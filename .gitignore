@@ -31,3 +31,32 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+
+# ==============================
+# Frontend - Angular
+# ==============================
+
+# Node modules
+frontend/node_modules/
+
+# Angular / build outputs
+frontend/dist/
+frontend/out-tsc/
+frontend/tmp/
+frontend/.angular/
+
+# IDE / Editors
+frontend/.vscode/
+frontend/.idea/
+frontend/.nyc_output/
+frontend/coverage/
+
+# Logs
+*.log
+
+# Environment files
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
