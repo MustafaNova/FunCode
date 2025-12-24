@@ -1,0 +1,36 @@
+.bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  background: #4b0082;
+  gap: 10%;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
+
+  }
+
+.section {
+  display : flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: all 0.1s ease;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  border: none;
+  background-color: transparent
+  }
+
+.w-40 {
+  width: 40px
+  }
+
+
+.icon {
+  font-size: 25px;
+  width: 100%;
+  }
+
+
+.selected {
+  color: white
+  }

@@ -1,0 +1,74 @@
+.topBar {
+  padding: 12px;
+  height: 135px;
+  background: linear-gradient(to right, #6a0dad, #4b0082);
+
+
+  }
+
+
+.top-buttons {
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px
+  }
+
+.bottom-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 70px
+
+  }
+
+
+.careerBtn {
+  height: 50px;
+  width: 570px;
+  border-radius: 15px;
+  border: none;
+  color: #6a0dad;
+  font-size: 19px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease
+
+  }
+
+
+.icon-num {
+  color: white;
+  font-size: 20px;
+  font-weight: 600
+
+  }
+
+.statusBtn {
+  width: 130px;
+  height: 50px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease
+  }
+
+.statusBtn:hover{
+  background-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-5px)
+  }
+
+
+.status-content {
+  display: flex;
+  justify-content: center;
+  gap: 6px
+
+  }
+
+.icon {
+  color: white;
+  font-size: 22px
+  }

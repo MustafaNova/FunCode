@@ -1,0 +1,58 @@
+.level-btn {
+  width: 130px;
+  height: 130px;
+  border: none;
+  border-radius: 30px 30px 35px 35px ;
+  background-color: gray
+  }
+
+.course-title {
+  height: 50px;
+  display: grid;
+  place-items: center
+  }
+
+.level-row {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  height: 180px;
+  }
+
+.moveToRight {
+  position: relative;
+  left: 200px
+  }
+
+.level-btns {
+  display: flex;
+  gap: 40px;
+  }
+
+.moveLeft-btns {
+  position: relative;
+  right: 85px
+  }
+
+.moveRight-btns {
+  position: relative;
+  left: 85px
+  }
+
+
+.inside-btn {
+  background-color: purple;
+  height: 86%;
+  border-radius: 30px;
+  position: relative;
+  bottom: 5px;
+  display: grid;
+  place-items: center
+  }
+
+.content {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  left: 100px
+  }
