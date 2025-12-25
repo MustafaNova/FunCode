@@ -1,27 +1,36 @@
-.level-btn {
+.level-btn, .project-btn {
   width: 130px;
   height: 130px;
   border: none;
   border-radius: 30px 30px 35px 35px ;
-  background-color: gray
+  background-color: #C77DFF
+  }
+
+
+.project-btn {
+  height: 250px;
+  width: 470px
   }
 
 .course-title {
   height: 50px;
   display: grid;
-  place-items: center
+  place-items: center;
+  font-size: 25px;
+  font-weight: 600;
+  margin-bottom: 35px
   }
 
 .level-row {
   position: relative;
   display: flex;
   justify-content: center;
-  height: 180px;
+  height: auto;
   }
 
 .moveToRight {
   position: relative;
-  left: 200px
+  left: 170px
   }
 
 .level-btns {
@@ -41,18 +50,35 @@
 
 
 .inside-btn {
-  background-color: purple;
+  background-color: #2A003F;
   height: 86%;
   border-radius: 30px;
   position: relative;
   bottom: 5px;
   display: grid;
-  place-items: center
+  place-items: center;
+  color: white;
+  font-weight: 700;
+  font-size: 23px
   }
 
-.content {
+.adjustToRight {
   position: relative;
   display: flex;
-  justify-content: center;
   left: 100px
+  }
+
+.centerY {
+  display: flex;
+  align-items: center;
+  }
+
+.d-flex {
+  display: flex
+  }
+
+
+.project-wrapper {
+  display: flex;
+  flex-direction: column
   }
