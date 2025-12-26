@@ -20,8 +20,6 @@ So, what are you waiting for? Join this project and help make the world a little
 *Contributions are welcome! Check out the repository, open issues, or submit pull requests.*
 
 
-
-
 # Project Setup
 
 ## Prerequisites
@@ -34,69 +32,45 @@ To develop this project, you need the following:
 - Optional: **Angular CLI** (if not installed globally)
 
 
-### Backend(Spring Boot)
-- **Java**: v24.0.1
-- **Spring Boot**: latest compatible version
+### Backend (NestJS)
+- **NestJS**: v11.0.14
+- **pnpm**: v10.26.2
 
+---
 
+## Running the App Locally
 
+FunCode consists of **two separate applications** that must be running **at the same time**:
 
-# Frontend
+* 🧠 **Backend** – NestJS API (`/backend`)
+* 🎨 **Frontend** – Angular app (`/frontend`)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.10.
+> ⚠️ **Important:** Both the backend and frontend must be running for the app to work correctly.
 
-## Development server
+---
 
-To start a local development server, run:
+### 1️⃣ Start the Backend (NestJS)
+
+Open a terminal and run:
 
 ```bash
+cd backend
+pnpm install
+pnpm run start
+```
+
+The backend will be available at `http://localhost:3000`
+
+---
+
+### 2️⃣ Start the Frontend (Angular)
+
+Open **another terminal** and run:
+
+```bash
+cd frontend
+npm install
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+The frontend will be available at `http://localhost:4200`
