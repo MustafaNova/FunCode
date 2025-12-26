@@ -36,9 +36,8 @@ So, what are you waiting for? Join this project and help make the world a little
 
 #### Backend (NestJS)
 
-* **Node.js**: v24.12.0
 * **NestJS**: v11.0.14
-
+* **pnpm**: v10.26.2
 ---
 
 ## Running the App Locally
