@@ -31,7 +31,7 @@ So, what are you waiting for? Join this project and help make the world a little
 #### Frontend (Angular)
 
 * **Node.js**: v24.12.0
-* **npm**: v11.6.2
+* **pnpm**: v10.26.2
 * Optional: **Angular CLI** (if not installed globally)
 
 #### Backend (NestJS)
@@ -71,7 +71,7 @@ Open **another terminal** and run:
 
 ```bash
 cd frontend
-npm install
+pnpm install
 ng serve
 ```
 
