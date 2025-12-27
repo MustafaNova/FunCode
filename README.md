@@ -72,7 +72,7 @@ Open **another terminal** and run:
 ```bash
 cd frontend
 pnpm install
-ng serve
+pnpm run start
 ```
 
 The frontend will be available at `http://localhost:4200`.
