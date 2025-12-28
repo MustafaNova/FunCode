@@ -1,8 +1,13 @@
 .topBar {
-  padding: 12px;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  top: 0;
+  width: var(--app-width);
   height: 135px;
   background: linear-gradient(to right, #6a0dad, #4b0082);
-
+  z-index: 10;
+  border-bottom: 2px solid #3a006f;
 
   }
 
@@ -12,7 +17,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 20px
+  gap: 5px;
   }
 
 .bottom-buttons {
@@ -26,7 +31,7 @@
 
 .careerBtn {
   height: 50px;
-  width: 570px;
+  width: 95%;
   border-radius: 15px;
   border: none;
   color: #6a0dad;
@@ -46,7 +51,7 @@
   }
 
 .statusBtn {
-  width: 130px;
+  width: 75px;
   height: 50px;
   background-color: rgba(255, 255, 255, 0.2);
   border: none;

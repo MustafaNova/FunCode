@@ -1,5 +1,21 @@
+:root {
+  --app-width: 360px;
+}
+
 html, body {
   margin: 0;
-  height: 100%
+  height: 100%;
+  overflow-x:hidden;
   }
+
+.mobileSize {
+  width: 360px;
+  height: 640px
+  }
+
+.centerMobile {
+  display: flex;
+  justify-content: center
+  }
+
 

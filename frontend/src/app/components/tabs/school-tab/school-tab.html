@@ -1,18 +1,17 @@
 <div>
   <div class="course-title">
-    Einführung in die Webentwicklung
+    Introduction Web-development
   </div>
   <div class="level-row">
     <div class="adjustToRight">
-      <button class="level-btn">
+      <button class="level-btn" (click)="runLevelOne()">
         <div class="inside-btn">1</div>
       </button>
       <svg width="200" height="130" xmlns="http://www.w3.org/2000/svg">
-        <path d="M-1,60 Q135,50 100,181" stroke="#C77DFF" stroke-width="15" fill="transparent"/>
+        <path d="M-1,60 Q95,50 65,181" stroke="#C77DFF" stroke-width="15" fill="transparent"/>
       </svg>
     </div>
   </div>
-
   <div class="level-row">
     <button class="level-btn moveToRight">
       <div class="inside-btn">2</div>
@@ -20,14 +19,14 @@
   </div>
   <div class="level-row">
     <div class="d-flex">
-      <svg width="200" height="180" xmlns="http://www.w3.org/2000/svg">
-        <path d="M201,64 Q95,62 95,181" stroke="#C77DFF" stroke-width="15" fill="transparent"/>
+      <svg width="200" height="140" xmlns="http://www.w3.org/2000/svg">
+        <path d="M201,48 Q115,42 140,181" stroke="#C77DFF" stroke-width="15" fill="transparent"/>
       </svg>
       <button class="level-btn">
-      <div class="inside-btn">3</div>
-    </button>
+        <div class="inside-btn">3</div>
+      </button>
       <svg width="200" height="130" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0,64 Q105,65 105,-1" stroke="#C77DFF" stroke-width="15" fill="transparent"/>
+        <path d="M0,48 Q75,50 75,-1" stroke="#C77DFF" stroke-width="15" fill="transparent"/>
       </svg>
     </div>
   </div>
@@ -44,13 +43,13 @@
   <div class="level-row">
     <div class="centerY">
       <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
-        <path d="M201,95 Q95,95 95,-1" stroke="#C77DFF" stroke-width="15" fill="transparent"/>
+        <path d="M201,95 Q130,100 135,-1" stroke="#C77DFF" stroke-width="15" fill="transparent"/>
       </svg>
       <button class="level-btn">
-      <div class="inside-btn">6</div>
-    </button>
+        <div class="inside-btn">6</div>
+      </button>
       <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0,95 Q105,99 105,201" stroke="#C77DFF" stroke-width="15" fill="transparent"/>
+        <path d="M-1,95 Q65,99 65,201" stroke="#C77DFF" stroke-width="15" fill="transparent"/>
       </svg>
     </div>
   </div>
@@ -66,13 +65,16 @@
   </div>
   <div class="level-row">
     <div class="project-wrapper">
-      <svg class="line-svg" width="450" height="60" xmlns="http://www.w3.org/2000/svg">
-        <path d="M405,0 405,60" stroke="#C77DFF" stroke-width="15" fill="transparent"/>
+      <svg class="line-svg" width="100%" height="60" xmlns="http://www.w3.org/2000/svg">
+        <path d="M260,0 260,60" stroke="#C77DFF" stroke-width="15" fill="transparent"/>
       </svg>
       <button class="project-btn">
         <div class="inside-btn">Your first Project !</div>
       </button>
     </div>
   </div>
-
+  <app-first-lvl [(open)]="isLevelOneRunning"></app-first-lvl>
 </div>
+
+
+
