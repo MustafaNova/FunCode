@@ -1,0 +1,145 @@
+$card : rgba(255, 255, 255, 0.06);
+$card-border: rgba(255, 255, 255, 0.12);
+$border-rad: 14px;
+$border: 1px solid rgba(255, 255, 255, 0.14);
+$shadow: 0 18px 60px rgba(0, 0, 0, 0.65);
+$padding: 18px;
+$background-darker: rgba(0, 0, 0, 0.22);
+$white-color: rgba(255, 255, 255, 0.86);
+
+.goals-tab {
+  width: 90%;
+  height: 85%;
+  background: $card;
+  border: 1px solid $card-border;
+  border-radius: $border-rad;
+  box-shadow: $shadow;
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  }
+
+
+.close-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: $border-rad;
+  color: $white-color;
+  background: rgba(255, 255, 255, 0.06);
+  border: $border;
+  }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $padding
+  }
+
+.hearts {
+  color: red;
+  padding: 10px;
+  border-radius: $border-rad;
+  background: $background-darker;
+  border: $border
+  }
+
+
+
+
+.tab {
+  background:
+  radial-gradient(900px 500px at 20% 15%, rgba(124, 92, 255, 0.35), transparent 60%),
+  radial-gradient(900px 500px at 80% 20%, rgba(45, 212, 191, 0.22), transparent 60%),
+  radial-gradient(900px 700px at 50% 90%, rgba(255, 77, 109, 0.14), transparent 55%),
+  #0b1020;
+  height: 100%;
+  width: var(--app-width);
+  position:fixed;
+  top: 0;
+  z-index: 20;
+  transition: all 0.4s ease;
+  display: grid;
+  place-items: center;
+  }
+
+.closed {
+  transform: translateY(100%);
+  }
+
+
+.footer {
+  height: 50px;
+  display: grid;
+  place-items: center;
+  padding: $padding;
+  background: $background-darker;
+  border: 1px solid rgba(255, 255, 255, 0.10)
+  }
+
+
+.next-btn {
+  width: 100%;
+  height: 54px;
+  border: 0;
+  border-radius: 18px;
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  color: $white-color;
+  background: linear-gradient(135deg, rgba(124, 92, 255, 0.95), rgba(45, 212, 191, 0.85));
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+  }
+
+
+
+.steps {
+  display: flex;
+  gap: 5px;
+  padding: 0 18px 14px;
+  }
+
+
+.step {
+  background: $background-darker;
+  border: $border;
+  border-radius: 100px;
+  padding: 10px 21px;
+  font-size: 15px;
+  color: $white-color;
+  }
+
+
+.content {
+  height: 55%;
+  padding: 18px
+  }
+
+.step-content {
+  background: $background-darker;
+  border-radius: $border-rad;
+  width: 80%;
+  padding: 18px;
+  border: $border;
+  }
+
+.fs-25 {
+  font-size: 25px
+  }
+
+
+.topic {
+  color: $white-color;
+  display: flex;
+  align-items: center;
+  gap: 10px
+  }
+
+.topic-content {
+  background: rgba(255, 255, 255, 0.05);
+  }
+
+.mg-0 {
+  margin: 0px
+  }
