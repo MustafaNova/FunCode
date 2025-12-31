@@ -6,10 +6,12 @@ $shadow: 0 18px 60px rgba(0, 0, 0, 0.65);
 $padding: 18px;
 $background-darker: rgba(0, 0, 0, 0.22);
 $white-color: rgba(255, 255, 255, 0.86);
+$muted: rgba(255, 255, 255, 0.72);
+$text: rgba(255, 255, 255, 0.92);
 
 .goals-tab {
   width: 90%;
-  height: 85%;
+  height: 96%;
   background: $card;
   border: 1px solid $card-border;
   border-radius: $border-rad;
@@ -74,7 +76,9 @@ $white-color: rgba(255, 255, 255, 0.86);
   place-items: center;
   padding: $padding;
   background: $background-darker;
-  border: 1px solid rgba(255, 255, 255, 0.10)
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
   }
 
 
@@ -112,34 +116,73 @@ $white-color: rgba(255, 255, 255, 0.86);
 
 
 .content {
-  height: 55%;
+  height: 59%;
   padding: 18px
   }
 
 .step-content {
   background: $background-darker;
   border-radius: $border-rad;
-  width: 80%;
+  width: 88%;
   padding: 18px;
   border: $border;
+  color: $text;
   }
 
-.fs-25 {
-  font-size: 25px
+.fs-35 {
+  font-size: 35px
   }
 
 
 .topic {
-  color: $white-color;
   display: flex;
   align-items: center;
   gap: 10px
   }
 
 .topic-content {
-  background: rgba(255, 255, 255, 0.05);
+  background: $card;
+  margin-top: 14px;
+  border: $border;
+  border-radius: $border-rad;
+  padding: 14px;
   }
 
 .mg-0 {
-  margin: 0px
+  margin: 0
   }
+
+.subtitle {
+  color: $muted;
+}
+
+
+.title {
+  font-weight: 800;
+  font-size: 17px;
+  margin: 0;
+}
+
+
+.mission-header {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+
+.mission-icon {
+  display: flex;
+  gap: 5px;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: $border-rad;
+  border: $border;
+  background: rgba(124, 92, 255, 0.18);
+}
+
+
+.hint-txt {
+  color: $muted;
+  font-size: 14px;
+}

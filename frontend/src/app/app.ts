@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { TopBar } from './components/top-bar/top-bar';
 import { BottomBar } from './components/bottom-bar/bottom-bar';
 import { RouterOutlet } from '@angular/router';

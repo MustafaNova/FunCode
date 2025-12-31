@@ -8,8 +8,8 @@ import { FirstLvl } from './learning-paths/web-development/introduction/first-lv
   styleUrl: './school-tab.scss',
 })
 export class SchoolTab {
-  isLevelOneRunning: boolean = false;
+  isLevelOneRunning = false;
 
-  runLevelOne() { this.isLevelOneRunning = true }
+  runLevelOne(){ this.isLevelOneRunning = true;}
 
 }

@@ -7,9 +7,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   styleUrl: './level-frame.scss',
 })
 export class LevelFrame {
-  @Input() hasStarted: boolean = false;
+  @Input() hasStarted = false;
   @Output() closed = new EventEmitter<void>();
 
   emitClose() { this.closed.emit(); }
-
 }
