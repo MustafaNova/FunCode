@@ -8,7 +8,7 @@ import { LevelFrame } from '../level-frame/level-frame';
   styleUrl: './first-lvl.scss',
 })
 export class FirstLvl {
-  @Input() open: boolean = false;
+  @Input() open = false;
   @Output() openChange = new EventEmitter<boolean>();
 
   forwardClosed() { this.openChange.emit(false); }

@@ -11,51 +11,34 @@
       </div>
     </header>
     <div class="steps">
-      <div class="step">
+      <button class="step"
+              [class.active]="activeTab === 'goal'"
+              (click)="setActiveTab('goal')">
         <i class="fa-solid fa-bullseye"></i>
-      </div>
-      <div class="step">
+      </button>
+      <button class="step"
+              [class.active]="activeTab === 'concept'"
+              (click)="setActiveTab('concept')">
         <i class="fa-solid fa-book"></i>
-      </div>
-      <div class="step">
+      </button>
+      <button class="step"
+              [class.active]="activeTab === 'quiz'"
+              (click)="setActiveTab('quiz')">
         <i class="fa-solid fa-question"></i>
-      </div>
-      <div class="step">
+      </button>
+      <button class="step"
+              [class.active]="activeTab === 'task'"
+              (click)="setActiveTab('task')">
         <i class="fa-solid fa-code"></i>
-      </div>
+      </button>
     </div>
     <div class="content">
       <div class="step-content">
-        <div class="topic">
-          <div>
-            <i class="fa-solid fa-bullseye fs-35"></i>
-          </div>
-          <div>
-            <p class="title">Level 1: Erste Schritte</p>
-            <span class="subtitle">
-              Lets Go!
-            </span>
-          </div>
-        </div>
-        <div class="topic-content">
-          <div class="mission-header">
-            <span class="mission-icon">
-              <i class="fa-solid fa-list-check"></i>
-              Mission
-            </span>
-            <span>Basic Html</span>
-          </div>
-          <ul>
-            <li>Verstehe die Grundlagen des Themas</li>
-            <li>Löse die ersten Aufgaben erfolgreich</li>
-            <li>Erreiche das Ziel, ohne alle Leben zu verlieren</li>
-          </ul>
-          <p class="hint-txt">
-            💡 Tipp: Wenn du unsicher bist, lies den Hinweis noch einmal – Geschwindigkeit kommt später.
-          </p>
-        </div>
+        <app-goal-tab-frame [hasStarted]="isTabActive('goal')"></app-goal-tab-frame>
+        <app-concept-tab-frame [hasStarted]="isTabActive('concept')"></app-concept-tab-frame>
+        <app-quiz-tab-frame [hasStarted]="isTabActive('quiz')"></app-quiz-tab-frame>
+        <app-task-tab-frame [hasStarted]="isTabActive('task')"></app-task-tab-frame>
       </div>
-
     </div>
     <footer class="footer">
       <button class="next-btn" >Continue</button>

@@ -10,8 +10,8 @@ $muted: rgba(255, 255, 255, 0.72);
 $text: rgba(255, 255, 255, 0.92);
 
 .goals-tab {
-  width: 90%;
-  height: 96%;
+  width: 97%;
+  height: 98%;
   background: $card;
   border: 1px solid $card-border;
   border-radius: $border-rad;
@@ -35,7 +35,7 @@ $text: rgba(255, 255, 255, 0.92);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: $padding
+  padding: 18px 10px
   }
 
 .hearts {
@@ -101,7 +101,7 @@ $text: rgba(255, 255, 255, 0.92);
 .steps {
   display: flex;
   gap: 5px;
-  padding: 0 18px 14px;
+  padding: 0 10px 4px;
   }
 
 
@@ -109,15 +109,16 @@ $text: rgba(255, 255, 255, 0.92);
   background: $background-darker;
   border: $border;
   border-radius: 100px;
-  padding: 10px 21px;
+  padding: 10px 24px;
   font-size: 15px;
   color: $white-color;
   }
 
 
 .content {
-  height: 59%;
-  padding: 18px
+  display: flex;
+  padding: 3px 10px;
+  flex: 1;
   }
 
 .step-content {
@@ -134,55 +135,18 @@ $text: rgba(255, 255, 255, 0.92);
   }
 
 
-.topic {
-  display: flex;
-  align-items: center;
-  gap: 10px
-  }
-
-.topic-content {
-  background: $card;
-  margin-top: 14px;
-  border: $border;
-  border-radius: $border-rad;
-  padding: 14px;
-  }
 
 .mg-0 {
   margin: 0
   }
 
-.subtitle {
-  color: $muted;
-}
 
-
-.title {
+.fw-800 {
   font-weight: 800;
-  font-size: 17px;
-  margin: 0;
 }
 
-
-.mission-header {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-
-.mission-icon {
-  display: flex;
-  gap: 5px;
-  font-size: 12px;
-  padding: 6px 10px;
-  border-radius: $border-rad;
-  border: $border;
+.active {
+  border-color: rgba(124, 92, 255, 0.55);
   background: rgba(124, 92, 255, 0.18);
-}
-
-
-.hint-txt {
-  color: $muted;
-  font-size: 14px;
+  color: rgba(255, 255, 255, 0.92);
 }

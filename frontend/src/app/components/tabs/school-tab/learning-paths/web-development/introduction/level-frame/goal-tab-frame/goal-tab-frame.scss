@@ -1,0 +1,86 @@
+$card : rgba(255, 255, 255, 0.06);
+$border-rad: 14px;
+$border: 1px solid rgba(255, 255, 255, 0.14);
+$muted: rgba(255, 255, 255, 0.72);
+
+.topic {
+  display: flex;
+  align-items: center;
+  gap: 10px
+}
+
+.topic-content {
+  display: flex;
+  flex-direction: column;
+  background: $card;
+  margin-top: 14px;
+  border: $border;
+  border-radius: $border-rad;
+  padding: 14px;
+  flex: 1;
+}
+
+.subtitle {
+  color: $muted;
+}
+
+
+.title {
+  font-weight: 800;
+  font-size: 17px;
+  margin: 0;
+}
+
+
+.mission-header {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+
+.mission-icon {
+  display: flex;
+  gap: 5px;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: $border-rad;
+  border: $border;
+  background: rgba(124, 92, 255, 0.18);
+  font-weight: 800;
+}
+
+
+.hint-txt {
+  color: $muted;
+  font-size: 12px;
+}
+
+
+
+.goal-component {
+  height: 370px;
+  display: flex;
+  flex-direction: column;
+}
+
+.goal-list {
+  flex: 1;
+  font-size: 14px;
+  padding-left: 15px;
+  display: grid;
+  font-weight: 500;
+}
+
+
+.fs-35 {
+  font-size: 35px
+}
+
+.fw-800 {
+  font-weight: 800;
+}
+
+.closed {
+  display: none;
+}
