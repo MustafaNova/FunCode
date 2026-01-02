@@ -4,7 +4,7 @@ import { QuizTabFrame } from './quiz-tab-frame/quiz-tab-frame';
 import { ConceptTabFrame } from './concept-tab-frame/concept-tab-frame';
 import { TaskTabFrame } from './task-tab-frame/task-tab-frame';
 
-type levelFrameTab = 'goal' | 'concept' | 'quiz' | 'task';
+type levelFrameTab = 'goal' | 'concept' | 'quiz' | 'task' | 'end';
 
 @Component({
   selector: 'app-level-frame',
@@ -17,10 +17,13 @@ export class LevelFrame {
   @Input() hasStarted = false;
   @Output() closed = new EventEmitter<void>();
   activeTab: levelFrameTab = 'goal';
+  private readonly tabs: levelFrameTab[] = ["goal", "concept", "quiz", "task", "end"];
 
-  setActiveTab(tab: levelFrameTab) { this.activeTab = tab; }
   isTabActive(tab: levelFrameTab) { return this.activeTab == tab;}
-
+  goToNextTab() {
+    const curIndex = this.tabs.indexOf(this.activeTab);
+    this.activeTab = this.tabs[curIndex + 1];
+  }
 
   emitClose() { this.closed.emit(); }
 }

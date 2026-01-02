@@ -11,37 +11,27 @@
       </div>
     </header>
     <div class="steps">
-      <button class="step"
-              [class.active]="activeTab === 'goal'"
-              (click)="setActiveTab('goal')">
+      <button class="step" [class.active]="activeTab === 'goal'">
         <i class="fa-solid fa-bullseye"></i>
       </button>
-      <button class="step"
-              [class.active]="activeTab === 'concept'"
-              (click)="setActiveTab('concept')">
+      <button class="step" [class.active]="activeTab === 'concept'">
         <i class="fa-solid fa-book"></i>
       </button>
-      <button class="step"
-              [class.active]="activeTab === 'quiz'"
-              (click)="setActiveTab('quiz')">
+      <button class="step" [class.active]="activeTab === 'quiz'">
         <i class="fa-solid fa-question"></i>
       </button>
-      <button class="step"
-              [class.active]="activeTab === 'task'"
-              (click)="setActiveTab('task')">
+      <button class="step" [class.active]="activeTab === 'task'">
         <i class="fa-solid fa-code"></i>
       </button>
     </div>
     <div class="content">
-      <div class="step-content">
         <app-goal-tab-frame [hasStarted]="isTabActive('goal')"></app-goal-tab-frame>
         <app-concept-tab-frame [hasStarted]="isTabActive('concept')"></app-concept-tab-frame>
         <app-quiz-tab-frame [hasStarted]="isTabActive('quiz')"></app-quiz-tab-frame>
         <app-task-tab-frame [hasStarted]="isTabActive('task')"></app-task-tab-frame>
-      </div>
     </div>
     <footer class="footer">
-      <button class="next-btn" >Continue</button>
+      <button class="next-btn" (click)="goToNextTab()">Continue</button>
     </footer>
   </div>
 </div>

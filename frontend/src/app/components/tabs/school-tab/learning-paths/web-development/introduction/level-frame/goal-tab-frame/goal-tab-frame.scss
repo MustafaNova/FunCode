@@ -2,6 +2,8 @@ $card : rgba(255, 255, 255, 0.06);
 $border-rad: 14px;
 $border: 1px solid rgba(255, 255, 255, 0.14);
 $muted: rgba(255, 255, 255, 0.72);
+$text: rgba(255, 255, 255, 0.92);
+$background-darker: rgba(0, 0, 0, 0.22);
 
 .topic {
   display: flex;
@@ -83,4 +85,14 @@ $muted: rgba(255, 255, 255, 0.72);
 
 .closed {
   display: none;
+}
+
+
+.step-content {
+  background: $background-darker;
+  border-radius: $border-rad;
+  width: 88%;
+  padding: 18px;
+  border: $border;
+  color: $text;
 }
