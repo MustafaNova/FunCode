@@ -1,0 +1,22 @@
+:root {
+  --app-width: 360px;
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow-x:hidden;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+}
+
+
+.mobileSize {
+  width: 360px;
+  height: 640px
+}
+
+.centerMobile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
