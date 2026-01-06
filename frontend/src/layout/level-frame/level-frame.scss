@@ -61,8 +61,9 @@ $text: rgba(255, 255, 255, 0.92);
   top: 0;
   z-index: 20;
   transition: all 0.4s ease;
-  display: grid;
-  place-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .closed {
@@ -143,6 +144,6 @@ $text: rgba(255, 255, 255, 0.92);
   color: rgba(255, 255, 255, 0.92);
 }
 
-.d-none {
-  display: flex
+.hidden {
+  transform: translateY(100%);
 }

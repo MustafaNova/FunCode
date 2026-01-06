@@ -1,0 +1,127 @@
+$text: rgba(255, 255, 255, 0.92);
+$muted: rgba(255, 255, 255, 0.72);
+$border: 1px solid rgba(255, 255, 255, 0.12);
+
+.closed {
+  display: none !important;
+}
+
+.concept-component {
+  height: 410px;
+  overflow-y: auto;
+  color: $text;
+  display: grid;
+  gap: 15px;
+}
+
+
+.panel {
+  border-radius: 20px;
+  border: $border;
+  background: rgba(0, 0, 0, 0.18);
+  padding: 18px;
+}
+
+
+.introduction {
+  display: flex;
+  align-items: center;
+  gap: 12px
+}
+
+
+.title {
+  font-weight: 700;
+  margin-top: 0;
+  font-size: 15px;
+}
+
+.muted {
+  color: $muted
+}
+
+
+.block {
+  border-radius: 18px;
+  border: $border;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+}
+
+
+.badge {
+  font-size: 12px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(45, 212, 191, 0.14);
+  color: rgba(255, 255, 255, 0.9);
+  white-space: nowrap;
+}
+
+.header {
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fs-15 {
+  font-size: 15px
+}
+
+.hint {
+  color: $muted;
+  font-size: 11px;
+}
+
+.media {
+  border-radius: 16px;
+  border: $border;
+  background: rgba(0, 0, 0, 0.20);
+  overflow: hidden;
+  min-height: 160px;
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
+.blocks {
+  display: grid;
+  gap: 10px;
+}
+
+.visual-badge {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 16px;
+  border: $border;
+  background: rgba(124, 92, 255, 0.16);
+}
+
+
+.fw-700 {
+  font-weight: 700;
+}
+
+.step-txt {
+  font-weight: 700;
+  font-size: 12px;
+  color: $muted
+}
+
+.step-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  background: rgba(124, 92, 255, 0.18);
+  border: 1px solid rgba(124, 92, 255, 0.35);
+}

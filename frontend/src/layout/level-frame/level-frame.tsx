@@ -8,18 +8,39 @@ import {
     faCode
 } from "@fortawesome/free-solid-svg-icons";
 import { Goal } from "./goal-frame/goal-frame.tsx";
+import {ConceptFrame} from "./concept-frame/concept-frame.tsx";
+import {QuizFrame} from "./quiz-frame/quiz-frame.tsx";
+import {TaskFrame} from "./task-frame/task-frame.tsx";
+import {useState} from "react";
 
 type props = {
     isActive: boolean
+    setIsActive: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export function LevelFrame({isActive}: props) {
+type LevelTabs = "goal" | "concept" | "quiz" | "task"
+
+export function LevelFrame({isActive, setIsActive}: props) {
+
+    const [curTab, setCurTab] = useState<LevelTabs>("goal")
+    const steps = [
+        {icon: faBullseye, tab: "goal"},
+        {icon: faBook, tab: "concept"},
+        {icon: faQuestion, tab: "quiz"},
+        {icon: faCode, tab: "task"}
+    ]
+
+    function nextTab() {
+        const curIndex = steps.findIndex(
+            step => step.tab == curTab)
+        setCurTab(steps[curIndex + 1].tab as LevelTabs)
+    }
 
     return (
-        <div className={`tab ${isActive ? "" : "d-none"}`}>
+        <div className={`tab ${isActive ? "" : "hidden"}`}>
             <div className="goals-tab">
                 <header className="header">
-                    <button className="close-btn">x</button>
+                    <button className="close-btn" onClick={() => setIsActive(false)}>x</button>
                     <div className="hearts">
                         <FontAwesomeIcon icon={faHeart}/>
                         <FontAwesomeIcon icon={faHeart}/>
@@ -28,24 +49,20 @@ export function LevelFrame({isActive}: props) {
                     </div>
                 </header>
                 <div className="steps">
-                    <button className="step">
-                        <FontAwesomeIcon icon={faBullseye}/>
-                    </button>
-                    <button className="step">
-                        <FontAwesomeIcon icon={faBook}/>
-                    </button>
-                    <button className="step">
-                        <FontAwesomeIcon icon={faQuestion}/>
-                    </button>
-                    <button className="step">
-                        <FontAwesomeIcon icon={faCode}/>
-                    </button>
+                    {steps.map((step) => (
+                        <button className={`step ${step.tab == curTab && "active"}`}>
+                            <FontAwesomeIcon icon={step.icon}/>
+                        </button>
+                    ))}
                 </div>
                 <div className="content">
-                    <Goal/>
+                    <Goal isVisible={curTab == "goal"}/>
+                    <ConceptFrame isVisible={curTab == "concept"}/>
+                    <QuizFrame isVisible={curTab == "quiz"}/>
+                    <TaskFrame isVisible={curTab == "task"}/>
                 </div>
                 <footer className="footer">
-                    <button className="next-btn">Continue</button>
+                    <button className="next-btn" onClick={nextTab}>Continue</button>
                 </footer>
             </div>
         </div>

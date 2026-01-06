@@ -5,10 +5,14 @@ import {
     faBullseye,
 } from "@fortawesome/free-solid-svg-icons";
 
-export function Goal() {
+type props = {
+    isVisible: boolean
+}
+
+export function Goal({isVisible}: props) {
 
     return (
-        <div className="step-content">
+        <div className={`step-content ${!isVisible && "hidden"}`}>
             <div className="goal-component">
                 <div className="topic">
                     <div>

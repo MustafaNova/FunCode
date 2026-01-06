@@ -1,10 +1,10 @@
 import "./school.scss"
+import { LevelFrame } from "../../layout/level-frame/level-frame.tsx";
+import { useState } from "react";
 
 export function School() {
+    const [levelOneActive, setLevelOneActive] = useState(false)
 
-    function runLevelOne() {
-        return
-    }
 
     return (
         <div>
@@ -13,7 +13,7 @@ export function School() {
             </div>
             <div className="level-row">
                 <div className="adjustToRight">
-                <button className="level-btn" onClick={() => runLevelOne()}>
+                <button className="level-btn" onClick={() => setLevelOneActive(true)}>
                     <div className="inside-btn">1</div>
                 </button>
                 <svg width="200" height="130" xmlns="http://www.w3.org/2000/svg">
@@ -82,6 +82,7 @@ export function School() {
                     </button>
                 </div>
             </div>
+            <LevelFrame isActive={levelOneActive} setIsActive={setLevelOneActive}/>
         </div>
-)
+    )
 }
