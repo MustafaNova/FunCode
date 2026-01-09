@@ -1,4 +1,5 @@
+import {User} from "../../../domain/entities/user";
+
 export interface MatchmakingQueuePort {
-    enqueue(userId: string): Promise<void>
-    dequeuePair(): Promise<string>
+    enqueue(user: User): Promise<void>
 }
