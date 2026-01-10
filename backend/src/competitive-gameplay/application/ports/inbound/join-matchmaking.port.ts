@@ -1,3 +1,3 @@
 export interface JoinMatchMakingUC {
-    join(userId: string): Promise<void>
+    join(userId: string): Promise<void>;
 }

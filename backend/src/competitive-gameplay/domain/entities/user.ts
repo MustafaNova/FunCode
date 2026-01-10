@@ -1,7 +1,7 @@
 export class User {
-    userId: string
+    id: string;
 
     constructor(userId: string) {
-        this.userId = userId
+        this.id = userId;
     }
 }

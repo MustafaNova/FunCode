@@ -1,1 +1,2 @@
 export const REDIS_MATCHMAKING_ADAPTER = 'REDIS_MATCHMAKING_ADAPTER' as const;
+export const REDIS_CLIENT = 'REDIS_CLIENT' as const;

@@ -1,5 +1,5 @@
-import {User} from "../../../domain/entities/user";
+import { User } from '../../../domain/entities/user';
 
 export interface MatchmakingQueuePort {
-    enqueue(user: User): Promise<void>
+    enqueue(user: User): Promise<void>;
 }
