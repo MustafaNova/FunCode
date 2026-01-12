@@ -1,7 +1,6 @@
-import { Req, Controller, Post, Inject, UseGuards } from '@nestjs/common';
+import { Req, Controller, Post, Inject } from '@nestjs/common';
 import type { JoinMatchMakingUC } from '../../application/ports/inbound/join-matchmaking.port';
 import { JOIN_MATCHMAKING_SERVICE } from '../../application/tokens';
-import { AuthGuard } from '@nestjs/passport';
 import type { JwtRequest } from '../../../auth/jwt-request.type';
 
 @Controller('matchmaking')
@@ -12,7 +11,6 @@ export class MatchmakingController {
     ) {}
 
     @Post('join')
-    @UseGuards(AuthGuard('jwt'))
     async join(@Req() req: JwtRequest) {
         await this.joinMatchMaking.join(req.user.sub);
     }
