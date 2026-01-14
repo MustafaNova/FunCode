@@ -1,5 +1,7 @@
-export interface UserRegistrationCmd {
-    username: string;
-    email: string;
-    password: string;
+export class UserRegistrationCmd {
+    constructor(
+        public readonly username: string,
+        public readonly email: string,
+        public readonly password: string,
+    ) {}
 }

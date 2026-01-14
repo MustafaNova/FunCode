@@ -1,5 +1,5 @@
 export class Email {
-    constructor(private readonly email: string) {}
+    private constructor(private readonly email: string) {}
 
     static create(raw: string) {
         if (!raw) {
