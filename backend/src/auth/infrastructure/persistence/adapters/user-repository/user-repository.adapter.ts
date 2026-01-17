@@ -22,13 +22,13 @@ export class UserRepositoryAdapter implements UserRepositoryPort {
         return this.repo.exists({ where: { username: username.get() } });
     }
 
-    async saveNewUser(user: User): Promise<void> {
+    saveNewUser(user: User): Promise<UserEntity> {
         const entity = this.repo.create({
             username: user.username.get(),
             email: user.email.get(),
             password: user.password.get(),
         });
 
-        await this.repo.save(entity);
+        return this.repo.save(entity);
     }
 }
