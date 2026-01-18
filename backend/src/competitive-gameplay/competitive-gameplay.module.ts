@@ -25,8 +25,8 @@ import { MatchmakingController } from './presentation/controllers/matchmaking.co
             provide: REDIS_CLIENT,
             useFactory: () => {
                 return new Redis({
-                    host: 'localhost',
-                    port: 6379,
+                    host: process.env.REDIS_HOST,
+                    port: Number(process.env.REDIS_PORT),
                 });
             },
         },

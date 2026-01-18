@@ -1,6 +1,6 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { RegisterUserPort } from '../../ports/inbound/register-user.port';
-import { UserRegistrationCmd } from '../../dtos/commands/register-user.command';
+import { UserRegistrationCmd } from '../../dtos/commands/register-user.cmd';
 import { RegisterUserResult } from '../../dtos/results/register-user.result';
 import { Username } from '../../../domain/value-objects/username.vo';
 import { Email } from '../../../domain/value-objects/email.vo';
@@ -34,6 +34,6 @@ export class UserRegistrationService implements RegisterUserPort {
         const user = new User(username, email, password);
         await this.userRepository.saveNewUser(user);
 
-        return { success: true, username: username.get() };
+        return { username: username.get() };
     }
 }

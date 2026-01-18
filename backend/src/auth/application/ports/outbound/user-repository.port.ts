@@ -7,4 +7,5 @@ export interface UserRepositoryPort {
     checkEmailExists(email: Email): Promise<boolean>;
     checkUsernameExists(username: Username): Promise<boolean>;
     saveNewUser(user: User): Promise<UserEntity>;
+    // findByUsername(user: Username):
 }
