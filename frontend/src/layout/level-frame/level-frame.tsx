@@ -32,14 +32,15 @@ export function LevelFrame({isActive, setIsActive}: props) {
 
     function nextTab() {
         const curIndex = steps.findIndex(
-            step => step.tab == curTab)
+            step => step.tab == curTab
+        )
         setCurTab(steps[curIndex + 1].tab as LevelTabs)
     }
 
     return (
         <div className={`tab ${isActive ? "" : "hidden"}`}>
             <div className="goals-tab">
-                <header className="header">
+                <header className="level-frame-header">
                     <button className="close-btn" onClick={() => setIsActive(false)}>x</button>
                     <div className="hearts">
                         <FontAwesomeIcon icon={faHeart}/>

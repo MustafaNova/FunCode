@@ -1,4 +1,5 @@
-import "./quiz-frame.scss"
+import s from "./quiz-frame.module.scss"
+import clsx from 'clsx';
 
 type props = {
     isVisible: boolean
@@ -7,8 +8,17 @@ type props = {
 export function QuizFrame({isVisible} : props) {
 
     return (
-        <div className={isVisible ? "" : "hidden"}>
-            <h1>quiz works!</h1>
+        <div className={clsx({[s.hidden] : !isVisible})}>
+            <div className={s.panel}>
+                <div className={s.headerPanel}>
+                    <div className={s.logo}>
+
+                    </div>
+                    <div>
+
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }

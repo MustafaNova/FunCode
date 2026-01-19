@@ -6,7 +6,7 @@ $border: 1px solid rgba(255, 255, 255, 0.12);
   display: none !important;
 }
 
-.concept-component {
+.conceptComponent {
   height: 410px;
   overflow-y: auto;
   color: $text;
@@ -33,6 +33,7 @@ $border: 1px solid rgba(255, 255, 255, 0.12);
 .title {
   font-weight: 700;
   margin-top: 0;
+  margin-bottom: 4px;
   font-size: 15px;
 }
 
@@ -59,6 +60,9 @@ $border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(45, 212, 191, 0.14);
   color: rgba(255, 255, 255, 0.9);
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 2px;
 }
 
 .header {
@@ -68,7 +72,7 @@ $border: 1px solid rgba(255, 255, 255, 0.12);
   gap: 10px;
 }
 
-.fs-15 {
+.fs15 {
   font-size: 15px
 }
 
@@ -93,7 +97,7 @@ $border: 1px solid rgba(255, 255, 255, 0.12);
   gap: 10px;
 }
 
-.visual-badge {
+.visualBadge {
   position: absolute;
   left: 12px;
   top: 12px;
@@ -105,17 +109,17 @@ $border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 
-.fw-700 {
+.fw700 {
   font-weight: 700;
 }
 
-.step-txt {
+.stepTxt {
   font-weight: 700;
   font-size: 12px;
   color: $muted
 }
 
-.step-num {
+.stepNum {
   width: 28px;
   height: 28px;
   border-radius: 10px;
@@ -124,4 +128,19 @@ $border: 1px solid rgba(255, 255, 255, 0.12);
   font-weight: 900;
   background: rgba(124, 92, 255, 0.18);
   border: 1px solid rgba(124, 92, 255, 0.35);
+}
+
+.htmlIcon {
+  color: red;
+  font-size: 40px;
+}
+
+.hidden {
+  display: none;
+}
+
+.steps {
+  margin-top: 15px;
+  display: grid;
+  gap: 15px;
 }
