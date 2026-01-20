@@ -20,6 +20,8 @@ $border: 1px solid rgba(255, 255, 255, 0.12);
   border: $border;
   background: rgba(0, 0, 0, 0.18);
   padding: 18px;
+  display: grid;
+  gap: 10px;
 }
 
 

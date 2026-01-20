@@ -1,10 +1,108 @@
+$muted : rgba(255, 255, 255, 0.72);
+$border: 1px solid rgba(255, 255, 255, 0.14);
+
+
+
 .hidden {
   display: none
 }
 
 .panel {
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: $border;
   background: rgba(0, 0, 0, 0.18);
   padding: 18px;
+  margin-bottom: 10px;
+}
+
+.header {
+  font-size: 22px;
+  display: flex;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: $muted;
+  margin-bottom: 8px;
+}
+
+
+.statsBox {
+  display: flex;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 100px;
+  border: $border;
+  background: rgba(255, 255, 255, 0.05);
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.curStats {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.progressBar {
+  height: 10px;
+  border-radius: 100px;
+  border: $border;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.barFill {
+  height: 100%;
+  width: 0;
+  border-radius: 100px;
+  background: linear-gradient(135deg, rgba(124, 92, 255, 0.95), rgba(45, 212, 191, 0.85));
+  transition: all 0.2s ease
+}
+
+
+.qNum {
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  background: rgba(124, 92, 255, 0.18);
+  border: 1px solid rgba(124, 92, 255, 0.35);
+  flex: 0 0 auto;
+}
+
+.quizHeader {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.question {
+  font-weight: bold;
+}
+
+.options {
+  display: grid;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.opt {
+  border-radius: 18px;
+  border: $border;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 12px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.content {
+  overflow-y: auto;
+  height: 410px;
 }
