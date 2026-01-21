@@ -90,19 +90,38 @@ $border: 1px solid rgba(255, 255, 255, 0.14);
   margin-top: 15px;
 }
 
-.opt {
+.opt, .nextQ {
+  display: flex;
+  justify-content: center;
   border-radius: 18px;
   border: $border;
   background: rgba(255, 255, 255, 0.05);
   padding: 12px 12px;
-  display: flex;
-  align-items: center;
   gap: 10px;
   cursor: pointer;
+  width: 100%;
+  color: inherit;
+  font: inherit;
   transition: all 0.1s ease;
+}
+
+.nextQ {
+
+  opacity: 0.55;
 }
 
 .content {
   overflow-y: auto;
   height: 410px;
+}
+
+.opt.wrong {
+  border-color: rgba(255, 77, 109, 0.45);
+  background: rgba(255, 77, 109, 0.10);
+}
+
+
+.opt.correct {
+  border-color: rgba(45, 212, 191, 0.45);
+  background: rgba(45, 212, 191, 0.12);
 }
