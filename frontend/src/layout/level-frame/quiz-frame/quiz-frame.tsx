@@ -1,7 +1,7 @@
 import s from "./quiz-frame.module.scss"
 import { useState } from 'react';
 import clsx from 'clsx';
-import { questions } from './data/questions.tsx';
+import { quizData } from './data/questions.tsx';
 type props = {
     isVisible: boolean
 }
@@ -12,9 +12,24 @@ export function QuizFrame({isVisible} : props) {
     const headerTxt = "Quiz: HTML-DOM";
     const [selected, setSelected] = useState<Selected>(null);
     const [score, setScore] = useState(0);
+    const [progress, setProgress] = useState(0);
     const [questionNum, setQuestionNum] = useState(0);
+    const curQ = quizData[questionNum];
+    const isAnswered = selected !== null;
+    const isCorrect = selected === curQ.correct;
 
+    function chooseAnswer(i: number) {
+        if (selected !== null) return;
+        setSelected(i);
+        if (i == curQ.correct) setScore(prev => prev + 1);
+        setProgress(prev => Math.min(prev + 25, 100))
+    }
 
+    function nextQuestion() {
+        if (selected == null) return;
+        setQuestionNum(prev => prev + 1);
+        setSelected(null);
+    }
 
     return (
         <div className={clsx({[s.hidden] : !isVisible}, s.content)}>
@@ -37,7 +52,10 @@ export function QuizFrame({isVisible} : props) {
                     </span>
                     </div>
                     <div className={s.progressBar}>
-                        <div className={s.barFill}></div>
+                        <div
+                            className={s.barFill}
+                            style={ {width: `${progress}%`} }
+                        ></div>
                     </div>
                 </div>
 
@@ -45,21 +63,24 @@ export function QuizFrame({isVisible} : props) {
             <div className={s.panel}>
                 <div className={s.quizHeader}>
                     <div className={s.qNum}>{questionNum + 1}</div>
-                    <div className={s.question}>{questions[questionNum].question}</div>
+                    <div className={s.question}>{curQ.question}</div>
                 </div>
-                <div className={s.subtitle}>{questions[questionNum].hint}</div>
+                <div className={s.subtitle}>{curQ.hint}</div>
                 <div className={s.options}>
                     {[0,1,2,3].map((i) => (
-                        <button onClick={() => setSelected(i)} key={i} className={clsx(
+                        <button onClick={() => chooseAnswer(i)} key={i} className={clsx(
                             s.opt,
-                            selected != null && i == questions[questionNum].correct && s.correct,
-                            selected != null && i == selected && selected != questions[questionNum].correct && s.wrong,
-                        )}
-                        >
-                            {questions[questionNum].answers[i]}
+                            selected != null && i == curQ.correct && s.correct,
+                            selected != null && i == selected && selected != curQ.correct && s.wrong,
+                        )}>
+                            <div className={clsx(s.radio, {[s.purpleBorder]: i === selected})}></div>
+                            {curQ.answers[i]}
                         </button>
                     ))}
-                    <button onClick={() => setQuestionNum(questionNum+1)} className={s.nextQ}>next question</button>
+                    <div className={clsx(s.opt,s.hidden, isAnswered && (isCorrect ? s.ok : s.bad))}>
+                        { isCorrect ? "✅ " + curQ.correctMsg : "❌ " + curQ.falseMsg }
+                    </div>
+                    <button onClick={() => nextQuestion()} className={s.nextQ}>next question</button>
                 </div>
 
             </div>

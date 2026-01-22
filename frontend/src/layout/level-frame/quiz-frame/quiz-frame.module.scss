@@ -1,11 +1,7 @@
 $muted : rgba(255, 255, 255, 0.72);
 $border: 1px solid rgba(255, 255, 255, 0.14);
-
-
-
-.hidden {
-  display: none
-}
+$radius100: 100px;
+$purple: rgba(124, 92, 255, 0.85);
 
 .panel {
   border-radius: 20px;
@@ -33,7 +29,7 @@ $border: 1px solid rgba(255, 255, 255, 0.14);
   display: flex;
   gap: 10px;
   padding: 12px 14px;
-  border-radius: 100px;
+  border-radius: $radius100;
   border: $border;
   background: rgba(255, 255, 255, 0.05);
   font-weight: 800;
@@ -48,7 +44,7 @@ $border: 1px solid rgba(255, 255, 255, 0.14);
 
 .progressBar {
   height: 10px;
-  border-radius: 100px;
+  border-radius: $radius100;
   border: $border;
   background: rgba(0, 0, 0, 0.18);
 }
@@ -56,9 +52,9 @@ $border: 1px solid rgba(255, 255, 255, 0.14);
 .barFill {
   height: 100%;
   width: 0;
-  border-radius: 100px;
+  border-radius: $radius100;
   background: linear-gradient(135deg, rgba(124, 92, 255, 0.95), rgba(45, 212, 191, 0.85));
-  transition: all 0.2s ease
+  transition: all 0.5s ease
 }
 
 
@@ -91,22 +87,23 @@ $border: 1px solid rgba(255, 255, 255, 0.14);
 }
 
 .opt, .nextQ {
+  all: unset;
   display: flex;
-  justify-content: center;
+  justify-content: left;
   border-radius: 18px;
   border: $border;
   background: rgba(255, 255, 255, 0.05);
   padding: 12px 12px;
   gap: 10px;
   cursor: pointer;
-  width: 100%;
+  width: 90%;
   color: inherit;
   font: inherit;
   transition: all 0.1s ease;
 }
 
 .nextQ {
-
+  justify-content: center;
   opacity: 0.55;
 }
 
@@ -124,4 +121,51 @@ $border: 1px solid rgba(255, 255, 255, 0.14);
 .opt.correct {
   border-color: rgba(45, 212, 191, 0.45);
   background: rgba(45, 212, 191, 0.12);
+}
+
+.hidden {
+  display: none
+}
+
+.ok {
+  display: flex;
+  border-color: rgba(45, 212, 191, 0.40);
+  background: rgba(45, 212, 191, 0.10);
+}
+
+.bad {
+  display: flex;
+  border-color: rgba(255, 77, 109, 0.40);
+  background: rgba(255, 77, 109, 0.08);
+}
+
+
+.radio {
+  width: 18px;
+  height: 18px;
+  border-radius: $radius100;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  background: rgba(0, 0, 0, 0.18);
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+}
+
+.radio::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: $radius100;
+  background: $purple;
+  transition: background 0.1s ease;
+  opacity: 0;
+}
+
+
+.purpleBorder {
+  border-color: $purple;
+}
+
+.purpleBorder::after {
+  opacity: 1;
 }

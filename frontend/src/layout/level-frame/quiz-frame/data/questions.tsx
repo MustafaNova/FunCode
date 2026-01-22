@@ -39,7 +39,7 @@ const correctThree = 3;
 const correctMsgThree = "3Genau! Erst kommt der Request vom Browser(Client)";
 const falseMsgThree = "3Nicht ganz! Erst schickt der Browser ein Request(Anfrage). Dann kommt der Response(Antwort)";
 
-export const questions = [
+export const quizData = [
     {
         question: questionOne,
         hint: hintOne,
