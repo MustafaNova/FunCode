@@ -1,5 +1,5 @@
-import { RegisterUserResult } from '../../dtos/results/register-user.result';
-import { UserRegistrationCmd } from '../../dtos/commands/register-user.cmd';
+import { RegisterUserResult } from '../../use-cases/user-registration/register-user.result';
+import { UserRegistrationCmd } from '../../use-cases/user-registration/register-user.cmd';
 
 export interface RegisterUserPort {
     registerUser(

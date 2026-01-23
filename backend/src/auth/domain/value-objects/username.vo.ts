@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { UsernameError } from '../errors/UsernameError';
 
 export class Username {
     private constructor(private readonly username: string) {}
@@ -6,13 +6,12 @@ export class Username {
     static create(raw: string) {
         const v = raw?.trim();
 
-        if (!v) throw new BadRequestException('empty username');
-        if (v.length < 3) throw new BadRequestException('username is to short');
-        if (v.length > 30) throw new BadRequestException('username is to long');
+        if (!v) throw new UsernameError('empty username');
+        if (v.length < 3) throw new UsernameError('username is to short');
+        if (v.length > 30) throw new UsernameError('username is to long');
 
         const ok = /^[a-zA-Z0-9._-]+$/.test(v);
-        if (!ok)
-            throw new BadRequestException('invalid characters in username');
+        if (!ok) throw new UsernameError('invalid characters in username');
 
         return new Username(v);
     }

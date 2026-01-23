@@ -8,7 +8,7 @@ import {
 import { UserRegistrationReq } from './dtos/user-registration.request';
 import type { RegisterUserPort } from '../../../application/ports/inbound/register-user.port';
 import { REGISTER_USER_PORT } from '../../../application/tokens';
-import { UserRegistrationCmd } from '../../../application/dtos/commands/register-user.cmd';
+import { UserRegistrationCmd } from '../../../application/use-cases/user-registration/register-user.cmd';
 import { UserRegistrationResponse } from './dtos/user-registration.response';
 
 @Controller('registration')

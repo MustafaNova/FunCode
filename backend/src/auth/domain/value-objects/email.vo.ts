@@ -1,23 +1,23 @@
-import { BadRequestException } from '@nestjs/common';
+import { EmailError } from '../errors/EmailError';
 
 export class Email {
     private constructor(private readonly email: string) {}
 
     static create(raw: string) {
         if (!raw) {
-            throw new BadRequestException('empty email');
+            throw new EmailError('empty email');
         }
 
         const value = raw.trim().toLowerCase();
 
         if (value.length > 254) {
-            throw new BadRequestException('email address is to long');
+            throw new EmailError('email to long');
         }
 
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!regex.test(value)) {
-            throw new BadRequestException('invalid email address');
+            throw new EmailError('invalid email');
         }
 
         return new Email(raw);
