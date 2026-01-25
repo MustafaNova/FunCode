@@ -6,6 +6,6 @@ import { UserEntity } from '../../../infrastructure/persistence/typeorm/user.ent
 export interface UserRepositoryPort {
     checkEmailExists(email: Email): Promise<boolean>;
     checkUsernameExists(username: Username): Promise<boolean>;
-    saveNewUser(user: User): Promise<UserEntity>;
-    // findByUsername(user: Username):
+    save(user: User): Promise<UserEntity>;
+    findByUsername(username: Username): Promise<User | null>;
 }

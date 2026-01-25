@@ -1,12 +1,12 @@
-import {
-    ArgumentsHost,
-    Catch,
-    ExceptionFilter,
-    HttpStatus,
-} from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpStatus, } from '@nestjs/common';
 import { AppError } from '../../../application/errors/AppError';
-import { EmailAlreadyExistsError } from '../../../application/errors/EmailAlreadyExistsError';
-import { UsernameAlreadyExistsError } from '../../../application/errors/UsernameAlreadyExistsError';
+import {
+    EmailAlreadyExistsError
+} from '../../../application/use-cases/user-registration/errors/EmailAlreadyExistsError';
+import {
+    UsernameAlreadyExistsError
+} from '../../../application/use-cases/user-registration/errors/UsernameAlreadyExistsError';
+import { InvalidCredentialsError } from '../../../application/use-cases/user-login/errors/InvalidCredentialsError';
 
 @Catch(AppError)
 export class AppErrorFilter implements ExceptionFilter {
@@ -14,20 +14,19 @@ export class AppErrorFilter implements ExceptionFilter {
         const res = host.switchToHttp().getResponse();
 
         let status = HttpStatus.BAD_REQUEST;
-        let msg = 'INTERNAL_ERROR';
 
-        if (error instanceof EmailAlreadyExistsError) {
+        if (
+            error instanceof EmailAlreadyExistsError ||
+            error instanceof UsernameAlreadyExistsError
+        ) {
             status = HttpStatus.CONFLICT;
-            msg = 'Email already exists';
         }
 
-        if (error instanceof UsernameAlreadyExistsError) {
-            status = HttpStatus.CONFLICT;
-            msg = 'Username already exists';
+        if (error instanceof InvalidCredentialsError) {
+            status = HttpStatus.UNAUTHORIZED;
         }
 
         res.status(status).json({
-            msg,
             message: error.message,
         });
     }

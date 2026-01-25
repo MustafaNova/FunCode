@@ -8,14 +8,14 @@ import { Password } from '../../../domain/value-objects/password.vo';
 import type { UserRepositoryPort } from '../../ports/outbound/user-repository.port';
 import { USER_REPOSITORY_PORT } from '../../tokens';
 import { User } from '../../../domain/entitys/user';
-import { UsernameAlreadyExistsError } from '../../errors/UsernameAlreadyExistsError';
-import { EmailAlreadyExistsError } from '../../errors/EmailAlreadyExistsError';
+import { UsernameAlreadyExistsError } from './errors/UsernameAlreadyExistsError';
+import { EmailAlreadyExistsError } from './errors/EmailAlreadyExistsError';
 
 @Injectable()
 export class UserRegistrationService implements RegisterUserPort {
     constructor(
         @Inject(USER_REPOSITORY_PORT)
-        private readonly userRepository: UserRepositoryPort,
+        private readonly userRepo: UserRepositoryPort,
     ) {}
 
     async registerUser(
@@ -25,17 +25,17 @@ export class UserRegistrationService implements RegisterUserPort {
         const email = Email.create(userRegistration.email);
         const password = await Password.create(userRegistration.password);
 
-        if (await this.userRepository.checkUsernameExists(username)) {
+        if (await this.userRepo.checkUsernameExists(username)) {
             throw new UsernameAlreadyExistsError();
         }
 
-        if (await this.userRepository.checkEmailExists(email)) {
+        if (await this.userRepo.checkEmailExists(email)) {
             throw new EmailAlreadyExistsError();
         }
 
-        const user = new User(username, email, password);
-        await this.userRepository.saveNewUser(user);
+        const user = new User(null, username, email, password);
+        await this.userRepo.save(user);
 
-        return { username: username.get() };
+        return RegisterUserResult.from(user);
     }
 }

@@ -23,6 +23,9 @@ export class Email {
         return new Email(raw);
     }
 
+    static fromPersistence(email: string) {
+        return new Email(email);
+    }
     get() {
         return this.email;
     }

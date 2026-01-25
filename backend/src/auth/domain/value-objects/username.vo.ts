@@ -16,6 +16,10 @@ export class Username {
         return new Username(v);
     }
 
+    static fromPersistence(username: string) {
+        return new Username(username);
+    }
+
     get() {
         return this.username;
     }

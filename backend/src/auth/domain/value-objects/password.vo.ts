@@ -13,6 +13,10 @@ export class Password {
         return new Password(hashed);
     }
 
+    static fromPersistence(hashedPassword: string) {
+        return new Password(hashedPassword);
+    }
+
     get() {
         return this.hashed;
     }

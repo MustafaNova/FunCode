@@ -6,6 +6,8 @@ import { User } from '../../../../domain/entitys/user';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../../typeorm/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Password } from '../../../../domain/value-objects/password.vo';
+import { UserId } from '../../../../domain/value-objects/userId.vo';
 
 @Injectable()
 export class UserRepositoryAdapter implements UserRepositoryPort {
@@ -22,7 +24,7 @@ export class UserRepositoryAdapter implements UserRepositoryPort {
         return this.repo.exists({ where: { username: username.get() } });
     }
 
-    saveNewUser(user: User): Promise<UserEntity> {
+    save(user: User): Promise<UserEntity> {
         const entity = this.repo.create({
             username: user.username.get(),
             email: user.email.get(),
@@ -30,5 +32,16 @@ export class UserRepositoryAdapter implements UserRepositoryPort {
         });
 
         return this.repo.save(entity);
+    }
+
+    async findByUsername(username: Username): Promise<User | null> {
+        const user = await this.repo.findOneBy({ username: username.get() });
+        if (!user) return null;
+        return new User(
+            UserId.create(user.id),
+            Username.fromPersistence(user.username),
+            Email.fromPersistence(user.email),
+            Password.fromPersistence(user.password),
+        );
     }
 }
