@@ -1,4 +1,4 @@
-import { User } from '../../../domain/entitys/user';
+import { User } from '../../../../domain/entitys/user';
 
 export class RegisterUserResult {
     private constructor(public readonly username: string) {}

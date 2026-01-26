@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RegisterUserPort } from '../../ports/inbound/register-user.port';
-import { UserRegistrationCmd } from './register-user.cmd';
-import { RegisterUserResult } from './register-user.result';
+import { UserRegistrationCmd } from './dtos/register-user.cmd';
+import { RegisterUserResult } from './dtos/register-user.result';
 import { Username } from '../../../domain/value-objects/username.vo';
 import { Email } from '../../../domain/value-objects/email.vo';
 import { Password } from '../../../domain/value-objects/password.vo';

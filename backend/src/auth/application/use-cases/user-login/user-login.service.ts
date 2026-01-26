@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { LoginUserPort } from '../../ports/inbound/login-user.port';
-import { LoginUserCmd } from './login-user.cmd';
-import { LoginUserRes } from './login-user.res';
+import { LoginUserCmd } from './dtos/login-user.cmd';
+import { LoginUserRes } from './dtos/login-user.res';
 import { Username } from '../../../domain/value-objects/username.vo';
 import type { UserRepositoryPort } from '../../ports/outbound/user-repository.port';
 import { TOKEN_SERVICE_PORT, USER_REPOSITORY_PORT } from '../../tokens';
@@ -25,11 +25,13 @@ export class UserLoginService implements LoginUserPort {
         const user = await this.userRepo.findByUsername(loginUsername);
 
         if (!user) {
+            console.log('username nicht gefunden');
             throw new InvalidCredentialsError();
         }
 
         const loginPassword = await Password.create(loginData.password);
         if (!user.verifyPassword(loginPassword)) {
+            console.log('passwort fehler');
             throw new InvalidCredentialsError();
         }
 

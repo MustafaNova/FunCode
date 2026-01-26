@@ -9,8 +9,8 @@ export class MatchmakingController {
         private readonly joinMatchMaking: JoinMatchMakingPort,
     ) {}
 
-    @Post('join')
-    async join(@Req() req) {
+    // @Post('join')
+    // async join(@Req() req) {
         // await this.joinMatchMaking.join(req.user.sub);
-    }
+    // }
 }
