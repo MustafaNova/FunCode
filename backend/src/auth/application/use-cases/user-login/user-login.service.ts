@@ -6,7 +6,6 @@ import { Username } from '../../../domain/value-objects/username.vo';
 import type { UserRepositoryPort } from '../../ports/outbound/user-repository.port';
 import { TOKEN_SERVICE_PORT, USER_REPOSITORY_PORT } from '../../tokens';
 import { InvalidCredentialsError } from './errors/InvalidCredentialsError';
-import { Password } from '../../../domain/value-objects/password.vo';
 import type { TokenServicePort } from '../../ports/outbound/token-service.port';
 import { UserId } from '../../../domain/value-objects/userId.vo';
 import { TokenPayload } from '../../../domain/value-objects/tokenPayload.vo';
@@ -25,13 +24,13 @@ export class UserLoginService implements LoginUserPort {
         const user = await this.userRepo.findByUsername(loginUsername);
 
         if (!user) {
-            console.log('username nicht gefunden');
+            console.log('username not found for login');
             throw new InvalidCredentialsError();
         }
 
-        const loginPassword = await Password.create(loginData.password);
-        if (!user.verifyPassword(loginPassword)) {
-            console.log('passwort fehler');
+        const correctPassword = await user.verifyPassword(loginData.password);
+        if (!correctPassword) {
+            console.log('wrong password for login');
             throw new InvalidCredentialsError();
         }
 

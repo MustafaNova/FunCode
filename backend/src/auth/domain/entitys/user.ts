@@ -11,7 +11,7 @@ export class User {
         public readonly password: Password,
     ) {}
 
-    verifyPassword(password: Password) {
-        return password.get() == this.password.get();
+    async verifyPassword(raw: string) {
+        return this.password.matches(raw);
     }
 }

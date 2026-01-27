@@ -1,4 +1,4 @@
-import { hash } from 'bcrypt';
+import { hash, compare } from 'bcrypt';
 import { PasswordError } from '../errors/PasswordError';
 
 export class Password {
@@ -15,6 +15,10 @@ export class Password {
 
     static fromPersistence(hashedPassword: string) {
         return new Password(hashedPassword);
+    }
+
+    async matches(raw: string) {
+        return compare(raw, this.hashed);
     }
 
     get() {
