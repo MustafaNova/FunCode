@@ -8,9 +8,10 @@ import {
 } from './application/tokens';
 import Redis from 'ioredis';
 import { MatchmakingController } from './presentation/controllers/matchmaking/matchmaking.controller';
+import { AuthInfrastructureModule } from '../auth/infrastructure/auth/auth.infrastructure.module';
 
 @Module({
-    imports: [],
+    imports: [AuthInfrastructureModule],
     controllers: [MatchmakingController],
     providers: [
         {
