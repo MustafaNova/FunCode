@@ -7,8 +7,9 @@ import {
     REDIS_MATCHMAKING_ADAPTER,
 } from './application/tokens';
 import Redis from 'ioredis';
-import { MatchmakingController } from './presentation/controllers/matchmaking/matchmaking.controller';
+import { MatchmakingController } from './presentation/http/controllers/matchmaking/matchmaking.controller';
 import { AuthInfrastructureModule } from '../auth/infrastructure/auth/auth.infrastructure.module';
+import { MatchMakerService } from './application/use-cases/matchMaker/match-maker.service';
 
 @Module({
     imports: [AuthInfrastructureModule],
@@ -31,6 +32,7 @@ import { AuthInfrastructureModule } from '../auth/infrastructure/auth/auth.infra
                 });
             },
         },
+        MatchMakerService,
     ],
 })
 export class CompetitiveGameplayModule {}

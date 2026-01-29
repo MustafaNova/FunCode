@@ -1,8 +1,8 @@
 import { MatchmakingQueuePort } from '../application/ports/outbound/matchmaking-queue.port';
-import { User } from '../domain/entities/user';
 import Redis from 'ioredis';
 import { REDIS_CLIENT } from '../application/tokens';
 import { Inject } from '@nestjs/common';
+import { QueueEntry } from '../domain/entities/queueEntry';
 
 export class RedisMatchmakingQueueAdapter implements MatchmakingQueuePort {
     constructor(
@@ -10,9 +10,13 @@ export class RedisMatchmakingQueueAdapter implements MatchmakingQueuePort {
         private readonly redis: Redis,
     ) {}
 
-    async enqueue(user: User): Promise<void> {
+    async enqueue(queueEntry: QueueEntry): Promise<void> {
         const key = 'queue:matchmaking:ranked';
         const time = Date.now();
-        await this.redis.zadd(key, time, user.id);
+        const value = JSON.stringify({
+            userId: queueEntry.userId,
+            username: queueEntry.username,
+        });
+        await this.redis.zadd(key, time, value);
     }
 }
