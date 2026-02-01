@@ -1,3 +1,3 @@
 export interface MatchMakerPort {
-    matchTwoPlayers(): void;
+    matchTwoPlayers(): Promise<void>;
 }

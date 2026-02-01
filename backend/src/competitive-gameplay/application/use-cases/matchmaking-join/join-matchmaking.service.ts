@@ -1,7 +1,7 @@
 import { JoinMatchMakingPort } from '../../ports/inbound/join-matchmaking.port';
 import type { MatchmakingQueuePort } from '../../ports/outbound/matchmaking-queue.port';
 import { Inject, Injectable } from '@nestjs/common';
-import { REDIS_MATCHMAKING_ADAPTER } from '../../tokens';
+import { MATCHMAKING_QUEUE_PORT } from '../../tokens';
 import { JoinCmd } from './dtos/join.cmd';
 import { JoinRes } from './dtos/join.res';
 import { QueueEntry } from '../../../domain/entities/queueEntry';
@@ -9,7 +9,7 @@ import { QueueEntry } from '../../../domain/entities/queueEntry';
 @Injectable()
 export class JoinMatchmakingService implements JoinMatchMakingPort {
     constructor(
-        @Inject(REDIS_MATCHMAKING_ADAPTER)
+        @Inject(MATCHMAKING_QUEUE_PORT)
         private readonly matchmakingQueuePort: MatchmakingQueuePort,
     ) {}
 
