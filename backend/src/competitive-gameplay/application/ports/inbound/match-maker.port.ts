@@ -1,3 +1,3 @@
 export interface MatchMakerPort {
-    matchTwoPlayers(): Promise<void>;
+    match1v1Unranked(): Promise<void>;
 }

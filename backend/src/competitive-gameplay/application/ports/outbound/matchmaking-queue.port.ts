@@ -1,5 +1,12 @@
 import { QueueEntry } from '../../../domain/entities/queueEntry';
+import { MatchType, PlayerCount } from '../../../domain/types';
 
 export interface MatchmakingQueuePort {
-    enqueue(queueEntry: QueueEntry): Promise<void>;
+    enqueue(
+        queueEntry: QueueEntry,
+        type: MatchType,
+        players: PlayerCount,
+    ): Promise<void>;
+    getEntryCount(type: MatchType, players: PlayerCount): Promise<number>;
+    popTwoPlayers(type: MatchType, players: PlayerCount): Promise<QueueEntry[]>;
 }
