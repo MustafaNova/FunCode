@@ -5,6 +5,10 @@ import { Inject } from '@nestjs/common';
 import { QueueEntry } from '../../domain/entities/queueEntry';
 import { MatchType, PlayerCount } from '../../domain/types';
 
+interface PlayerEntry {
+    userId: string;
+    username: string;
+}
 export class RedisMatchmakingQueueAdapter implements MatchmakingQueuePort {
     constructor(
         @Inject(REDIS_CLIENT)
@@ -22,10 +26,11 @@ export class RedisMatchmakingQueueAdapter implements MatchmakingQueuePort {
         players: PlayerCount,
     ): Promise<void> {
         const time = Date.now();
-        const value = JSON.stringify({
+        const entry: PlayerEntry = {
             userId: queueEntry.userId,
             username: queueEntry.username,
-        });
+        };
+        const value = JSON.stringify(entry);
 
         const key = this.getQueueKey(type, players);
         await this.redis.zadd(key, time, value);
@@ -45,10 +50,22 @@ export class RedisMatchmakingQueueAdapter implements MatchmakingQueuePort {
     ): Promise<QueueEntry[]> {
         const key = this.getQueueKey(type, players);
         const unparsedRes = await this.redis.zpopmin(key, 2);
-        // return this.parseQueueEntry(unparsedRes);
+        return this.parseQueueEntry(unparsedRes);
     }
 
-    private parseQueueEntry(entry: string[]): QueueEntry[] {}
+    private parseQueueEntry(entry: string[]): QueueEntry[] {
+        const playerOne = JSON.parse(entry[0]) as PlayerEntry;
+        const playerTwo = JSON.parse(entry[2]) as PlayerEntry;
+        const entryOne = QueueEntry.create(
+            playerOne.userId,
+            playerOne.username,
+        );
+        const entryTwo = QueueEntry.create(
+            playerTwo.userId,
+            playerTwo.username,
+        );
+        return [entryOne, entryTwo];
+    }
 
     private getQueueKey(type: MatchType, players: PlayerCount) {
         switch (players) {

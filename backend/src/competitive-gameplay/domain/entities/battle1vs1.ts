@@ -1,10 +1,15 @@
+export interface PlayerInfo {
+    userId: string;
+    username: string;
+}
+
 export class Battle1vs1 {
     private constructor(
-        public readonly playerId1: string,
-        public readonly playerId2: string,
+        public readonly player1: PlayerInfo,
+        public readonly player2: PlayerInfo,
     ) {}
 
-    static create(playerId1: string, playerId2: string) {
-        return new Battle1vs1(playerId1, playerId2);
+    static create(player1: PlayerInfo, player2: PlayerInfo) {
+        return new Battle1vs1(player1, player2);
     }
 }

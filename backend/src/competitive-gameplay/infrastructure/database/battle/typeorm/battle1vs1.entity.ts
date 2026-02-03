@@ -9,7 +9,13 @@ export class Battle1vs1Entity {
     playerId1!: string;
 
     @Column()
+    playerUsername1!: string;
+
+    @Column()
     playerId2!: string;
+
+    @Column()
+    playerUsername2: string;
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     createdAt!: Date;
