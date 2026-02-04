@@ -1,9 +1,9 @@
-import { Controller, Post, Inject, UseGuards } from '@nestjs/common';
+import { Controller, Post, Inject, UseGuards, Body } from '@nestjs/common';
 import type { JoinMatchMakingPort } from '../../../../application/ports/inbound/join-matchmaking.port';
 import { JOIN_MATCHMAKING_SERVICE } from '../../../../application/tokens';
 import { AuthGuard } from '@nestjs/passport';
 import { UserPayload } from '../../decorators/user-payload.decorator';
-import { JoinRequest } from './dtos/join.request';
+import { AuthUser, JoinPayload } from './dtos/join.request';
 import { JoinCmd } from '../../../../application/use-cases/matchmaking-join/dtos/join.cmd';
 
 @Controller('matchmaking')
@@ -15,8 +15,13 @@ export class MatchmakingController {
 
     @Post('join')
     @UseGuards(AuthGuard('jwt'))
-    async join(@UserPayload() req: JoinRequest) {
-        const cmd = JoinCmd.create(req.userId, req.username);
+    async join(@UserPayload() user: AuthUser, @Body() payload: JoinPayload) {
+        const cmd = JoinCmd.create(
+            user.userId,
+            user.username,
+            payload.matchType,
+            payload.playerCount,
+        );
         await this.joinMatchMaking.join(cmd);
         return { success: true };
     }

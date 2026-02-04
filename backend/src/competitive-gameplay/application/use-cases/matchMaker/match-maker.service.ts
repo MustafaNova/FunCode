@@ -40,6 +40,7 @@ export class MatchMakerService
             type,
             playerNum,
         );
+
         if (playerCount < 2) return;
         const twoPlayers = await this.matchMaking.popTwoPlayers(
             type,
