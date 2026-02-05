@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { JoinMatchmakingService } from './application/use-cases/matchmaking-join/join-matchmaking.service';
 import { RedisMatchmakingQueueAdapter } from './infrastructure/redis/redis-matchmaking-queue.adapter';
 import {
+    BATTLE_EVENT_PUBLISHER_PORT,
     JOIN_MATCHMAKING_SERVICE,
     MATCHMAKING_QUEUE_PORT,
     REDIS_CLIENT,
@@ -11,6 +12,8 @@ import { MatchmakingController } from './presentation/http/controllers/matchmaki
 import { AuthInfrastructureModule } from '../auth/infrastructure/auth/auth.infrastructure.module';
 import { MatchMakerService } from './application/use-cases/matchMaker/match-maker.service';
 import { DatabaseModule } from './infrastructure/database/database.module';
+import { BattleManagerService } from './application/use-cases/battle-manager/battle-manager.service';
+import { BattleEventPublisherAdapter } from './infrastructure/redis/battle.event.publisher.adapter';
 
 @Module({
     imports: [AuthInfrastructureModule, DatabaseModule],
@@ -25,6 +28,10 @@ import { DatabaseModule } from './infrastructure/database/database.module';
             useClass: RedisMatchmakingQueueAdapter,
         },
         {
+            provide: BATTLE_EVENT_PUBLISHER_PORT,
+            useClass: BattleEventPublisherAdapter,
+        },
+        {
             provide: REDIS_CLIENT,
             useFactory: () => {
                 return new Redis({
@@ -34,6 +41,7 @@ import { DatabaseModule } from './infrastructure/database/database.module';
             },
         },
         MatchMakerService,
+        BattleManagerService,
     ],
 })
 export class CompetitiveGameplayModule {}

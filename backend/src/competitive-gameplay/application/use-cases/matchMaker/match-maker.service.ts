@@ -6,10 +6,15 @@ import {
 } from '@nestjs/common';
 import { MatchMakerPort } from '../../ports/inbound/match-maker.port';
 import type { BattleRepositoryPort } from '../../ports/outbound/battleRepository.port';
-import { BATTLE_REPOSITORY_PORT, MATCHMAKING_QUEUE_PORT } from '../../tokens';
+import {
+    BATTLE_EVENT_PUBLISHER_PORT,
+    BATTLE_REPOSITORY_PORT,
+    MATCHMAKING_QUEUE_PORT,
+} from '../../tokens';
 import type { MatchmakingQueuePort } from '../../ports/outbound/matchmaking-queue.port';
 import { MatchType, PlayerCount } from '../../../domain/types';
 import { Battle1vs1 } from '../../../domain/entities/battle1vs1';
+import type { BattleEventPublisherPort } from '../../ports/outbound/battle.event.publisher.port';
 
 @Injectable()
 export class MatchMakerService
@@ -23,6 +28,8 @@ export class MatchMakerService
         private readonly battleRepo: BattleRepositoryPort,
         @Inject(MATCHMAKING_QUEUE_PORT)
         private readonly matchMaking: MatchmakingQueuePort,
+        @Inject(BATTLE_EVENT_PUBLISHER_PORT)
+        private readonly battleEventPublisher: BattleEventPublisherPort,
     ) {}
 
     onModuleInit(): any {
@@ -55,6 +62,7 @@ export class MatchMakerService
         );
 
         await this.battleRepo.save1vs1(battle);
+        await this.battleEventPublisher.created1v1(battle);
     }
 
     private async loop() {
