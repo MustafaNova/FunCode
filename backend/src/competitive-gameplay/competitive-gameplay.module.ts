@@ -3,6 +3,7 @@ import { JoinMatchmakingService } from './application/use-cases/matchmaking-join
 import { RedisMatchmakingQueueAdapter } from './infrastructure/redis/redis-matchmaking-queue.adapter';
 import {
     BATTLE_EVENT_PUBLISHER_PORT,
+    BATTLE_MANAGER_PORT,
     JOIN_MATCHMAKING_SERVICE,
     MATCHMAKING_QUEUE_PORT,
     REDIS_CLIENT,
@@ -14,9 +15,10 @@ import { MatchMakerService } from './application/use-cases/matchMaker/match-make
 import { DatabaseModule } from './infrastructure/database/database.module';
 import { BattleManagerService } from './application/use-cases/battle-manager/battle-manager.service';
 import { BattleEventPublisherAdapter } from './infrastructure/redis/battle.event.publisher.adapter';
+import { RedisModule } from './infrastructure/redis/redis/redis.module';
 
 @Module({
-    imports: [AuthInfrastructureModule, DatabaseModule],
+    imports: [AuthInfrastructureModule, DatabaseModule, RedisModule],
     controllers: [MatchmakingController],
     providers: [
         {
@@ -30,6 +32,10 @@ import { BattleEventPublisherAdapter } from './infrastructure/redis/battle.event
         {
             provide: BATTLE_EVENT_PUBLISHER_PORT,
             useClass: BattleEventPublisherAdapter,
+        },
+        {
+            provide: BATTLE_MANAGER_PORT,
+            useClass: BattleManagerService,
         },
         {
             provide: REDIS_CLIENT,
