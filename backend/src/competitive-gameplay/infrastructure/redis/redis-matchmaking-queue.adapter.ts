@@ -1,9 +1,9 @@
 import { MatchmakingQueuePort } from '../../application/ports/outbound/matchmaking-queue.port';
 import Redis from 'ioredis';
-import { REDIS_CLIENT } from '../../application/tokens';
 import { Inject } from '@nestjs/common';
 import { QueueEntry } from '../../domain/entities/queueEntry';
 import { MatchType, PlayerCount } from '../../domain/types';
+import { REDIS_CLIENT } from './tokens';
 
 interface PlayerEntry {
     userId: string;

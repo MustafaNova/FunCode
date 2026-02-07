@@ -1,6 +1,6 @@
 import { Controller, Post, Inject, UseGuards, Body } from '@nestjs/common';
 import type { JoinMatchMakingPort } from '../../../../application/ports/inbound/join-matchmaking.port';
-import { JOIN_MATCHMAKING_SERVICE } from '../../../../application/tokens';
+import { JOIN_MATCHMAKING_PORT } from '../../../../application/tokens';
 import { AuthGuard } from '@nestjs/passport';
 import { UserPayload } from '../../decorators/user-payload.decorator';
 import { AuthUser, JoinPayload } from './dtos/join.request';
@@ -9,7 +9,7 @@ import { JoinCmd } from '../../../../application/use-cases/matchmaking-join/dtos
 @Controller('matchmaking')
 export class MatchmakingController {
     constructor(
-        @Inject(JOIN_MATCHMAKING_SERVICE)
+        @Inject(JOIN_MATCHMAKING_PORT)
         private readonly joinMatchMaking: JoinMatchMakingPort,
     ) {}
 

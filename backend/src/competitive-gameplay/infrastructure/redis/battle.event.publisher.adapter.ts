@@ -1,8 +1,8 @@
 import { BattleEventPublisherPort } from '../../application/ports/outbound/battle.event.publisher.port';
 import Redis from 'ioredis';
-import { REDIS_CLIENT } from '../../application/tokens';
 import { Inject } from '@nestjs/common';
 import { Battle1vs1 } from '../../domain/entities/battle1vs1';
+import { REDIS_CLIENT } from './tokens';
 
 export class BattleEventPublisherAdapter implements BattleEventPublisherPort {
     constructor(

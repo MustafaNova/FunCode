@@ -6,15 +6,15 @@ import {
 } from '@nestjs/common';
 import { MatchMakerPort } from '../../ports/inbound/match-maker.port';
 import type { BattleRepositoryPort } from '../../ports/outbound/battleRepository.port';
-import {
-    BATTLE_EVENT_PUBLISHER_PORT,
-    BATTLE_REPOSITORY_PORT,
-    MATCHMAKING_QUEUE_PORT,
-} from '../../tokens';
+import { BATTLE_REPOSITORY_PORT } from '../../tokens';
 import type { MatchmakingQueuePort } from '../../ports/outbound/matchmaking-queue.port';
 import { MatchType, PlayerCount } from '../../../domain/types';
 import { Battle1vs1 } from '../../../domain/entities/battle1vs1';
 import type { BattleEventPublisherPort } from '../../ports/outbound/battle.event.publisher.port';
+import {
+    BATTLE_EVENT_PUBLISHER_PORT,
+    MATCHMAKING_QUEUE_PORT,
+} from '../../../infrastructure/redis/tokens';
 
 @Injectable()
 export class MatchMakerService

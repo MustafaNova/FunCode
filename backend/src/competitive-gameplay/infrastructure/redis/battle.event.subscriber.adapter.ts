@@ -1,8 +1,9 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import Redis from 'ioredis';
-import { BATTLE_MANAGER_PORT, REDIS_CLIENT } from '../../application/tokens';
+import { BATTLE_MANAGER_PORT } from '../../application/tokens';
 import type { BattleManagerPort } from '../../application/ports/inbound/battle.manager.port';
 import { Battle1vs1, PlayerInfo } from '../../domain/entities/battle1vs1';
+import { REDIS_SUBSCRIBER_CLIENT } from './tokens';
 
 interface Payload {
     player1: PlayerInfo;
@@ -12,7 +13,7 @@ interface Payload {
 @Injectable()
 export class BattleEventSubscriberAdapter implements OnModuleInit {
     constructor(
-        @Inject(REDIS_CLIENT)
+        @Inject(REDIS_SUBSCRIBER_CLIENT)
         private readonly redis: Redis,
         @Inject(BATTLE_MANAGER_PORT)
         private readonly battleManager: BattleManagerPort,

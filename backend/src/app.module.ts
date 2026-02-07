@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
-import { CompetitiveGameplayModule } from './competitive-gameplay/competitive-gameplay.module';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CompetitiveGameplayModule } from './competitive-gameplay/competitive-gameplay.module';
 
 @Module({
     imports: [
-        CompetitiveGameplayModule,
         AuthModule,
         TypeOrmModule.forRoot({
             type: 'postgres',
@@ -17,6 +16,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
             autoLoadEntities: true,
             synchronize: true,
         }),
+        CompetitiveGameplayModule,
     ],
     controllers: [],
     providers: [],
