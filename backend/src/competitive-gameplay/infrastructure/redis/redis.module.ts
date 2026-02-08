@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { RedisMatchmakingQueueAdapter } from './redis-matchmaking-queue.adapter';
 import { BattleEventPublisherAdapter } from './battle.event.publisher.adapter';
 import Redis from 'ioredis';
@@ -8,15 +8,13 @@ import {
     REDIS_CLIENT,
     REDIS_SUBSCRIBER_CLIENT,
 } from './tokens';
-import { BATTLE_MANAGER_PORT } from '../../application/tokens';
-import { BattleManagerService } from '../../application/use-cases/battle-manager/battle-manager.service';
+import { BattleEventSubscriberAdapter } from './battle.event.subscriber.adapter';
+import { ApplicationModule } from '../../application/application.module';
 
 @Module({
+    imports: [forwardRef(() => ApplicationModule)],
     providers: [
-        {
-            provide: BATTLE_MANAGER_PORT,
-            useExisting: BattleManagerService,
-        },
+        BattleEventSubscriberAdapter,
         {
             provide: MATCHMAKING_QUEUE_PORT,
             useClass: RedisMatchmakingQueueAdapter,

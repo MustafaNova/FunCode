@@ -5,6 +5,5 @@ import { MatchmakingController } from './controllers/matchmaking/matchmaking.con
 @Module({
     imports: [ApplicationModule],
     controllers: [MatchmakingController],
-    exports: [MatchmakingController],
 })
-export class ApiModule {}
+export class HttpModule {}

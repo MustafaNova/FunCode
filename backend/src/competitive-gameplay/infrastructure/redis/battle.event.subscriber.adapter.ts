@@ -20,15 +20,12 @@ export class BattleEventSubscriberAdapter implements OnModuleInit {
     ) {}
 
     async onModuleInit(): Promise<void> {
-        console.log('subscriber init');
-        await this.redis.subscribe('battle.created', (msg) => {
-            console.log('subscriber no string');
-            if (typeof msg !== 'string') return;
-            console.log('subscriber is string');
+        console.log('SUBSCRIBER INIT');
+        await this.redis.subscribe('battle.created');
+        this.redis.on('message', (channel, msg) => {
             const payload = JSON.parse(msg) as Payload;
             const battle = Battle1vs1.create(payload.player1, payload.player2);
             void this.battleManager.on1v1Created(battle);
-            console.log('on1v1Created aufgerufen');
         });
     }
 }
