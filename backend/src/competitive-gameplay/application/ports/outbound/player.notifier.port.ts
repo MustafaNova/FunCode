@@ -1,6 +1,13 @@
-import { Battle1vs1 } from '../../../domain/entities/battle1vs1';
-
 export interface PlayerNotifierPort {
-    createBattleRoom1v1(battle: Battle1vs1): Promise<void>;
-    notifyBattleRoom(roomId: string, msg: string): Promise<void>;
+    joinPlayersToRoom1v1(
+        roomId: string,
+        userId1: string,
+        userId2: string,
+    ): Promise<void>;
+    notifyBattleRoom(
+        roomId: string,
+        name1: string,
+        name2: string,
+        msg: string,
+    ): void;
 }

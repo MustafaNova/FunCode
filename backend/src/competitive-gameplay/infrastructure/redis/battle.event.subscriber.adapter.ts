@@ -20,7 +20,6 @@ export class BattleEventSubscriberAdapter implements OnModuleInit {
     ) {}
 
     async onModuleInit(): Promise<void> {
-        console.log('SUBSCRIBER INIT');
         await this.redis.subscribe('battle.created');
         this.redis.on('message', (channel, msg) => {
             const payload = JSON.parse(msg) as Payload;

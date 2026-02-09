@@ -13,6 +13,5 @@ export class BattleEventPublisherAdapter implements BattleEventPublisherPort {
     async created1v1(battle: Battle1vs1): Promise<void> {
         const msg = JSON.stringify(battle);
         await this.redis.publish('battle.created', msg);
-        console.log('published battle.created');
     }
 }

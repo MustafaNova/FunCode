@@ -1,11 +1,11 @@
 import {
     OnGatewayConnection,
-    OnGatewayDisconnect,
+    OnGatewayDisconnect, SubscribeMessage,
     WebSocketGateway,
+    WebSocketServer,
 } from '@nestjs/websockets';
-import { Socket } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { verify } from 'jsonwebtoken';
-import { PlayerInfo } from '../../domain/entities/battle1vs1';
 
 interface Payload {
     userId: string;
@@ -14,15 +14,12 @@ interface Payload {
     exp: number;
 }
 
-interface Player {
-    userId: string;
-    username: string;
-    socket: Socket;
-}
-
 @WebSocketGateway()
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
+    @WebSocketServer()
+    server: Server;
     private connectedPlayers = new Map<string, Socket>();
+    private readyPlayers = new Map<string, Set<string>>();
 
     handleConnection(client: Socket): any {
         const token = client.handshake.headers.authorization as string;
@@ -57,5 +54,18 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
         const player2 = this.connectedPlayers.get(userId2);
         await player1?.join(roomId);
         await player2?.join(roomId);
+    }
+
+    notifyRoom1v1(roomId: string, name1: string, name2: string, msg: string) {
+        this.server.to(roomId).emit('MATCH_FOUND', {
+            message: msg,
+            prompt: 'Are you ready ?',
+            players: [name1, name2],
+        });
+    }
+
+    @SubscribeMessage('PLAYER_READY')
+    handlePlayerReady(client: Socket) {
+
     }
 }
