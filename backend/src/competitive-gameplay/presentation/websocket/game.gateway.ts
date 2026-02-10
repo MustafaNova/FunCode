@@ -1,34 +1,38 @@
 import {
     OnGatewayConnection,
-    OnGatewayDisconnect, SubscribeMessage,
+    OnGatewayDisconnect,
+    SubscribeMessage,
     WebSocketGateway,
     WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { verify } from 'jsonwebtoken';
-
-interface Payload {
-    userId: string;
-    username: string;
-    iat: number;
-    exp: number;
-}
+import type { AuthenticatedSocket, Payload } from './interfaces';
+import type { BattleManagerPort } from '../../application/ports/inbound/battle.manager.port';
+import { BATTLE_MANAGER_PORT } from '../../application/tokens';
+import { Inject } from '@nestjs/common';
 
 @WebSocketGateway()
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
+    constructor(
+        @Inject(BATTLE_MANAGER_PORT)
+        private readonly battleManager: BattleManagerPort,
+    ) {}
+
     @WebSocketServer()
     server: Server;
     private connectedPlayers = new Map<string, Socket>();
-    private readyPlayers = new Map<string, Set<string>>();
 
-    handleConnection(client: Socket): any {
-        const token = client.handshake.headers.authorization as string;
+    handleConnection(client: AuthenticatedSocket): any {
+        const auth = client.handshake.headers.authorization as string;
+        const token = auth?.split(' ')[1];
         if (!token) {
             this.disconnectUnauthorized(client);
             return;
         }
         try {
             const payload = verify(token, 'test') as Payload;
+            client.data.user = payload;
             this.connectedPlayers.set(payload.userId, client);
         } catch {
             this.disconnectUnauthorized(client);
@@ -56,16 +60,28 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
         await player2?.join(roomId);
     }
 
-    notifyRoom1v1(roomId: string, name1: string, name2: string, msg: string) {
-        this.server.to(roomId).emit('MATCH_FOUND', {
+    notifyBattleRoom(roomId: string, event: string, msg: string) {
+        this.server.to(roomId).emit(event, {
             message: msg,
-            prompt: 'Are you ready ?',
-            players: [name1, name2],
         });
     }
 
     @SubscribeMessage('PLAYER_READY')
-    handlePlayerReady(client: Socket) {
+    handlePlayerReady(
+        client: AuthenticatedSocket,
+        payload: { roomId: string },
+    ) {
+        const userId = client.data.user?.userId as string;
+        const roomId = payload.roomId;
+        const room = this.server.sockets.adapter.rooms.get(roomId);
+        if (!room) {
+            client.emit('ERROR', {
+                code: 'ROOM_ERROR',
+                msg: 'Room does not exist',
+            });
+            return;
+        }
 
+        this.battleManager.handleReadyPlayers(userId, roomId, room.size);
     }
 }

@@ -1,3 +1,3 @@
-export enum BattleMsg {
-    MATCH_FOUND = 'Match found!',
+export enum BattleEvent {
+    MATCH_FOUND = 'MATCH_FOUND',
 }

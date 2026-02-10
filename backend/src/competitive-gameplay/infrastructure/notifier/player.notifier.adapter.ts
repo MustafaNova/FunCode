@@ -14,12 +14,7 @@ export class PlayerNotifierAdapter implements PlayerNotifierPort {
         await this.gameGateway.createNewRoom1v1(roomId, userId1, userId2);
     }
 
-    notifyBattleRoom(
-        roomId: string,
-        name1: string,
-        name2: string,
-        msg: string,
-    ): void {
-        this.gameGateway.notifyRoom1v1(roomId, name1, name2, msg);
+    notifyBattleRoom(roomId: string, event: string, msg: string): void {
+        this.gameGateway.notifyBattleRoom(roomId, event, msg);
     }
 }
