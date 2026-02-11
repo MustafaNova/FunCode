@@ -21,7 +21,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     @WebSocketServer()
     server: Server;
-    private connectedPlayers = new Map<string, Socket>();
+    private connectedPlayers = new Map<string, AuthenticatedSocket>();
 
     handleConnection(client: AuthenticatedSocket): any {
         const auth = client.handshake.headers.authorization as string;
@@ -56,6 +56,8 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     async createNewRoom1v1(roomId: string, userId1: string, userId2: string) {
         const player1 = this.connectedPlayers.get(userId1);
         const player2 = this.connectedPlayers.get(userId2);
+        this.connectedPlayers.get(userId1)!.data.room = roomId;
+        this.connectedPlayers.get(userId2)!.data.room = roomId;
         await player1?.join(roomId);
         await player2?.join(roomId);
     }
@@ -67,12 +69,18 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     @SubscribeMessage('PLAYER_READY')
-    handlePlayerReady(
-        client: AuthenticatedSocket,
-        payload: { roomId: string },
-    ) {
+    handlePlayerReady(client: AuthenticatedSocket) {
         const userId = client.data.user?.userId as string;
-        const roomId = payload.roomId;
+        const roomId = client.data.room;
+
+        if (!roomId) {
+            client.emit('ERROR', {
+                code: 'ROOM_ERROR',
+                msg: 'No room was joined',
+            });
+            return;
+        }
+
         const room = this.server.sockets.adapter.rooms.get(roomId);
         if (!room) {
             client.emit('ERROR', {

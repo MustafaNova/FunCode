@@ -10,5 +10,6 @@ export interface Payload {
 export interface AuthenticatedSocket extends Socket {
     data: {
         user?: Payload;
+        room?: string;
     };
 }

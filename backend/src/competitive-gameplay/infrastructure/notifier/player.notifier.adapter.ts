@@ -1,20 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { PlayerNotifierPort } from '../../application/ports/outbound/player.notifier.port';
-import { GameGateway } from '../../presentation/websocket/game.gateway';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class PlayerNotifierAdapter implements PlayerNotifierPort {
-    constructor(private readonly gameGateway: GameGateway) {}
+    constructor(private readonly eventEmitter: EventEmitter2) {}
 
-    async joinPlayersToRoom1v1(
+    joinPlayersToRoom1v1(
         roomId: string,
         userId1: string,
         userId2: string,
-    ): Promise<void> {
-        await this.gameGateway.createNewRoom1v1(roomId, userId1, userId2);
+    ): void {
+        this.eventEmitter.emit('createNewRoom1v1', {
+            roomId,
+            userId1,
+            userId2,
+        });
     }
 
     notifyBattleRoom(roomId: string, event: string, msg: string): void {
-        this.gameGateway.notifyBattleRoom(roomId, event, msg);
+        this.eventEmitter.emit('notifyRoom', { roomId, event, msg });
     }
 }

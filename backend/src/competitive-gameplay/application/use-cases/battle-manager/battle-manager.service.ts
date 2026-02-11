@@ -45,12 +45,14 @@ export class BattleManagerService implements BattleManagerPort {
 
         const readyRoom = this.readyPlayers.get(roomId)!;
         readyRoom.add(userId);
-        const readyCount = readyRoom.size;
 
-
-        if (roomSize == readyCount) {
+        if (roomSize == readyRoom.size) {
             this.readyPlayers.delete(roomId);
-            // battle start
+            this.playerNotifier.notifyBattleRoom(
+                roomId,
+                'BATTLE_STARTED',
+                'Battle has started',
+            );
         }
     }
 }

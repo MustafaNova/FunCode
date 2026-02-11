@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CompetitiveGameplayModule } from './competitive-gameplay/competitive-gameplay.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
     imports: [
@@ -17,6 +18,7 @@ import { CompetitiveGameplayModule } from './competitive-gameplay/competitive-ga
             synchronize: true,
         }),
         CompetitiveGameplayModule,
+        EventEmitterModule.forRoot(),
     ],
     controllers: [],
     providers: [],
