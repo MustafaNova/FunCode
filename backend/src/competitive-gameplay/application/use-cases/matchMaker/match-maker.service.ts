@@ -21,7 +21,6 @@ export class MatchMakerService
     implements MatchMakerPort, OnModuleInit, OnModuleDestroy
 {
     private stopped = false;
-    private interval: NodeJS.Timer;
 
     constructor(
         @Inject(BATTLE_REPOSITORY_PORT)

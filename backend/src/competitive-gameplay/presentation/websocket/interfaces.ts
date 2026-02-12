@@ -13,3 +13,15 @@ export interface AuthenticatedSocket extends Socket {
         room?: string;
     };
 }
+
+export interface CreateNewRoom1v1Event {
+    roomId: string;
+    userId1: string;
+    userId2: string;
+}
+
+export interface NotifyRoomEvent {
+    roomId: string;
+    event: string;
+    msg: string;
+}

@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { HttpModule } from './http/http.module';
-import { GameGateway } from './websocket/game.gateway';
+import { GameGatewayModule } from './websocket/game.gateway.module';
 
 @Module({
-    imports: [HttpModule, GameGateway],
+    imports: [HttpModule, GameGatewayModule],
 })
 export class ApiModule {}

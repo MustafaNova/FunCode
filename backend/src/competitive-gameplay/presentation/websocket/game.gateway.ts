@@ -7,10 +7,17 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { verify } from 'jsonwebtoken';
-import type { AuthenticatedSocket, Payload } from './interfaces';
+import type {
+    AuthenticatedSocket,
+    CreateNewRoom1v1Event,
+    NotifyRoomEvent,
+    Payload,
+} from './interfaces';
 import type { BattleManagerPort } from '../../application/ports/inbound/battle.manager.port';
 import { BATTLE_MANAGER_PORT } from '../../application/tokens';
 import { Inject } from '@nestjs/common';
+import { OnEvent } from '@nestjs/event-emitter';
+import { BattleEvent } from '../../domain/battle.events';
 
 @WebSocketGateway()
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -53,16 +60,20 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
         client.disconnect();
     }
 
-    async createNewRoom1v1(roomId: string, userId1: string, userId2: string) {
+    @OnEvent(BattleEvent.CREATE_1V1)
+    async createNewRoom1v1(payload: CreateNewRoom1v1Event) {
+        const { roomId, userId1, userId2 } = payload;
         const player1 = this.connectedPlayers.get(userId1);
         const player2 = this.connectedPlayers.get(userId2);
-        this.connectedPlayers.get(userId1)!.data.room = roomId;
-        this.connectedPlayers.get(userId2)!.data.room = roomId;
+        player1!.data.room = roomId;
+        player2!.data.room = roomId;
         await player1?.join(roomId);
         await player2?.join(roomId);
     }
 
-    notifyBattleRoom(roomId: string, event: string, msg: string) {
+    @OnEvent(BattleEvent.ROOM_NOTIFICATION)
+    notifyBattleRoom(payload: NotifyRoomEvent) {
+        const { roomId, event, msg } = payload;
         this.server.to(roomId).emit(event, {
             message: msg,
         });
@@ -70,6 +81,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     @SubscribeMessage('PLAYER_READY')
     handlePlayerReady(client: AuthenticatedSocket) {
+        console.log('PLAYER_READY MESSAGE ARRIVED');
         const userId = client.data.user?.userId as string;
         const roomId = client.data.room;
 

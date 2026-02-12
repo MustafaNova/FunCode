@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PlayerNotifierPort } from '../../application/ports/outbound/player.notifier.port';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { BattleEvent } from '../../domain/battle.events';
 
 @Injectable()
 export class PlayerNotifierAdapter implements PlayerNotifierPort {
@@ -11,7 +12,7 @@ export class PlayerNotifierAdapter implements PlayerNotifierPort {
         userId1: string,
         userId2: string,
     ): void {
-        this.eventEmitter.emit('createNewRoom1v1', {
+        this.eventEmitter.emit(BattleEvent.CREATE_1V1, {
             roomId,
             userId1,
             userId2,
@@ -19,6 +20,10 @@ export class PlayerNotifierAdapter implements PlayerNotifierPort {
     }
 
     notifyBattleRoom(roomId: string, event: string, msg: string): void {
-        this.eventEmitter.emit('notifyRoom', { roomId, event, msg });
+        this.eventEmitter.emit(BattleEvent.ROOM_NOTIFICATION, {
+            roomId,
+            event,
+            msg,
+        });
     }
 }

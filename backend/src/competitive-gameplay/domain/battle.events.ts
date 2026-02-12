@@ -1,0 +1,4 @@
+export enum BattleEvent {
+    CREATE_1V1 = 'CREATE_1V1',
+    ROOM_NOTIFICATION = 'ROOM_NOTIFICATION',
+}

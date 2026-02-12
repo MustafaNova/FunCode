@@ -4,7 +4,7 @@ import { Battle1vs1, PlayerInfo } from '../../../domain/entities/battle1vs1';
 import { randomUUID } from 'node:crypto';
 import type { PlayerNotifierPort } from '../../ports/outbound/player.notifier.port';
 import { PLAYER_NOTIFIER_PORT } from '../../../infrastructure/notifier/token';
-import { BattleEvent } from './messages';
+import { BattleNotification } from '../../../domain/battle.notifs';
 
 @Injectable()
 export class BattleManagerService implements BattleManagerPort {
@@ -22,16 +22,12 @@ export class BattleManagerService implements BattleManagerPort {
         const p2 = battle.player2;
 
         this.roomToPlayers.set(roomId, [p1, p2]);
-        await this.playerNotifier.joinPlayersToRoom1v1(
-            roomId,
-            p1.userId,
-            p2.userId,
-        );
+        this.playerNotifier.joinPlayersToRoom1v1(roomId, p1.userId, p2.userId);
 
         const msg = `Battle: ${p1.username} vs ${p2.username}`;
         this.playerNotifier.notifyBattleRoom(
             roomId,
-            BattleEvent.MATCH_FOUND,
+            BattleNotification.MATCH_FOUND,
             msg,
         );
 
@@ -50,7 +46,7 @@ export class BattleManagerService implements BattleManagerPort {
             this.readyPlayers.delete(roomId);
             this.playerNotifier.notifyBattleRoom(
                 roomId,
-                'BATTLE_STARTED',
+                BattleNotification.START_BATTLE,
                 'Battle has started',
             );
         }
