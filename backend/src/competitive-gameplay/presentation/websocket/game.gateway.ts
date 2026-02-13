@@ -63,12 +63,12 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @OnEvent(BattleEvent.CREATE_1V1)
     async createNewRoom1v1(payload: CreateNewRoom1v1Event) {
         const { roomId, userId1, userId2 } = payload;
-        const player1 = this.connectedPlayers.get(userId1);
-        const player2 = this.connectedPlayers.get(userId2);
-        player1!.data.room = roomId;
-        player2!.data.room = roomId;
-        await player1?.join(roomId);
-        await player2?.join(roomId);
+        const player1 = this.connectedPlayers.get(userId1)!;
+        const player2 = this.connectedPlayers.get(userId2)!;
+        player1.data.room = roomId;
+        player2.data.room = roomId;
+        await player1.join(roomId);
+        await player2.join(roomId);
     }
 
     @OnEvent(BattleEvent.ROOM_NOTIFICATION)

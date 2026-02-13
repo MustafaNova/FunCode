@@ -7,12 +7,12 @@ import { BattleEvent } from '../../domain/battle.events';
 export class PlayerNotifierAdapter implements PlayerNotifierPort {
     constructor(private readonly eventEmitter: EventEmitter2) {}
 
-    joinPlayersToRoom1v1(
+    async joinPlayersToRoom1v1(
         roomId: string,
         userId1: string,
         userId2: string,
-    ): void {
-        this.eventEmitter.emit(BattleEvent.CREATE_1V1, {
+    ): Promise<void> {
+        await this.eventEmitter.emitAsync(BattleEvent.CREATE_1V1, {
             roomId,
             userId1,
             userId2,

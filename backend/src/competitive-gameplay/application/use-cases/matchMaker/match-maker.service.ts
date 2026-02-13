@@ -54,7 +54,7 @@ export class MatchMakerService
         );
         const p1 = twoPlayers[0];
         const p2 = twoPlayers[1];
-
+        console.log(`popped ${p1.username} and ${p2.username}`);
         const battle = Battle1vs1.create(
             { userId: p1.userId, username: p1.username },
             { userId: p2.userId, username: p2.username },

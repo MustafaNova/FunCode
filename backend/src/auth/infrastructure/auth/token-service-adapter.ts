@@ -14,7 +14,7 @@ export class TokenServiceAdapter implements TokenServicePort {
             username: payload.username.get(),
         });
 
-        const expiresIn = 3600;
+        const expiresIn = 9999999999;
         return AccessToken.create(token, expiresIn);
     }
 }

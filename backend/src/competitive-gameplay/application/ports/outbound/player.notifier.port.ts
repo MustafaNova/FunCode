@@ -5,10 +5,6 @@ export interface PlayerNotifierPort {
         roomId: string,
         userId1: string,
         userId2: string,
-    ): void;
-    notifyBattleRoom(
-        roomId: string,
-        notif: BattleNotification,
-        msg: string,
-    ): void;
+    ): Promise<void>;
+    notifyBattleRoom(roomId: string, notif: BattleNotification, msg: any): void;
 }

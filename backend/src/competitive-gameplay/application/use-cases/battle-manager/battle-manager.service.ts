@@ -5,6 +5,7 @@ import { randomUUID } from 'node:crypto';
 import type { PlayerNotifierPort } from '../../ports/outbound/player.notifier.port';
 import { PLAYER_NOTIFIER_PORT } from '../../../infrastructure/notifier/token';
 import { BattleNotification } from '../../../domain/battle.notifs';
+import { TaskService } from './tasks/task.service';
 
 @Injectable()
 export class BattleManagerService implements BattleManagerPort {
@@ -14,15 +15,20 @@ export class BattleManagerService implements BattleManagerPort {
     constructor(
         @Inject(PLAYER_NOTIFIER_PORT)
         private readonly playerNotifier: PlayerNotifierPort,
+        private readonly taskService: TaskService,
     ) {}
 
     async on1v1Created(battle: Battle1vs1): Promise<void> {
         const roomId = randomUUID();
         const p1 = battle.player1;
         const p2 = battle.player2;
-
+        console.log(`creating now 1v1 for ${p1.username} and ${p2.username}`);
         this.roomToPlayers.set(roomId, [p1, p2]);
-        this.playerNotifier.joinPlayersToRoom1v1(roomId, p1.userId, p2.userId);
+        await this.playerNotifier.joinPlayersToRoom1v1(
+            roomId,
+            p1.userId,
+            p2.userId,
+        );
 
         const msg = `Battle: ${p1.username} vs ${p2.username}`;
         this.playerNotifier.notifyBattleRoom(
@@ -47,7 +53,7 @@ export class BattleManagerService implements BattleManagerPort {
             this.playerNotifier.notifyBattleRoom(
                 roomId,
                 BattleNotification.START_BATTLE,
-                'Battle has started',
+                this.taskService.getRandomTask(),
             );
         }
     }
