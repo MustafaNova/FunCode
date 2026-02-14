@@ -1,4 +1,5 @@
 import {
+    MessageBody,
     OnGatewayConnection,
     OnGatewayDisconnect,
     SubscribeMessage,
@@ -12,12 +13,16 @@ import type {
     CreateNewRoom1v1Event,
     NotifyRoomEvent,
     Payload,
+    SolutionSubmit,
 } from './interfaces';
 import type { BattleManagerPort } from '../../application/ports/inbound/battle.manager.port';
 import { BATTLE_MANAGER_PORT } from '../../application/tokens';
-import { Inject } from '@nestjs/common';
+import { Inject, UseGuards } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { BattleEvent } from '../../domain/battle.events';
+import { ReadyPlayerCmd } from '../../application/use-cases/battle-manager/dtos/ready.player.cmd';
+import { SubmitCmd } from '../../application/use-cases/battle-manager/dtos/submit.cmd';
+import { RoomGuard } from './guards/room.guard';
 
 @WebSocketGateway()
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -85,12 +90,23 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
         const userId = client.data.user?.userId as string;
         const roomId = client.data.room;
 
+        const room = this.getValidatedRoom(client, roomId);
+        if (!room) return;
+        this.battleManager.handleReadyPlayer(
+            ReadyPlayerCmd.create(userId, roomId as string, room.size),
+        );
+    }
+
+    private getValidatedRoom(
+        client: AuthenticatedSocket,
+        roomId: string | undefined,
+    ) {
         if (!roomId) {
             client.emit('ERROR', {
                 code: 'ROOM_ERROR',
                 msg: 'No room was joined',
             });
-            return;
+            return undefined;
         }
 
         const room = this.server.sockets.adapter.rooms.get(roomId);
@@ -99,9 +115,23 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
                 code: 'ROOM_ERROR',
                 msg: 'Room does not exist',
             });
-            return;
+            return undefined;
         }
+        return room;
+    }
 
-        this.battleManager.handleReadyPlayers(userId, roomId, room.size);
+    @UseGuards(RoomGuard)
+    @SubscribeMessage('SUBMIT_SOLUTION')
+    handleSolutionSubmit(
+        client: AuthenticatedSocket,
+        @MessageBody() payload: SolutionSubmit,
+    ) {
+        this.battleManager.handleSolutionSubmit(
+            SubmitCmd.create(
+                client.data.room,
+                client.data.user?.username,
+                payload.solution,
+            ),
+        );
     }
 }

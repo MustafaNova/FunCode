@@ -25,3 +25,7 @@ export interface NotifyRoomEvent {
     event: string;
     msg: string;
 }
+
+export interface SolutionSubmit {
+    solution: string;
+}

@@ -6,6 +6,8 @@ import type { PlayerNotifierPort } from '../../ports/outbound/player.notifier.po
 import { PLAYER_NOTIFIER_PORT } from '../../../infrastructure/notifier/token';
 import { BattleNotification } from '../../../domain/battle.notifs';
 import { TaskService } from './tasks/task.service';
+import { ReadyPlayerCmd } from './dtos/ready.player.cmd';
+import { SubmitCmd } from './dtos/submit.cmd';
 
 @Injectable()
 export class BattleManagerService implements BattleManagerPort {
@@ -40,7 +42,8 @@ export class BattleManagerService implements BattleManagerPort {
         return Promise.resolve();
     }
 
-    handleReadyPlayers(userId: string, roomId: string, roomSize: number) {
+    handleReadyPlayer(readyPlayer: ReadyPlayerCmd) {
+        const { userId, roomId, roomSize } = readyPlayer;
         if (!this.readyPlayers.has(roomId)) {
             this.readyPlayers.set(roomId, new Set<string>());
         }
@@ -56,5 +59,9 @@ export class BattleManagerService implements BattleManagerPort {
                 this.taskService.getRandomTask(),
             );
         }
+    }
+
+    handleSolutionSubmit(submit: SubmitCmd) {
+
     }
 }
