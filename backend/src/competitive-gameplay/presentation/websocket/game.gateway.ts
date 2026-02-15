@@ -2,6 +2,7 @@ import {
     MessageBody,
     OnGatewayConnection,
     OnGatewayDisconnect,
+    OnGatewayInit,
     SubscribeMessage,
     WebSocketGateway,
     WebSocketServer,
@@ -9,10 +10,11 @@ import {
 import { Server, Socket } from 'socket.io';
 import { verify } from 'jsonwebtoken';
 import type {
-    AuthenticatedSocket,
     CreateNewRoom1v1Event,
+    GameSocket,
     NotifyRoomEvent,
     Payload,
+    RoomSocket,
     SolutionSubmit,
 } from './interfaces';
 import type { BattleManagerPort } from '../../application/ports/inbound/battle.manager.port';
@@ -23,19 +25,27 @@ import { BattleEvent } from '../../domain/battle.events';
 import { ReadyPlayerCmd } from '../../application/use-cases/battle-manager/dtos/ready.player.cmd';
 import { SubmitCmd } from '../../application/use-cases/battle-manager/dtos/submit.cmd';
 import { RoomGuard } from './guards/room.guard';
+import { GameService } from './game.service';
 
 @WebSocketGateway()
-export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class GameGateway
+    implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit
+{
     constructor(
         @Inject(BATTLE_MANAGER_PORT)
         private readonly battleManager: BattleManagerPort,
+        private readonly gs: GameService,
     ) {}
 
     @WebSocketServer()
     server: Server;
-    private connectedPlayers = new Map<string, AuthenticatedSocket>();
+    private connectedPlayers = new Map<string, GameSocket>();
 
-    handleConnection(client: AuthenticatedSocket): any {
+    afterInit(server: Server): any {
+        this.gs.setServer(server);
+    }
+
+    handleConnection(client: Socket): any {
         const auth = client.handshake.headers.authorization as string;
         const token = auth?.split(' ')[1];
         if (!token) {
@@ -44,8 +54,8 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
         }
         try {
             const payload = verify(token, 'test') as Payload;
-            client.data.user = payload;
-            this.connectedPlayers.set(payload.userId, client);
+            client.data.user = payload; // eslint-disable-line
+            this.connectedPlayers.set(payload.userId, client as GameSocket);
         } catch {
             this.disconnectUnauthorized(client);
         }
@@ -61,7 +71,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     private disconnectUnauthorized(client: Socket) {
-        client.emit('unauthorized', { message: 'token is missing' });
+        this.gs.sendClient(client, 'unauthorized', 'token is missing');
         client.disconnect();
     }
 
@@ -77,59 +87,32 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     @OnEvent(BattleEvent.ROOM_NOTIFICATION)
-    notifyBattleRoom(payload: NotifyRoomEvent) {
-        const { roomId, event, msg } = payload;
-        this.server.to(roomId).emit(event, {
-            message: msg,
-        });
+    notifyBattleRoom({ roomId, event, msg }: NotifyRoomEvent) {
+        this.gs.sendRoom(roomId, event, msg);
     }
 
+    @UseGuards(RoomGuard)
     @SubscribeMessage('PLAYER_READY')
-    handlePlayerReady(client: AuthenticatedSocket) {
+    handlePlayerReady(client: RoomSocket) {
         console.log('PLAYER_READY MESSAGE ARRIVED');
-        const userId = client.data.user?.userId as string;
+        const userId = client.data.user.userId;
         const roomId = client.data.room;
 
-        const room = this.getValidatedRoom(client, roomId);
-        if (!room) return;
         this.battleManager.handleReadyPlayer(
-            ReadyPlayerCmd.create(userId, roomId as string, room.size),
+            ReadyPlayerCmd.create(userId, roomId, client.data.roomSize),
         );
-    }
-
-    private getValidatedRoom(
-        client: AuthenticatedSocket,
-        roomId: string | undefined,
-    ) {
-        if (!roomId) {
-            client.emit('ERROR', {
-                code: 'ROOM_ERROR',
-                msg: 'No room was joined',
-            });
-            return undefined;
-        }
-
-        const room = this.server.sockets.adapter.rooms.get(roomId);
-        if (!room) {
-            client.emit('ERROR', {
-                code: 'ROOM_ERROR',
-                msg: 'Room does not exist',
-            });
-            return undefined;
-        }
-        return room;
     }
 
     @UseGuards(RoomGuard)
     @SubscribeMessage('SUBMIT_SOLUTION')
     handleSolutionSubmit(
-        client: AuthenticatedSocket,
+        client: RoomSocket,
         @MessageBody() payload: SolutionSubmit,
     ) {
         this.battleManager.handleSolutionSubmit(
             SubmitCmd.create(
                 client.data.room,
-                client.data.user?.username,
+                client.data.user.username,
                 payload.solution,
             ),
         );

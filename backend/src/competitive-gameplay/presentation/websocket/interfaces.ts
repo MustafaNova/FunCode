@@ -7,10 +7,18 @@ export interface Payload {
     exp: number;
 }
 
-export interface AuthenticatedSocket extends Socket {
+export interface GameSocket extends Socket {
     data: {
-        user?: Payload;
+        user: Payload;
         room?: string;
+        roomSize?: number;
+    };
+}
+
+export interface RoomSocket extends GameSocket {
+    data: GameSocket['data'] & {
+        room: string;
+        roomSize: number;
     };
 }
 
