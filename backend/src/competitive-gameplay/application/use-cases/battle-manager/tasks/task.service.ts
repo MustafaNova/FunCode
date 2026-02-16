@@ -6,4 +6,6 @@ export class TaskService {
     getRandomTask() {
         return tasks[0];
     }
+
+    checkSubmit(taskId: string, solution: string) {}
 }

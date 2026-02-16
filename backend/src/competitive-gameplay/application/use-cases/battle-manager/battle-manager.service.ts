@@ -11,6 +11,7 @@ import { SubmitCmd } from './dtos/submit.cmd';
 
 @Injectable()
 export class BattleManagerService implements BattleManagerPort {
+    connectedPlayers = new Set<string>();
     roomToPlayers = new Map<string, PlayerInfo[]>();
     private readyPlayers = new Map<string, Set<string>>();
 
@@ -52,6 +53,7 @@ export class BattleManagerService implements BattleManagerPort {
         readyRoom.add(userId);
 
         if (roomSize == readyRoom.size) {
+            console.log(`Battle has started: ${roomId}`);
             this.readyPlayers.delete(roomId);
             this.playerNotifier.notifyBattleRoom(
                 roomId,
@@ -62,6 +64,27 @@ export class BattleManagerService implements BattleManagerPort {
     }
 
     handleSolutionSubmit(submit: SubmitCmd) {
+        const res = this.taskService.checkSubmit(
+            submit.taskId,
+            submit.solution,
+        );
 
+        if (res) {
+            this.playerNotifier.notifyBattleRoom(
+                submit.roomId,
+                BattleNotification.WIN,
+                'Player has won',
+            );
+        } else {
+            this.playerNotifier.notifyBattleRoom(
+                submit.roomId,
+                BattleNotification.WRONG_SUBMIT,
+                'Player submitted wrong',
+            );
+        }
+    }
+
+    registerNewPlayer(userId: string) {
+        this.connectedPlayers.add(userId);
     }
 }

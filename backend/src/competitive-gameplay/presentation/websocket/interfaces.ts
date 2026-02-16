@@ -35,5 +35,6 @@ export interface NotifyRoomEvent {
 }
 
 export interface SolutionSubmit {
+    taskId: string;
     solution: string;
 }

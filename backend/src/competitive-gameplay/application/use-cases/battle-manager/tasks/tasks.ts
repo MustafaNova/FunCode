@@ -5,6 +5,7 @@ enum Difficulty {
 }
 
 export interface Task {
+    id: string;
     name: string;
     difficulty: Difficulty;
     description: string;
@@ -12,8 +13,14 @@ export interface Task {
     constraints: string;
 }
 
+export interface TaskTest<Input = any, Output = any> {
+    input: Input;
+    expectedOutput: Output;
+}
+
 export const tasks: Task[] = [
     {
+        id: '123456789',
         name: 'Add Digits',
         difficulty: Difficulty.EASY,
         description:
@@ -25,3 +32,18 @@ export const tasks: Task[] = [
         constraints: '0 <= num <= 2^31 - 1',
     },
 ];
+
+export const taskTests: Record<string, TaskTest<any, any>[]> = {
+    '123456789': [
+        { input: 0, expectedOutput: 0 },
+        { input: 5, expectedOutput: 5 },
+        { input: 9, expectedOutput: 9 },
+        { input: 10, expectedOutput: 1 },
+        { input: 11, expectedOutput: 2 },
+        { input: 38, expectedOutput: 2 },
+        { input: 123, expectedOutput: 6 },
+        { input: 99, expectedOutput: 9 },
+        { input: 1234, expectedOutput: 1 },
+        { input: 9876, expectedOutput: 3 },
+    ],
+};
