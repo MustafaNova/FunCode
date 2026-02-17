@@ -9,6 +9,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import type {
     CreateNewRoom1v1Event,
+    ErrorEvent,
     NotifyRoomEvent,
     RoomSocket,
     SolutionSubmit,
@@ -53,6 +54,11 @@ export class GameGateway
         this.gs.sendRoom(roomId, event, msg);
     }
 
+    @OnEvent(BattleEvent.ERROR)
+    reportError({ userId, code, msg }: ErrorEvent) {
+        this.gs.sendError(userId, code, msg);
+    }
+
     @UseGuards(RoomGuard)
     @SubscribeMessage('PLAYER_READY')
     handlePlayerReady(client: RoomSocket) {
@@ -69,6 +75,7 @@ export class GameGateway
         @MessageBody() payload: SolutionSubmit,
     ) {
         this.gs.solutionSubmit(
+            client.data.user.userId,
             client.data.room,
             client.data.user.username,
             payload.taskId,

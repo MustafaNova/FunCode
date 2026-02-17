@@ -29,6 +29,10 @@ export class GameService {
         client.emit(event, { msg: msg });
     }
 
+    sendError(userId: string, code: number, msg: string) {
+        this.connectedPlayers.get(userId)?.emit('ERROR', { code, msg });
+    }
+
     sendRoom(roomId: string, event: string, msg: string) {
         this.server.to(roomId).emit(event, { msg: msg });
     }
@@ -78,13 +82,14 @@ export class GameService {
     }
 
     solutionSubmit(
+        userId: string,
         roomId: string,
         playerName: string,
         taskId: string,
         solution: string,
     ) {
         this.battleManager.handleSolutionSubmit(
-            SubmitCmd.create(roomId, playerName, taskId, solution),
+            SubmitCmd.create(userId, roomId, playerName, taskId, solution),
         );
     }
 }

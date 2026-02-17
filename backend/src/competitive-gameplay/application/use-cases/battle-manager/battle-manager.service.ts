@@ -8,6 +8,7 @@ import { BattleNotification } from '../../../domain/battle.notifs';
 import { TaskService } from './tasks/task.service';
 import { ReadyPlayerCmd } from './dtos/ready.player.cmd';
 import { SubmitCmd } from './dtos/submit.cmd';
+import { TaskIdError } from './errors/task.id.err';
 
 @Injectable()
 export class BattleManagerService implements BattleManagerPort {
@@ -64,22 +65,36 @@ export class BattleManagerService implements BattleManagerPort {
     }
 
     handleSolutionSubmit(submit: SubmitCmd) {
-        const res = this.taskService.checkSubmit(
-            submit.taskId,
-            submit.solution,
-        );
-
-        if (res) {
-            this.playerNotifier.notifyBattleRoom(
-                submit.roomId,
-                BattleNotification.WIN,
-                'Player has won',
+        try {
+            const res = this.taskService.checkSubmit(
+                submit.taskId,
+                submit.solution,
             );
-        } else {
-            this.playerNotifier.notifyBattleRoom(
-                submit.roomId,
-                BattleNotification.WRONG_SUBMIT,
-                'Player submitted wrong',
+
+            if (submit.roomId) {
+                this.playerNotifier.notifyBattleRoom(
+                    submit.roomId,
+                    BattleNotification.WIN,
+                    'Player has won',
+                );
+            } else {
+                this.playerNotifier.notifyBattleRoom(
+                    submit.roomId,
+                    BattleNotification.WRONG_SUBMIT,
+                    'Player submitted wrong',
+                );
+            }
+        } catch (err) {
+            this.handleError(submit.userId, err);
+        }
+    }
+
+    private handleError(userId: string, err: any) {
+        if (err instanceof TaskIdError) {
+            this.playerNotifier.reportErrorToUser(
+                userId,
+                err.code,
+                err.message,
             );
         }
     }

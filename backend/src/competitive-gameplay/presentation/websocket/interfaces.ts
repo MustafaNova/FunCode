@@ -38,3 +38,9 @@ export interface SolutionSubmit {
     taskId: string;
     solution: string;
 }
+
+export interface ErrorEvent {
+    userId: string;
+    code: number;
+    msg: string;
+}

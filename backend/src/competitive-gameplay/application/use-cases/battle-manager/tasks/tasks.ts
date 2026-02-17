@@ -18,6 +18,10 @@ export interface TaskTest<Input = any, Output = any> {
     expectedOutput: Output;
 }
 
+export type taskTestMap = {
+    '123456789': TaskTest<number, number>[];
+};
+
 export const tasks: Task[] = [
     {
         id: '123456789',
@@ -33,7 +37,7 @@ export const tasks: Task[] = [
     },
 ];
 
-export const taskTests: Record<string, TaskTest<any, any>[]> = {
+export const taskTests: taskTestMap = {
     '123456789': [
         { input: 0, expectedOutput: 0 },
         { input: 5, expectedOutput: 5 },
