@@ -1,5 +1,4 @@
 import {
-    MessageBody,
     OnGatewayConnection,
     OnGatewayDisconnect,
     OnGatewayInit,
@@ -70,10 +69,7 @@ export class GameGateway
 
     @UseGuards(RoomGuard)
     @SubscribeMessage('SUBMIT_SOLUTION')
-    handleSolutionSubmit(
-        client: RoomSocket,
-        @MessageBody() payload: SolutionSubmit,
-    ) {
+    handleSolutionSubmit(client: RoomSocket, payload: SolutionSubmit) {
         this.gs.solutionSubmit(
             client.data.user.userId,
             client.data.room,

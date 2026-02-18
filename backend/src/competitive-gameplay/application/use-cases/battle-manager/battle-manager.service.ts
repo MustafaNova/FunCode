@@ -8,7 +8,7 @@ import { BattleNotification } from '../../../domain/battle.notifs';
 import { TaskService } from './tasks/task.service';
 import { ReadyPlayerCmd } from './dtos/ready.player.cmd';
 import { SubmitCmd } from './dtos/submit.cmd';
-import { TaskIdError } from './errors/task.id.err';
+import { AppError } from './interfaces';
 
 @Injectable()
 export class BattleManagerService implements BattleManagerPort {
@@ -65,6 +65,7 @@ export class BattleManagerService implements BattleManagerPort {
     }
 
     handleSolutionSubmit(submit: SubmitCmd) {
+        console.log('Started handleSolutionSubmit');
         try {
             const res = this.taskService.checkSubmit(
                 submit.taskId,
@@ -89,14 +90,8 @@ export class BattleManagerService implements BattleManagerPort {
         }
     }
 
-    private handleError(userId: string, err: any) {
-        if (err instanceof TaskIdError) {
-            this.playerNotifier.reportErrorToUser(
-                userId,
-                err.code,
-                err.message,
-            );
-        }
+    private handleError(userId: string, err: AppError) {
+        this.playerNotifier.reportErrorToUser(userId, err.code, err.message);
     }
 
     registerNewPlayer(userId: string) {
