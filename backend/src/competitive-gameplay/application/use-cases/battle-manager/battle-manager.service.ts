@@ -72,17 +72,17 @@ export class BattleManagerService implements BattleManagerPort {
                 submit.solution,
             );
 
-            if (submit.roomId) {
+            if (res) {
                 this.playerNotifier.notifyBattleRoom(
                     submit.roomId,
                     BattleNotification.WIN,
-                    'Player has won',
+                    'correct solution',
                 );
             } else {
                 this.playerNotifier.notifyBattleRoom(
                     submit.roomId,
                     BattleNotification.WRONG_SUBMIT,
-                    'Player submitted wrong',
+                    'wrong solution',
                 );
             }
         } catch (err) {
