@@ -70,6 +70,7 @@ export class GameGateway
     @UseGuards(RoomGuard)
     @SubscribeMessage('SUBMIT_SOLUTION')
     handleSolutionSubmit(client: RoomSocket, payload: SolutionSubmit) {
+        console.log(`submit: ${payload}`);
         this.gs.solutionSubmit(
             client.data.user.userId,
             client.data.room,

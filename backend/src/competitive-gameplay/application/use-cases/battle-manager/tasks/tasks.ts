@@ -11,6 +11,7 @@ export interface Task {
     description: string;
     examples: string[];
     constraints: string;
+    starterCode: string;
 }
 
 export interface TaskTest<Input = any, Output = any> {
@@ -19,7 +20,7 @@ export interface TaskTest<Input = any, Output = any> {
 }
 
 export type taskTestMap = {
-    '123456789': TaskTest<Record<string, number>, number>[];
+    '123456789': { functionName: string; tests: TaskTest<number[], number>[] };
 };
 
 export const tasks: Task[] = [
@@ -34,20 +35,27 @@ export const tasks: Task[] = [
             'Input: num = 0 → Output: 0',
         ],
         constraints: '0 <= num <= 2^31 - 1',
+        starterCode: `function addDigits(num: number): number {
+            // TODO: implement solution
+            return 0;
+        }`,
     },
 ];
 
 export const taskTests: taskTestMap = {
-    '123456789': [
-        { input: { num: 0 }, expectedOutput: 0 },
-        { input: { num: 5 }, expectedOutput: 5 },
-        { input: { num: 9 }, expectedOutput: 9 },
-        { input: { num: 10 }, expectedOutput: 1 },
-        { input: { num: 11 }, expectedOutput: 2 },
-        { input: { num: 38 }, expectedOutput: 2 },
-        { input: { num: 123 }, expectedOutput: 6 },
-        { input: { num: 99 }, expectedOutput: 9 },
-        { input: { num: 1234 }, expectedOutput: 1 },
-        { input: { num: 9876 }, expectedOutput: 3 },
-    ],
+    '123456789': {
+        functionName: 'addDigits',
+        tests: [
+            { input: [0], expectedOutput: 0 },
+            { input: [5], expectedOutput: 5 },
+            { input: [9], expectedOutput: 9 },
+            { input: [10], expectedOutput: 1 },
+            { input: [11], expectedOutput: 2 },
+            { input: [38], expectedOutput: 2 },
+            { input: [123], expectedOutput: 6 },
+            { input: [99], expectedOutput: 9 },
+            { input: [1234], expectedOutput: 1 },
+            { input: [9876], expectedOutput: 3 },
+        ],
+    },
 };

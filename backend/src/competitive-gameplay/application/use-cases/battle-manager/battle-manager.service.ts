@@ -5,7 +5,7 @@ import { randomUUID } from 'node:crypto';
 import type { PlayerNotifierPort } from '../../ports/outbound/player.notifier.port';
 import { PLAYER_NOTIFIER_PORT } from '../../../infrastructure/notifier/token';
 import { BattleNotification } from '../../../domain/battle.notifs';
-import { TaskService } from './tasks/task.service';
+import TaskService from './tasks/task.service';
 import { ReadyPlayerCmd } from './dtos/ready.player.cmd';
 import { SubmitCmd } from './dtos/submit.cmd';
 import { AppError } from './interfaces';
