@@ -3,10 +3,12 @@ import { Injectable } from '@nestjs/common';
 import { TaskIdError } from '../errors/task.id.err';
 import { SolutionError } from '../errors/solution.err';
 import vm from 'vm';
+import { UserCodeError } from '../errors/usercode.err';
 
 interface Sandbox {
-    args: any[] | null;
-    result: any;
+    args: unknown[] | null;
+    result: unknown;
+    [key: string]: any;
 }
 
 @Injectable()
@@ -16,7 +18,6 @@ class TaskService {
     }
 
     checkSubmit(taskId: string, solution: string) {
-        console.log(`checkSubmit: ${solution}`);
         if (!(taskId in taskTests)) {
             console.log('taskId Error');
             throw new TaskIdError();
@@ -25,41 +26,32 @@ class TaskService {
             console.log('solution Error');
             throw new SolutionError();
         }
-        const taskTest = taskTests[taskId as keyof taskTestMap];
+        return this.runUserCode(taskId, solution);
+    }
 
+    private runUserCode(taskId: string, solution: string) {
+        const taskTest = taskTests[taskId as keyof taskTestMap];
         const sandbox: Sandbox = { args: null, result: null };
-        const script = new vm.Script(solution);
-        const context = vm.createContext(sandbox);
-        script.runInContext(context);
+
+        try {
+            const script = new vm.Script(solution);
+            const context = vm.createContext(sandbox);
+            script.runInContext(context);
+        } catch (err) {
+            throw new UserCodeError((err as Error).message);
+        }
 
         for (const test of taskTest.tests) {
             sandbox.args = test.input;
-            sandbox.result = sandbox[taskTest.functionName].apply(
-                null,
-                sandbox.args,
-            );
+            const func = sandbox[taskTest.functionName] as (
+                ...args: any[]
+            ) => any;
+            sandbox.result = func(...sandbox.args);
             if (sandbox.result !== test.expectedOutput) {
                 return false;
             }
         }
         return true;
-    }
-
-    private runUserCode(
-        code: string,
-        functionName: string,
-        args: any[],
-    ): unknown {
-        const sandbox = { result: null, args };
-        const wrappedCode = `
-            ${code}
-            result = ${functionName}.apply(null, args);
-        `;
-
-        const script = new vm.Script(wrappedCode);
-        const context = vm.createContext(sandbox);
-        script.runInContext(context);
-        return sandbox.result;
     }
 }
 

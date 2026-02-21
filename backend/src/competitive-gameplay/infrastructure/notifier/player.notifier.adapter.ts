@@ -20,7 +20,7 @@ export class PlayerNotifierAdapter implements PlayerNotifierPort {
         });
     }
 
-    notifyBattleRoom(roomId: string, event: string, msg: string): void {
+    notifyBattleRoom(roomId: string, event: string, msg: unknown): void {
         this.eventEmitter.emit(BattleEvent.ROOM_NOTIFICATION, {
             roomId,
             event,

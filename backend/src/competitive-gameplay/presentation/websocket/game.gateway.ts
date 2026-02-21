@@ -58,6 +58,11 @@ export class GameGateway
         this.gs.sendError(userId, code, msg);
     }
 
+    @OnEvent(BattleEvent.CLOSE_ROOM)
+    closeRoom(roomId: string) {
+        this.gs.closeRoom(roomId);
+    }
+
     @UseGuards(RoomGuard)
     @SubscribeMessage('PLAYER_READY')
     handlePlayerReady(client: RoomSocket) {
@@ -70,7 +75,6 @@ export class GameGateway
     @UseGuards(RoomGuard)
     @SubscribeMessage('SUBMIT_SOLUTION')
     handleSolutionSubmit(client: RoomSocket, payload: SolutionSubmit) {
-        console.log(`submit: ${payload}`);
         this.gs.solutionSubmit(
             client.data.user.userId,
             client.data.room,

@@ -7,6 +7,10 @@ export interface PlayerNotifierPort {
         userId1: string,
         userId2: string,
     ): Promise<void>;
-    notifyBattleRoom(roomId: string, notif: BattleNotification, msg: any): void;
+    notifyBattleRoom(
+        roomId: string,
+        notif: BattleNotification,
+        msg: unknown,
+    ): void;
     reportErrorToUser(userId: string, code: ErrorCodes, msg: string): void;
 }

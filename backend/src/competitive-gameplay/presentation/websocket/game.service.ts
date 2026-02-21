@@ -33,8 +33,8 @@ export class GameService {
         this.connectedPlayers.get(userId)?.emit('ERROR', { code, msg });
     }
 
-    sendRoom(roomId: string, event: string, msg: string) {
-        this.server.to(roomId).emit(event, { msg: msg });
+    sendRoom(roomId: string, event: string, msg: unknown) {
+        this.server.to(roomId).emit(event, msg);
     }
 
     registerNewPlayer(client: Socket, token: string) {
@@ -91,5 +91,15 @@ export class GameService {
         this.battleManager.handleSolutionSubmit(
             SubmitCmd.create(userId, roomId, playerName, taskId, solution),
         );
+    }
+
+    closeRoom(roomId: string) {
+        const room = this.server.sockets.adapter.rooms.get(roomId);
+        if (room) {
+            for (const socketId of room) {
+                const socket = this.server.sockets.sockets.get(socketId);
+                void socket?.leave(roomId);
+            }
+        }
     }
 }

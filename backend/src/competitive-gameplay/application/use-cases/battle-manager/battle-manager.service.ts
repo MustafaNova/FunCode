@@ -9,6 +9,7 @@ import TaskService from './tasks/task.service';
 import { ReadyPlayerCmd } from './dtos/ready.player.cmd';
 import { SubmitCmd } from './dtos/submit.cmd';
 import { AppError } from './interfaces';
+import { SubmitRes } from './dtos/submit.res';
 
 @Injectable()
 export class BattleManagerService implements BattleManagerPort {
@@ -34,7 +35,7 @@ export class BattleManagerService implements BattleManagerPort {
             p2.userId,
         );
 
-        const msg = `Battle: ${p1.username} vs ${p2.username}`;
+        const msg = { match: `${p1.username} vs ${p2.username}` };
         this.playerNotifier.notifyBattleRoom(
             roomId,
             BattleNotification.MATCH_FOUND,
@@ -65,28 +66,32 @@ export class BattleManagerService implements BattleManagerPort {
     }
 
     handleSolutionSubmit(submit: SubmitCmd) {
-        console.log('Started handleSolutionSubmit');
         try {
             const res = this.taskService.checkSubmit(
                 submit.taskId,
                 submit.solution,
             );
-
-            if (res) {
-                this.playerNotifier.notifyBattleRoom(
-                    submit.roomId,
-                    BattleNotification.WIN,
-                    'correct solution',
-                );
-            } else {
-                this.playerNotifier.notifyBattleRoom(
-                    submit.roomId,
-                    BattleNotification.WRONG_SUBMIT,
-                    'wrong solution',
-                );
-            }
+            this.notifySubmitRes(res, submit);
         } catch (err) {
             this.handleError(submit.userId, err);
+        }
+    }
+
+    private notifySubmitRes(res: boolean, submit: SubmitCmd) {
+        const payload: SubmitRes = {
+            status: res ? 'success' : 'failed',
+            playerName: submit.playerName,
+            solution: res ? submit.solution : undefined,
+        };
+
+        this.playerNotifier.notifyBattleRoom(
+            submit.roomId,
+            res ? BattleNotification.WIN : BattleNotification.WRONG_SUBMIT,
+            payload,
+        );
+
+        if (res) {
+            this.roomToPlayers.delete(submit.roomId);
         }
     }
 
