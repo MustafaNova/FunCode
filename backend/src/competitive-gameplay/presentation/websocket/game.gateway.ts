@@ -49,7 +49,7 @@ export class GameGateway
     }
 
     @OnEvent(BattleEvent.ROOM_NOTIFICATION)
-    notifyBattleRoom({ roomId, event, msg }: NotifyRoomEvent) {
+    notifyRoom({ roomId, event, msg }: NotifyRoomEvent) {
         this.gs.sendRoom(roomId, event, msg);
     }
 

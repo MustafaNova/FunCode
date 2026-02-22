@@ -1,0 +1,1 @@
+export const PLAYER_GATEWAY_PORT = 'PLAYER_GATEWAY_PORT' as const;

@@ -101,5 +101,9 @@ export class GameService {
                 void socket?.leave(roomId);
             }
         }
+        console.log(
+            'closeRoom Result: ',
+            this.server.sockets.adapter.rooms.get(roomId),
+        );
     }
 }

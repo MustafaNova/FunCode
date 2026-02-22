@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BattleManagerPort } from '../../ports/inbound/battle.manager.port';
 import { Battle1vs1, PlayerInfo } from '../../../domain/entities/battle1vs1';
 import { randomUUID } from 'node:crypto';
-import type { PlayerNotifierPort } from '../../ports/outbound/player.notifier.port';
-import { PLAYER_NOTIFIER_PORT } from '../../../infrastructure/notifier/token';
+import type { PlayerGatewayPort } from '../../ports/outbound/player.gateway.port';
+import { PLAYER_GATEWAY_PORT } from '../../../infrastructure/playerGateway/token';
 import { BattleNotification } from '../../../domain/battle.notifs';
 import TaskService from './tasks/task.service';
 import { ReadyPlayerCmd } from './dtos/ready.player.cmd';
@@ -18,8 +18,8 @@ export class BattleManagerService implements BattleManagerPort {
     private readyPlayers = new Map<string, Set<string>>();
 
     constructor(
-        @Inject(PLAYER_NOTIFIER_PORT)
-        private readonly playerNotifier: PlayerNotifierPort,
+        @Inject(PLAYER_GATEWAY_PORT)
+        private readonly playerGateway: PlayerGatewayPort,
         private readonly taskService: TaskService,
     ) {}
 
@@ -29,14 +29,14 @@ export class BattleManagerService implements BattleManagerPort {
         const p2 = battle.player2;
         console.log(`creating now 1v1 for ${p1.username} and ${p2.username}`);
         this.roomToPlayers.set(roomId, [p1, p2]);
-        await this.playerNotifier.joinPlayersToRoom1v1(
+        await this.playerGateway.joinPlayersToRoom1v1(
             roomId,
             p1.userId,
             p2.userId,
         );
 
         const msg = { match: `${p1.username} vs ${p2.username}` };
-        this.playerNotifier.notifyBattleRoom(
+        this.playerGateway.notifyRoom(
             roomId,
             BattleNotification.MATCH_FOUND,
             msg,
@@ -57,7 +57,7 @@ export class BattleManagerService implements BattleManagerPort {
         if (roomSize == readyRoom.size) {
             console.log(`Battle has started: ${roomId}`);
             this.readyPlayers.delete(roomId);
-            this.playerNotifier.notifyBattleRoom(
+            this.playerGateway.notifyRoom(
                 roomId,
                 BattleNotification.START_BATTLE,
                 this.taskService.getRandomTask(),
@@ -84,7 +84,7 @@ export class BattleManagerService implements BattleManagerPort {
             solution: res ? submit.solution : undefined,
         };
 
-        this.playerNotifier.notifyBattleRoom(
+        this.playerGateway.notifyRoom(
             submit.roomId,
             res ? BattleNotification.WIN : BattleNotification.WRONG_SUBMIT,
             payload,
@@ -92,11 +92,12 @@ export class BattleManagerService implements BattleManagerPort {
 
         if (res) {
             this.roomToPlayers.delete(submit.roomId);
+            this.playerGateway.closeRoom(submit.roomId);
         }
     }
 
     private handleError(userId: string, err: AppError) {
-        this.playerNotifier.reportErrorToUser(userId, err.code, err.message);
+        this.playerGateway.reportError(userId, err.code, err.message);
     }
 
     registerNewPlayer(userId: string) {

@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { PlayerNotifierPort } from '../../application/ports/outbound/player.notifier.port';
+import { PlayerGatewayPort } from '../../application/ports/outbound/player.gateway.port';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { BattleEvent } from '../../domain/battle.events';
 import { ErrorCodes } from '../../../common/error.codes';
 
 @Injectable()
-export class PlayerNotifierAdapter implements PlayerNotifierPort {
+export class PlayerGatewayAdapter implements PlayerGatewayPort {
     constructor(private readonly eventEmitter: EventEmitter2) {}
 
     async joinPlayersToRoom1v1(
@@ -20,7 +20,11 @@ export class PlayerNotifierAdapter implements PlayerNotifierPort {
         });
     }
 
-    notifyBattleRoom(roomId: string, event: string, msg: unknown): void {
+    closeRoom(roomId: string) {
+        this.eventEmitter.emit(BattleEvent.CLOSE_ROOM, { roomId });
+    }
+
+    notifyRoom(roomId: string, event: string, msg: unknown): void {
         this.eventEmitter.emit(BattleEvent.ROOM_NOTIFICATION, {
             roomId,
             event,
@@ -28,7 +32,7 @@ export class PlayerNotifierAdapter implements PlayerNotifierPort {
         });
     }
 
-    reportErrorToUser(userId: string, code: ErrorCodes, msg: string) {
+    reportError(userId: string, code: ErrorCodes, msg: string) {
         this.eventEmitter.emit(BattleEvent.ERROR, {
             userId,
             code,

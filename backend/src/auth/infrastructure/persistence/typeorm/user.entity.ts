@@ -5,14 +5,14 @@ import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 @Entity('users')
 export class UserEntity {
     @PrimaryGeneratedColumn('uuid')
-    id!: string;
+    id: string;
 
-    @Column()
-    username!: string;
+    @Column({ type: 'varchar' })
+    username: string;
 
-    @Column()
-    email!: string;
+    @Column({ type: 'varchar' })
+    email: string;
 
-    @Column()
-    password!: string;
+    @Column({ type: 'varchar' })
+    password: string;
 }
