@@ -1,9 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 
 @Entity('battle1vs1')
 export class Battle1vs1Entity {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
+    @Column({ type: 'varchar' })
+    roomId: string;
 
     @Column({ type: 'varchar' })
     playerId1: string;

@@ -1,3 +1,4 @@
 export const JOIN_MATCHMAKING_PORT = 'JOIN_MATCHMAKING_PORT' as const;
 export const BATTLE_REPOSITORY_PORT = 'BATTLE_REPOSITORY_PORT' as const;
 export const BATTLE_MANAGER_PORT = 'BATTLE_MANAGER_PORT' as const;
+export const ID_GENERATOR_PORT = 'ID_GENERATOR_PORT' as const;

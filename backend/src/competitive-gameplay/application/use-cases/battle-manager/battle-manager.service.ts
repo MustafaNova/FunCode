@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { BattleManagerPort } from '../../ports/inbound/battle.manager.port';
 import { Battle1vs1, PlayerInfo } from '../../../domain/entities/battle1vs1';
-import { randomUUID } from 'node:crypto';
 import type { PlayerGatewayPort } from '../../ports/outbound/player.gateway.port';
 import { PLAYER_GATEWAY_PORT } from '../../../infrastructure/playerGateway/token';
 import { BattleNotification } from '../../../domain/battle.notifs';
@@ -24,7 +23,7 @@ export class BattleManagerService implements BattleManagerPort {
     ) {}
 
     async on1v1Created(battle: Battle1vs1): Promise<void> {
-        const roomId = randomUUID();
+        const roomId = battle.roomId;
         const p1 = battle.player1;
         const p2 = battle.player2;
         console.log(`creating now 1v1 for ${p1.username} and ${p2.username}`);

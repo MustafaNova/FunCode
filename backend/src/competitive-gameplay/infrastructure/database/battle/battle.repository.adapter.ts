@@ -16,11 +16,16 @@ export class BattleRepositoryAdapter implements BattleRepositoryPort {
         const p1 = battle.player1;
         const p2 = battle.player2;
         const battleEntity = this.battleRepo.create({
+            roomId: battle.roomId,
             playerId1: p1.userId,
             playerUsername1: p1.username,
             playerId2: p2.userId,
             playerUsername2: p2.username,
         });
         await this.battleRepo.save(battleEntity);
+    }
+
+    async setWinner(userId: string): Promise<void> {
+
     }
 }
