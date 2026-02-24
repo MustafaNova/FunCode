@@ -59,8 +59,8 @@ export class GameGateway
     }
 
     @OnEvent(BattleEvent.CLOSE_ROOM)
-    closeRoom(roomId: string) {
-        this.gs.closeRoom(roomId);
+    async closeRoom(roomId: string) {
+        await this.gs.closeRoom(roomId);
     }
 
     @UseGuards(RoomGuard)
@@ -74,8 +74,8 @@ export class GameGateway
 
     @UseGuards(RoomGuard)
     @SubscribeMessage('SUBMIT_SOLUTION')
-    handleSolutionSubmit(client: RoomSocket, payload: SolutionSubmit) {
-        this.gs.solutionSubmit(
+    async handleSolutionSubmit(client: RoomSocket, payload: SolutionSubmit) {
+        await this.gs.solutionSubmit(
             client.data.user.userId,
             client.data.room,
             client.data.user.username,

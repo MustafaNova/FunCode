@@ -20,8 +20,8 @@ export class PlayerGatewayAdapter implements PlayerGatewayPort {
         });
     }
 
-    closeRoom(roomId: string) {
-        this.eventEmitter.emit(BattleEvent.CLOSE_ROOM, { roomId });
+    async closeRoom(roomId: string) {
+        await this.eventEmitter.emitAsync(BattleEvent.CLOSE_ROOM, { roomId });
     }
 
     notifyRoom(roomId: string, event: string, msg: unknown): void {

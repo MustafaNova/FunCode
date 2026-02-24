@@ -9,6 +9,8 @@ import { ReadyPlayerCmd } from './dtos/ready.player.cmd';
 import { SubmitCmd } from './dtos/submit.cmd';
 import { AppError } from './interfaces';
 import { SubmitRes } from './dtos/submit.res';
+import type { BattleRepositoryPort } from '../../ports/outbound/battleRepository.port';
+import { BATTLE_REPOSITORY_PORT } from '../../tokens';
 
 @Injectable()
 export class BattleManagerService implements BattleManagerPort {
@@ -20,10 +22,12 @@ export class BattleManagerService implements BattleManagerPort {
         @Inject(PLAYER_GATEWAY_PORT)
         private readonly playerGateway: PlayerGatewayPort,
         private readonly taskService: TaskService,
+        @Inject(BATTLE_REPOSITORY_PORT)
+        private readonly battleRepo: BattleRepositoryPort,
     ) {}
 
     async on1v1Created(battle: Battle1vs1): Promise<void> {
-        const roomId = battle.roomId;
+        const roomId = battle.roomId!;
         const p1 = battle.player1;
         const p2 = battle.player2;
         console.log(`creating now 1v1 for ${p1.username} and ${p2.username}`);
@@ -64,19 +68,19 @@ export class BattleManagerService implements BattleManagerPort {
         }
     }
 
-    handleSolutionSubmit(submit: SubmitCmd) {
+    async handleSolutionSubmit(submit: SubmitCmd) {
         try {
             const res = this.taskService.checkSubmit(
                 submit.taskId,
                 submit.solution,
             );
-            this.notifySubmitRes(res, submit);
+            await this.notifySubmitRes(res, submit);
         } catch (err) {
             this.handleError(submit.userId, err);
         }
     }
 
-    private notifySubmitRes(res: boolean, submit: SubmitCmd) {
+    private async notifySubmitRes(res: boolean, submit: SubmitCmd) {
         const payload: SubmitRes = {
             status: res ? 'success' : 'failed',
             playerName: submit.playerName,
@@ -91,7 +95,11 @@ export class BattleManagerService implements BattleManagerPort {
 
         if (res) {
             this.roomToPlayers.delete(submit.roomId);
-            this.playerGateway.closeRoom(submit.roomId);
+            await this.playerGateway.closeRoom(submit.roomId);
+            await this.battleRepo.setWinner(submit.roomId, submit.userId);
+            console.log(
+                `roomToPlayers get(roomId): ${this.roomToPlayers.has(submit.roomId)}`,
+            );
         }
     }
 

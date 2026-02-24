@@ -1,8 +1,8 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity('battle1vs1')
 export class Battle1vs1Entity {
-    @Column({ type: 'varchar' })
+    @PrimaryColumn({ type: 'varchar' })
     roomId: string;
 
     @Column({ type: 'varchar' })
@@ -18,7 +18,7 @@ export class Battle1vs1Entity {
     playerUsername2: string;
 
     @Column({ type: 'varchar', nullable: true, default: null })
-    winner: string | null;
+    winnerId: string | null;
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date;

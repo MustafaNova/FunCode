@@ -81,29 +81,28 @@ export class GameService {
         );
     }
 
-    solutionSubmit(
+    async solutionSubmit(
         userId: string,
         roomId: string,
         playerName: string,
         taskId: string,
         solution: string,
     ) {
-        this.battleManager.handleSolutionSubmit(
+        await this.battleManager.handleSolutionSubmit(
             SubmitCmd.create(userId, roomId, playerName, taskId, solution),
         );
     }
 
-    closeRoom(roomId: string) {
+    async closeRoom(roomId: string) {
         const room = this.server.sockets.adapter.rooms.get(roomId);
         if (room) {
             for (const socketId of room) {
                 const socket = this.server.sockets.sockets.get(socketId);
-                void socket?.leave(roomId);
+                await socket?.leave(roomId);
             }
         }
         console.log(
-            'closeRoom Result: ',
-            this.server.sockets.adapter.rooms.get(roomId),
+            `after room deletion(false=room not exists): ${this.server.sockets.adapter.rooms.has(roomId)}`,
         );
     }
 }

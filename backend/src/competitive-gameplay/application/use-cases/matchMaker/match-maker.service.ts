@@ -61,9 +61,9 @@ export class MatchMakerService
 
         const roomId = this.idGenerator.generate();
         const battle = Battle1vs1.create(
-            roomId,
             { userId: p1.userId, username: p1.username },
             { userId: p2.userId, username: p2.username },
+            roomId,
         );
 
         await this.battleRepo.save1vs1(battle);
