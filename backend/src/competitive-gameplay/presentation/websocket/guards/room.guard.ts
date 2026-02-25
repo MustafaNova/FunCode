@@ -1,25 +1,27 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { GameSocket } from '../interfaces';
 import { GameService } from '../game.service';
-import { RoomError } from '../errors/room.errors';
+import { ErrorCodes } from '../../../../common/error.codes';
 
 @Injectable()
 export class RoomGuard implements CanActivate {
     constructor(private readonly gs: GameService) {}
 
     canActivate(context: ExecutionContext): boolean {
+        console.log('RoomGuard activated');
         const client = context.switchToWs().getClient<GameSocket>();
         const roomId = client.data.room;
+        const userId = client.data.user.userId;
         if (!roomId) {
-            this.gs.sendClient(client, RoomError.NO_ROOM, 'joined no room');
+            this.gs.sendError(userId, ErrorCodes.NO_ROOM_ID, 'joined no room');
             return false;
         }
 
         const room = this.gs.getRoom(roomId);
         if (!room) {
-            this.gs.sendClient(
-                client,
-                RoomError.ROOM_NOT_EXIST,
+            this.gs.sendError(
+                userId,
+                ErrorCodes.ROOM_NOT_EXIST,
                 'Room does not exist',
             );
             return false;

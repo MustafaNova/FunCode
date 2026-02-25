@@ -97,9 +97,6 @@ export class BattleManagerService implements BattleManagerPort {
             this.roomToPlayers.delete(submit.roomId);
             await this.playerGateway.closeRoom(submit.roomId);
             await this.battleRepo.setWinner(submit.roomId, submit.userId);
-            console.log(
-                `roomToPlayers get(roomId): ${this.roomToPlayers.has(submit.roomId)}`,
-            );
         }
     }
 

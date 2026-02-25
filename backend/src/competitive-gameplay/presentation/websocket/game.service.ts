@@ -101,8 +101,5 @@ export class GameService {
                 await socket?.leave(roomId);
             }
         }
-        console.log(
-            `after room deletion(false=room not exists): ${this.server.sockets.adapter.rooms.has(roomId)}`,
-        );
     }
 }

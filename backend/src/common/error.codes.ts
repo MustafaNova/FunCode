@@ -2,4 +2,6 @@ export enum ErrorCodes {
     TASK_ID_NOT_FOUND = 404,
     UNDEFINED_SOLUTION = 405,
     USER_CODE_ERROR = 406,
+    NO_ROOM_ID = 407,
+    ROOM_NOT_EXIST = 408,
 }

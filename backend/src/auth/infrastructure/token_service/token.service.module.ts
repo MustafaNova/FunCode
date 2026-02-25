@@ -19,6 +19,6 @@ import { PassportModule } from '@nestjs/passport';
         JwtStrategy,
         { provide: TOKEN_SERVICE_PORT, useClass: TokenServiceAdapter },
     ],
-    exports: [TOKEN_SERVICE_PORT, JwtStrategy],
+    exports: [TOKEN_SERVICE_PORT],
 })
-export class AuthInfrastructureModule {}
+export class TokenServiceModule {}

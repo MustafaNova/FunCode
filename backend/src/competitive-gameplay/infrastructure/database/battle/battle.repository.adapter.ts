@@ -27,7 +27,5 @@ export class BattleRepositoryAdapter implements BattleRepositoryPort {
 
     async setWinner(roomId: string, winnerId: string): Promise<void> {
         await this.battleRepo.update({ roomId }, { winnerId });
-        const res = await this.battleRepo.findOne({ where: { roomId } });
-        console.log(`after database update: ${winnerId} == ${res?.winnerId}`);
     }
 }

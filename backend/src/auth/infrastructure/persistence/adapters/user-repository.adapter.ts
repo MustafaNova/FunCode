@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { UserRepositoryPort } from '../../../../application/ports/outbound/user-repository.port';
-import { Email } from '../../../../domain/value-objects/email.vo';
-import { Username } from '../../../../domain/value-objects/username.vo';
-import { User } from '../../../../domain/entitys/user';
+import { UserRepositoryPort } from '../../../application/ports/outbound/user-repository.port';
+import { Email } from '../../../domain/value-objects/email.vo';
+import { Username } from '../../../domain/value-objects/username.vo';
+import { User } from '../../../domain/entitys/user';
 import { Repository } from 'typeorm';
-import { UserEntity } from '../../typeorm/user.entity';
+import { UserEntity } from '../typeorm/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Password } from '../../../../domain/value-objects/password.vo';
-import { UserId } from '../../../../domain/value-objects/userId.vo';
+import { Password } from '../../../domain/value-objects/password.vo';
+import { UserId } from '../../../domain/value-objects/userId.vo';
 
 @Injectable()
 export class UserRepositoryAdapter implements UserRepositoryPort {
