@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { ApplicationModule } from '../../application/application.module';
 import { AuthController } from './controllers/auth/auth.controller';
+import { UCServicesModule } from '../../infrastructure/uc-wiring/uc.services.module';
 
 @Module({
-    imports: [ApplicationModule],
+    imports: [UCServicesModule],
     controllers: [AuthController],
 })
 export class HttpModule {}

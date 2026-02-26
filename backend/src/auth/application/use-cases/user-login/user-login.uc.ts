@@ -1,21 +1,16 @@
-import { Inject, Injectable } from '@nestjs/common';
 import { LoginUserPort } from '../../ports/inbound/login-user.port';
 import { LoginUserCmd } from './dtos/login-user.cmd';
 import { LoginUserRes } from './dtos/login-user.res';
 import { Username } from '../../../domain/value-objects/username.vo';
 import type { UserRepositoryPort } from '../../ports/outbound/user-repository.port';
-import { TOKEN_SERVICE_PORT, USER_REPOSITORY_PORT } from '../../tokens';
 import { InvalidCredentialsError } from './errors/InvalidCredentialsError';
 import type { TokenServicePort } from '../../ports/outbound/token-service.port';
 import { UserId } from '../../../domain/value-objects/userId.vo';
 import { TokenPayload } from '../../../domain/value-objects/tokenPayload.vo';
 
-@Injectable()
-export class UserLoginService implements LoginUserPort {
+export class UserLoginUC implements LoginUserPort {
     constructor(
-        @Inject(USER_REPOSITORY_PORT)
         private readonly userRepo: UserRepositoryPort,
-        @Inject(TOKEN_SERVICE_PORT)
         private readonly tokenService: TokenServicePort,
     ) {}
 

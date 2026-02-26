@@ -6,6 +6,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
     imports: [
+        CompetitiveGameplayModule,
         AuthModule,
         TypeOrmModule.forRoot({
             type: 'postgres',
@@ -17,7 +18,6 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
             autoLoadEntities: true,
             synchronize: true,
         }),
-        CompetitiveGameplayModule,
         EventEmitterModule.forRoot(),
     ],
     controllers: [],

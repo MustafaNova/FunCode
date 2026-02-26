@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { InfrastructureModule } from '../infrastructure/infrastructure.module';
-import { UserLoginService } from './use-cases/user-login/user-login.service';
+import { UserLoginService } from './user.login.service';
+import { UserRegistrationService } from './user.registration.service';
+import { PersistenceModule } from '../persistence/persistence.module';
+import { TokenServiceModule } from '../token_service/token.service.module';
 import { LOGIN_USER_PORT, REGISTER_USER_PORT } from './tokens';
-import { UserRegistrationService } from './use-cases/user-registration/user-registration.service';
 
 @Module({
-    imports: [InfrastructureModule],
-    controllers: [],
+    imports: [PersistenceModule, TokenServiceModule],
     providers: [
         {
             provide: REGISTER_USER_PORT,
@@ -19,4 +19,4 @@ import { UserRegistrationService } from './use-cases/user-registration/user-regi
     ],
     exports: [REGISTER_USER_PORT, LOGIN_USER_PORT],
 })
-export class ApplicationModule {}
+export class UCServicesModule {}

@@ -5,6 +5,5 @@ import { ApiModule } from './presentation/api.module';
 
 @Module({
     imports: [ApplicationModule, InfrastructureModule, ApiModule],
-    providers: [],
 })
 export class CompetitiveGameplayModule {}

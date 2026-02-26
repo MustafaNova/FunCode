@@ -12,7 +12,7 @@ interface Sandbox {
 }
 
 @Injectable()
-class TaskService {
+export class TaskService {
     getRandomTask() {
         return tasks[0];
     }
@@ -54,5 +54,3 @@ class TaskService {
         return true;
     }
 }
-
-export default TaskService;

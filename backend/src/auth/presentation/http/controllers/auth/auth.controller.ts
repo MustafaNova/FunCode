@@ -10,7 +10,7 @@ import type { RegisterUserPort } from '../../../../application/ports/inbound/reg
 import {
     LOGIN_USER_PORT,
     REGISTER_USER_PORT,
-} from '../../../../application/tokens';
+} from '../../../../infrastructure/uc-wiring/tokens';
 import { UserRegistrationCmd } from '../../../../application/use-cases/user-registration/dtos/register-user.cmd';
 import { UserRegistrationResponse } from './dtos/user-registration.response';
 import { UserLoginReq } from './dtos/user-login.request';

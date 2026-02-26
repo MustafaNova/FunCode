@@ -1,4 +1,3 @@
-import { Inject, Injectable } from '@nestjs/common';
 import { RegisterUserPort } from '../../ports/inbound/register-user.port';
 import { UserRegistrationCmd } from './dtos/register-user.cmd';
 import { RegisterUserResult } from './dtos/register-user.result';
@@ -6,17 +5,12 @@ import { Username } from '../../../domain/value-objects/username.vo';
 import { Email } from '../../../domain/value-objects/email.vo';
 import { Password } from '../../../domain/value-objects/password.vo';
 import type { UserRepositoryPort } from '../../ports/outbound/user-repository.port';
-import { USER_REPOSITORY_PORT } from '../../tokens';
 import { User } from '../../../domain/entitys/user';
 import { UsernameAlreadyExistsError } from './errors/UsernameAlreadyExistsError';
 import { EmailAlreadyExistsError } from './errors/EmailAlreadyExistsError';
 
-@Injectable()
-export class UserRegistrationService implements RegisterUserPort {
-    constructor(
-        @Inject(USER_REPOSITORY_PORT)
-        private readonly userRepo: UserRepositoryPort,
-    ) {}
+export class UserRegistrationUC implements RegisterUserPort {
+    constructor(private readonly userRepo: UserRepositoryPort) {}
 
     async registerUser(
         userRegistration: UserRegistrationCmd,
