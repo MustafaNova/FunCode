@@ -4,13 +4,14 @@ import { Battle1vs1, PlayerInfo } from '../../../domain/entities/battle1vs1';
 import type { PlayerGatewayPort } from '../../ports/outbound/player.gateway.port';
 import { PLAYER_GATEWAY_PORT } from '../../../infrastructure/playerGateway/token';
 import { BattleNotification } from '../../../domain/battle.notifs';
-import TaskService from './tasks/task.service';
 import { ReadyPlayerCmd } from './dtos/ready.player.cmd';
 import { SubmitCmd } from './dtos/submit.cmd';
 import { AppError } from './interfaces';
 import { SubmitRes } from './dtos/submit.res';
 import type { BattleRepositoryPort } from '../../ports/outbound/battleRepository.port';
 import { BATTLE_REPOSITORY_PORT } from '../../tokens';
+import type { ChallengeRepositoryPort } from '../../ports/outbound/challenge.repository.port';
+import type { ValidatorPort } from '../../ports/inbound/validator.port';
 
 @Injectable()
 export class BattleManagerService implements BattleManagerPort {
@@ -21,7 +22,8 @@ export class BattleManagerService implements BattleManagerPort {
     constructor(
         @Inject(PLAYER_GATEWAY_PORT)
         private readonly playerGateway: PlayerGatewayPort,
-        private readonly taskService: TaskService,
+        private readonly challengeRepo: ChallengeRepositoryPort,
+        private readonly validator: ValidatorPort,
         @Inject(BATTLE_REPOSITORY_PORT)
         private readonly battleRepo: BattleRepositoryPort,
     ) {}
@@ -63,14 +65,14 @@ export class BattleManagerService implements BattleManagerPort {
             this.playerGateway.notifyRoom(
                 roomId,
                 BattleNotification.START_BATTLE,
-                this.taskService.getRandomTask(),
+                this.challengeRepo.getRandomTask(),
             );
         }
     }
 
     async handleSolutionSubmit(submit: SubmitCmd) {
         try {
-            const res = this.taskService.checkSubmit(
+            const res = this.validator.checkSubmit(
                 submit.taskId,
                 submit.solution,
             );

@@ -7,8 +7,6 @@ import type { BattleEventPublisherPort } from '../../ports/outbound/battle.event
 import type { IdGeneratorPort } from '../../ports/outbound/id.generator.port';
 
 export class MatchMakerUC implements MatchMakerPort {
-    protected stopped = false;
-
     constructor(
         private readonly battleRepo: BattleRepositoryPort,
         private readonly matchMaking: MatchmakingQueuePort,
@@ -42,20 +40,5 @@ export class MatchMakerUC implements MatchMakerPort {
 
         await this.battleRepo.save1vs1(battle);
         await this.battleEventPublisher.created1v1(battle);
-    }
-
-    protected async loop() {
-        while (!this.stopped) {
-            try {
-                await this.match1v1Unranked();
-            } catch (err) {
-                console.log(err);
-            }
-            await this.sleep(1000);
-        }
-    }
-
-    private sleep(ms: number) {
-        return new Promise((resolve) => setTimeout(resolve, ms));
     }
 }

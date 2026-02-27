@@ -23,6 +23,7 @@ export class MatchMakerService
     extends MatchMakerUC
     implements OnModuleInit, OnModuleDestroy
 {
+    private stopped = false;
     constructor(
         @Inject(BATTLE_REPOSITORY_PORT)
         battleRepo: BattleRepositoryPort,
@@ -41,5 +42,20 @@ export class MatchMakerService
 
     onModuleDestroy(): any {
         this.stopped = true;
+    }
+
+    private async loop() {
+        while (!this.stopped) {
+            try {
+                await this.match1v1Unranked();
+            } catch (err) {
+                console.log(err);
+            }
+            await this.sleep(1000);
+        }
+    }
+
+    private sleep(ms: number) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
     }
 }

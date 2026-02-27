@@ -1,9 +1,10 @@
-import { tasks, taskTestMap, taskTests } from './tasks';
 import { Injectable } from '@nestjs/common';
-import { TaskIdError } from '../errors/task.id.err';
-import { SolutionError } from '../errors/solution.err';
+import { TaskIdError } from '../battle-manager/errors/task.id.err';
+import { SolutionError } from '../battle-manager/errors/solution.err';
 import vm from 'vm';
-import { UserCodeError } from '../errors/usercode.err';
+import { UserCodeError } from '../battle-manager/errors/usercode.err';
+import { ValidatorPort } from '../../ports/inbound/validator.port';
+import type { ChallengeRepositoryPort } from '../../ports/outbound/challenge.repository.port';
 
 interface Sandbox {
     args: unknown[] | null;
@@ -12,13 +13,11 @@ interface Sandbox {
 }
 
 @Injectable()
-export class TaskService {
-    getRandomTask() {
-        return tasks[0];
+export class ValidatorUC implements ValidatorPort {
+    constructor(private readonly challengeRepo: ChallengeRepositoryPort) {
     }
-
     checkSubmit(taskId: string, solution: string) {
-        if (!(taskId in taskTests)) {
+        if (!this.challengeRepo.exists(taskId)) {
             console.log('taskId Error');
             throw new TaskIdError();
         }
@@ -30,7 +29,7 @@ export class TaskService {
     }
 
     private runUserCode(taskId: string, solution: string) {
-        const taskTest = taskTests[taskId as keyof taskTestMap];
+        const taskTest = this.challengeRepo.getTests(taskId);
         const sandbox: Sandbox = { args: null, result: null };
 
         try {
