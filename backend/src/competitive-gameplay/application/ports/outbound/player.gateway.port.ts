@@ -1,4 +1,4 @@
-import { BattleNotification } from '../../../domain/battle.notifs';
+import { BattleNotification } from '../../../domain/enums/battle.notification';
 import { ErrorCodes } from '../../../../common/error.codes';
 
 export interface PlayerGatewayPort {

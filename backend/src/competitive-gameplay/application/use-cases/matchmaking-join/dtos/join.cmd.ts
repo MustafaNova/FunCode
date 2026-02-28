@@ -1,4 +1,5 @@
-import { MatchType, PlayerCount } from '../../../../domain/types';
+import { MatchType } from '../../../../domain/enums/matchtype';
+import { PlayerCount } from '../../../../domain/enums/playercount';
 
 export class JoinCmd {
     private constructor(

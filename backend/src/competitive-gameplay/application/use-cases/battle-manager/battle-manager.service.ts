@@ -3,7 +3,7 @@ import { BattleManagerPort } from '../../ports/inbound/battle.manager.port';
 import { Battle1vs1, PlayerInfo } from '../../../domain/entities/battle1vs1';
 import type { PlayerGatewayPort } from '../../ports/outbound/player.gateway.port';
 import { PLAYER_GATEWAY_PORT } from '../../../infrastructure/playerGateway/token';
-import { BattleNotification } from '../../../domain/battle.notifs';
+import { BattleNotification } from '../../../domain/enums/battle.notification';
 import { ReadyPlayerCmd } from './dtos/ready.player.cmd';
 import { SubmitCmd } from './dtos/submit.cmd';
 import { AppError } from './interfaces';

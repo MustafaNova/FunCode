@@ -15,7 +15,7 @@ import type {
 } from './interfaces';
 import { UseGuards } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { BattleEvent } from '../../domain/battle.events';
+import { BattleEvent } from '../../domain/enums/battle.events';
 import { RoomGuard } from './guards/room.guard';
 import { GameService } from './game.service';
 

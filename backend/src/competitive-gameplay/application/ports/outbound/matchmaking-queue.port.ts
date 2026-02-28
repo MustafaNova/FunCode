@@ -1,5 +1,6 @@
 import { QueueEntry } from '../../../domain/entities/queueEntry';
-import { MatchType, PlayerCount } from '../../../domain/types';
+import { MatchType } from '../../../domain/enums/matchtype';
+import { PlayerCount } from '../../../domain/enums/playercount';
 
 export interface MatchmakingQueuePort {
     enqueue(

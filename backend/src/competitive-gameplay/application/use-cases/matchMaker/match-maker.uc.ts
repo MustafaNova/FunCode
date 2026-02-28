@@ -1,10 +1,11 @@
 import { MatchMakerPort } from '../../ports/inbound/match-maker.port';
 import type { BattleRepositoryPort } from '../../ports/outbound/battleRepository.port';
 import type { MatchmakingQueuePort } from '../../ports/outbound/matchmaking-queue.port';
-import { MatchType, PlayerCount } from '../../../domain/types';
 import { Battle1vs1 } from '../../../domain/entities/battle1vs1';
 import type { BattleEventPublisherPort } from '../../ports/outbound/battle.event.publisher.port';
 import type { IdGeneratorPort } from '../../ports/outbound/id.generator.port';
+import { MatchType } from '../../../domain/enums/matchtype';
+import { PlayerCount } from '../../../domain/enums/playercount';
 
 export class MatchMakerUC implements MatchMakerPort {
     constructor(

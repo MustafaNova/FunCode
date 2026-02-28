@@ -1,11 +1,10 @@
 import { ChallengeRepositoryPort } from '../../../application/ports/outbound/challenge.repository.port';
 import { Task, TaskTest } from '../../../domain/entities/task';
 import { Difficulty } from '../../../domain/value-objects/difficulty.vo';
+import { Injectable } from '@nestjs/common';
 
-export type taskTestMap = {
-    '123456789': { functionName: string; tests: TaskTest<number[], number>[] };
-};
 
+@Injectable()
 export class ChallengeRepositoryAdapter implements ChallengeRepositoryPort {
     private tasks: Task[] = [
         {
@@ -44,5 +43,13 @@ export class ChallengeRepositoryAdapter implements ChallengeRepositoryPort {
         },
     };
 
+    exists(taskId: string): boolean {
+        return true;
+    }
+
     getRandomTask() {}
+
+    getTests<K extends keyof taskTestMap>(taskId: K): taskTestMap[K] {
+        return this.taskTests[taskId];
+    }
 }

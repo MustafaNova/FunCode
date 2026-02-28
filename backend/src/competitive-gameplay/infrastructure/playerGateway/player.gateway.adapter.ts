@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PlayerGatewayPort } from '../../application/ports/outbound/player.gateway.port';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { BattleEvent } from '../../domain/battle.events';
+import { BattleEvent } from '../../domain/enums/battle.events';
 import { ErrorCodes } from '../../../common/error.codes';
 
 @Injectable()
