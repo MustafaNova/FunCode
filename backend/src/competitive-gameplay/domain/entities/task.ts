@@ -3,6 +3,7 @@ import { Difficulty } from '../value-objects/difficulty.vo';
 export interface Task {
     id: string;
     name: string;
+    functionName: string;
     difficulty: Difficulty;
     description: string;
     examples: string[];

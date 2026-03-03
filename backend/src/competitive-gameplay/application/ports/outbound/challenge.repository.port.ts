@@ -1,8 +1,9 @@
 import { Task } from '../../../domain/entities/task';
-import { taskTestMap } from '../../../domain/types/taskTestMap';
+import { tasksMap } from '../../../domain/types/tasksMap';
+import { TaskTestsWithName } from '../../../domain/types/taskTestsWithName';
 
 export interface ChallengeRepositoryPort {
     getRandomTask(): Task;
     exists(taskId: string): boolean;
-    getTests<K extends keyof taskTestMap>(taskId: K): taskTestMap[K];
+    getTests<K extends keyof tasksMap>(taskId: K): TaskTestsWithName<K>;
 }

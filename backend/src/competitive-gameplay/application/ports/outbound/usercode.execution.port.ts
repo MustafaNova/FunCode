@@ -1,3 +1,9 @@
+import { TaskTest } from '../../../domain/entities/task';
+
 export interface UserCodeExecutionPort {
-    run(userCode: string, tests: K): boolean;
+    run<I, O>(
+        userCode: string,
+        functionName: string,
+        tests: TaskTest<I, O>[],
+    ): boolean;
 }

@@ -1,33 +1,30 @@
 import { ChallengeRepositoryPort } from '../../../application/ports/outbound/challenge.repository.port';
-import { Task, TaskTest } from '../../../domain/entities/task';
 import { Difficulty } from '../../../domain/value-objects/difficulty.vo';
 import { Injectable } from '@nestjs/common';
-
+import { tasksMap } from '../../../domain/types/tasksMap';
+import { TaskTestsWithName } from '../../../domain/types/taskTestsWithName';
 
 @Injectable()
 export class ChallengeRepositoryAdapter implements ChallengeRepositoryPort {
-    private tasks: Task[] = [
-        {
-            id: '123456789',
-            name: 'Add Digits',
-            difficulty: Difficulty.EASY,
-            description:
-                'Given an integer num, repeatedly add all its digits until the result has only one digit, and return it.',
-            examples: [
-                'Input: num = 38 → Output: 2\nExplanation: 38 → 3 + 8 = 11 → 1 + 1 = 2',
-                'Input: num = 0 → Output: 0',
-            ],
-            constraints: '0 <= num <= 2^31 - 1',
-            starterCode: `function addDigits(num: number): number {
+    private tasks: tasksMap = {
+        '123456789': {
+            task: {
+                id: '123456789',
+                name: 'Add Digits',
+                functionName: 'addDigits',
+                difficulty: Difficulty.EASY,
+                description:
+                    'Given an integer num, repeatedly add all its digits until the result has only one digit, and return it.',
+                examples: [
+                    'Input: num = 38 → Output: 2\nExplanation: 38 → 3 + 8 = 11 → 1 + 1 = 2',
+                    'Input: num = 0 → Output: 0',
+                ],
+                constraints: '0 <= num <= 2^31 - 1',
+                starterCode: `function addDigits(num: number): number {
             // TODO: implement solution
             return 0;
         }`,
-        },
-    ];
-
-    private taskTests: taskTestMap = {
-        '123456789': {
-            functionName: 'addDigits',
+            },
             tests: [
                 { input: [0], expectedOutput: 0 },
                 { input: [5], expectedOutput: 5 },
@@ -42,14 +39,24 @@ export class ChallengeRepositoryAdapter implements ChallengeRepositoryPort {
             ],
         },
     };
+    private taskKeys: (keyof tasksMap)[] = Object.keys(
+        this.tasks,
+    ) as (keyof tasksMap)[];
 
     exists(taskId: string): boolean {
-        return true;
+        return taskId in this.tasks;
     }
 
-    getRandomTask() {}
+    getRandomTask() {
+        const randomKey =
+            this.taskKeys[Math.floor(Math.random() * this.taskKeys.length)];
+        return this.tasks[randomKey].task;
+    }
 
-    getTests<K extends keyof taskTestMap>(taskId: K): taskTestMap[K] {
-        return this.taskTests[taskId];
+    getTests<K extends keyof tasksMap>(taskId: K): TaskTestsWithName<K> {
+        return {
+            functionName: this.tasks[taskId].task.functionName,
+            tests: [...this.tasks[taskId].tests],
+        };
     }
 }

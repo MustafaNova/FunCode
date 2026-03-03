@@ -4,7 +4,7 @@ import { SolutionError } from '../battle-manager/errors/solution.err';
 import { ValidatorPort } from '../../ports/inbound/validator.port';
 import type { ChallengeRepositoryPort } from '../../ports/outbound/challenge.repository.port';
 import type { UserCodeExecutionPort } from '../../ports/outbound/usercode.execution.port';
-import { taskTestMap } from '../../../domain/types/taskTestMap';
+import { tasksMap } from '../../../domain/types/tasksMap';
 
 @Injectable()
 export class ValidatorUC implements ValidatorPort {
@@ -21,11 +21,15 @@ export class ValidatorUC implements ValidatorPort {
             console.log('solution Error');
             throw new SolutionError();
         }
-        return this.runUserCode(taskId as keyof taskTestMap, solution);
+        return this.runUserCode(taskId as keyof tasksMap, solution);
     }
 
-    private runUserCode(taskId: keyof taskTestMap, solution: string) {
-        const taskTest = this.challengeRepo.getTests(taskId);
-        return this.codeExecutor.run(solution, taskTest);
+    private runUserCode(taskId: keyof tasksMap, solution: string) {
+        const testObj = this.challengeRepo.getTests(taskId);
+        return this.codeExecutor.run(
+            solution,
+            testObj.functionName,
+            testObj.tests,
+        );
     }
 }

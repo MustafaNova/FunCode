@@ -1,6 +1,7 @@
 import { UserCodeExecutionPort } from '../../application/ports/outbound/usercode.execution.port';
 import vm from 'vm';
 import { Injectable } from '@nestjs/common';
+import { TaskTest } from '../../domain/entities/task';
 
 interface Sandbox {
     args: unknown[] | null;
@@ -10,8 +11,11 @@ interface Sandbox {
 
 @Injectable()
 export class UserCodeExecutionAdapter implements UserCodeExecutionPort {
-
-    run(userCode: string, tests: unknown): boolean {
+    run<I, O>(
+        userCode: string,
+        functionName: string,
+        tests: TaskTest<I, O>[],
+    ): boolean {
         const sandbox: Sandbox = { args: null, result: null };
 
         const script = new vm.Script(userCode);
@@ -20,9 +24,7 @@ export class UserCodeExecutionAdapter implements UserCodeExecutionPort {
 
         for (const test of tests) {
             sandbox.args = test.input;
-            const func = sandbox[tests.functionName] as (
-                ...args: any[]
-            ) => any;
+            const func = sandbox[functionName] as (...args: any[]) => any;
             sandbox.result = func(...sandbox.args);
             if (sandbox.result !== test.expectedOutput) {
                 return false;
