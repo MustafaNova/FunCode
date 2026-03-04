@@ -1,12 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { TaskIdError } from '../battle-manager/errors/task.id.err';
-import { SolutionError } from '../battle-manager/errors/solution.err';
+import { TaskIdError } from './errors/task.id.err';
+import { SolutionError } from './errors/solution.err';
 import { ValidatorPort } from '../../ports/inbound/validator.port';
 import type { ChallengeRepositoryPort } from '../../ports/outbound/challenge.repository.port';
 import type { UserCodeExecutionPort } from '../../ports/outbound/usercode.execution.port';
 import { tasksMap } from '../../../domain/types/tasksMap';
+import { UserCodeError } from './errors/usercode.err';
 
-@Injectable()
 export class ValidatorUC implements ValidatorPort {
     constructor(
         private readonly challengeRepo: ChallengeRepositoryPort,
@@ -26,10 +25,14 @@ export class ValidatorUC implements ValidatorPort {
 
     private runUserCode(taskId: keyof tasksMap, solution: string) {
         const testObj = this.challengeRepo.getTests(taskId);
-        return this.codeExecutor.run(
-            solution,
-            testObj.functionName,
-            testObj.tests,
-        );
+        try {
+            return this.codeExecutor.run(
+                solution,
+                testObj.functionName,
+                testObj.tests,
+            );
+        } catch (err) {
+            throw new UserCodeError((err as Error).message);
+        }
     }
 }

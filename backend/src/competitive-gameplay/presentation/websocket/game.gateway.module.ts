@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { GameGateway } from './game.gateway';
-import { ApplicationModule } from '../../application/application.module';
 import { RoomGuard } from './guards/room.guard';
 import { GameService } from './game.service';
+import { UCServicesModule } from '../../infrastructure/uc-wiring/uc.services.module';
 
 @Module({
-    imports: [ApplicationModule],
+    imports: [UCServicesModule],
     providers: [GameGateway, RoomGuard, GameService],
     exports: [GameGateway],
 })

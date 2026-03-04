@@ -4,19 +4,19 @@ import { Injectable } from '@nestjs/common';
 import { TaskTest } from '../../domain/entities/task';
 
 interface Sandbox {
-    args: unknown[] | null;
+    args: unknown[];
     result: unknown;
     [key: string]: any;
 }
 
 @Injectable()
 export class UserCodeExecutionAdapter implements UserCodeExecutionPort {
-    run<I, O>(
+    run<I extends unknown[], O>(
         userCode: string,
         functionName: string,
         tests: TaskTest<I, O>[],
     ): boolean {
-        const sandbox: Sandbox = { args: null, result: null };
+        const sandbox: Sandbox = { args: [], result: null };
 
         const script = new vm.Script(userCode);
         const context = vm.createContext(sandbox);

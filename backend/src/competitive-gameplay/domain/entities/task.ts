@@ -11,7 +11,10 @@ export interface Task {
     starterCode: string;
 }
 
-export interface TaskTest<Input = any, Output = any> {
+export interface TaskTest<
+    Input extends unknown[] = unknown[],
+    Output = unknown,
+> {
     input: Input;
     expectedOutput: Output;
 }

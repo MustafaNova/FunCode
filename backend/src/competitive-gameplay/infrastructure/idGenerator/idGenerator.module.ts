@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ID_GENERATOR_PORT } from '../../application/tokens';
+import { ID_GENERATOR_PORT } from '../uc-wiring/tokens';
 import { IdGeneratorAdapter } from './id.generator.adapter';
 
 @Module({

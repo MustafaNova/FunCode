@@ -12,7 +12,7 @@ import type { IdGeneratorPort } from '../../application/ports/outbound/id.genera
 import {
     BATTLE_REPOSITORY_PORT,
     ID_GENERATOR_PORT,
-} from '../../application/tokens';
+} from '../../infrastructure/uc-wiring/tokens';
 import {
     BATTLE_EVENT_PUBLISHER_PORT,
     MATCHMAKING_QUEUE_PORT,

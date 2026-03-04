@@ -9,10 +9,10 @@ import {
     REDIS_SUBSCRIBER_CLIENT,
 } from './tokens';
 import { BattleEventSubscriberAdapter } from './battle.event.subscriber.adapter';
-import { ApplicationModule } from '../../application/application.module';
+import { UCServicesModule } from '../uc-wiring/uc.services.module';
 
 @Module({
-    imports: [forwardRef(() => ApplicationModule)],
+    imports: [forwardRef(() => UCServicesModule)],
     providers: [
         BattleEventSubscriberAdapter,
         {

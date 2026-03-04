@@ -1,30 +1,24 @@
-import { Inject, Injectable } from '@nestjs/common';
 import { BattleManagerPort } from '../../ports/inbound/battle.manager.port';
 import { Battle1vs1, PlayerInfo } from '../../../domain/entities/battle1vs1';
 import type { PlayerGatewayPort } from '../../ports/outbound/player.gateway.port';
-import { PLAYER_GATEWAY_PORT } from '../../../infrastructure/playerGateway/token';
 import { BattleNotification } from '../../../domain/enums/battle.notification';
 import { ReadyPlayerCmd } from './dtos/ready.player.cmd';
 import { SubmitCmd } from './dtos/submit.cmd';
 import { AppError } from './interfaces';
 import { SubmitRes } from './dtos/submit.res';
 import type { BattleRepositoryPort } from '../../ports/outbound/battleRepository.port';
-import { BATTLE_REPOSITORY_PORT } from '../../tokens';
 import type { ChallengeRepositoryPort } from '../../ports/outbound/challenge.repository.port';
 import type { ValidatorPort } from '../../ports/inbound/validator.port';
 
-@Injectable()
-export class BattleManagerService implements BattleManagerPort {
+export class BattleManagerUC implements BattleManagerPort {
     connectedPlayers = new Set<string>();
     roomToPlayers = new Map<string, PlayerInfo[]>();
     private readyPlayers = new Map<string, Set<string>>();
 
     constructor(
-        @Inject(PLAYER_GATEWAY_PORT)
         private readonly playerGateway: PlayerGatewayPort,
         private readonly challengeRepo: ChallengeRepositoryPort,
         private readonly validator: ValidatorPort,
-        @Inject(BATTLE_REPOSITORY_PORT)
         private readonly battleRepo: BattleRepositoryPort,
     ) {}
 

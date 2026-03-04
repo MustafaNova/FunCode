@@ -1,6 +1,6 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import Redis from 'ioredis';
-import { BATTLE_MANAGER_PORT } from '../../application/tokens';
+import { BATTLE_MANAGER_PORT } from '../uc-wiring/tokens';
 import type { BattleManagerPort } from '../../application/ports/inbound/battle.manager.port';
 import { Battle1vs1 } from '../../domain/entities/battle1vs1';
 import { REDIS_SUBSCRIBER_CLIENT } from './tokens';

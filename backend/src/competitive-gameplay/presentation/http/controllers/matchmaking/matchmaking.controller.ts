@@ -1,6 +1,6 @@
 import { Controller, Post, Inject, UseGuards, Body } from '@nestjs/common';
 import type { JoinMatchMakingPort } from '../../../../application/ports/inbound/join-matchmaking.port';
-import { JOIN_MATCHMAKING_PORT } from '../../../../application/tokens';
+import { JOIN_MATCHMAKING_PORT } from '../../../../infrastructure/uc-wiring/tokens';
 import { AuthGuard } from '@nestjs/passport';
 import { UserPayload } from '../../decorators/user-payload.decorator';
 import { AuthUser, JoinPayload } from './dtos/join.request';

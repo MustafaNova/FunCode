@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 import type { GameSocket, Payload } from './interfaces';
 import { verify } from 'jsonwebtoken';
-import { BATTLE_MANAGER_PORT } from '../../application/tokens';
+import { BATTLE_MANAGER_PORT } from '../../infrastructure/uc-wiring/tokens';
 import type { BattleManagerPort } from '../../application/ports/inbound/battle.manager.port';
 import { ReadyPlayerCmd } from '../../application/use-cases/battle-manager/dtos/ready.player.cmd';
 import { SubmitCmd } from '../../application/use-cases/battle-manager/dtos/submit.cmd';
