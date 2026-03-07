@@ -2,7 +2,7 @@ import { MatchMakerPort } from '../../ports/inbound/match-maker.port';
 import type { BattleRepositoryPort } from '../../ports/outbound/battleRepository.port';
 import type { MatchmakingQueuePort } from '../../ports/outbound/matchmaking-queue.port';
 import { Battle1vs1 } from '../../../domain/entities/battle1vs1';
-import type { BattleEventPublisherPort } from '../../ports/outbound/battle.event.publisher.port';
+import type { MatchPort } from '../../ports/outbound/match.port';
 import type { IdGeneratorPort } from '../../ports/outbound/id.generator.port';
 import { MatchType } from '../../../domain/enums/matchtype';
 import { PlayerCount } from '../../../domain/enums/playercount';
@@ -11,7 +11,7 @@ export class MatchMakerUC implements MatchMakerPort {
     constructor(
         private readonly battleRepo: BattleRepositoryPort,
         private readonly matchMaking: MatchmakingQueuePort,
-        private readonly battleEventPublisher: BattleEventPublisherPort,
+        private readonly match: MatchPort,
         private readonly idGenerator: IdGeneratorPort,
     ) {}
 
@@ -40,6 +40,6 @@ export class MatchMakerUC implements MatchMakerPort {
         );
 
         await this.battleRepo.save1vs1(battle);
-        await this.battleEventPublisher.created1v1(battle);
+        this.match.matchFound1v1(battle);
     }
 }

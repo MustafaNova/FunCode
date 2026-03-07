@@ -5,3 +5,4 @@ export const ID_GENERATOR_PORT = 'ID_GENERATOR_PORT' as const;
 export const USERCODE_EXECUTION_PORT = 'USERCODE_EXECUTION_PORT' as const;
 export const CHALLENGE_REPOSITORY_PORT = 'CHALLENGE_REPOSITORY_PORT' as const;
 export const VALIDATOR_PORT = 'VALIDATOR_PORT' as const;
+export const MATCH_PORT = 'MATCH_PORT' as const;
