@@ -1,6 +1,10 @@
+import './arena.scss'
 
 export function Arena() {
     return (
-        <h1>arena works!</h1>
+        <div className='d-flex'>
+            <button>1v1</button>
+            <button>2v2</button>
+        </div>
     )
 }

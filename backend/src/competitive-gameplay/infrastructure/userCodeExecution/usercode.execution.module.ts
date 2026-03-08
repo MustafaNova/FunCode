@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { USERCODE_EXECUTION_PORT } from '../uc-wiring/tokens';
+import { USERCODE_EXECUTION_PORT } from './tokens';
 import { UserCodeExecutionAdapter } from './usercode.execution.adapter';
 
 @Module({

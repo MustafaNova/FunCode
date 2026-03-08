@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { MATCH_PORT } from '../uc-wiring/tokens';
+import { MATCH_PORT } from './tokens';
 import { MatchAdapter } from './match.adapter';
 
 @Module({

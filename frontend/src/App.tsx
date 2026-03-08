@@ -6,7 +6,7 @@ import { Outlet } from "react-router-dom";
 
 function App() {
     const appWrapper: CSSProperties = { display: "flex", flexDirection: "column", height: "100%", width: "100%"}
-    const centerContent = {paddingTop: "136px"}
+    const centerContent = { paddingTop: "136px" }
 
     return (
       <div style={appWrapper}>
@@ -20,7 +20,6 @@ function App() {
           <BottomBar/>
         </footer>
       </div>
-
     )
 }
 

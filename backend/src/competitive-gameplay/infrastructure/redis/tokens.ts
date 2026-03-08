@@ -1,4 +1,2 @@
-export const REDIS_CLIENT = 'REDIS_CLIENT' as const;;
+export const REDIS_CLIENT = 'REDIS_CLIENT' as const;
 export const MATCHMAKING_QUEUE_PORT = 'MATCHMAKING_QUEUE_PORT' as const;
-export const BATTLE_EVENT_PUBLISHER_PORT =
-    'BATTLE_EVENT_PUBLISHER_PORT' as const;

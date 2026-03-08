@@ -1,0 +1,1 @@
+export const USER_REPOSITORY_PORT = 'USER_REPOSITORY_PORT' as const;
