@@ -1,0 +1,14 @@
+.dFlex {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  gap: 40px;
+}
+
+
+.button {
+  height: 80px;
+  width: 150px;
+}

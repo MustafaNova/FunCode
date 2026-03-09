@@ -5,20 +5,20 @@ import { Outlet } from "react-router-dom";
 
 
 function App() {
-    const appWrapper: CSSProperties = { display: "flex", flexDirection: "column", height: "100%", width: "100%"}
-    const centerContent = { paddingTop: "136px" }
+    const appWrapper: CSSProperties = { display: 'flex', flexDirection: 'column', height: '100vh', width: '100%'}
+    const mainStyle: CSSProperties = {
+        marginTop: 'var(--top-bar-height)',
+        marginBottom: 'var(--bottom-bar-height)',
+        height: 'calc(100vh - var(--top-bar-height) - var(--bottom-bar-height))'
+    }
 
     return (
       <div style={appWrapper}>
-        <header>
           <TopBar/>
-        </header>
-        <main style={centerContent}>
+        <main style={mainStyle}>
           <Outlet/>
         </main>
-        <footer>
           <BottomBar/>
-        </footer>
       </div>
     )
 }

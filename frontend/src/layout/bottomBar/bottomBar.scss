@@ -6,11 +6,10 @@ $muted: rgba(255, 255, 255, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 60px;
+  height: var(--bottom-bar-height);
   width: var(--app-width);
   background: #4b0082;
   gap: 10%;
-  border-top: 2px solid #3a006f;
 }
 
 .section {
