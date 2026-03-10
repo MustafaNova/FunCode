@@ -15,9 +15,9 @@ function App() {
     return (
       <div style={appWrapper}>
           <TopBar/>
-        <main style={mainStyle}>
-          <Outlet/>
-        </main>
+          <main style={mainStyle}>
+            <Outlet/>
+          </main>
           <BottomBar/>
       </div>
     )
