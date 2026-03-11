@@ -9,6 +9,7 @@
 
 
 .button {
-  height: 80px;
-  width: 150px;
+  height: var(--arena-btn-height);
+  width: var(--arena-btn-width);
 }
+

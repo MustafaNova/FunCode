@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  gap: 30px;
+}
+
+.button {
+  height: var(--arena-btn-height);
+  width: var(--arena-btn-width);
+}
+
+
+.searchingScreen {
+  position: fixed;
+  width: 100vw;
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  bottom: 0;
+  z-index: 10;
+  background: radial-gradient(900px 500px at 20% 15%, rgba(124, 92, 255, 0.35), transparent 60%), radial-gradient(900px 500px at 80% 20%, rgba(45, 212, 191, 0.22), transparent 60%), radial-gradient(900px 700px at 50% 90%, rgba(255, 77, 109, 0.14), transparent 55%), #0b1020;
+}

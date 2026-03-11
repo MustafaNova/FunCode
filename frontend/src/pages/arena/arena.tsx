@@ -6,7 +6,7 @@ export function Arena() {
     return (
         <div className={s.dFlex}>
             <button className={s.button} onClick={() => navigate('1v1')}>1v1</button>
-            <button className={s.button}>2v2</button>
+            <button className='notAvailable'>2v2</button>
         </div>
     )
 }
