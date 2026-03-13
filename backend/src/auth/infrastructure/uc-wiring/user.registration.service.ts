@@ -1,7 +1,7 @@
 import { UserRegistrationUC } from '../../application/use-cases/user-registration/user-registration.uc';
 import { Inject, Injectable } from '@nestjs/common';
 import type { UserRepositoryPort } from '../../application/ports/outbound/user-repository.port';
-import { USER_REPOSITORY_PORT } from './tokens';
+import { USER_REPOSITORY_PORT } from '../persistence/tokens';
 
 @Injectable()
 export class UserRegistrationService extends UserRegistrationUC {

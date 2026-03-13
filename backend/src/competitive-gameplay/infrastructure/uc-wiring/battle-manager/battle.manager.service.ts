@@ -5,11 +5,11 @@ import type { ChallengeRepositoryPort } from '../../../application/ports/outboun
 import type { ValidatorPort } from '../../../application/ports/inbound/validator.port';
 import type { BattleRepositoryPort } from '../../../application/ports/outbound/battleRepository.port';
 import { PLAYER_GATEWAY_PORT } from '../../playerGateway/token';
+import { VALIDATOR_PORT } from '../tokens';
 import {
     BATTLE_REPOSITORY_PORT,
     CHALLENGE_REPOSITORY_PORT,
-    VALIDATOR_PORT,
-} from '../tokens';
+} from '../../database/tokens';
 
 @Injectable()
 export class BattleManagerService extends BattleManagerUC {

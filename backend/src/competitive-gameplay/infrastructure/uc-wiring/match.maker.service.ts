@@ -9,12 +9,10 @@ import type { BattleRepositoryPort } from '../../application/ports/outbound/batt
 import type { MatchmakingQueuePort } from '../../application/ports/outbound/matchmaking-queue.port';
 import type { MatchPort } from '../../application/ports/outbound/match.port';
 import type { IdGeneratorPort } from '../../application/ports/outbound/id.generator.port';
-import {
-    BATTLE_REPOSITORY_PORT,
-    ID_GENERATOR_PORT,
-    MATCH_PORT,
-} from './tokens';
 import { MATCHMAKING_QUEUE_PORT } from '../redis/tokens';
+import { BATTLE_REPOSITORY_PORT } from '../database/tokens';
+import { MATCH_PORT } from '../match/tokens';
+import { ID_GENERATOR_PORT } from '../idGenerator/tokens';
 
 @Injectable()
 export class MatchMakerService
