@@ -45,13 +45,13 @@ export function Registration() {
             </div>
             <div className={s.dFlex}>
                 <label htmlFor='password'>Password</label>
-                <input placeholder='password' id='password'
+                <input placeholder='password' type='password' id='password'
                        value={password}
                        onChange={(e) => setPassword(e.target.value)} required/>
             </div>
             <div className={s.dFlex}>
                 <label htmlFor='passwordRepeat'>PasswordRepeat</label>
-                <input placeholder='passwordRepeat' id='passwordRepeat'
+                <input placeholder='passwordRepeat' type='password' id='passwordRepeat'
                        value={passwordRepeat}
                        onChange={(e) => setPasswordRepeat(e.target.value)} required/>
             </div>

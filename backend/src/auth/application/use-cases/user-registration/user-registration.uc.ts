@@ -15,7 +15,6 @@ export class UserRegistrationUC implements RegisterUserPort {
     async registerUser(
         userRegistration: UserRegistrationCmd,
     ): Promise<RegisterUserResult> {
-        console.log('RegisterUser Req: ', userRegistration.username, userRegistration.email, userRegistration.password);
         const username = Username.create(userRegistration.username);
         const email = Email.create(userRegistration.email);
         const password = await Password.create(userRegistration.password);
