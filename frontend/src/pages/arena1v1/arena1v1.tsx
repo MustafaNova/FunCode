@@ -1,5 +1,6 @@
 import s from './arena1v1.module.scss'
 import { useState } from 'react';
+import { matchmakingCodeDuel } from '../../services/matchmaking.ts';
 
 type CancelSearch = {
     cancel: () => void
@@ -8,13 +9,18 @@ type CancelSearch = {
 export function Arena1v1() {
     const [searching, setSearching] = useState(false);
 
+    const startDuelMatchMaking = () => {
+        setSearching(true)
+        matchmakingCodeDuel();
+    }
+
     if (searching) {
         return <SearchingScreen cancel={() => setSearching(false)} />
     }
 
     return (
         <div className={s.container}>
-            <button className={s.button} onClick={() => setSearching(true)}>CodeDuel</button>
+            <button className={s.button} onClick={startDuelMatchMaking}>CodeDuel</button>
             <button className='notAvailable'>Bug Hunt</button>
             <button className='notAvailable'>Random Programming Language</button>
         </div>

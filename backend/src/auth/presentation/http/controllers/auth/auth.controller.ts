@@ -4,7 +4,9 @@ import {
     Body,
     Inject,
     BadRequestException,
+    Res,
 } from '@nestjs/common';
+import type { Response } from 'express';
 import { UserRegistrationReq } from './dtos/user-registration.request';
 import type { RegisterUserPort } from '../../../../application/ports/inbound/register-user.port';
 import {
@@ -42,9 +44,11 @@ export class AuthController {
     }
 
     @Post('login')
-    async login(@Body() req: UserLoginReq) {
+    async login(@Body() req: UserLoginReq, @Res() res: Response) {
         const cmd = LoginUserCmd.create(req.username, req.password);
-        const res = await this.loginService.login(cmd);
-        return UserLoginResponse.create(res.token, res.expiresIn);
+        const loginRes = await this.loginService.login(cmd);
+        res.cookie('token', loginRes.token, { httpOnly: true });
+        res.send({ message: 'login successful' });
+        // return UserLoginResponse.create(res.token, res.expiresIn);
     }
 }
