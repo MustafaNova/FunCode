@@ -1,6 +1,8 @@
 import s from './arena1v1.module.scss'
 import { useState } from 'react';
 import { matchmakingCodeDuel } from '../../services/matchmaking.ts';
+import { Socket } from 'socket.io-client';
+import { SOCKET_EVENTS } from '../../constants/socketEvents.ts';
 
 type CancelSearch = {
     cancel: () => void
@@ -9,9 +11,10 @@ type CancelSearch = {
 export function Arena1v1() {
     const [searching, setSearching] = useState(false);
 
-    const startDuelMatchMaking = () => {
+    const startDuelMatchMaking = async () => {
         setSearching(true)
-        matchmakingCodeDuel();
+        const socket: Socket = await matchmakingCodeDuel();
+        socket.on(SOCKET_EVENTS.MATCH_FOUND, () => console.log('MATCH_FOUND'));
     }
 
     if (searching) {

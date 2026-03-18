@@ -102,4 +102,11 @@ export class GameService {
             }
         }
     }
+
+    getTokenFromCookie(cookie: string | undefined) {
+        return cookie
+            ?.split(';')
+            .find((c) => c.startsWith('token='))
+            ?.split('=')[1];
+    }
 }

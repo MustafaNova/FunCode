@@ -1,0 +1,4 @@
+export const SOCKET_EVENTS = {
+    MATCH_FOUND : 'MATCH_FOUND',
+    BATTLE_STARTED : 'BATTLE_STARTED',
+}

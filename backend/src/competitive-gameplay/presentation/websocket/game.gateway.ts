@@ -18,8 +18,14 @@ import { OnEvent } from '@nestjs/event-emitter';
 import { BattleEvent } from '../../domain/enums/battle.events';
 import { RoomGuard } from './guards/room.guard';
 import { GameService } from './game.service';
+import { FRONTEND_URL } from '../../../constants';
 
-@WebSocketGateway()
+@WebSocketGateway({
+    cors: {
+        origin: FRONTEND_URL,
+        credentials: true,
+    },
+})
 export class GameGateway
     implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit
 {
@@ -30,9 +36,12 @@ export class GameGateway
     }
 
     handleConnection(client: Socket): any {
-        const auth = client.handshake.headers.authorization as string;
-        const token = auth?.split(' ')[1];
+        const token = this.gs.getTokenFromCookie(
+            client.handshake.headers.cookie,
+        );
+        if (!token) return;
         this.gs.registerNewPlayer(client, token);
+        console.log(`NEW GATEWAY CONNECTION. Token: ${token}`);
     }
 
     handleDisconnect(client: Socket): any {
