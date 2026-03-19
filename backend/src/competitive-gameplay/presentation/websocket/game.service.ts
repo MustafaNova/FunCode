@@ -37,7 +37,7 @@ export class GameService {
         this.server.to(roomId).emit(event, msg);
     }
 
-    registerNewPlayer(client: Socket, token: string) {
+    registerNewPlayer(client: Socket, token: string | undefined) {
         if (!token) {
             this.disconnectUnauthorized(client);
             return;

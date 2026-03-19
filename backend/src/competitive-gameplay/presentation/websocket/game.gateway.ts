@@ -39,7 +39,6 @@ export class GameGateway
         const token = this.gs.getTokenFromCookie(
             client.handshake.headers.cookie,
         );
-        if (!token) return;
         this.gs.registerNewPlayer(client, token);
         console.log(`NEW GATEWAY CONNECTION. Token: ${token}`);
     }

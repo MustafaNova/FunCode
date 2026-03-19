@@ -1,6 +1,6 @@
 import s from './arena1v1.module.scss'
 import { useState } from 'react';
-import { matchmakingCodeDuel } from '../../services/matchmaking.ts';
+import { matchmakingUnranked1v1 } from '../../services/matchmaking.ts';
 import { Socket } from 'socket.io-client';
 import { SOCKET_EVENTS } from '../../constants/socketEvents.ts';
 
@@ -11,9 +11,9 @@ type CancelSearch = {
 export function Arena1v1() {
     const [searching, setSearching] = useState(false);
 
-    const startDuelMatchMaking = async () => {
+    const startUnranked1v1 = async () => {
         setSearching(true)
-        const socket: Socket = await matchmakingCodeDuel();
+        const socket: Socket = await matchmakingUnranked1v1();
         socket.on(SOCKET_EVENTS.MATCH_FOUND, () => console.log('MATCH_FOUND'));
     }
 
@@ -23,7 +23,7 @@ export function Arena1v1() {
 
     return (
         <div className={s.container}>
-            <button className={s.button} onClick={startDuelMatchMaking}>CodeDuel</button>
+            <button className={s.button} onClick={startUnranked1v1}>unranked</button>
             <button className='notAvailable'>Bug Hunt</button>
             <button className='notAvailable'>Random Programming Language</button>
         </div>

@@ -16,6 +16,7 @@ export class MatchmakingController {
     @Post('join')
     @UseGuards(AuthGuard('jwt'))
     async join(@UserPayload() user: AuthUser, @Body() payload: JoinPayload) {
+        console.log('NEW PLAYER JOINED QUEUE');
         const cmd = JoinCmd.create(
             user.userId,
             user.username,
