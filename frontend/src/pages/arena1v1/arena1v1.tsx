@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { matchmakingUnranked1v1 } from '../../services/matchmaking.ts';
 import { Socket } from 'socket.io-client';
 import { SOCKET_EVENTS } from '../../constants/socketEvents.ts';
+import { useNavigate } from 'react-router-dom';
 
 type CancelSearch = {
     cancel: () => void
@@ -10,11 +11,15 @@ type CancelSearch = {
 
 export function Arena1v1() {
     const [searching, setSearching] = useState(false);
+    const navigate = useNavigate();
 
     const startUnranked1v1 = async () => {
         setSearching(true)
         const socket: Socket = await matchmakingUnranked1v1();
-        socket.on(SOCKET_EVENTS.MATCH_FOUND, () => console.log('MATCH_FOUND'));
+        socket.on(SOCKET_EVENTS.MATCH_FOUND, () => {
+            navigate('/match/ready');
+            setSearching(false);
+        });
     }
 
     if (searching) {

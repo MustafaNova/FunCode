@@ -1,0 +1,18 @@
+.readyScreen {
+  position: fixed;
+  width: 100vw;
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  bottom: 0;
+  z-index: 10;
+  background: var(--galaxy-background)
+}
+
+.btn {
+  width: 100px;
+  height: 50px;
+}
