@@ -1,7 +1,8 @@
+import s from './match.module.scss'
 
 export function Match() {
     return (
-        <div>
+        <div className={s.matchScreen}>
             Match Started
         </div>
     )

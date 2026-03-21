@@ -18,4 +18,8 @@ export function sendPlayerReady() {
 
 export function onBattleStarted(callback: () => void) {
     socket?.on(SOCKET_EVENTS.BATTLE_STARTED, callback);
+
+    return () => {
+        socket?.off(SOCKET_EVENTS.BATTLE_STARTED, callback);
+    }
 }
