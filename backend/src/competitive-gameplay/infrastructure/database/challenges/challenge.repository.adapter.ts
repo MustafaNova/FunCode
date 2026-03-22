@@ -1,8 +1,8 @@
 import { ChallengeRepositoryPort } from '../../../application/ports/outbound/challenge.repository.port';
-import { Difficulty } from '../../../domain/value-objects/difficulty.vo';
 import { Injectable } from '@nestjs/common';
 import { tasksMap } from '../../../domain/types/tasksMap';
 import { TaskTestsWithName } from '../../../domain/types/taskTestsWithName';
+import { Difficulty } from '../../../../../../shared/types.shared';
 
 @Injectable()
 export class ChallengeRepositoryAdapter implements ChallengeRepositoryPort {
@@ -50,7 +50,7 @@ export class ChallengeRepositoryAdapter implements ChallengeRepositoryPort {
     getRandomTask() {
         const randomKey =
             this.taskKeys[Math.floor(Math.random() * this.taskKeys.length)];
-        return this.tasks[randomKey].task;
+        return { task: this.tasks[randomKey].task };
     }
 
     getTests<K extends keyof tasksMap>(taskId: K): TaskTestsWithName<K> {

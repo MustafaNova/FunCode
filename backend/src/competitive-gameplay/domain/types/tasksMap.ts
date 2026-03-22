@@ -1,4 +1,5 @@
-import { Task, TaskTest } from '../entities/task';
+import { TaskTest } from '../entities/task';
+import { Task } from '../../../../../shared/types.shared';
 
 type TaskEntry<I extends unknown[], O> = {
     task: Task;

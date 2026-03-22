@@ -1,7 +1,12 @@
 import { create } from 'zustand';
+import type { Task } from '../../../shared/types.shared.ts';
 
+type MatchStore = {
+    matchTask: Task | null;
+    setMatchTask: (data: Task) => void;
+}
 
-export const useMatchStore = create((set) => ({
+export const useMatchStore = create<MatchStore>((set) => ({
     matchTask: null,
-    setMatchTask: (data: string) => set({ matchTask: data }),
+    setMatchTask: (data: Task) => set({ matchTask: data }),
 }));

@@ -6,9 +6,10 @@ import { useMatchStore } from '../../store/matchStore.ts';
 
 export function ReadyScreen() {
     const navigate = useNavigate();
-    const setMatchTask = useMatchStore((s) => s.setMatchTask());
+    const setMatchTask = useMatchStore((s) => s.setMatchTask);
     useEffect(() =>{
-        return onBattleStarted(() => {
+        return onBattleStarted((data) => {
+            setMatchTask(data.task);
             navigate('/match')
         });
     }, [])
