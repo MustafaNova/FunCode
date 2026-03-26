@@ -1,0 +1,16 @@
+frontend
+frontend-angular
+node_modules
+package.json
+pnpm-lock.yaml
+.gitattributes
+.gitignore
+README.md
+.idea
+
+backend/node_modules
+backend/dist
+backend/.git
+backend/.gitignore
+backend/Dockerfile*
+backend/docker-compose*.yml

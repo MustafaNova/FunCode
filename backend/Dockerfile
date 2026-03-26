@@ -4,10 +4,12 @@ WORKDIR /app
 
 RUN npm install -g pnpm
 
-COPY package.json pnpm-lock.yaml ./
+COPY backend/package.json backend/pnpm-lock.yaml ./
 RUN pnpm install
 
-COPY . .
+COPY ./backend .
+COPY ./shared ../shared
+
 
 EXPOSE 3000
-CMD ["pnpm", "start:dev"]
+CMD ["node", "dist/app/src/main.js"]

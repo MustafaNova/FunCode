@@ -1,6 +1,6 @@
 import { tasksMap } from '../../../domain/types/tasksMap';
 import { TaskTestsWithName } from '../../../domain/types/taskTestsWithName';
-import { Task } from '../../../../../../shared/types.shared';
+import { Task } from '@shared/types.shared';
 
 export interface ChallengeRepositoryPort {
     getRandomTask(): { task: Task };
