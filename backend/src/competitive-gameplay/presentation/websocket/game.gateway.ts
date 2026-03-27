@@ -83,6 +83,7 @@ export class GameGateway
     @UseGuards(RoomGuard)
     @SubscribeMessage('SUBMIT_SOLUTION')
     async handleSolutionSubmit(client: RoomSocket, payload: SolutionSubmit) {
+        console.log(`backend taskId: ${payload.taskId}`);
         await this.gs.solutionSubmit(
             client.data.user.userId,
             client.data.room,

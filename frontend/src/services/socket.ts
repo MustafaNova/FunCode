@@ -2,6 +2,7 @@ import { io, type Socket } from 'socket.io-client';
 import { SERVER_URL } from '../constants/urls.ts';
 import { SOCKET_EVENTS } from '../constants/socketEvents.ts';
 import type { Task } from '../../../shared/types.shared.ts';
+import { createSubmissionPayload } from '../utils/payloadBuilder.ts';
 
 
 let socket: Socket | null = null;
@@ -22,5 +23,16 @@ export function onBattleStarted(callback: (data: { task: Task }) => void) {
 
     return () => {
         socket?.off(SOCKET_EVENTS.BATTLE_STARTED, callback);
+    }
+}
+
+export function sendCode(taskId: string, solution: string) {
+    socket?.emit(SOCKET_EVENTS.SUBMIT_SOLUTION, createSubmissionPayload(taskId, solution));
+}
+
+export function onWrongSubmit(callback: (response) => void) {
+    socket?.on(SOCKET_EVENTS.WRONG_SUBMIT, callback);
+    return () => {
+        socket?.off(SOCKET_EVENTS.WRONG_SUBMIT, callback);
     }
 }

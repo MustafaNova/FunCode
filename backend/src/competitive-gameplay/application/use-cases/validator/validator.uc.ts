@@ -13,7 +13,7 @@ export class ValidatorUC implements ValidatorPort {
     ) {}
     checkSubmit(taskId: string, solution: string) {
         if (!this.challengeRepo.exists(taskId)) {
-            console.log('taskId Error');
+            console.log(`taskId Error: ${taskId}`);
             throw new TaskIdError();
         }
         if (!solution) {

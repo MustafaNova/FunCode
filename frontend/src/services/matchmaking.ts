@@ -1,5 +1,5 @@
 import { API_URLS } from '../constants/urls.ts';
-import { createMatchMakingPayload } from '../utils/matchmaking.ts';
+import { createMatchMakingPayload } from '../utils/payloadBuilder.ts';
 import { getSocket } from './socket.ts';
 
 export async function matchmakingUnranked1v1() {
@@ -8,7 +8,8 @@ export async function matchmakingUnranked1v1() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify(createMatchMakingPayload('unranked', 1))
+        body: createMatchMakingPayload('unranked', 1)
     })
     return socket;
 }
+
