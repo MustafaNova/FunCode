@@ -2,7 +2,7 @@ import { ChallengeRepositoryPort } from '../../../application/ports/outbound/cha
 import { Injectable } from '@nestjs/common';
 import { tasksMap } from '../../../domain/types/tasksMap';
 import { TaskTestsWithName } from '../../../domain/types/taskTestsWithName';
-import { Difficulty } from '@shared/types.shared';
+import { Difficulty } from '@funcode/shared';
 
 @Injectable()
 export class ChallengeRepositoryAdapter implements ChallengeRepositoryPort {

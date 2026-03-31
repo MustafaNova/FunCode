@@ -12,4 +12,4 @@ COPY ./shared ../shared
 
 
 EXPOSE 3000
-CMD ["node", "dist/app/src/main.js"]
+CMD ["pnpm", "start:dev"]

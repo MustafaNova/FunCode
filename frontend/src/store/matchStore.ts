@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Task } from '../../../shared/types.shared.ts';
+import type { Task } from '../../../shared/src/types.shared.ts';
 
 type MatchStore = {
     matchTask: Task | null;

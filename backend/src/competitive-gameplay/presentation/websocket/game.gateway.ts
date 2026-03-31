@@ -74,7 +74,7 @@ export class GameGateway
     @UseGuards(RoomGuard)
     @SubscribeMessage('PLAYER_READY')
     handlePlayerReady(client: RoomSocket) {
-        console.log('PLAYER_READY MESSAGE ARRIVED');
+        console.log('PLAYER_READY MESSAGE ARRIVED!!!');
         const userId = client.data.user.userId;
         const roomId = client.data.room;
         this.gs.playerReady(userId, roomId, client.data.roomSize);
@@ -83,7 +83,8 @@ export class GameGateway
     @UseGuards(RoomGuard)
     @SubscribeMessage('SUBMIT_SOLUTION')
     async handleSolutionSubmit(client: RoomSocket, payload: SolutionSubmit) {
-        console.log(`backend taskId: ${payload.taskId}`);
+        console.log('TEST');
+        console.log(`backend taskId: ${payload.taskId} and backend solution: ${payload.solution}`);
         await this.gs.solutionSubmit(
             client.data.user.userId,
             client.data.room,

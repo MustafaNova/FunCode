@@ -17,7 +17,6 @@ export function Match() {
 
     function submitCode() {
         if (code.trim() === '' || matchTask?.id == null) return;
-        console.log(matchTask.id)
         sendCode(matchTask.id, code);
     }
 
@@ -45,7 +44,7 @@ export function Match() {
                     <p>{matchTask?.constraints}</p>
                 </div>
             </div>
-            <button className={s.submitBtn} onClick={() => submitCode()}>submit</button>
+            <button className={s.submitBtn} onClick={submitCode}>submit</button>
             <Editor value={matchTask?.starterCode} onChange={(userCode) => setCode(userCode ?? '')}  height={'300px'} language={'JavaScript'} theme={'vs-dark'}/>
         </div>
     )
