@@ -7,9 +7,8 @@ export function createMatchMakingPayload(matchType: string, playerCount: number)
 }
 
 export function createSubmissionPayload(taskId: string, solution: string) {
-    const payload = {
+    return {
         taskId,
         solution,
     };
-    return JSON.stringify(payload);
 }

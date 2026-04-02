@@ -1,7 +1,7 @@
 import { io, type Socket } from 'socket.io-client';
 import { SERVER_URL } from '../constants/urls.ts';
 import { SOCKET_EVENTS } from '../constants/socketEvents.ts';
-import type { Task } from '../../../shared/src/types.shared.ts';
+import type { Task } from '../../../shared/src';
 import { createSubmissionPayload } from '../utils/payloadBuilder.ts';
 
 

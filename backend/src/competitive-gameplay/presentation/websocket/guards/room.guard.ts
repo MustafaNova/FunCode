@@ -8,7 +8,6 @@ export class RoomGuard implements CanActivate {
     constructor(private readonly gs: GameService) {}
 
     canActivate(context: ExecutionContext): boolean {
-        console.log('RoomGuard activated!');
         const client = context.switchToWs().getClient<GameSocket>();
         const roomId = client.data.room;
         const userId = client.data.user.userId;
