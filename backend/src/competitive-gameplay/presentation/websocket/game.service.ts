@@ -30,10 +30,12 @@ export class GameService {
     }
 
     sendError(userId: string, code: number, msg: string) {
+        console.log(`sendError: ${code}, ${msg}`);
         this.connectedPlayers.get(userId)?.emit('ERROR', { code, msg });
     }
 
     sendRoom(roomId: string, event: string, msg: unknown) {
+        console.log(`sendRoom: ${event}, ${msg}`);
         this.server.to(roomId).emit(event, msg);
     }
 

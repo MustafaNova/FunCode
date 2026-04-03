@@ -20,7 +20,7 @@ export class ChallengeRepositoryAdapter implements ChallengeRepositoryPort {
                     'Input: num = 0 → Output: 0',
                 ],
                 constraints: '0 <= num <= 2^31 - 1',
-                starterCode: `function addDigits(num: number): number {
+                starterCode: `function addDigits(num) {
             // TODO: implement solution
             return 0;
         }`,

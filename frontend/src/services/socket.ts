@@ -30,7 +30,7 @@ export function sendCode(taskId: string, solution: string) {
     socket?.emit(SOCKET_EVENTS.SUBMIT_SOLUTION, createSubmissionPayload(taskId, solution));
 }
 
-export function onWrongSubmit(callback: (response) => void) {
+export function onWrongSubmit(callback: (response: unknown) => void) {
     socket?.on(SOCKET_EVENTS.WRONG_SUBMIT, callback);
     return () => {
         socket?.off(SOCKET_EVENTS.WRONG_SUBMIT, callback);

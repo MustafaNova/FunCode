@@ -7,11 +7,11 @@ import { onWrongSubmit, sendCode } from '../../services/socket.ts';
 export function Match() {
     const matchTask = useMatchStore((s) => s.matchTask);
     const [code, setCode] = useState('');
-    const [errorMsg, setErrorMsg] = useState('');
+    const [submitMsg, setSubmitMsg] = useState('');
     useEffect(() => {
         return onWrongSubmit((msg) => {
             console.log(msg);
-            setErrorMsg(msg);
+            setSubmitMsg(msg as string);
         })
     }, [])
 
@@ -44,7 +44,10 @@ export function Match() {
                     <p>{matchTask?.constraints}</p>
                 </div>
             </div>
-            <button className={s.submitBtn} onClick={submitCode}>submit</button>
+            <div>
+                <button className={s.submitBtn} onClick={submitCode}>submit</button>
+                <div>{submitMsg && <span>{submitMsg}</span>}</div>
+            </div>
             <Editor value={matchTask?.starterCode} onChange={(userCode) => setCode(userCode ?? '')}  height={'300px'} language={'JavaScript'} theme={'vs-dark'}/>
         </div>
     )
