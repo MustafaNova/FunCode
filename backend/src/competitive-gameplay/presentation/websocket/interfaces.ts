@@ -1,4 +1,5 @@
 import { Socket } from 'socket.io';
+import { LosePayload, WinPayload } from '../../domain/value-objects/payloads';
 
 export interface Payload {
     userId: string;
@@ -34,13 +35,18 @@ export interface NotifyRoomEvent {
     msg: string;
 }
 
-export interface SolutionSubmit {
-    taskId: string;
-    solution: string;
-}
-
 export interface ErrorEvent {
     userId: string;
     code: number;
     msg: string;
+}
+
+export interface WinEvent {
+    userId: string;
+    payload: WinPayload;
+}
+
+export interface LoseEvent {
+    userId: string;
+    payload: LosePayload;
 }

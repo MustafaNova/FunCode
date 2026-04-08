@@ -2,22 +2,45 @@ import s from './match.module.scss'
 import { useMatchStore } from '../../store/matchStore.ts';
 import { Editor } from '@monaco-editor/react';
 import { useEffect, useState } from 'react';
-import { onWrongSubmit, sendCode } from '../../services/socket.ts';
+import { onLose, onWin, onWrongSubmit, sendCode } from '../../services/socket.ts';
+import type { SubmitReq, SubmitRes } from '../../../../shared/src';
+import { useNavigate } from 'react-router-dom';
 
 export function Match() {
+    const navigate = useNavigate();
     const matchTask = useMatchStore((s) => s.matchTask);
     const [code, setCode] = useState('');
-    const [submitMsg, setSubmitMsg] = useState('');
+    const [submitResponse, setSubmitResponse] = useState<SubmitRes | null>(null);
+
     useEffect(() => {
-        return onWrongSubmit((msg) => {
-            console.log(msg);
-            setSubmitMsg(msg as string);
+        const offWrong = onWrongSubmit((res) => {
+            setSubmitResponse(res);
         })
+
+        const offWin = onWin((res) => {
+            console.log('won');
+            navigate('win');
+        })
+
+        const offLose = onLose((res) => {
+            console.log('failed');
+            navigate('lose');
+        })
+
+        return () => {
+            offWrong();
+            offWin();
+            offLose();
+        }
     }, [])
 
     function submitCode() {
         if (code.trim() === '' || matchTask?.id == null) return;
-        sendCode(matchTask.id, code);
+        const submitReq: SubmitReq = {
+            taskId: matchTask.id,
+            solution: code
+        }
+        sendCode(submitReq);
     }
 
     return (
@@ -46,7 +69,7 @@ export function Match() {
             </div>
             <div>
                 <button className={s.submitBtn} onClick={submitCode}>submit</button>
-                <div>{submitMsg && <span>{submitMsg}</span>}</div>
+                <div>{submitResponse && <span>{submitResponse.playerName}: {submitResponse.status}</span>}</div>
             </div>
             <Editor value={matchTask?.starterCode} onChange={(userCode) => setCode(userCode ?? '')}  height={'300px'} language={'JavaScript'} theme={'vs-dark'}/>
         </div>

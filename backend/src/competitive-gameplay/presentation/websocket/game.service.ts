@@ -6,6 +6,8 @@ import { BATTLE_MANAGER_PORT } from '../../infrastructure/uc-wiring/tokens';
 import type { BattleManagerPort } from '../../application/ports/inbound/battle.manager.port';
 import { ReadyPlayerCmd } from '../../application/use-cases/battle-manager/dtos/ready.player.cmd';
 import { SubmitCmd } from '../../application/use-cases/battle-manager/dtos/submit.cmd';
+import { LosePayload, WinPayload } from '../../domain/value-objects/payloads';
+import { UserId } from '../../domain/types/players';
 
 @Injectable()
 export class GameService {
@@ -15,7 +17,7 @@ export class GameService {
     ) {}
 
     private server: Server;
-    private connectedPlayers = new Map<string, GameSocket>();
+    private connectedPlayers = new Map<UserId, GameSocket>();
 
     setServer(server: Server) {
         this.server = server;
@@ -27,6 +29,22 @@ export class GameService {
 
     sendClient(client: Socket, event: string, msg: string) {
         client.emit(event, { msg: msg });
+    }
+
+    notifyWin(userId: string, payload: WinPayload) {
+        const client = this.connectedPlayers.get(userId);
+        if (!client) {
+            console.log('undefined client at notifyWin');
+        }
+        client?.emit('WIN', payload);
+    }
+
+    notifyLose(userId: string, payload: LosePayload) {
+        const client = this.connectedPlayers.get(userId);
+        if (!client) {
+            console.log('undefined client at notifyLose');
+        }
+        client?.emit('LOSE', payload);
     }
 
     sendError(userId: string, code: number, msg: string) {
@@ -49,6 +67,8 @@ export class GameService {
             client.data.user = payload; // eslint-disable-line
             this.connectedPlayers.set(payload.userId, client as GameSocket);
             this.battleManager.registerNewPlayer(payload.userId);
+            console.log(`new gateway connection userId:${payload.userId}`);
+            console.log(`connectedPlayers updated ${this.connectedPlayers.has(payload.userId)}`);
         } catch {
             this.disconnectUnauthorized(client);
         }

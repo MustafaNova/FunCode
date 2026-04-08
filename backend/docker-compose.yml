@@ -8,7 +8,7 @@ services:
       - "3000:3000"
     volumes:
     - .:/app
-    - backendTe:/app/node_modules
+    - backendT:/app/node_modules
     environment:
       DB_HOST: db
       DB_PORT: "5432"
@@ -44,4 +44,4 @@ services:
 volumes:
   postgres_data:
   redis_data:
-  backendTe:
+  backendT:

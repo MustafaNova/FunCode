@@ -9,11 +9,16 @@ import { SubmitRes } from '@funcode/shared';
 import type { BattleRepositoryPort } from '../../ports/outbound/battleRepository.port';
 import type { ChallengeRepositoryPort } from '../../ports/outbound/challenge.repository.port';
 import type { ValidatorPort } from '../../ports/inbound/validator.port';
+import {
+    LosePayload,
+    WinPayload,
+} from '../../../domain/value-objects/payloads';
+import { RoomId, UserId } from '../../../domain/types/players';
 
 export class BattleManagerUC implements BattleManagerPort {
-    connectedPlayers = new Set<string>();
-    roomToPlayers = new Map<string, PlayerInfo[]>();
-    private readyPlayers = new Map<string, Set<string>>();
+    connectedPlayers = new Set<UserId>();
+    roomToPlayers = new Map<RoomId, PlayerInfo[]>();
+    private readyPlayers = new Map<RoomId, Set<UserId>>();
 
     constructor(
         private readonly playerGateway: PlayerGatewayPort,
@@ -77,22 +82,43 @@ export class BattleManagerUC implements BattleManagerPort {
     }
 
     private async notifySubmitRes(res: boolean, submit: SubmitCmd) {
-        const payload: SubmitRes = {
-            status: res ? 'success' : 'failed',
-            playerName: submit.playerName,
-            solution: res ? submit.solution : undefined,
-        };
-
-        this.playerGateway.notifyRoom(
-            submit.roomId,
-            res ? BattleNotification.WIN : BattleNotification.WRONG_SUBMIT,
-            payload,
-        );
-
         if (res) {
+            const winnerId = submit.userId;
+            const winPayload: WinPayload = {
+                playerName: submit.playerName,
+                solution: submit.solution,
+            };
+            this.playerGateway.notifyPlayerWin(winnerId, winPayload);
+
+            const loserPlayer = this.getLoserId(
+                winnerId,
+                this.roomToPlayers.get(submit.roomId)!,
+            );
+            const losePayload: LosePayload = {
+                playerName: loserPlayer!.username,
+                solution: submit.solution,
+            };
+
+            this.playerGateway.notifyPlayerLose(
+                loserPlayer!.userId,
+                losePayload,
+            );
+
             this.roomToPlayers.delete(submit.roomId);
             await this.playerGateway.closeRoom(submit.roomId);
             await this.battleRepo.setWinner(submit.roomId, submit.userId);
+        } else {
+            const payload: SubmitRes = {
+                status: 'failed',
+                playerName: submit.playerName,
+                solution: undefined,
+            };
+
+            this.playerGateway.notifyRoom(
+                submit.roomId,
+                BattleNotification.WRONG_SUBMIT,
+                payload,
+            );
         }
     }
 
@@ -102,5 +128,13 @@ export class BattleManagerUC implements BattleManagerPort {
 
     registerNewPlayer(userId: string) {
         this.connectedPlayers.add(userId);
+    }
+
+    private getLoserId(winnerId: UserId, players: PlayerInfo[]) {
+        for (const player of players) {
+            if (player.userId != winnerId) {
+                return player;
+            }
+        }
     }
 }

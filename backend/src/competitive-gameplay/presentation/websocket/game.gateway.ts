@@ -5,13 +5,15 @@ import {
     SubscribeMessage,
     WebSocketGateway,
 } from '@nestjs/websockets';
+import type { SubmitReq } from '@funcode/shared';
 import { Server, Socket } from 'socket.io';
 import type {
     CreateNewRoom1v1Event,
     ErrorEvent,
+    LoseEvent,
     NotifyRoomEvent,
     RoomSocket,
-    SolutionSubmit,
+    WinEvent,
 } from './interfaces';
 import { UseGuards } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
@@ -40,7 +42,6 @@ export class GameGateway
             client.handshake.headers.cookie,
         );
         this.gs.registerNewPlayer(client, token);
-        console.log(`NEW GATEWAY CONNECTION. Token: ${token}`);
     }
 
     handleDisconnect(client: Socket): any {
@@ -71,6 +72,16 @@ export class GameGateway
         await this.gs.closeRoom(roomId);
     }
 
+    @OnEvent(BattleEvent.WIN_NOTIFICATION)
+    notifyWin({ userId, payload }: WinEvent) {
+        this.gs.notifyWin(userId, payload);
+    }
+
+    @OnEvent(BattleEvent.LOSE_NOTIFICATION)
+    notifyLose({ userId, payload }: LoseEvent) {
+        this.gs.notifyLose(userId, payload);
+    }
+
     @UseGuards(RoomGuard)
     @SubscribeMessage('PLAYER_READY')
     handlePlayerReady(client: RoomSocket) {
@@ -82,7 +93,7 @@ export class GameGateway
 
     @UseGuards(RoomGuard)
     @SubscribeMessage('SUBMIT_SOLUTION')
-    async handleSolutionSubmit(client: RoomSocket, payload: SolutionSubmit) {
+    async handleSolutionSubmit(client: RoomSocket, payload: SubmitReq) {
         console.log('NEW SUBMIT_SOLUTION ARRIVED');
         await this.gs.solutionSubmit(
             client.data.user.userId,

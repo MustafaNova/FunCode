@@ -1,9 +1,7 @@
 import { io, type Socket } from 'socket.io-client';
 import { SERVER_URL } from '../constants/urls.ts';
 import { SOCKET_EVENTS } from '../constants/socketEvents.ts';
-import type { Task } from '../../../shared/src';
-import { createSubmissionPayload } from '../utils/payloadBuilder.ts';
-
+import type { SubmitReq, SubmitRes, Task } from '../../../shared/src';
 
 let socket: Socket | null = null;
 
@@ -26,13 +24,27 @@ export function onBattleStarted(callback: (data: { task: Task }) => void) {
     }
 }
 
-export function sendCode(taskId: string, solution: string) {
-    socket?.emit(SOCKET_EVENTS.SUBMIT_SOLUTION, createSubmissionPayload(taskId, solution));
+export function sendCode(submitReq: SubmitReq) {
+    socket?.emit(SOCKET_EVENTS.SUBMIT_SOLUTION, submitReq);
 }
 
-export function onWrongSubmit(callback: (response: unknown) => void) {
+export function onWrongSubmit(callback: (response: SubmitRes) => void) {
     socket?.on(SOCKET_EVENTS.WRONG_SUBMIT, callback);
     return () => {
         socket?.off(SOCKET_EVENTS.WRONG_SUBMIT, callback);
+    }
+}
+
+export function onWin(callback: (response: unknown) => void) {
+    socket?.on(SOCKET_EVENTS.WIN, callback)
+    return () => {
+        socket?.off(SOCKET_EVENTS.WIN, callback);
+    }
+}
+
+export function onLose(callback: (response: unknown) => void) {
+    socket?.on(SOCKET_EVENTS.LOSE, callback)
+    return () => {
+        socket?.off(SOCKET_EVENTS.LOSE, callback);
     }
 }

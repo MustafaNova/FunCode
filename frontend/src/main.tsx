@@ -12,6 +12,8 @@ import { Login } from './pages/auth/login/login.tsx';
 import { Registration } from './pages/auth/registration/registration.tsx';
 import { ReadyScreen } from './pages/ready/readyScreen.tsx';
 import { Match } from './pages/match/match.tsx';
+import { Win } from './pages/win/win.tsx';
+import { Lose } from './pages/lose/lose.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -21,6 +23,8 @@ createRoot(document.getElementById('root')!).render(
               <Route path='/register' element={<Registration/>}></Route>
               <Route path='/match' element={<Match/>}></Route>
               <Route path='/match/ready' element={<ReadyScreen/>}></Route>
+              <Route path='/match/win' element={<Win/>}></Route>
+              <Route path='/match/lose' element={<Lose/>}></Route>
               <Route path='home' element={<App/>}>
                   <Route index element={<School/>}></Route>
                   <Route path='arena' element={<Arena/>}></Route>
