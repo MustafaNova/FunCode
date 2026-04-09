@@ -1,5 +1,12 @@
 import s from './win.module.scss';
+import { useBackToHome } from '../../utils/hooks.ts';
 
 export function Win() {
-    return <div className={s.readyScreen}>Win</div>
+    const backToHome = useBackToHome();
+    return (
+        <div className={s.readyScreen}>
+            Win
+            <button onClick={backToHome}>leave</button>
+        </div>
+    )
 }

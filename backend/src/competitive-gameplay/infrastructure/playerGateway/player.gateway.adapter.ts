@@ -3,7 +3,7 @@ import { PlayerGatewayPort } from '../../application/ports/outbound/player.gatew
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { BattleEvent } from '../../domain/enums/battle.events';
 import { ErrorCodes } from '../../../common/error.codes';
-import { LosePayload, WinPayload } from '../../domain/value-objects/payloads';
+import { LoseRes, WinRes } from '@funcode/shared';
 
 @Injectable()
 export class PlayerGatewayAdapter implements PlayerGatewayPort {
@@ -33,14 +33,14 @@ export class PlayerGatewayAdapter implements PlayerGatewayPort {
         });
     }
 
-    notifyPlayerWin(userId: string, payload: WinPayload) {
+    notifyPlayerWin(userId: string, payload: WinRes) {
         this.eventEmitter.emit(BattleEvent.WIN_NOTIFICATION, {
             userId,
             payload,
         });
     }
 
-    notifyPlayerLose(userId: string, payload: LosePayload) {
+    notifyPlayerLose(userId: string, payload: LoseRes) {
         this.eventEmitter.emit(BattleEvent.LOSE_NOTIFICATION, {
             userId,
             payload,

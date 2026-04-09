@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import { LosePayload, WinPayload } from '../../domain/value-objects/payloads';
+import { LoseRes, WinRes } from '@funcode/shared';
 
 export interface Payload {
     userId: string;
@@ -43,10 +43,10 @@ export interface ErrorEvent {
 
 export interface WinEvent {
     userId: string;
-    payload: WinPayload;
+    payload: WinRes;
 }
 
 export interface LoseEvent {
     userId: string;
-    payload: LosePayload;
+    payload: LoseRes;
 }

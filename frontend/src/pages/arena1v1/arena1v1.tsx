@@ -2,8 +2,8 @@ import s from './arena1v1.module.scss'
 import { useState } from 'react';
 import { matchmakingUnranked1v1 } from '../../services/matchmaking.ts';
 import { Socket } from 'socket.io-client';
-import { SOCKET_EVENTS } from '../../constants/socketEvents.ts';
 import { useNavigate } from 'react-router-dom';
+import { SOCKET_EVENTS } from '../../../../shared/src';
 
 type CancelSearch = {
     cancel: () => void

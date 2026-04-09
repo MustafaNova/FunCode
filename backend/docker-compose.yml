@@ -9,6 +9,7 @@ services:
     volumes:
     - .:/app
     - backendT:/app/node_modules
+    - ../shared:/app/node_modules/@funcode/shared
     environment:
       DB_HOST: db
       DB_PORT: "5432"

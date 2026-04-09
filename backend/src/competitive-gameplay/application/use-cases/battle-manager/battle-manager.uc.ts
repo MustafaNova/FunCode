@@ -1,18 +1,13 @@
 import { BattleManagerPort } from '../../ports/inbound/battle.manager.port';
 import { Battle1vs1, PlayerInfo } from '../../../domain/entities/battle1vs1';
 import type { PlayerGatewayPort } from '../../ports/outbound/player.gateway.port';
-import { BattleNotification } from '../../../domain/enums/battle.notification';
 import { ReadyPlayerCmd } from './dtos/ready.player.cmd';
 import { SubmitCmd } from './dtos/submit.cmd';
 import { AppError } from './interfaces';
-import { SubmitRes } from '@funcode/shared';
+import { LoseRes, WrongRes, WinRes, SOCKET_EVENTS } from '@funcode/shared';
 import type { BattleRepositoryPort } from '../../ports/outbound/battleRepository.port';
 import type { ChallengeRepositoryPort } from '../../ports/outbound/challenge.repository.port';
 import type { ValidatorPort } from '../../ports/inbound/validator.port';
-import {
-    LosePayload,
-    WinPayload,
-} from '../../../domain/value-objects/payloads';
 import { RoomId, UserId } from '../../../domain/types/players';
 
 export class BattleManagerUC implements BattleManagerPort {
@@ -40,11 +35,7 @@ export class BattleManagerUC implements BattleManagerPort {
         );
 
         const msg = { match: `${p1.username} vs ${p2.username}` };
-        this.playerGateway.notifyRoom(
-            roomId,
-            BattleNotification.MATCH_FOUND,
-            msg,
-        );
+        this.playerGateway.notifyRoom(roomId, SOCKET_EVENTS.MATCH_FOUND, msg);
 
         return Promise.resolve();
     }
@@ -63,7 +54,7 @@ export class BattleManagerUC implements BattleManagerPort {
             this.readyPlayers.delete(roomId);
             this.playerGateway.notifyRoom(
                 roomId,
-                BattleNotification.START_BATTLE,
+                SOCKET_EVENTS.BATTLE_STARTED,
                 this.challengeRepo.getRandomTask(),
             );
         }
@@ -84,7 +75,7 @@ export class BattleManagerUC implements BattleManagerPort {
     private async notifySubmitRes(res: boolean, submit: SubmitCmd) {
         if (res) {
             const winnerId = submit.userId;
-            const winPayload: WinPayload = {
+            const winPayload: WinRes = {
                 playerName: submit.playerName,
                 solution: submit.solution,
             };
@@ -94,7 +85,7 @@ export class BattleManagerUC implements BattleManagerPort {
                 winnerId,
                 this.roomToPlayers.get(submit.roomId)!,
             );
-            const losePayload: LosePayload = {
+            const losePayload: LoseRes = {
                 playerName: loserPlayer!.username,
                 solution: submit.solution,
             };
@@ -108,15 +99,13 @@ export class BattleManagerUC implements BattleManagerPort {
             await this.playerGateway.closeRoom(submit.roomId);
             await this.battleRepo.setWinner(submit.roomId, submit.userId);
         } else {
-            const payload: SubmitRes = {
-                status: 'failed',
+            const payload: WrongRes = {
                 playerName: submit.playerName,
-                solution: undefined,
             };
 
             this.playerGateway.notifyRoom(
                 submit.roomId,
-                BattleNotification.WRONG_SUBMIT,
+                SOCKET_EVENTS.WRONG_SUBMIT,
                 payload,
             );
         }

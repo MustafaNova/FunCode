@@ -6,8 +6,8 @@ import { BATTLE_MANAGER_PORT } from '../../infrastructure/uc-wiring/tokens';
 import type { BattleManagerPort } from '../../application/ports/inbound/battle.manager.port';
 import { ReadyPlayerCmd } from '../../application/use-cases/battle-manager/dtos/ready.player.cmd';
 import { SubmitCmd } from '../../application/use-cases/battle-manager/dtos/submit.cmd';
-import { LosePayload, WinPayload } from '../../domain/value-objects/payloads';
 import { UserId } from '../../domain/types/players';
+import { LoseRes, WinRes } from '@funcode/shared';
 
 @Injectable()
 export class GameService {
@@ -31,7 +31,7 @@ export class GameService {
         client.emit(event, { msg: msg });
     }
 
-    notifyWin(userId: string, payload: WinPayload) {
+    notifyWin(userId: string, payload: WinRes) {
         const client = this.connectedPlayers.get(userId);
         if (!client) {
             console.log('undefined client at notifyWin');
@@ -39,7 +39,7 @@ export class GameService {
         client?.emit('WIN', payload);
     }
 
-    notifyLose(userId: string, payload: LosePayload) {
+    notifyLose(userId: string, payload: LoseRes) {
         const client = this.connectedPlayers.get(userId);
         if (!client) {
             console.log('undefined client at notifyLose');

@@ -3,14 +3,14 @@ import { useMatchStore } from '../../store/matchStore.ts';
 import { Editor } from '@monaco-editor/react';
 import { useEffect, useState } from 'react';
 import { onLose, onWin, onWrongSubmit, sendCode } from '../../services/socket.ts';
-import type { SubmitReq, SubmitRes } from '../../../../shared/src';
+import type { SubmitReq, WrongRes } from '../../../../shared/src';
 import { useNavigate } from 'react-router-dom';
 
 export function Match() {
     const navigate = useNavigate();
     const matchTask = useMatchStore((s) => s.matchTask);
     const [code, setCode] = useState('');
-    const [submitResponse, setSubmitResponse] = useState<SubmitRes | null>(null);
+    const [submitResponse, setSubmitResponse] = useState<WrongRes | null>(null);
 
     useEffect(() => {
         const offWrong = onWrongSubmit((res) => {
@@ -18,12 +18,10 @@ export function Match() {
         })
 
         const offWin = onWin((res) => {
-            console.log('won');
             navigate('win');
         })
 
         const offLose = onLose((res) => {
-            console.log('failed');
             navigate('lose');
         })
 
@@ -69,7 +67,7 @@ export function Match() {
             </div>
             <div>
                 <button className={s.submitBtn} onClick={submitCode}>submit</button>
-                <div>{submitResponse && <span>{submitResponse.playerName}: {submitResponse.status}</span>}</div>
+                <div>{submitResponse && <span>{submitResponse.playerName}: failed</span>}</div>
             </div>
             <Editor value={matchTask?.starterCode} onChange={(userCode) => setCode(userCode ?? '')}  height={'300px'} language={'JavaScript'} theme={'vs-dark'}/>
         </div>
