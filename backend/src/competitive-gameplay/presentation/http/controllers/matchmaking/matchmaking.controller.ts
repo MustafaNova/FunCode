@@ -2,8 +2,11 @@ import { Controller, Post, Inject, UseGuards, Body } from '@nestjs/common';
 import type { JoinMatchMakingPort } from '../../../../application/ports/inbound/join-matchmaking.port';
 import { JOIN_MATCHMAKING_PORT } from '../../../../infrastructure/uc-wiring/tokens';
 import { AuthGuard } from '@nestjs/passport';
-import { UserPayload } from '../../decorators/user-payload.decorator';
-import { AuthUser, JoinPayload } from './dtos/join.request';
+import {
+    AuthUser,
+    UserPayload,
+} from '../../../../../common/utils/user-payload.decorator';
+import { JoinPayload } from './dtos/join.request';
 import { JoinCmd } from '../../../../application/use-cases/matchmaking-join/dtos/join.cmd';
 
 @Controller('matchmaking')

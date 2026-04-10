@@ -10,10 +10,3 @@ export class JoinPayload {
     playerCount: PlayerCount;
 }
 
-export class AuthUser {
-    @IsString()
-    userId: string;
-
-    @IsString()
-    username: string;
-}

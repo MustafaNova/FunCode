@@ -1,5 +1,6 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { Request } from 'express';
+import { IsString } from 'class-validator';
 
 interface joinReq extends Request {
     user: { userId: string; username: string };
@@ -14,3 +15,11 @@ export const UserPayload = createParamDecorator(
         };
     },
 );
+
+export class AuthUser {
+    @IsString()
+    userId: string;
+
+    @IsString()
+    username: string;
+}
