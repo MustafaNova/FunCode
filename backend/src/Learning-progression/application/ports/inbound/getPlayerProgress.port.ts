@@ -1,4 +1,4 @@
-import { PlayerProgress } from '../../../domain/entities/player.progress';
+import { PlayerProgress } from '../../use-cases/getPlayerProgress/progress.res';
 
 export interface GetPlayerProgressPort {
     getPlayerProgress(userId: string): Promise<PlayerProgress>;

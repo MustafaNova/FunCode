@@ -1,4 +1,4 @@
-import { IsEnum, IsString } from 'class-validator';
+import { IsEnum } from 'class-validator';
 import { PlayerCount } from '../../../../../domain/enums/playercount';
 import { MatchType } from '../../../../../domain/enums/matchtype';
 
@@ -9,4 +9,3 @@ export class JoinPayload {
     @IsEnum(PlayerCount)
     playerCount: PlayerCount;
 }
-

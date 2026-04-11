@@ -1,5 +1,7 @@
+import { Course } from '../../../../domain/enums';
+
 export class ProgressRes {
     unlockedLevel: number;
-    course: string;
+    course: Course;
     module: string;
 }

@@ -1,15 +1,16 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Course } from '../../../domain/enums';
 
 @Entity('player_progress')
 export class PlayerProgressEntity {
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    progressId: string;
 
     @Column({ type: 'uuid' })
     userId: string;
 
     @Column()
-    course: string;
+    course: Course;
 
     @Column()
     module: string;

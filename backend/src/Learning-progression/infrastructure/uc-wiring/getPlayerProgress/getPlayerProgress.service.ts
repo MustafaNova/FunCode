@@ -1,4 +1,4 @@
-import { GetPlayerProgressUC } from '../../application/use-cases/getPlayerProgress/getPlayerProgress.uc';
+import { GetPlayerProgressUC } from '../../../application/use-cases/getPlayerProgress/getPlayerProgress.uc';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

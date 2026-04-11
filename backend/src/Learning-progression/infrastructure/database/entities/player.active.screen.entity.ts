@@ -5,12 +5,6 @@ export class PlayerActiveScreenEntity {
     @Column({ type: 'uuid' })
     userId: string;
 
-    @Column()
-    activeCourse: string;
-
-    @Column()
-    activeModule: string;
-
-    @Column()
-    unlockedLevel: string;
+    @Column({ type: 'uuid' })
+    progressId: string;
 }

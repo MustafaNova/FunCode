@@ -1,5 +1,7 @@
+import { Course } from '../../../domain/enums';
+
 export interface PlayerProgress {
-    course: string;
+    course: Course;
     module: string;
     unlockedLevel: number;
 }
