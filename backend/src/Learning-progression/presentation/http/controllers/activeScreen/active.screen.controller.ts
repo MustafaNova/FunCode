@@ -1,19 +1,26 @@
-import { Body, Controller, Inject, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Put, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
     AuthUser,
     UserPayload,
 } from '../../../../../common/utils/user-payload.decorator';
-import { ActiveScreenReq } from './activeScreen.req';
+import { ActiveScreenReq } from './dtos/activeScreen.req';
 import type { ChangeActiveScreenPort } from '../../../../application/ports/inbound/changeActiveScreen.port';
-import { CHANGE_ACTIVE_SCREEN_PORT } from '../../../../infrastructure/uc-wiring/tokens';
+import {
+    CHANGE_ACTIVE_SCREEN_PORT,
+    GET_ACTIVE_SCREEN_PORT,
+} from '../../../../infrastructure/uc-wiring/tokens';
 import { ChangeActiveScreenCmd } from '../../../../application/use-cases/changeActiveScreen/changeActiveScreen.cmd';
+import type { GetActiveScreenPort } from '../../../../application/ports/inbound/getActiveScreen.port';
+import { GetActiveScreenRes } from './dtos/getActiveScreen.res';
 
 @Controller('active-screen')
 export class ActiveScreenController {
     constructor(
         @Inject(CHANGE_ACTIVE_SCREEN_PORT)
-        private readonly activeScreenPort: ChangeActiveScreenPort,
+        private readonly changeACPort: ChangeActiveScreenPort,
+        @Inject(GET_ACTIVE_SCREEN_PORT)
+        private readonly getACPort: GetActiveScreenPort,
     ) {}
 
     @UseGuards(AuthGuard('jwt'))
@@ -27,6 +34,19 @@ export class ActiveScreenController {
             body.course,
             body.module,
         );
-        await this.activeScreenPort.execute(cmd);
+        await this.changeACPort.execute(cmd);
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Get()
+    async getActiveScreen(
+        @UserPayload() user: AuthUser,
+    ): Promise<GetActiveScreenRes> {
+        const res = await this.getACPort.getActiveScreen(user.userId);
+        return {
+            course: res.course,
+            module: res.module,
+            unlockedLevel: res.unlockedLevel,
+        };
     }
 }

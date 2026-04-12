@@ -1,8 +1,8 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity('player_active_screen')
 export class PlayerActiveScreenEntity {
-    @Column({ type: 'uuid' })
+    @PrimaryColumn({ type: 'uuid' })
     userId: string;
 
     @Column({ type: 'uuid' })

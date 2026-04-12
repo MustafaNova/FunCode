@@ -1,12 +1,14 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpStatus, } from '@nestjs/common';
-import { AppError } from '../../../application/errors/AppError';
 import {
-    EmailAlreadyExistsError
-} from '../../../application/use-cases/user-registration/errors/EmailAlreadyExistsError';
-import {
-    UsernameAlreadyExistsError
-} from '../../../application/use-cases/user-registration/errors/UsernameAlreadyExistsError';
+    ArgumentsHost,
+    Catch,
+    ExceptionFilter,
+    HttpStatus,
+} from '@nestjs/common';
+import { AppError } from '../../../../common/errors/AppError';
+import { EmailAlreadyExistsError } from '../../../application/use-cases/user-registration/errors/EmailAlreadyExistsError';
+import { UsernameAlreadyExistsError } from '../../../application/use-cases/user-registration/errors/UsernameAlreadyExistsError';
 import { InvalidCredentialsError } from '../../../application/use-cases/user-login/errors/InvalidCredentialsError';
+import { NotFoundException } from '../../../../Learning-progression/infrastructure/database/notFoundException.err';
 
 @Catch(AppError)
 export class AppErrorFilter implements ExceptionFilter {
@@ -24,6 +26,10 @@ export class AppErrorFilter implements ExceptionFilter {
 
         if (error instanceof InvalidCredentialsError) {
             status = HttpStatus.UNAUTHORIZED;
+        }
+
+        if (error instanceof NotFoundException) {
+            status = HttpStatus.NOT_FOUND;
         }
 
         res.status(status).json({

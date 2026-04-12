@@ -4,7 +4,7 @@ import {
     ExceptionFilter,
     HttpStatus,
 } from '@nestjs/common';
-import { DomainError } from '../../../domain/errors/DomainError';
+import { DomainError } from '../../../../common/errors/DomainError';
 
 @Catch(DomainError)
 export class DomainErrorFilter implements ExceptionFilter {

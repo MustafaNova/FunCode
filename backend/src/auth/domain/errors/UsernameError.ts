@@ -1,4 +1,4 @@
-import { DomainError } from './DomainError';
+import { DomainError } from '../../../common/errors/DomainError';
 
 export class UsernameError extends DomainError {
     constructor(message: string) {

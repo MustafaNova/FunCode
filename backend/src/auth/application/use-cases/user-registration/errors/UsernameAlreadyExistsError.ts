@@ -1,4 +1,4 @@
-import { AppError } from '../../../errors/AppError';
+import { AppError } from '../../../../../common/errors/AppError';
 
 export class UsernameAlreadyExistsError extends AppError {
     constructor() {

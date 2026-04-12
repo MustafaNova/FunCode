@@ -7,11 +7,13 @@ import { InvalidCredentialsError } from './errors/InvalidCredentialsError';
 import type { TokenServicePort } from '../../ports/outbound/token-service.port';
 import { UserId } from '../../../domain/value-objects/userId.vo';
 import { TokenPayload } from '../../../domain/value-objects/tokenPayload.vo';
+import { LearningProgressionPort } from '../../ports/outbound/learning.progression.port';
 
 export class UserLoginUC implements LoginUserPort {
     constructor(
         private readonly userRepo: UserRepositoryPort,
         private readonly tokenService: TokenServicePort,
+        private readonly learningProgress: LearningProgressionPort,
     ) {}
 
     async login(loginData: LoginUserCmd): Promise<LoginUserRes> {
@@ -33,6 +35,16 @@ export class UserLoginUC implements LoginUserPort {
             TokenPayload.create(user.id as UserId, loginUsername),
         );
 
-        return LoginUserRes.create(token.token, token.expiresIn);
+        const { course, module, unlockedLevel } =
+            await this.learningProgress.getActiveScreen(
+                user.id?.get() as string,
+            );
+        return LoginUserRes.create(
+            token.token,
+            token.expiresIn,
+            course,
+            module,
+            unlockedLevel,
+        );
     }
 }

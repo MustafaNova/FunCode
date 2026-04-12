@@ -48,7 +48,12 @@ export class AuthController {
         const cmd = LoginUserCmd.create(req.username, req.password);
         const loginRes = await this.loginService.login(cmd);
         res.cookie('token', loginRes.token, { httpOnly: true });
-        res.send({ message: 'login successful' });
-        // return UserLoginResponse.create(res.token, res.expiresIn);
+        return UserLoginResponse.create(
+            loginRes.token,
+            loginRes.expiresIn,
+            loginRes.course,
+            loginRes.module,
+            loginRes.unlockedLevel,
+        );
     }
 }
