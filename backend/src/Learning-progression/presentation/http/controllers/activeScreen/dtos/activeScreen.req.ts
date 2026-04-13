@@ -1,4 +1,4 @@
-import { Course } from '../../../../../domain/enums';
+import { Course } from '@funcode/shared';
 import { IsEnum, IsString } from 'class-validator';
 
 export class ActiveScreenReq {

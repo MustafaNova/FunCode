@@ -3,7 +3,7 @@ import { useMatchStore } from '../../store/matchStore.ts';
 import { Editor } from '@monaco-editor/react';
 import { useEffect, useState } from 'react';
 import { onLose, onWin, onWrongSubmit, sendCode } from '../../services/socket.ts';
-import type { SubmitReq, WrongRes } from '../../../../shared/src';
+import type { SubmitReq, WrongRes } from '@funcode/shared';
 import { useNavigate } from 'react-router-dom';
 
 export function Match() {

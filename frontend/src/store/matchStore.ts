@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Task } from '../../../shared/src/competitive-gameplay/task.model.ts';
+import type { Task } from '@funcode/shared';
 
 type MatchStore = {
     matchTask: Task | null;

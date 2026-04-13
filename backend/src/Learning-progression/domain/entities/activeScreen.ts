@@ -1,4 +1,4 @@
-import { Course } from '../enums';
+import { Course } from '@funcode/shared';
 
 export interface ActiveScreen {
     course: Course | null;

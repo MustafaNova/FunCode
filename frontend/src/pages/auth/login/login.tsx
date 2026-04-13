@@ -2,6 +2,7 @@ import s from './login.module.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import { type FormEvent, useState } from 'react';
 import { loginUser } from '../../../services/auth.ts';
+import { getActiveScreen } from '../../../services/learning.progression.ts';
 
 
 export function Login() {
@@ -12,6 +13,7 @@ export function Login() {
         e.preventDefault();
         const req = { username, password };
         await loginUser(req);
+        await getActiveScreen();
         navigate('/home')
     }
 

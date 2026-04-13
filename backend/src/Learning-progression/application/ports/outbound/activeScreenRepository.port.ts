@@ -1,5 +1,5 @@
-import { Course } from '../../../domain/enums';
 import { ActiveScreen } from '../../../domain/entities/activeScreen';
+import { Course } from '@funcode/shared';
 
 export interface ActiveScreenRepositoryPort {
     updateActiveScreen(

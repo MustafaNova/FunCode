@@ -1,10 +1,14 @@
 import "./school.scss"
 import { LevelFrame } from "../../layout/level-frame/level-frame.tsx";
 import { useState } from "react";
+import { useActiveScreen } from '../../store/activeScreenStore.ts';
 
 export function School() {
     const [levelOneActive, setLevelOneActive] = useState(false)
-
+    const course = useActiveScreen((state) => state.course);
+    const module = useActiveScreen((state) => state.module);
+    const unlockedLevel = useActiveScreen((state) => state.unlockedLevel);
+    console.log(course, module, unlockedLevel);
 
     return (
         <div>

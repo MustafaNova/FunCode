@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { matchmakingUnranked1v1 } from '../../services/matchmaking.ts';
 import { Socket } from 'socket.io-client';
 import { useNavigate } from 'react-router-dom';
-import { SOCKET_EVENTS } from '../../../../shared/src';
+import { SOCKET_EVENTS } from '@funcode/shared';
 
 type CancelSearch = {
     cancel: () => void

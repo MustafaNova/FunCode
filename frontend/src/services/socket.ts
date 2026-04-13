@@ -7,7 +7,7 @@ import {
     type Task,
     type WinRes,
     SOCKET_EVENTS
-} from '../../../shared/src';
+} from '@funcode/shared';
 
 let socket: Socket | null = null;
 

@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { Course } from '../../../domain/enums';
+import { Course } from '@funcode/shared';
 
 @Entity('player_progress')
 export class PlayerProgressEntity {

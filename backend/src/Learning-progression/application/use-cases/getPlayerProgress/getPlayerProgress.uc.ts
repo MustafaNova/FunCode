@@ -1,6 +1,6 @@
 import { GetPlayerProgressPort } from '../../ports/inbound/getPlayerProgress.port';
 import { PlayerProgress } from './progress.res';
-import { Course } from '../../../domain/enums';
+import { Course } from '@funcode/shared';
 
 export class GetPlayerProgressUC implements GetPlayerProgressPort {
     getPlayerProgress(userId: string): Promise<PlayerProgress> {

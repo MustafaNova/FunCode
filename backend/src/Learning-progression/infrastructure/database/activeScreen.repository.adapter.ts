@@ -1,6 +1,6 @@
 import { ActiveScreenRepositoryPort } from '../../application/ports/outbound/activeScreenRepository.port';
 import { Injectable } from '@nestjs/common';
-import { Course } from '../../domain/enums';
+import { Course } from '@funcode/shared';
 import { Repository } from 'typeorm';
 import { PlayerActiveScreenEntity } from './entities/player.active.screen.entity';
 import { PlayerProgressEntity } from './entities/player.progress.entity';
