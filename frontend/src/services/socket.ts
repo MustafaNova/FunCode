@@ -6,7 +6,7 @@ import {
     type WrongRes,
     type Task,
     type WinRes,
-    SOCKET_EVENTS
+    SOCKET_EVENTS,
 } from '@funcode/shared';
 
 let socket: Socket | null = null;

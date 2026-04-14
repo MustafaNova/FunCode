@@ -3,7 +3,8 @@
   height: 95px;
   border: none;
   border-radius: 30px 30px 35px 35px ;
-  background-color: #C77DFF
+  background-color: #C77DFF;
+  color: white;
 }
 
 
@@ -63,7 +64,6 @@
   bottom: 5px;
   display: grid;
   place-items: center;
-  color: white;
   font-weight: 700;
   font-size: 23px
 }
@@ -89,4 +89,28 @@
   height: 300px;
   display: flex;
   flex-direction: column
+}
+
+
+.done {
+  position: relative;
+  color: gray;
+  pointer-events: none;
+}
+
+.done::after {
+  content: "";
+  position: absolute;
+  top: 45%;
+  left: 0%;
+  width: 100%;
+  height: 4px;
+  background-color: #C77DFF;
+  transform: rotate(-45deg);
+  pointer-events: none;
+}
+
+.locked {
+  opacity: 0.4;
+  filter: grayscale(1);
 }
