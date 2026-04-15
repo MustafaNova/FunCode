@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PlayerProgressEntity } from './entities/player.progress.entity';
 import { PlayerActiveScreenEntity } from './entities/player.active.screen.entity';
 import { ACTIVE_SCREEN_REPOSITORY_PORT } from './tokens';
-import { ActiveScreenRepositoryAdapter } from './activeScreen.repository.adapter';
+import { ActiveScreenRepositoryAdapter } from './adapters/activeScreen.repository.adapter';
 
 @Module({
     imports: [

@@ -1,13 +1,13 @@
 import s from "./quiz-frame.module.scss"
 import { useState } from 'react';
 import clsx from 'clsx';
-import { quizData } from './data/questions.tsx';
 type props = {
-    isVisible: boolean
+    isVisible: boolean,
+    quizData: any,
 }
 type Selected = number | null;
 
-export function QuizFrame({isVisible} : props) {
+export function QuizFrame({isVisible, quizData} : props) {
     const subtitleTxt = "Der HTML DOM (Document Object Model) stellt eine Webseite als Baumstruktur aus Objekten dar, die JavaScript lesen und verändern kann";
     const headerTxt = "Quiz: HTML-DOM";
     const [selected, setSelected] = useState<Selected>(null);

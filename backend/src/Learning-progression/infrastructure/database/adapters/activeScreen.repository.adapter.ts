@@ -1,12 +1,12 @@
-import { ActiveScreenRepositoryPort } from '../../application/ports/outbound/activeScreenRepository.port';
+import { ActiveScreenRepositoryPort } from '../../../application/ports/outbound/activeScreenRepository.port';
 import { Injectable } from '@nestjs/common';
 import { Course } from '@funcode/shared';
 import { Repository } from 'typeorm';
-import { PlayerActiveScreenEntity } from './entities/player.active.screen.entity';
-import { PlayerProgressEntity } from './entities/player.progress.entity';
+import { PlayerActiveScreenEntity } from '../entities/player.active.screen.entity';
+import { PlayerProgressEntity } from '../entities/player.progress.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ActiveScreen } from '../../domain/entities/activeScreen';
-import { NotFoundException } from './notFoundException.err';
+import { ActiveScreen } from '../../../domain/entities/activeScreen';
+import { NotFoundException } from '../notFoundException.err';
 
 @Injectable()
 export class ActiveScreenRepositoryAdapter implements ActiveScreenRepositoryPort {

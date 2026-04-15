@@ -17,9 +17,8 @@ export function TaskFrame({isVisible} : props) {
                         <div style={{ width: "100%" }}>
                             <div className={s.taskTitle}>
                                 <div>
-                                    <h1>Aufgabe: Baue eine Mini-Seite</h1>
-                                    <p className={s.subtitle}>
-                                        Schreibe HTML &amp; CSS im Editor. Klicke dann auf „Ausführen“. Unten siehst du das Ergebnis. Wenn alles passt, bekommst du ✅.
+                                    <h1 id="title"></h1>
+                                    <p className={s.subtitle} id="subtitle">
                                     </p>
                                 </div>
                                 <span className={s.badge} id="status">
@@ -32,20 +31,16 @@ export function TaskFrame({isVisible} : props) {
                 <section className={s.grid}>
                     <div className={`${s.panel} ${s.task}`}>
                         <div className={s.taskBox}>
-                            <b>Ziel:</b>
-                            <ul>
-                                <li>
-                                    Erstelle eine <b>&lt;h1&gt;</b> Überschrift mit dem Text: <b>"Hallo Web!"</b>
+                            <b>Goals:</b>
+                            <ul id="goals">
+                                <li id="goal1">
                                 </li>
-                                <li>
-                                    Erstelle darunter einen <b>&lt;button&gt;</b> mit dem Text: <b>"Klick"</b>
+                                <li id="goal2">
                                 </li>
-                                <li>
-                                    Wenn man auf den Button klickt, soll im Text darunter erscheinen: <b>"Geklickt!"</b>
+                                <li id="goal3">
                                 </li>
                             </ul>
-                            <div className={s.tip}>
-                                Tipp: Du kannst ein Element mit <code>id</code> verwenden und es mit JavaScript ändern.
+                            <div className={s.tip} id="hint">
                             </div>
                         </div>
                         <div className={s.editorWrap}>
