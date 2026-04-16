@@ -9,6 +9,7 @@ import {
 import { JoinPayload } from './dtos/join.request';
 import { JoinCmd } from '../../../../application/use-cases/matchmaking-join/dtos/join.cmd';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('matchmaking')
 export class MatchmakingController {
     constructor(
@@ -17,7 +18,6 @@ export class MatchmakingController {
     ) {}
 
     @Post('join')
-    @UseGuards(AuthGuard('jwt'))
     async join(@UserPayload() user: AuthUser, @Body() payload: JoinPayload) {
         console.log('NEW PLAYER JOINED QUEUE');
         const cmd = JoinCmd.create(

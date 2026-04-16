@@ -11,17 +11,15 @@ import { Goal } from "./goal-frame/goal-frame.tsx";
 import {ConceptFrame} from "./concept-frame/concept-frame.tsx";
 import {QuizFrame} from "./quiz-frame/quiz-frame.tsx";
 import {TaskFrame} from "./task-frame/task-frame.tsx";
-import {useState} from "react";
+import { useEffect, useState } from 'react';
 import { quizData } from './quiz-frame/data/questions.tsx';
+import type { LevelTabs } from './types.ts';
+import { useNavigate, useParams } from 'react-router-dom';
 
-type props = {
-    isActive: boolean
-    setIsActive: React.Dispatch<React.SetStateAction<boolean>>
-}
 
-type LevelTabs = "goal" | "concept" | "quiz" | "task"
-
-export function LevelFrame({isActive, setIsActive}: props) {
+export function LevelFrame() {
+    const { id } = useParams();
+    const navigate = useNavigate();
     const levelOne = {
         tabs: {
             goal: {
@@ -71,7 +69,7 @@ export function LevelFrame({isActive, setIsActive}: props) {
             task: {
                 title: 'Aufgabe: Baue eine Mini-Seite',
                 subtitle:
-                    'Schreibe HTML &amp; CSS im Editor. Klicke dann auf „Ausführen“. Unten siehst du das Ergebnis. Wenn alles passt, bekommst du ✅.\n',
+                    'Schreibe HTML; CSS im Editor. Klicke dann auf „Ausführen“. Unten siehst du das Ergebnis. Wenn alles passt, bekommst du ✅.\n',
                 goals: [
                     'Erstelle eine h1 Überschrift mit dem Text: "Hallo Web!"\n',
                     'Erstelle darunter einen button mit dem Text: "Klick"\n',
@@ -96,11 +94,16 @@ export function LevelFrame({isActive, setIsActive}: props) {
         setCurTab(steps[curIndex + 1].tab as LevelTabs)
     }
 
+    useEffect(() => {
+        console.log(id);
+        // api call will be here
+    }, [])
+
     return (
-        <div className={`tab ${isActive ? "" : "hidden"}`}>
+        <div className="tab">
             <div className="goals-tab">
                 <header className="level-frame-header">
-                    <button className="close-btn" onClick={() => setIsActive(false)}>x</button>
+                    <button className="close-btn" onClick={() => navigate("/home")}>x</button>
                     <div className="hearts">
                         <FontAwesomeIcon icon={faHeart}/>
                         <FontAwesomeIcon icon={faHeart}/>
@@ -118,8 +121,8 @@ export function LevelFrame({isActive, setIsActive}: props) {
                 <div className="content">
                     <Goal isVisible={curTab == "goal"} data={levelOne.tabs.goal}/>
                     <ConceptFrame isVisible={curTab == "concept"} data={levelOne.tabs.concept}/>
-                    <QuizFrame isVisible={curTab == "quiz"} quizData={quizData}/>
-                    <TaskFrame isVisible={curTab == "task"}/>
+                    <QuizFrame isVisible={curTab == "quiz"} quizData={levelOne.tabs.quiz}/>
+                    <TaskFrame isVisible={curTab == "task"} data={levelOne.tabs.task}/>
                 </div>
                 <footer className="footer">
                     <button className="next-btn" onClick={nextTab}>Continue</button>

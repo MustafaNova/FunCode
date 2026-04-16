@@ -14,6 +14,7 @@ import { ReadyScreen } from './pages/ready/readyScreen.tsx';
 import { Match } from './pages/match/match.tsx';
 import { Win } from './pages/win/win.tsx';
 import { Lose } from './pages/lose/lose.tsx';
+import { LevelFrame } from './layout/level-frame/level-frame.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -32,6 +33,7 @@ createRoot(document.getElementById('root')!).render(
                   <Route path='clan' element={<Clan/>}></Route>
                   <Route path='practice' element={<Practice/>}></Route>
               </Route>
+              <Route path="/level/:id" element={<LevelFrame />}/>
           </Routes>
       </BrowserRouter>
   </StrictMode>,

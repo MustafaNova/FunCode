@@ -4,11 +4,8 @@ import {
     faListCheck,
     faBullseye,
 } from "@fortawesome/free-solid-svg-icons";
+import type { props } from './types.ts';
 
-type props = {
-    isVisible: boolean,
-    data: any
-}
 
 export function Goal({isVisible, data}: props) {
 

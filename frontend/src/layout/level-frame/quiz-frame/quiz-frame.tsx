@@ -1,11 +1,8 @@
 import s from "./quiz-frame.module.scss"
 import { useState } from 'react';
 import clsx from 'clsx';
-type props = {
-    isVisible: boolean,
-    quizData: any,
-}
-type Selected = number | null;
+import type { props, Selected } from './types.ts';
+
 
 export function QuizFrame({isVisible, quizData} : props) {
     const subtitleTxt = "Der HTML DOM (Document Object Model) stellt eine Webseite als Baumstruktur aus Objekten dar, die JavaScript lesen und verändern kann";

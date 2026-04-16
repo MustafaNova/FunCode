@@ -1,0 +1,1 @@
+export type LevelTabs = "goal" | "concept" | "quiz" | "task"

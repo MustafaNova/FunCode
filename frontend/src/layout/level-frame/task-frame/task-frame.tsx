@@ -1,10 +1,8 @@
 import s from './task-frame.module.scss';
+import type { props } from './types.ts';
 
-type props = {
-    isVisible: boolean
-}
 
-export function TaskFrame({isVisible} : props) {
+export function TaskFrame({isVisible, data} : props) {
 
     return (
         <div className={isVisible ? "" : s.hidden}>
@@ -17,8 +15,9 @@ export function TaskFrame({isVisible} : props) {
                         <div style={{ width: "100%" }}>
                             <div className={s.taskTitle}>
                                 <div>
-                                    <h1 id="title"></h1>
+                                    <h1 id="title">{data.title}</h1>
                                     <p className={s.subtitle} id="subtitle">
+                                        {data.subtitle}
                                     </p>
                                 </div>
                                 <span className={s.badge} id="status">
@@ -34,13 +33,17 @@ export function TaskFrame({isVisible} : props) {
                             <b>Goals:</b>
                             <ul id="goals">
                                 <li id="goal1">
+                                    {data.goals[0]}
                                 </li>
                                 <li id="goal2">
+                                    {data.goals[1]}
                                 </li>
                                 <li id="goal3">
+                                    {data.goals[2]}
                                 </li>
                             </ul>
                             <div className={s.tip} id="hint">
+                                {data.hint}
                             </div>
                         </div>
                         <div className={s.editorWrap}>

@@ -8,6 +8,7 @@ import {
 } from '../../../../../common/utils/user-payload.decorator';
 import { ProgressRes } from './res.dto';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('progress')
 export class PlayerProgressController {
     constructor(
@@ -16,7 +17,6 @@ export class PlayerProgressController {
     ) {}
 
     @Get()
-    @UseGuards(AuthGuard('jwt'))
     async getProgress(@UserPayload() user: AuthUser): Promise<ProgressRes> {
         const res = await this.playerProgressPort.getPlayerProgress(
             user.userId,

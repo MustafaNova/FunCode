@@ -3,10 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHtml5 } from "@fortawesome/free-brands-svg-icons";
 import { faBrain, faCar } from "@fortawesome/free-solid-svg-icons";
 import clsx from "clsx";
-type props = {
-    isVisible: boolean,
-    data: any
-}
+import type { props } from './types.ts';
 
 export function ConceptFrame({isVisible, data} : props) {
 
@@ -103,8 +100,8 @@ export function ConceptFrame({isVisible, data} : props) {
                             {data.unitTwoTitle}
                         </span>
                     </div>
-                    <div className={s.fs15} id="unitTwoContent">
-                        {data.unitTwoContent}
+                    <div className={s.fs15} id="unitTwo">
+                        {data.unitTwo}
                     </div>
                     <div className={s.hint} id="unitTwoNote">
                         {data.unitTwoNote}

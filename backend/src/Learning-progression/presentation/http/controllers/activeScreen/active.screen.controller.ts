@@ -14,6 +14,7 @@ import { ChangeActiveScreenCmd } from '../../../../application/use-cases/changeA
 import type { GetActiveScreenPort } from '../../../../application/ports/inbound/getActiveScreen.port';
 import { GetActiveScreenRes } from '@funcode/shared';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('active-screen')
 export class ActiveScreenController {
     constructor(
@@ -23,7 +24,6 @@ export class ActiveScreenController {
         private readonly getACPort: GetActiveScreenPort,
     ) {}
 
-    @UseGuards(AuthGuard('jwt'))
     @Put()
     async setActiveScreen(
         @UserPayload() user: AuthUser,
@@ -37,7 +37,6 @@ export class ActiveScreenController {
         await this.changeACPort.execute(cmd);
     }
 
-    @UseGuards(AuthGuard('jwt'))
     @Get()
     async getActiveScreen(
         @UserPayload() user: AuthUser,
