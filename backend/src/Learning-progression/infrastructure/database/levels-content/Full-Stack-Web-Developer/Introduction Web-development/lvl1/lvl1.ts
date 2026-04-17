@@ -1,6 +1,7 @@
 import { quizData } from './quizData';
+import { LevelModel } from '../../../../../../domain/value-objects/level.model';
 
-export const levelOne = {
+export const levelOne: LevelModel = {
     tabs: {
         goal: {
             subtitle: 'Lets Go!',

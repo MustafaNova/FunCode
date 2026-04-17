@@ -1,0 +1,1 @@
+export * from './getActiveScreen.res';

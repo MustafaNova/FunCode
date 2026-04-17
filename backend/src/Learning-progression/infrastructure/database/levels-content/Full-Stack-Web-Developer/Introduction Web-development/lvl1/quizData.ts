@@ -1,4 +1,8 @@
+
+
 // question 1
+import { QuizTab } from '../../../../../../domain/value-objects/level.model';
+
 const questionOne =
     'Was schickt der Browser zuerst an den Server, wenn du eine Website öffnest';
 const hintOne = 'Tipp: Denke an Request und Response';
@@ -43,7 +47,7 @@ const correctMsgThree = '3Genau! Erst kommt der Request vom Browser(Client)';
 const falseMsgThree =
     '3Nicht ganz! Erst schickt der Browser ein Request(Anfrage). Dann kommt der Response(Antwort)';
 
-export const quizData = [
+export const quizData: QuizTab[] = [
     {
         question: questionOne,
         hint: hintOne,

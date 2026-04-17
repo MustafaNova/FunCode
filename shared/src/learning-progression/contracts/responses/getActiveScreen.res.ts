@@ -1,4 +1,4 @@
-import { Course } from './enums';
+import { Course } from '../enums';
 
 export interface GetActiveScreenRes {
     course: Course | null;
