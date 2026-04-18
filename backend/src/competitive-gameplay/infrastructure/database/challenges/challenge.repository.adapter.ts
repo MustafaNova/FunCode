@@ -50,7 +50,7 @@ export class ChallengeRepositoryAdapter implements ChallengeRepositoryPort {
     getRandomTask() {
         const randomKey =
             this.taskKeys[Math.floor(Math.random() * this.taskKeys.length)];
-        return { task: this.tasks[randomKey].task };
+        return this.tasks[randomKey].task;
     }
 
     getTests<K extends keyof tasksMap>(taskId: K): TaskTestsWithName<K> {

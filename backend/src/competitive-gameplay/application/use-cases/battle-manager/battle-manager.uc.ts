@@ -9,6 +9,7 @@ import type { BattleRepositoryPort } from '../../ports/outbound/battleRepository
 import type { ChallengeRepositoryPort } from '../../ports/outbound/challenge.repository.port';
 import type { ValidatorPort } from '../../ports/inbound/validator.port';
 import { RoomId, UserId } from '../../../domain/types/players';
+import { toTaskDto } from './mappers/task.mapper';
 
 export class BattleManagerUC implements BattleManagerPort {
     connectedPlayers = new Set<UserId>();
@@ -52,10 +53,11 @@ export class BattleManagerUC implements BattleManagerPort {
         if (roomSize == readyRoom.size) {
             console.log(`Battle has started: ${roomId}`);
             this.readyPlayers.delete(roomId);
+            const task = toTaskDto(this.challengeRepo.getRandomTask());
             this.playerGateway.notifyRoom(
                 roomId,
                 SOCKET_EVENTS.BATTLE_STARTED,
-                this.challengeRepo.getRandomTask(),
+                { task },
             );
         }
     }

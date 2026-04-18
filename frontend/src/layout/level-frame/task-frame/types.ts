@@ -1,9 +1,7 @@
+import type { TaskTabDto } from '@funcode/shared';
+
+
 export type props = {
     isVisible: boolean,
-    data: {
-        title: string,
-        subtitle: string,
-        goals: string[]
-        hint: string,
-    },
+    data: TaskTabDto,
 }

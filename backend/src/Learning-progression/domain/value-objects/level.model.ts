@@ -52,7 +52,7 @@ export interface TaskTab {
     hint: string;
 }
 
-export interface Icon {
+interface Icon {
     name: string;
     className: string;
 }

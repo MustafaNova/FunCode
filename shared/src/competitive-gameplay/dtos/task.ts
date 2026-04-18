@@ -1,10 +1,6 @@
-export enum Difficulty {
-    EASY = 'easy',
-    MEDIUM = 'medium',
-    HARD = 'hard',
-}
+import { Difficulty } from '../enums';
 
-export interface Task {
+export interface TaskDto {
     id: string;
     name: string;
     functionName: string;

@@ -1,7 +1,8 @@
-import type { QuizTab } from '@funcode/shared';
+import type { QuizTabDto } from '@funcode/shared';
+
 
 export type props = {
     isVisible: boolean,
-    quizData: QuizTab[]
+    quizData: QuizTabDto[],
 }
 export type Selected = number | null;

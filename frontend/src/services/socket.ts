@@ -4,7 +4,7 @@ import {
     type LoseRes,
     type SubmitReq,
     type WrongRes,
-    type Task,
+    type TaskDto,
     type WinRes,
     SOCKET_EVENTS,
 } from '@funcode/shared';
@@ -22,7 +22,7 @@ export function sendPlayerReady() {
     socket?.emit(SOCKET_EVENTS.PLAYER_READY);
 }
 
-export function onBattleStarted(callback: (data: { task: Task }) => void) {
+export function onBattleStarted(callback: (data: { task: TaskDto }) => void) {
     socket?.on(SOCKET_EVENTS.BATTLE_STARTED, callback);
 
     return () => {

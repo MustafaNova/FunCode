@@ -1,9 +1,6 @@
+import type { GoalTabDto } from '@funcode/shared';
+
 export type props = {
     isVisible: boolean,
-    data: {
-        subtitle: string,
-        title: string,
-        objectives: string[],
-        hint: string,
-    }
+    data: GoalTabDto,
 }
