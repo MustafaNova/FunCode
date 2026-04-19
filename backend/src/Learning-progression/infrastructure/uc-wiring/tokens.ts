@@ -1,3 +1,4 @@
 export const GET_PLAYER_PROGRESS_PORT = 'GET_PLAYER_PROGRESS_PORT' as const;
 export const CHANGE_ACTIVE_SCREEN_PORT = 'CHANGE_ACTIVE_SCREEN_PORT' as const;
 export const GET_ACTIVE_SCREEN_PORT = 'GET_ACTIVE_SCREEN_PORT' as const;
+export const GET_LEVEL_PORT = 'GET_LEVEL_PORT' as const;
