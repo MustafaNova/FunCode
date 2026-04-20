@@ -1,9 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { AppErrorFilter } from './auth/presentation/http/filters/AppErrorFilter';
-import { DomainErrorFilter } from './auth/presentation/http/filters/DomainErrorFilter';
 import cookieParser from 'cookie-parser';
+import { GlobalExceptionFilter } from './common/global.exception.filter';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
@@ -14,7 +13,7 @@ async function bootstrap() {
             transform: true,
         }),
     );
-    app.useGlobalFilters(new AppErrorFilter(), new DomainErrorFilter());
+    app.useGlobalFilters(new GlobalExceptionFilter());
     app.enableCors({
         origin: 'http://localhost:5173',
         credentials: true,

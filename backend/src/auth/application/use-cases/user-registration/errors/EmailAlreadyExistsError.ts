@@ -1,6 +1,4 @@
-import { AppError } from '../../../../../common/errors/AppError';
-
-export class EmailAlreadyExistsError extends AppError {
+export class EmailAlreadyExistsError extends Error {
     constructor() {
         super('Email already exists');
     }

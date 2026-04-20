@@ -1,6 +1,4 @@
-import { AppError } from '../../../../../common/errors/AppError';
-
-export class InvalidCredentialsError extends AppError {
+export class InvalidCredentialsError extends Error {
     constructor() {
         super('Invalid credentials');
     }

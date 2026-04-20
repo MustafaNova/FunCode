@@ -6,7 +6,7 @@ import { PlayerActiveScreenEntity } from '../entities/player.active.screen.entit
 import { PlayerProgressEntity } from '../entities/player.progress.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ActiveScreen } from '../../../domain/entities/activeScreen';
-import { NotFoundException } from '../notFoundException.err';
+import { NotFoundException } from '../errors/notFoundException.err';
 
 @Injectable()
 export class ActiveScreenRepositoryAdapter implements ActiveScreenRepositoryPort {

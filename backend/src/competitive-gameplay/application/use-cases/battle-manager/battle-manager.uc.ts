@@ -3,7 +3,6 @@ import { Battle1vs1, PlayerInfo } from '../../../domain/entities/battle1vs1';
 import type { PlayerGatewayPort } from '../../ports/outbound/player.gateway.port';
 import { ReadyPlayerCmd } from './dtos/ready.player.cmd';
 import { SubmitCmd } from './dtos/submit.cmd';
-import { AppError } from './interfaces';
 import { LoseRes, WrongRes, WinRes, SOCKET_EVENTS } from '@funcode/shared';
 import type { BattleRepositoryPort } from '../../ports/outbound/battleRepository.port';
 import type { ChallengeRepositoryPort } from '../../ports/outbound/challenge.repository.port';
@@ -113,8 +112,8 @@ export class BattleManagerUC implements BattleManagerPort {
         }
     }
 
-    private handleError(userId: string, err: AppError) {
-        this.playerGateway.reportError(userId, err.code, err.message);
+    private handleError(userId: string, err: Error) {
+        this.playerGateway.reportError(userId, 407, err.message);
     }
 
     registerNewPlayer(userId: string) {

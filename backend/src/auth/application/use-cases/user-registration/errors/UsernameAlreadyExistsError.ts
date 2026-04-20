@@ -1,6 +1,4 @@
-import { AppError } from '../../../../../common/errors/AppError';
-
-export class UsernameAlreadyExistsError extends AppError {
+export class UsernameAlreadyExistsError extends Error {
     constructor() {
         super('Username already exists');
     }

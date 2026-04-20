@@ -1,6 +1,5 @@
-import { DomainError } from '../../../common/errors/DomainError';
 
-export class PasswordError extends DomainError {
+export class PasswordError extends Error {
     constructor(message: string) {
         super(message);
     }
