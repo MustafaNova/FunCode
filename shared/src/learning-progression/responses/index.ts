@@ -1,1 +1,1 @@
-export * from './getActiveScreen.res';
+export * from './getActiveScreen.js';

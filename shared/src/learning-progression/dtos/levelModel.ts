@@ -1,7 +1,7 @@
-import { TaskTabDto } from './taskTab';
-import { GoalTabDto } from './goalTab';
-import { ConceptTabDto } from './conceptTab';
-import { QuizTabDto } from './quizTab';
+import { TaskTabDto } from './taskTab.js';
+import { GoalTabDto } from './goalTab.js';
+import { ConceptTabDto } from './conceptTab.js';
+import { QuizTabDto } from './quizTab.js';
 
 export interface LevelModelDto {
     tabs: {

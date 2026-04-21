@@ -1,1 +1,1 @@
-export * from './submit.res';
+export * from './submit.res.js';

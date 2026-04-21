@@ -1,2 +1,2 @@
-export * from './competitive-gameplay';
-export * from './learning-progression';
+export * from './competitive-gameplay/index.js';
+export * from './learning-progression/index.js';

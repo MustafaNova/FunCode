@@ -1,4 +1,4 @@
-import { Difficulty } from '../enums';
+import { Difficulty } from '../enums/index.js';
 
 export interface TaskDto {
     id: string;
