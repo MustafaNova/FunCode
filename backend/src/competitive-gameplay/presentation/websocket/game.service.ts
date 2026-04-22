@@ -8,6 +8,10 @@ import { ReadyPlayerCmd } from '../../application/use-cases/battle-manager/dtos/
 import { SubmitCmd } from '../../application/use-cases/battle-manager/dtos/submit.cmd';
 import { UserId } from '../../domain/types/players';
 import { LoseRes, WinRes } from '@funcode/shared';
+import { TaskIdError } from '../../application/use-cases/validator/errors/task.id.err';
+import { WsException } from '@nestjs/websockets';
+import { SolutionError } from '../../application/use-cases/validator/errors/solution.err';
+import { UserCodeError } from '../../application/use-cases/validator/errors/usercode.err';
 
 @Injectable()
 export class GameService {
@@ -110,9 +114,13 @@ export class GameService {
         taskId: string,
         solution: string,
     ) {
-        await this.battleManager.handleSolutionSubmit(
-            SubmitCmd.create(userId, roomId, playerName, taskId, solution),
-        );
+        try {
+            await this.battleManager.handleSolutionSubmit(
+                SubmitCmd.create(userId, roomId, playerName, taskId, solution),
+            );
+        } catch (err) {
+            throw new WsException(err.message);
+        }
     }
 
     async closeRoom(roomId: string) {

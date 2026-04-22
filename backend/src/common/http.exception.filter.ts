@@ -1,10 +1,11 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpStatus, } from '@nestjs/common';
 import {
-    EmailAlreadyExistsError
-} from '../auth/application/use-cases/user-registration/errors/EmailAlreadyExistsError';
-import {
-    UsernameAlreadyExistsError
-} from '../auth/application/use-cases/user-registration/errors/UsernameAlreadyExistsError';
+    ArgumentsHost,
+    Catch,
+    ExceptionFilter,
+    HttpStatus,
+} from '@nestjs/common';
+import { EmailAlreadyExistsError } from '../auth/application/use-cases/user-registration/errors/EmailAlreadyExistsError';
+import { UsernameAlreadyExistsError } from '../auth/application/use-cases/user-registration/errors/UsernameAlreadyExistsError';
 import { InvalidCredentialsError } from '../auth/application/use-cases/user-login/errors/InvalidCredentialsError';
 import { NotFoundException } from '../Learning-progression/infrastructure/database/errors/notFoundException.err';
 import { EmailError } from '../auth/domain/errors/EmailError';
@@ -13,7 +14,7 @@ import { UsernameError } from '../auth/domain/errors/UsernameError';
 import { LevelNotFoundException } from '../Learning-progression/infrastructure/database/errors/levelNotFound.err';
 
 @Catch()
-export class GlobalExceptionFilter implements ExceptionFilter {
+export class HttpExceptionFilter implements ExceptionFilter {
     catch(error: Error, host: ArgumentsHost): any {
         const res = host.switchToHttp().getResponse();
 

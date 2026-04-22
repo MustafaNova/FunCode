@@ -12,13 +12,10 @@ export class ValidatorUC implements ValidatorPort {
         private readonly codeExecutor: UserCodeExecutionPort,
     ) {}
     checkSubmit(taskId: string, solution: string) {
-        console.log('started checkSubmit');
         if (!this.challengeRepo.exists(taskId)) {
-            console.log(`taskId Error: ${taskId}`);
             throw new TaskIdError();
         }
         if (!solution) {
-            console.log('solution Error');
             throw new SolutionError();
         }
         return this.runUserCode(taskId as keyof tasksMap, solution);

@@ -94,7 +94,6 @@ export class GameGateway
     @UseGuards(RoomGuard)
     @SubscribeMessage('SUBMIT_SOLUTION')
     async handleSolutionSubmit(client: RoomSocket, payload: SubmitReq) {
-        console.log('NEW SUBMIT_SOLUTION ARRIVED');
         await this.gs.solutionSubmit(
             client.data.user.userId,
             client.data.room,

@@ -9,6 +9,7 @@ import type { ChallengeRepositoryPort } from '../../ports/outbound/challenge.rep
 import type { ValidatorPort } from '../../ports/inbound/validator.port';
 import { RoomId, UserId } from '../../../domain/types/players';
 import { toTaskDto } from './mappers/task.mapper';
+import { TaskIdError } from '../validator/errors/task.id.err';
 
 export class BattleManagerUC implements BattleManagerPort {
     connectedPlayers = new Set<UserId>();
@@ -62,15 +63,9 @@ export class BattleManagerUC implements BattleManagerPort {
     }
 
     async handleSolutionSubmit(submit: SubmitCmd) {
-        try {
-            const res = this.validator.checkSubmit(
-                submit.taskId,
-                submit.solution,
-            );
-            await this.notifySubmitRes(res, submit);
-        } catch (err) {
-            this.handleError(submit.userId, err);
-        }
+        const res = this.validator.checkSubmit(submit.taskId, submit.solution);
+        await this.notifySubmitRes(res, submit);
+
     }
 
     private async notifySubmitRes(res: boolean, submit: SubmitCmd) {

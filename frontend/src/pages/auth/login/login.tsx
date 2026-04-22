@@ -12,7 +12,8 @@ export function Login() {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         const req = { username, password };
-        await loginUser(req);
+        const res = await loginUser(req);
+        if (!res) return
         await getActiveScreen();
         navigate('/home')
     }
