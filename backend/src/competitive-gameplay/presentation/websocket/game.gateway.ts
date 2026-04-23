@@ -15,13 +15,15 @@ import type {
     RoomSocket,
     WinEvent,
 } from './interfaces';
-import { UseGuards } from '@nestjs/common';
+import { UseFilters, UseGuards } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { BattleEvent } from '../../domain/enums/battle.events';
 import { RoomGuard } from './guards/room.guard';
 import { GameService } from './game.service';
 import { FRONTEND_URL } from '../../../constants';
+import { WsExceptionFilter } from '../../../common/ws.exception.filter';
 
+@UseFilters(new WsExceptionFilter())
 @WebSocketGateway({
     cors: {
         origin: FRONTEND_URL,

@@ -3,13 +3,12 @@ import { Battle1vs1, PlayerInfo } from '../../../domain/entities/battle1vs1';
 import type { PlayerGatewayPort } from '../../ports/outbound/player.gateway.port';
 import { ReadyPlayerCmd } from './dtos/ready.player.cmd';
 import { SubmitCmd } from './dtos/submit.cmd';
-import { LoseRes, WrongRes, WinRes, SOCKET_EVENTS } from '@funcode/shared';
+import { LoseRes, SubmitResponse, WinRes, SOCKET_EVENTS } from '@funcode/shared';
 import type { BattleRepositoryPort } from '../../ports/outbound/battleRepository.port';
 import type { ChallengeRepositoryPort } from '../../ports/outbound/challenge.repository.port';
 import type { ValidatorPort } from '../../ports/inbound/validator.port';
 import { RoomId, UserId } from '../../../domain/types/players';
 import { toTaskDto } from './mappers/task.mapper';
-import { TaskIdError } from '../validator/errors/task.id.err';
 
 export class BattleManagerUC implements BattleManagerPort {
     connectedPlayers = new Set<UserId>();
@@ -65,7 +64,6 @@ export class BattleManagerUC implements BattleManagerPort {
     async handleSolutionSubmit(submit: SubmitCmd) {
         const res = this.validator.checkSubmit(submit.taskId, submit.solution);
         await this.notifySubmitRes(res, submit);
-
     }
 
     private async notifySubmitRes(res: boolean, submit: SubmitCmd) {
@@ -95,7 +93,8 @@ export class BattleManagerUC implements BattleManagerPort {
             await this.playerGateway.closeRoom(submit.roomId);
             await this.battleRepo.setWinner(submit.roomId, submit.userId);
         } else {
-            const payload: WrongRes = {
+            const payload: SubmitResponse = {
+                type: 'wrong',
                 playerName: submit.playerName,
             };
 

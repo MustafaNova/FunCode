@@ -6,4 +6,5 @@ export enum SOCKET_EVENTS {
     WRONG_SUBMIT = 'WRONG_SUBMIT',
     WIN = 'WIN',
     LOSE = 'LOSE',
+    ERROR = 'ERROR',
 }

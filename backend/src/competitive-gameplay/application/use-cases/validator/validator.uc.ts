@@ -30,6 +30,7 @@ export class ValidatorUC implements ValidatorPort {
                 testObj.tests,
             );
         } catch (err) {
+            console.log('UserCodeError occured: ', err.message);
             throw new UserCodeError((err as Error).message);
         }
     }

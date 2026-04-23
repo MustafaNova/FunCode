@@ -1,6 +1,5 @@
-export interface WrongRes {
-    playerName: string;
-}
+export type SubmitResponse =
+    { type: 'wrong'; playerName: string} | { type: 'error'; message: string};
 
 export interface WinRes {
     playerName: string;

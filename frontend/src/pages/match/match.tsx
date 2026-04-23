@@ -2,19 +2,24 @@ import s from './match.module.scss'
 import { useMatchStore } from '../../store/matchStore.ts';
 import { Editor } from '@monaco-editor/react';
 import { useEffect, useState } from 'react';
-import { onLose, onWin, onWrongSubmit, sendCode } from '../../services/socket.ts';
-import type { SubmitReq, WrongRes } from '@funcode/shared';
+import { onError, onLose, onWin, onWrongSubmit, sendCode } from '../../services/socket.ts';
+import type { SubmitReq, SubmitResponse } from '@funcode/shared';
 import { useNavigate } from 'react-router-dom';
 
 export function Match() {
     const navigate = useNavigate();
     const matchTask = useMatchStore((s) => s.matchTask);
     const [code, setCode] = useState('');
-    const [submitResponse, setSubmitResponse] = useState<WrongRes | null>(null);
+    const [submitResponse, setSubmitResponse] = useState<SubmitResponse | null>(null);
 
     useEffect(() => {
         const offWrong = onWrongSubmit((res) => {
             setSubmitResponse(res);
+        })
+
+        const offError = onError((res) => {
+            console.log("onError", res.message);
+            setSubmitResponse(res.message);
         })
 
         const offWin = onWin((res) => {
@@ -29,6 +34,7 @@ export function Match() {
             offWrong();
             offWin();
             offLose();
+            offError();
         }
     }, [])
 

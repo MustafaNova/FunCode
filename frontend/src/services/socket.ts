@@ -3,7 +3,7 @@ import { SERVER_URL } from '../constants/urls.ts';
 import {
     type LoseRes,
     type SubmitReq,
-    type WrongRes,
+    type SubmitResponse,
     type TaskDto,
     type WinRes,
     SOCKET_EVENTS,
@@ -34,10 +34,17 @@ export function sendCode(submitReq: SubmitReq) {
     socket?.emit(SOCKET_EVENTS.SUBMIT_SOLUTION, submitReq);
 }
 
-export function onWrongSubmit(callback: (response: WrongRes) => void) {
+export function onWrongSubmit(callback: (response: SubmitResponse) => void) {
     socket?.on(SOCKET_EVENTS.WRONG_SUBMIT, callback);
     return () => {
         socket?.off(SOCKET_EVENTS.WRONG_SUBMIT, callback);
+    }
+}
+
+export function onError(callback: (response) => void) {
+    socket?.on(SOCKET_EVENTS.ERROR, callback);
+    return () => {
+        socket?.off(SOCKET_EVENTS.ERROR, callback);
     }
 }
 

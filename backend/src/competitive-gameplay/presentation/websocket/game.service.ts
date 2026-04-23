@@ -119,7 +119,8 @@ export class GameService {
                 SubmitCmd.create(userId, roomId, playerName, taskId, solution),
             );
         } catch (err) {
-            throw new WsException(err.message);
+            console.log('throwing now Error: ', err.message);
+            throw new WsException((err as Error).message);
         }
     }
 
