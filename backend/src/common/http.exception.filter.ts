@@ -12,6 +12,7 @@ import { EmailError } from '../auth/domain/errors/EmailError';
 import { PasswordError } from '../auth/domain/errors/PasswordError';
 import { UsernameError } from '../auth/domain/errors/UsernameError';
 import { LevelNotFoundException } from '../Learning-progression/infrastructure/database/errors/levelNotFound.err';
+import { ErrorResponse } from '@funcode/shared';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -47,8 +48,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
         }
 
         res.status(status).json({
-            success: false,
+            type: 'error',
             message: error.message,
-        });
+        } satisfies ErrorResponse);
     }
 }

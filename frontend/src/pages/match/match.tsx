@@ -18,8 +18,7 @@ export function Match() {
         })
 
         const offError = onError((res) => {
-            console.log("onError", res.message);
-            setSubmitResponse(res.message);
+            setSubmitResponse(res);
         })
 
         const offWin = onWin((res) => {
@@ -73,7 +72,14 @@ export function Match() {
             </div>
             <div>
                 <button className={s.submitBtn} onClick={submitCode}>submit</button>
-                <div>{submitResponse && <span>{submitResponse.playerName}: failed</span>}</div>
+                <div>
+                    {submitResponse?.type == 'wrong' && (
+                        <span>{submitResponse.playerName} has failed</span>
+                    )}
+                    {submitResponse?.type == 'error' && (
+                        <span>{submitResponse.message}</span>
+                    )}
+                </div>
             </div>
             <Editor value={matchTask?.starterCode} onChange={(userCode) => setCode(userCode ?? '')}  height={'300px'} language={'JavaScript'} theme={'vs-dark'}/>
         </div>

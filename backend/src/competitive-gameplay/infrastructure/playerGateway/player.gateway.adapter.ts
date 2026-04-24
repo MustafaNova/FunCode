@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { PlayerGatewayPort } from '../../application/ports/outbound/player.gateway.port';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { BattleEvent } from '../../domain/enums/battle.events';
-import { ErrorCodes } from '../../../common/error.codes';
 import { LoseRes, WinRes } from '@funcode/shared';
 
 @Injectable()
@@ -47,11 +46,4 @@ export class PlayerGatewayAdapter implements PlayerGatewayPort {
         });
     }
 
-    reportError(userId: string, code: ErrorCodes, msg: string) {
-        this.eventEmitter.emit(BattleEvent.ERROR, {
-            userId,
-            code,
-            msg,
-        });
-    }
 }

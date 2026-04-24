@@ -64,11 +64,6 @@ export class GameGateway
         this.gs.sendRoom(roomId, event, msg);
     }
 
-    @OnEvent(BattleEvent.ERROR)
-    reportError({ userId, code, msg }: ErrorEvent) {
-        this.gs.sendError(userId, code, msg);
-    }
-
     @OnEvent(BattleEvent.CLOSE_ROOM)
     async closeRoom(roomId: string) {
         await this.gs.closeRoom(roomId);

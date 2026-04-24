@@ -1,4 +1,3 @@
-import { ErrorCodes } from '../../../../common/error.codes';
 import { LoseRes, WinRes } from '@funcode/shared';
 
 export interface PlayerGatewayPort {
@@ -11,5 +10,4 @@ export interface PlayerGatewayPort {
     notifyRoom(roomId: string, notif: string, msg: unknown): void;
     notifyPlayerWin(userId: string, payload: WinRes): void;
     notifyPlayerLose(userId: string, payload: LoseRes): void;
-    reportError(userId: string, code: ErrorCodes, msg: string): void;
 }

@@ -10,3 +10,8 @@ export async function getActiveScreen() {
     const res: GetActiveScreenRes = await response.json();
     useActiveScreen.getState().setAC(res);
 }
+
+export async function getLevel(id: string) {
+    const res = await fetch(`${API_URLS.LEVELS}/${id}`);
+    return res.json();
+}

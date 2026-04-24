@@ -5,4 +5,5 @@ export const API_URLS = {
     LOGIN: `${SERVER_URL}/auth/login`,
     MATCHMAKING: `${SERVER_URL}/matchmaking/join`,
     ACTIVE_SCREEN: `${SERVER_URL}/active-screen`,
+    LEVELS: `${SERVER_URL}/levels`,
 }

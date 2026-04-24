@@ -6,7 +6,7 @@ import {
     type SubmitResponse,
     type TaskDto,
     type WinRes,
-    SOCKET_EVENTS,
+    SOCKET_EVENTS, type ErrorResponse,
 } from '@funcode/shared';
 
 let socket: Socket | null = null;
@@ -41,7 +41,7 @@ export function onWrongSubmit(callback: (response: SubmitResponse) => void) {
     }
 }
 
-export function onError(callback: (response) => void) {
+export function onError(callback: (response: ErrorResponse) => void) {
     socket?.on(SOCKET_EVENTS.ERROR, callback);
     return () => {
         socket?.off(SOCKET_EVENTS.ERROR, callback);

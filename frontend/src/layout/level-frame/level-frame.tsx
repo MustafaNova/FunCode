@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import { quizData } from './quiz-frame/data/questions.tsx';
 import type { LevelTabs } from './types.ts';
 import { useNavigate, useParams } from 'react-router-dom';
+import { getLevel } from '../../services/learning.progression.ts';
 
 
 export function LevelFrame() {
@@ -95,8 +96,7 @@ export function LevelFrame() {
     }
 
     useEffect(() => {
-        console.log(id);
-        // api call will be here
+        // getLevel api call here
     }, [])
 
     return (
