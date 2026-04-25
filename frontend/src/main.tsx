@@ -33,7 +33,7 @@ createRoot(document.getElementById('root')!).render(
                   <Route path='clan' element={<Clan/>}></Route>
                   <Route path='practice' element={<Practice/>}></Route>
               </Route>
-              <Route path="/level/:id" element={<LevelFrame />}/>
+              <Route path="/level/:course/:module/:id" element={<LevelFrame />}/>
           </Routes>
       </BrowserRouter>
   </StrictMode>,

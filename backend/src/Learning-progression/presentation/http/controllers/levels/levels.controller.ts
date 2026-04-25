@@ -7,10 +7,10 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import type { GetLevelPort } from '../../../../application/ports/inbound/getLevel.port';
+import { type GetLevelPort } from '../../../../application/ports/inbound/getLevel.port';
 import { GET_LEVEL_PORT } from '../../../../infrastructure/uc-wiring/tokens';
 import { GetLevelCmd } from '../../../../application/use-cases/getLevel/getLevel.cmd';
-import { Course } from '@funcode/shared';
+import { Course, type GetLevelRes } from '@funcode/shared';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('levels')
@@ -25,7 +25,8 @@ export class LevelsController {
         @Param('course') course: Course,
         @Param('module') module: string,
         @Param('level', ParseIntPipe) level: number,
-    ) {
+    ): GetLevelRes {
+        console.log('GetLevel request');
         const cmd = GetLevelCmd.create(course, module, level);
         const levelContent = this.levelService.execute(cmd);
         return { data: levelContent };

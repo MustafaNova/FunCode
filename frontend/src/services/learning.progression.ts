@@ -1,5 +1,5 @@
 import { API_URLS } from '../constants/urls.ts';
-import type { GetActiveScreenRes } from '@funcode/shared';
+import type { GetActiveScreenRes, GetLevelRes } from '@funcode/shared';
 import { useActiveScreen } from '../store/activeScreenStore.ts';
 
 export async function getActiveScreen() {
@@ -11,7 +11,10 @@ export async function getActiveScreen() {
     useActiveScreen.getState().setAC(res);
 }
 
-export async function getLevel(id: string) {
-    const res = await fetch(`${API_URLS.LEVELS}/${id}`);
+export async function getLevel(course: string, module: string, id: string): Promise<GetLevelRes> {
+    const res = await fetch(`${API_URLS.LEVELS}/${course}/${module}/${id}`, {
+        method: 'GET',
+        credentials: 'include',
+    });
     return res.json();
 }

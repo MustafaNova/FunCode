@@ -1,4 +1,4 @@
-import { quizData } from './quizData';
+import { quizDataOne } from './quizData';
 import { LevelModel } from '../../../../../../domain/value-objects/level.model';
 
 export const levelOne: LevelModel = {
@@ -46,7 +46,7 @@ export const levelOne: LevelModel = {
                 'Merke: Der Browser ist der „Client“ – der Server liefert die Daten.',
             visualTwo: 'Full-Stack-Developer/request.flow.png',
         },
-        quiz: quizData,
+        quiz: quizDataOne,
         task: {
             title: 'Aufgabe: Baue eine Mini-Seite',
             subtitle:

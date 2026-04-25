@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 
 export function School() {
     const navigate = useNavigate();
-    const goToLevel = (id: number) => navigate(`/level/${id}`);
     const course = useActiveScreen((state) => state.course);
     const module = useActiveScreen((state) => state.module);
     const unlockedLevel = useActiveScreen((state) => state.unlockedLevel);
+    const goToLevel = (id: number) => navigate(`/level/${course}/${module}/${id}`);
 
     return (
         <div>
