@@ -1,8 +1,10 @@
 import s from './task-frame.module.scss';
 import type { props } from './types.ts';
+import { useState } from 'react';
 
 
 export function TaskFrame({isVisible, data} : props) {
+    const [code, setCode] = useState("")
 
     return (
         <div className={isVisible ? "" : s.hidden}>
@@ -20,9 +22,6 @@ export function TaskFrame({isVisible, data} : props) {
                                         {data.subtitle}
                                     </p>
                                 </div>
-                                <span className={s.badge} id="status">
-                                    🟣 Noch nicht geprüft
-                                </span>
                             </div>
                         </div>
                     </div>
@@ -50,7 +49,7 @@ export function TaskFrame({isVisible, data} : props) {
                             <div className={s.editorHeader}>
                                 <div className={s.title}>🧑‍💻 Code Editor</div>
                                 <div className={s.actions}>
-                                    <button className={s.btnSmall} id="btnReset" type="button">
+                                    <button className={s.btnSmall} id="btnReset" onClick={() => setCode("")}>
                                         Reset
                                     </button>
                                     <button className={`${s.btnSmall} ${s.btnRun}`} id="btnRun" type="button">
@@ -58,9 +57,12 @@ export function TaskFrame({isVisible, data} : props) {
                                     </button>
                                 </div>
                             </div>
-                            <textarea className={s.editor} id="editor" spellCheck={false} />
+                            <textarea className={s.editor} id="editor" spellCheck={false} value={code}
+                                      onChange={(e) => setCode(e.target.value)} />
                             <div className={s.hint}>
-                                Hinweis: Der Code läuft in einer Sandbox (iframe). Fokus: HTML/CSS/JS-Grundlagen.
+                                <span className={s.badge} id="status">
+                                    🟣 not checked
+                                </span>
                             </div>
                         </div>
                     </div>
