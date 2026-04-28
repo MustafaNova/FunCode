@@ -2,6 +2,7 @@ import {
     LevelModel,
     QuizTab,
 } from '../../../../../domain/value-objects/level.model';
+import { TASK_IDS } from './taskIds';
 
 export const quizDataEight: QuizTab[] = [
     {
@@ -83,6 +84,7 @@ export const levelEight: LevelModel = {
         },
         quiz: quizDataEight,
         task: {
+            id: TASK_IDS.REGISTRATION,
             title: 'Aufgabe: Login System',
             subtitle: 'Erstelle ein einfaches Authentifizierungssystem.',
             goals: [

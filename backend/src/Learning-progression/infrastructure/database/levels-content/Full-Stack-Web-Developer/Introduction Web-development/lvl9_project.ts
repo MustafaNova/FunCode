@@ -2,6 +2,7 @@ import {
     LevelModel,
     QuizTab,
 } from '../../../../../domain/value-objects/level.model';
+import { TASK_IDS } from './taskIds';
 
 export const quizDataNine: QuizTab[] = [
     {
@@ -91,6 +92,7 @@ export const levelNine: LevelModel = {
         },
         quiz: quizDataNine,
         task: {
+            id: TASK_IDS.DEPLOYMENT,
             title: 'Aufgabe: Deine App online bringen',
             subtitle: 'Deploye deine Fullstack-Anwendung.',
             goals: [

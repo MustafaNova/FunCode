@@ -2,6 +2,7 @@ import {
     LevelModel,
     QuizTab,
 } from '../../../../../domain/value-objects/level.model';
+import { TASK_IDS } from './taskIds';
 
 export const quizDataFour: QuizTab[] = [
     {
@@ -88,6 +89,7 @@ export const levelFour: LevelModel = {
         },
         quiz: quizDataFour,
         task: {
+            id: TASK_IDS.FETCH,
             title: 'Aufgabe: API Daten anzeigen',
             subtitle: 'Hole Daten von einer API und zeige sie im Frontend an.',
             goals: [

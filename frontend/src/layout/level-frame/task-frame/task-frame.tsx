@@ -1,6 +1,7 @@
 import s from './task-frame.module.scss';
 import type { props } from './types.ts';
 import { useState } from 'react';
+import { Preview } from '../../../features/codeEditor/preview.tsx';
 
 
 export function TaskFrame({isVisible, data} : props) {
@@ -53,16 +54,13 @@ export function TaskFrame({isVisible, data} : props) {
                                         Reset
                                     </button>
                                     <button className={`${s.btnSmall} ${s.btnRun}`} id="btnRun" type="button">
-                                        Ausführen &amp; Prüfen
+                                        Prüfen
                                     </button>
                                 </div>
                             </div>
                             <textarea className={s.editor} id="editor" spellCheck={false} value={code}
                                       onChange={(e) => setCode(e.target.value)} />
                             <div className={s.hint}>
-                                <span className={s.badge} id="status">
-                                    🟣 not checked
-                                </span>
                             </div>
                         </div>
                     </div>
@@ -74,14 +72,9 @@ export function TaskFrame({isVisible, data} : props) {
                                     Hier siehst du die gerenderte Seite aus deinem Code.
                                 </div>
                             </div>
-                            <span className={s.badge} id="resultBadge">—</span>
+                            <span className={s.badge} id="resultBadge">🟣</span>
                         </div>
-                        <iframe
-                            className={s.preview}
-                            id="preview"
-                            sandbox="allow-scripts allow-forms allow-same-origin"
-                            title="Preview"
-                        />
+                        <Preview code={code} />
                     </div>
                 </section>
             </main>

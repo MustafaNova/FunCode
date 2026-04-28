@@ -2,6 +2,7 @@ import {
     LevelModel,
     QuizTab,
 } from '../../../../../domain/value-objects/level.model';
+import { TASK_IDS } from './taskIds';
 
 export const quizDataThree: QuizTab[] = [
     {
@@ -84,6 +85,7 @@ export const levelThree: LevelModel = {
         },
         quiz: quizDataThree,
         task: {
+            id: TASK_IDS.LOAD_DATA,
             title: 'Aufgabe: Erste Fullstack Verbindung',
             subtitle:
                 'Simuliere eine einfache Kommunikation zwischen Frontend und Backend.',

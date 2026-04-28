@@ -2,6 +2,7 @@ import {
     LevelModel,
     QuizTab,
 } from '../../../../../domain/value-objects/level.model';
+import { TASK_IDS } from './taskIds';
 
 export const quizDataSeven: QuizTab[] = [
     {
@@ -90,6 +91,7 @@ export const levelSeven: LevelModel = {
         },
         quiz: quizDataSeven,
         task: {
+            id: TASK_IDS.DATABASE,
             title: 'Aufgabe: CRUD API',
             subtitle: 'Erweitere dein Backend mit einer Datenbank.',
             goals: [

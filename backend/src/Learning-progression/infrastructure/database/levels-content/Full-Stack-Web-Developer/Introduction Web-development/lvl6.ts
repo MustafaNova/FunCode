@@ -2,6 +2,7 @@ import {
     LevelModel,
     QuizTab,
 } from '../../../../../domain/value-objects/level.model';
+import { TASK_IDS } from './taskIds';
 
 export const quizDataSix: QuizTab[] = [
     {
@@ -86,6 +87,7 @@ export const levelSix: LevelModel = {
         },
         quiz: quizDataSix,
         task: {
+            id: TASK_IDS.SERVER,
             title: 'Aufgabe: Eigener Server',
             subtitle: 'Erstelle deinen ersten einfachen Backend-Server.',
             goals: [

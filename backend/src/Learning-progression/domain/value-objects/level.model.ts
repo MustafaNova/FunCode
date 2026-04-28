@@ -46,6 +46,7 @@ export interface QuizTab {
 }
 
 export interface TaskTab {
+    id: string;
     title: string;
     subtitle: string;
     goals: string[];

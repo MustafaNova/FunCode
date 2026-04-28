@@ -2,6 +2,7 @@ import {
     LevelModel,
     QuizTab,
 } from '../../../../../domain/value-objects/level.model';
+import { TASK_IDS } from './taskIds';
 
 export const quizDataTwo: QuizTab[] = [
     {
@@ -85,6 +86,7 @@ export const levelTwo: LevelModel = {
         },
         quiz: quizDataTwo,
         task: {
+            id: TASK_IDS.CHANGE,
             title: 'Aufgabe: Interaktive Seite',
             subtitle:
                 'Erstelle eine strukturierte HTML-Seite und verändere sie mit JavaScript.',

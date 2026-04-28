@@ -2,6 +2,7 @@ import {
     LevelModel,
     QuizTab,
 } from '../../../../../domain/value-objects/level.model';
+import { TASK_IDS } from './taskIds';
 
 export const quizDataOne: QuizTab[] = [
     {
@@ -98,6 +99,7 @@ export const levelOne: LevelModel = {
         },
         quiz: quizDataOne,
         task: {
+            id: TASK_IDS.HELLO_WEB,
             title: 'Aufgabe: Baue eine Mini-Seite',
             subtitle:
                 'Schreibe HTML &amp; CSS im Editor. Klicke dann auf „Ausführen“. Unten siehst du das Ergebnis. Wenn alles passt, bekommst du ✅.\n',

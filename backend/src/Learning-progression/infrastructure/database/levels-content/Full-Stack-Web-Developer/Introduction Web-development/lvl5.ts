@@ -2,6 +2,7 @@ import {
     LevelModel,
     QuizTab,
 } from '../../../../../domain/value-objects/level.model';
+import { TASK_IDS } from './taskIds';
 
 export const quizDataFive: QuizTab[] = [
     {
@@ -91,6 +92,7 @@ export const levelFive: LevelModel = {
         },
         quiz: quizDataFive,
         task: {
+            id: TASK_IDS.ADD,
             title: 'Aufgabe: Dynamische Liste',
             subtitle: 'Erstelle eine interaktive Liste mit JavaScript.',
             goals: [
