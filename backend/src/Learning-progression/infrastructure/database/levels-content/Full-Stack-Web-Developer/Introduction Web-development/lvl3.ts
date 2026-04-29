@@ -2,7 +2,7 @@ import {
     LevelModel,
     QuizTab,
 } from '../../../../../domain/value-objects/level.model';
-import { TASK_IDS } from './taskIds';
+import { LEVEL_TASKS } from '../../task.map';
 
 export const quizDataThree: QuizTab[] = [
     {
@@ -84,17 +84,6 @@ export const levelThree: LevelModel = {
             visualTwo: 'Full-Stack-Developer/client.server.png',
         },
         quiz: quizDataThree,
-        task: {
-            id: TASK_IDS.LOAD_DATA,
-            title: 'Aufgabe: Erste Fullstack Verbindung',
-            subtitle:
-                'Simuliere eine einfache Kommunikation zwischen Frontend und Backend.',
-            goals: [
-                'Erstelle eine HTML-Seite mit einem Button "Daten laden"',
-                'Simuliere eine API (z. B. mit einer JSON-Datei oder Mock-Daten)',
-                'Zeige beim Klick auf den Button Daten im Browser an',
-            ],
-            hint: 'Tipp: Nutze fetch() oder einfache JavaScript-Objekte als Mock-Daten.',
-        },
+        task: LEVEL_TASKS.LOAD_DATA,
     },
 };

@@ -12,4 +12,3 @@ export async function matchmakingUnranked1v1() {
     })
     return socket;
 }
-

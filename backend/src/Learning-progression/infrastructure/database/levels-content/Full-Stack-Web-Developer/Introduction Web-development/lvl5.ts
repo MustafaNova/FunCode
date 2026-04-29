@@ -2,7 +2,7 @@ import {
     LevelModel,
     QuizTab,
 } from '../../../../../domain/value-objects/level.model';
-import { TASK_IDS } from './taskIds';
+import { LEVEL_TASKS } from '../../task.map';
 
 export const quizDataFive: QuizTab[] = [
     {
@@ -91,17 +91,6 @@ export const levelFive: LevelModel = {
             visualTwo: 'Full-Stack-Developer/dynamic.ui.png',
         },
         quiz: quizDataFive,
-        task: {
-            id: TASK_IDS.ADD,
-            title: 'Aufgabe: Dynamische Liste',
-            subtitle: 'Erstelle eine interaktive Liste mit JavaScript.',
-            goals: [
-                'Erstelle ein Eingabefeld und einen Button "Hinzufügen"',
-                'Speichere Einträge in einem Array (State)',
-                'Zeige die Liste im HTML an',
-                'Aktualisiere die Liste bei jedem neuen Eintrag',
-            ],
-            hint: 'Tipp: Nutze ein Array als State und render() die Liste neu.',
-        },
+        task: LEVEL_TASKS.ADD,
     },
 };

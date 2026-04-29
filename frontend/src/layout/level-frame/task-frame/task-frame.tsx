@@ -2,6 +2,7 @@ import s from './task-frame.module.scss';
 import type { props } from './types.ts';
 import { useState } from 'react';
 import { Preview } from '../../../features/codeEditor/preview.tsx';
+import { submitLevelTask } from '../../../services/learning.progression.ts';
 
 
 export function TaskFrame({isVisible, data} : props) {
@@ -53,7 +54,9 @@ export function TaskFrame({isVisible, data} : props) {
                                     <button className={s.btnSmall} id="btnReset" onClick={() => setCode("")}>
                                         Reset
                                     </button>
-                                    <button className={`${s.btnSmall} ${s.btnRun}`} id="btnRun" type="button">
+                                    <button
+                                        className={`${s.btnSmall} ${s.btnRun}`}
+                                        onClick={() => submitLevelTask({ taskId: data.id, code })}>
                                         Prüfen
                                     </button>
                                 </div>

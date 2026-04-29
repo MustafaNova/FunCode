@@ -2,7 +2,7 @@ import {
     LevelModel,
     QuizTab,
 } from '../../../../../domain/value-objects/level.model';
-import { TASK_IDS } from './taskIds';
+import { LEVEL_TASKS } from '../../task.map';
 
 export const quizDataEight: QuizTab[] = [
     {
@@ -83,17 +83,6 @@ export const levelEight: LevelModel = {
             visualTwo: 'Full-Stack-Developer/jwt.flow.png',
         },
         quiz: quizDataEight,
-        task: {
-            id: TASK_IDS.REGISTRATION,
-            title: 'Aufgabe: Login System',
-            subtitle: 'Erstelle ein einfaches Authentifizierungssystem.',
-            goals: [
-                'Erstelle eine Registrierung (User speichern)',
-                'Implementiere Login (Vergleich Passwort)',
-                'Nutze Hashing für Passwörter (z. B. bcrypt)',
-                'Erstelle und verwende ein JWT für geschützte Routen',
-            ],
-            hint: 'Tipp: Nutze bcrypt für Hashing und jsonwebtoken für Tokens.',
-        },
+        task: LEVEL_TASKS.REGISTRATION,
     },
 };

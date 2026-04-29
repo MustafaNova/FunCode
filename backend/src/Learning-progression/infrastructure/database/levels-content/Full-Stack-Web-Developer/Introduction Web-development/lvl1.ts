@@ -2,7 +2,7 @@ import {
     LevelModel,
     QuizTab,
 } from '../../../../../domain/value-objects/level.model';
-import { TASK_IDS } from './taskIds';
+import { LEVEL_TASKS } from '../../task.map';
 
 export const quizDataOne: QuizTab[] = [
     {
@@ -98,17 +98,6 @@ export const levelOne: LevelModel = {
             visualTwo: 'Full-Stack-Developer/request.flow.png',
         },
         quiz: quizDataOne,
-        task: {
-            id: TASK_IDS.HELLO_WEB,
-            title: 'Aufgabe: Baue eine Mini-Seite',
-            subtitle:
-                'Schreibe HTML &amp; CSS im Editor. Klicke dann auf „Ausführen“. Unten siehst du das Ergebnis. Wenn alles passt, bekommst du ✅.\n',
-            goals: [
-                'Erstelle eine h1 Überschrift mit dem Text: "Hallo Web!"\n',
-                'Erstelle darunter einen button mit dem Text: "Klick"\n',
-                'Wenn man auf den Button klickt, soll im Text darunter erscheinen: "Geklicked"\n',
-            ],
-            hint: 'Tipp: Du kannst ein Element mit id verwenden und es mit JavaScript ändern.\n',
-        },
+        task: LEVEL_TASKS.HELLO_WEB,
     },
 };

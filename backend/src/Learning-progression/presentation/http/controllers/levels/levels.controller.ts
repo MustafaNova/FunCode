@@ -1,16 +1,17 @@
 import {
+    Body,
     Controller,
     Get,
     Inject,
     Param,
-    ParseIntPipe,
+    Post,
     UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { type GetLevelPort } from '../../../../application/ports/inbound/getLevel.port';
 import { GET_LEVEL_PORT } from '../../../../infrastructure/uc-wiring/tokens';
 import { GetLevelCmd } from '../../../../application/use-cases/getLevel/getLevel.cmd';
-import { Course, type GetLevelRes } from '@funcode/shared';
+import type { GetLevelRes, ValidateLevelTaskReq } from '@funcode/shared';
 import { LevelAccessGuard } from './levelAccessGuard';
 import { GetLevelDto } from './getLevelReq';
 
@@ -29,5 +30,10 @@ export class LevelsController {
         const cmd = GetLevelCmd.create(req.course, req.module, req.level);
         const levelContent = this.levelService.execute(cmd);
         return { data: levelContent };
+    }
+
+    @Post('submit')
+    validateLevelTask(@Body() req: ValidateLevelTaskReq) {
+        console.log('request validateLevelTask');
     }
 }

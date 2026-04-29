@@ -2,7 +2,7 @@ import {
     LevelModel,
     QuizTab,
 } from '../../../../../domain/value-objects/level.model';
-import { TASK_IDS } from './taskIds';
+import { LEVEL_TASKS } from '../../task.map';
 
 export const quizDataSix: QuizTab[] = [
     {
@@ -86,17 +86,6 @@ export const levelSix: LevelModel = {
             visualTwo: 'Full-Stack-Developer/node.server.png',
         },
         quiz: quizDataSix,
-        task: {
-            id: TASK_IDS.SERVER,
-            title: 'Aufgabe: Eigener Server',
-            subtitle: 'Erstelle deinen ersten einfachen Backend-Server.',
-            goals: [
-                'Installiere Node.js',
-                'Erstelle einen einfachen Server (z. B. mit Express)',
-                'Erstelle eine Route /api/test',
-                'Gib eine JSON-Antwort zurück (z. B. { message: "Hello World" })',
-            ],
-            hint: 'Tipp: Nutze Express und app.get(), um Routen zu definieren.',
-        },
+        task: LEVEL_TASKS.SERVER,
     },
 };

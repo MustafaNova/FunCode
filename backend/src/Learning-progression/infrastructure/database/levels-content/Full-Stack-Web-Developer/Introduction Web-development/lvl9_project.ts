@@ -2,7 +2,7 @@ import {
     LevelModel,
     QuizTab,
 } from '../../../../../domain/value-objects/level.model';
-import { TASK_IDS } from './taskIds';
+import { LEVEL_TASKS } from '../../task.map';
 
 export const quizDataNine: QuizTab[] = [
     {
@@ -91,17 +91,6 @@ export const levelNine: LevelModel = {
             visualTwo: 'Full-Stack-Developer/fullstack.deploy.png',
         },
         quiz: quizDataNine,
-        task: {
-            id: TASK_IDS.DEPLOYMENT,
-            title: 'Aufgabe: Deine App online bringen',
-            subtitle: 'Deploye deine Fullstack-Anwendung.',
-            goals: [
-                'Wähle eine Hosting-Plattform (z. B. Vercel oder Render)',
-                'Deploye dein Frontend',
-                'Deploye dein Backend',
-                'Verbinde beide über eine echte API-URL',
-            ],
-            hint: 'Tipp: Achte darauf, dass deine API-URL im Frontend angepasst ist.',
-        },
+        task: LEVEL_TASKS.DEPLOYMENT,
     },
 };

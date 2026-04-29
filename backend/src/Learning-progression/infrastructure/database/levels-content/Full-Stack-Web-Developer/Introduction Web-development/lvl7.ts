@@ -2,7 +2,7 @@ import {
     LevelModel,
     QuizTab,
 } from '../../../../../domain/value-objects/level.model';
-import { TASK_IDS } from './taskIds';
+import { LEVEL_TASKS } from '../../task.map';
 
 export const quizDataSeven: QuizTab[] = [
     {
@@ -90,17 +90,6 @@ export const levelSeven: LevelModel = {
             visualTwo: 'Full-Stack-Developer/db.flow.png',
         },
         quiz: quizDataSeven,
-        task: {
-            id: TASK_IDS.DATABASE,
-            title: 'Aufgabe: CRUD API',
-            subtitle: 'Erweitere dein Backend mit einer Datenbank.',
-            goals: [
-                'Verbinde dein Backend mit einer Datenbank (z. B. MongoDB)',
-                'Erstelle eine Route zum Speichern von Daten (Create)',
-                'Erstelle eine Route zum Abrufen von Daten (Read)',
-                'Optional: Update und Delete hinzufügen',
-            ],
-            hint: 'Tipp: Nutze ein ORM/ODM wie Mongoose für MongoDB.',
-        },
+        task: LEVEL_TASKS.DATABASE,
     },
 };

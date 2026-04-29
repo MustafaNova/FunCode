@@ -25,7 +25,6 @@ export class LevelAccessGuard implements CanActivate {
         const req: AuthReq = context.switchToHttp().getRequest();
         const level = req.params.level;
         const res = await this.ac.getActiveScreen(req.user.userId);
-        console.log('Level-Access:', 'unlocked:', res.unlockedLevel, 'locked:', level);
         return res.unlockedLevel == level;
     }
 }

@@ -2,7 +2,7 @@ import {
     LevelModel,
     QuizTab,
 } from '../../../../../domain/value-objects/level.model';
-import { TASK_IDS } from './taskIds';
+import { LEVEL_TASKS } from '../../task.map';
 
 export const quizDataFour: QuizTab[] = [
     {
@@ -88,16 +88,6 @@ export const levelFour: LevelModel = {
             visualTwo: 'Full-Stack-Developer/fetch.api.png',
         },
         quiz: quizDataFour,
-        task: {
-            id: TASK_IDS.FETCH,
-            title: 'Aufgabe: API Daten anzeigen',
-            subtitle: 'Hole Daten von einer API und zeige sie im Frontend an.',
-            goals: [
-                'Erstelle einen Button "Daten laden"',
-                'Nutze fetch(), um Daten von einer API zu laden (z. B. JSONPlaceholder)',
-                'Zeige die geladenen Daten im HTML an (z. B. Titel eines Posts)',
-            ],
-            hint: 'Tipp: Nutze fetch().then() oder async/await und console.log() zum Testen.',
-        },
+        task: LEVEL_TASKS.FETCH,
     },
 };

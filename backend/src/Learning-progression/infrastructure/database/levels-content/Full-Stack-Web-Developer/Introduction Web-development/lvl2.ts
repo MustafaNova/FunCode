@@ -2,7 +2,7 @@ import {
     LevelModel,
     QuizTab,
 } from '../../../../../domain/value-objects/level.model';
-import { TASK_IDS } from './taskIds';
+import { LEVEL_TASKS } from '../../task.map';
 
 export const quizDataTwo: QuizTab[] = [
     {
@@ -85,17 +85,6 @@ export const levelTwo: LevelModel = {
             visualTwo: 'Full-Stack-Developer/dom.manipulation.png',
         },
         quiz: quizDataTwo,
-        task: {
-            id: TASK_IDS.CHANGE,
-            title: 'Aufgabe: Interaktive Seite',
-            subtitle:
-                'Erstelle eine strukturierte HTML-Seite und verändere sie mit JavaScript.',
-            goals: [
-                'Erstelle eine h1 Überschrift mit dem Text: "Meine Seite"',
-                'Erstelle einen Button mit dem Text: "Ändern"',
-                'Beim Klick soll sich der Text der Überschrift zu "Geändert!" ändern',
-            ],
-            hint: 'Tipp: Nutze document.getElementById() und addEventListener().',
-        },
+        task: LEVEL_TASKS.CHANGE,
     },
 };
