@@ -34,6 +34,6 @@ export class LevelsController {
 
     @Post('submit')
     validateLevelTask(@Body() req: ValidateLevelTaskReq) {
-        console.log('request validateLevelTask');
+        console.log('request validateLevelTask', req.taskId, req.code);
     }
 }

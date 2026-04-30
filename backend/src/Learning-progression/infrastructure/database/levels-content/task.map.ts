@@ -3,7 +3,7 @@ import { TaskTab } from '../../../domain/value-objects/level.model';
 export const LEVEL_TASKS: Record<string, TaskTab> = {
     HELLO_WEB: {
         id: 'HELLO_WEB',
-        type: 'html',
+        type: 'htmlE2E',
         title: 'Aufgabe: Baue eine Mini-Seite',
         subtitle:
             'Schreibe HTML &amp; CSS im Editor. Klicke dann auf „Ausführen“. Unten siehst du das Ergebnis. Wenn alles passt, bekommst du ✅.\n',
@@ -16,7 +16,7 @@ export const LEVEL_TASKS: Record<string, TaskTab> = {
     },
     CHANGE: {
         id: 'CHANGE',
-        type: 'html',
+        type: 'htmlE2E',
         title: 'Aufgabe: Interaktive Seite',
         subtitle:
             'Erstelle eine strukturierte HTML-Seite und verändere sie mit JavaScript.',
@@ -29,7 +29,7 @@ export const LEVEL_TASKS: Record<string, TaskTab> = {
     },
     LOAD_DATA: {
         id: 'LOAD_DATA',
-        type: 'html',
+        type: 'htmlE2E',
         title: 'Aufgabe: Erste Fullstack Verbindung',
         subtitle:
             'Simuliere eine einfache Kommunikation zwischen Frontend und Backend.',
@@ -42,7 +42,7 @@ export const LEVEL_TASKS: Record<string, TaskTab> = {
     },
     FETCH: {
         id: 'FETCH',
-        type: 'html',
+        type: 'htmlE2E',
         title: 'Aufgabe: API Daten anzeigen',
         subtitle: 'Hole Daten von einer API und zeige sie im Frontend an.',
         goals: [
@@ -54,7 +54,7 @@ export const LEVEL_TASKS: Record<string, TaskTab> = {
     },
     ADD: {
         id: 'ADD',
-        type: 'html',
+        type: 'htmlStatic',
         title: 'Aufgabe: Dynamische Liste',
         subtitle: 'Erstelle eine interaktive Liste mit JavaScript.',
         goals: [
@@ -67,7 +67,7 @@ export const LEVEL_TASKS: Record<string, TaskTab> = {
     },
     SERVER: {
         id: 'SERVER',
-        type: 'html',
+        type: 'htmlStatic',
         title: 'Aufgabe: Eigener Server',
         subtitle: 'Erstelle deinen ersten einfachen Backend-Server.',
         goals: [
@@ -80,7 +80,7 @@ export const LEVEL_TASKS: Record<string, TaskTab> = {
     },
     DATABASE: {
         id: 'DATABASE',
-        type: 'html',
+        type: 'htmlStatic',
         title: 'Aufgabe: CRUD API',
         subtitle: 'Erweitere dein Backend mit einer Datenbank.',
         goals: [
@@ -93,7 +93,7 @@ export const LEVEL_TASKS: Record<string, TaskTab> = {
     },
     REGISTRATION: {
         id: 'REGISTRATION',
-        type: 'html',
+        type: 'htmlStatic',
         title: 'Aufgabe: Login System',
         subtitle: 'Erstelle ein einfaches Authentifizierungssystem.',
         goals: [
@@ -106,7 +106,7 @@ export const LEVEL_TASKS: Record<string, TaskTab> = {
     },
     DEPLOYMENT: {
         id: 'DEPLOYMENT',
-        type: 'html',
+        type: 'htmlStatic',
         title: 'Aufgabe: Deine App online bringen',
         subtitle: 'Deploye deine Fullstack-Anwendung.',
         goals: [
