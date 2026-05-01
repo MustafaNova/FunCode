@@ -9,6 +9,8 @@ COPY ./shared ../shared
 
 RUN pnpm install
 
+RUN pnpm exec playwright install chromium
+
 COPY ./backend .
 
 RUN pnpm build

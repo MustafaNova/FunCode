@@ -1,0 +1,2 @@
+export const HTML_STATIC_VALIDATOR = 'HTML_STATIC_VALIDATOR' as const;
+export const HTML_E2E_VALIDATOR = 'HTML_E2E_VALIDATOR' as const;
