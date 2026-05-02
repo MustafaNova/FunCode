@@ -100,6 +100,7 @@ backend/node_modules/
 backend/dist/
 backend/build/
 backend/package-lock.json
+backend/.pnpm-store
 
 # Backend env files
 backend/.env

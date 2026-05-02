@@ -43,7 +43,6 @@ export class LevelsController {
     async validateLevelTask(
         @Body() req: ValidateLevelTaskReq,
     ): Promise<ValidateLevelTaskRes> {
-        console.log('request validateLevelTask', req.taskId, req.code);
         const validationRes = await this.taskValidation.validate({
             taskId: req.taskId,
             code: req.code,

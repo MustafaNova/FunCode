@@ -10,9 +10,27 @@ export class HtmlE2eValidatorAdapter implements HtmlE2eValidatorPort {
         const browser = await chromium.launch();
         const page = await browser.newPage();
         await page.setContent(code);
-        const el = await page.$('div');
-        console.log(el);
 
-        return { res: false };
+        for (const check of test.checks) {
+            if (check.type == 'element_exists') {
+                const el = await page.$(check.selector);
+                if (!el) return { res: false };
+                if (check.text) {
+                    const text = await el.textContent();
+                    if (text?.trim() !== check.text) return { res: false };
+                }
+            }
+
+            if (check.type == 'interaction') {
+                await page.click(check.target);
+                const text = await page.$eval(check.result.selector, (el) =>
+                    el.textContent?.trim(),
+                );
+                if (text !== check.result.text) return { res: false };
+            }
+        }
+
+        await browser.close();
+        return { res: true };
     }
 }

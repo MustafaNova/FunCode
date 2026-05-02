@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM node:20
 
 WORKDIR /app
 
@@ -9,10 +9,9 @@ COPY ./shared ../shared
 
 RUN pnpm install
 
-RUN pnpm exec playwright install chromium
-
 COPY ./backend .
 
+RUN pnpm exec playwright install --with-deps chromium
 RUN pnpm build
 
 EXPOSE 3000

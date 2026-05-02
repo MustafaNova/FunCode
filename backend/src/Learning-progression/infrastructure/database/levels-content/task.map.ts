@@ -10,7 +10,7 @@ export const LEVEL_TASKS: Record<string, TaskTab> = {
         goals: [
             'Erstelle eine h1 Überschrift mit dem Text: "Hallo Web!"\n',
             'Erstelle darunter einen button mit dem Text: "Klick"\n',
-            'Wenn man auf den Button klickt, soll im Text darunter erscheinen: "Geklicked"\n',
+            'Wenn man auf den Button klickt, soll im Text darunter erscheinen(element mit id: #result): "Geklicked"\n',
         ],
         hint: 'Tipp: Du kannst ein Element mit id verwenden und es mit JavaScript ändern.\n',
     },
