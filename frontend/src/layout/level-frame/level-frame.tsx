@@ -24,6 +24,7 @@ export function LevelFrame() {
     const [curTab, setCurTab] = useState<LevelTabs>("goal")
     const [levelContent, setLevelContent] = useState<LevelModelDto>();
     const [showModal, setShowModal] = useState(false)
+    const [quizFinished, setQuizFinished] = useState(false)
     const steps = [
         {icon: faBullseye, tab: "goal"},
         {icon: faBook, tab: "concept"},
@@ -95,11 +96,16 @@ export function LevelFrame() {
                 <div className="content">
                     <Goal isVisible={curTab == "goal"} data={levelContent.tabs.goal}/>
                     <ConceptFrame isVisible={curTab == "concept"} data={levelContent.tabs.concept}/>
-                    <QuizFrame isVisible={curTab == "quiz"} quizData={levelContent.tabs.quiz}/>
+                    <QuizFrame isVisible={curTab == "quiz"} quizData={levelContent.tabs.quiz} onFinish={() => setQuizFinished(true)}/>
                     <TaskFrame isVisible={curTab == "task"} data={levelContent.tabs.task}/>
                 </div>
                 <footer className="footer">
-                    <button className="next-btn" onClick={nextTab}>Continue</button>
+                    <button className="next-btn"
+                            onClick={nextTab}
+                            disabled={curTab === "quiz" && !quizFinished}
+                    >
+                        Continue
+                    </button>
                 </footer>
             </div>
         </div>

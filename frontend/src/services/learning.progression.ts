@@ -1,5 +1,11 @@
 import { API_URLS } from '../constants/urls.ts';
-import type { GetActiveScreenRes, GetLevelReq, GetLevelRes, ValidateLevelTaskReq } from '@funcode/shared';
+import type {
+    GetActiveScreenRes,
+    GetLevelReq,
+    GetLevelRes,
+    ValidateLevelTaskReq,
+    ValidateLevelTaskRes
+} from '@funcode/shared';
 import { useActiveScreen } from '../store/activeScreenStore.ts';
 
 export async function getActiveScreen() {
@@ -19,7 +25,7 @@ export async function getLevel(req: GetLevelReq): Promise<GetLevelRes> {
     return res.json();
 }
 
-export async function submitLevelTask(req: ValidateLevelTaskReq) {
+export async function submitLevelTask(req: ValidateLevelTaskReq): Promise<ValidateLevelTaskRes> {
     const res = await fetch(API_URLS.SUBMIT_LEVEL_TASK, {
         method: 'POST',
         credentials: 'include',
@@ -28,4 +34,5 @@ export async function submitLevelTask(req: ValidateLevelTaskReq) {
         },
         body: JSON.stringify({ taskId: req.taskId, code: req.code })
     })
+    return res.json();
 }

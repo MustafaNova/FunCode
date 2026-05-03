@@ -7,6 +7,11 @@ import { submitLevelTask } from '../../../services/learning.progression.ts';
 
 export function TaskFrame({isVisible, data} : props) {
     const [code, setCode] = useState("")
+    const [isCorrect, setIsCorrect] = useState<boolean | null>(null)
+    async function submit() {
+        const response = await submitLevelTask({ taskId: data.id, code })
+        setIsCorrect(response.res)
+    }
 
     return (
         <div className={isVisible ? "" : s.hidden}>
@@ -56,7 +61,7 @@ export function TaskFrame({isVisible, data} : props) {
                                     </button>
                                     <button
                                         className={`${s.btnSmall} ${s.btnRun}`}
-                                        onClick={() => submitLevelTask({ taskId: data.id, code })}>
+                                        onClick={submit}>
                                         Prüfen
                                     </button>
                                 </div>
@@ -75,7 +80,14 @@ export function TaskFrame({isVisible, data} : props) {
                                     Hier siehst du die gerenderte Seite aus deinem Code.
                                 </div>
                             </div>
-                            <span className={s.badge} id="resultBadge">🟣</span>
+                            <span className={s.badge} id="resultBadge">
+                                {isCorrect === null
+                                    ? "⚪"
+                                    : isCorrect
+                                    ? "✅"
+                                    : "❌"
+                                }
+                            </span>
                         </div>
                         <Preview code={code} />
                     </div>

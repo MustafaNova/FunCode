@@ -18,7 +18,7 @@ import type { GetLevelRes, ValidateLevelTaskReq } from '@funcode/shared';
 import { LevelAccessGuard } from './levelAccessGuard';
 import { GetLevelDto } from './getLevelReq';
 import type { ValidateTaskPort } from '../../../../application/ports/inbound/validate.task.port';
-import type { ValidateLevelTaskRes } from './validateLevelTask.res';
+import type { ValidateLevelTaskRes } from '@funcode/shared';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('levels')

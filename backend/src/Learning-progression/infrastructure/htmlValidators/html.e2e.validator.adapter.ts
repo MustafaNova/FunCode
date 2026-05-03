@@ -22,6 +22,8 @@ export class HtmlE2eValidatorAdapter implements HtmlE2eValidatorPort {
             }
 
             if (check.type == 'interaction') {
+                const el = await page.$(check.target);
+                if (!el) return { res: false };
                 await page.click(check.target);
                 const text = await page.$eval(check.result.selector, (el) =>
                     el.textContent?.trim(),
