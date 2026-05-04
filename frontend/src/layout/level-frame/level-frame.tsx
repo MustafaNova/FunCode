@@ -7,6 +7,7 @@ import {
     faQuestion,
     faCode
 } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as emptyHeart } from "@fortawesome/free-regular-svg-icons";
 import { Goal } from "./goal-frame/goal-frame.tsx";
 import {ConceptFrame} from "./concept-frame/concept-frame.tsx";
 import {QuizFrame} from "./quiz-frame/quiz-frame.tsx";
@@ -23,14 +24,25 @@ export function LevelFrame() {
     const navigate = useNavigate();
     const [curTab, setCurTab] = useState<LevelTabs>("goal")
     const [levelContent, setLevelContent] = useState<LevelModelDto>();
-    const [showModal, setShowModal] = useState(false)
-    const [quizFinished, setQuizFinished] = useState(false)
+    const [showModal, setShowModal] = useState(false);
+    const [quizFinished, setQuizFinished] = useState(false);
+    const maxHearts = 2;
+    const [hearts, setHearts] = useState<number>(maxHearts);
     const steps = [
         {icon: faBullseye, tab: "goal"},
         {icon: faBook, tab: "concept"},
         {icon: faQuestion, tab: "quiz"},
         {icon: faCode, tab: "task"}
-    ]
+    ];
+
+    function handleLoseHeart() {
+        setHearts(prev => {
+            if (prev == 0) {
+                navigate("/levelLose");
+            }
+            return prev - 1;
+        })
+    }
 
     function nextTab() {
         const curIndex = steps.findIndex(
@@ -80,10 +92,9 @@ export function LevelFrame() {
                 <header className="level-frame-header">
                     <button className="close-btn" onClick={() => setShowModal(true)}>x</button>
                     <div className="hearts">
-                        <FontAwesomeIcon icon={faHeart}/>
-                        <FontAwesomeIcon icon={faHeart}/>
-                        <FontAwesomeIcon icon={faHeart}/>
-                        <FontAwesomeIcon icon={faHeart}/>
+                        {Array.from({ length: maxHearts }).map((_, i) => (
+                            <FontAwesomeIcon key={i} icon={i < hearts ? faHeart : emptyHeart}/>
+                        ))}
                     </div>
                 </header>
                 <div className="steps">
@@ -96,8 +107,8 @@ export function LevelFrame() {
                 <div className="content">
                     <Goal isVisible={curTab == "goal"} data={levelContent.tabs.goal}/>
                     <ConceptFrame isVisible={curTab == "concept"} data={levelContent.tabs.concept}/>
-                    <QuizFrame isVisible={curTab == "quiz"} quizData={levelContent.tabs.quiz} onFinish={() => setQuizFinished(true)}/>
-                    <TaskFrame isVisible={curTab == "task"} data={levelContent.tabs.task}/>
+                    <QuizFrame isVisible={curTab == "quiz"} quizData={levelContent.tabs.quiz} onFinish={() => setQuizFinished(true)} onHeartLose={handleLoseHeart}/>
+                    <TaskFrame isVisible={curTab == "task"} data={levelContent.tabs.task} onHeartLose={handleLoseHeart}/>
                 </div>
                 <footer className="footer">
                     <button className="next-btn"

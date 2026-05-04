@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import type { props, Selected } from './types.ts';
 
 
-export function QuizFrame({isVisible, quizData, onFinish} : props) {
+export function QuizFrame({isVisible, quizData, onFinish, onHeartLose} : props) {
     const subtitleTxt = "Der HTML DOM (Document Object Model) stellt eine Webseite als Baumstruktur aus Objekten dar, die JavaScript lesen und verändern kann";
     const headerTxt = "Quiz: HTML-DOM";
     const [selected, setSelected] = useState<Selected>(null);
@@ -18,18 +18,26 @@ export function QuizFrame({isVisible, quizData, onFinish} : props) {
 
     function chooseAnswer(i: number) {
         if (selected !== null) return;
+
+        const isCorrect = i === curQ.correct;
+        const isLastQuestion = questionNum == quizData.length;
+
         setSelected(i);
-        if (i == curQ.correct) setScore(prev => prev + 1);
         setProgress(prev => Math.min(prev + 25, 100))
 
-        if (questionNum < quizData.length) {
-            setNextDisabled(false)
+        if (isCorrect) {
+            setScore(prev => prev + 1);
         }
-        if (questionNum == quizData.length) {
+        else {
+            onHeartLose()
+        }
+
+        if(isLastQuestion) {
             onFinish()
         }
-
-
+        else {
+            setNextDisabled(false)
+        }
     }
 
     function nextQuestion() {

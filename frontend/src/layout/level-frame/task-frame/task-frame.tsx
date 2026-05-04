@@ -3,14 +3,21 @@ import type { props } from './types.ts';
 import { useState } from 'react';
 import { Preview } from '../../../features/codeEditor/preview.tsx';
 import { submitLevelTask } from '../../../services/learning.progression.ts';
+import { useNavigate } from 'react-router-dom';
 
 
-export function TaskFrame({isVisible, data} : props) {
+export function TaskFrame({isVisible, data, onHeartLose} : props) {
+    const navigate = useNavigate()
     const [code, setCode] = useState("")
     const [isCorrect, setIsCorrect] = useState<boolean | null>(null)
     async function submit() {
         const response = await submitLevelTask({ taskId: data.id, code })
         setIsCorrect(response.res)
+        if (isCorrect) {
+            navigate("/levelWin")
+        } else {
+            onHeartLose()
+        }
     }
 
     return (

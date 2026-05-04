@@ -5,5 +5,6 @@ export type props = {
     isVisible: boolean,
     quizData: QuizTabDto[],
     onFinish: () => void,
+    onHeartLose: () => void,
 }
 export type Selected = number | null;
