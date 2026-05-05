@@ -3,7 +3,7 @@ import {
     CHANGE_ACTIVE_SCREEN_PORT,
     GET_ACTIVE_SCREEN_PORT,
     GET_LEVEL_PORT,
-    GET_PLAYER_PROGRESS_PORT, VALIDATE_TASK_PORT,
+    GET_PLAYER_PROGRESS_PORT, LEVEL_PROGRESS_PORT, VALIDATE_TASK_PORT,
 } from './tokens';
 import { GetPlayerProgressService } from './getPlayerProgress/getPlayerProgress.service';
 import { ChangeActiveScreenService } from './changeActiveScreen/changeActiveScreen.service';
@@ -12,6 +12,7 @@ import { GetActiveScreenService } from './getActiveScreen/getActiveScreen.servic
 import { GetLevelService } from './getLevel/getLevel.service';
 import { HtmlValidatorModule } from '../htmlValidators/htmlValidator.module';
 import { ValidateTaskService } from './validateTask/validateTask.service';
+import { LevelProgressionService } from './LevelProgression/levelProgression.service';
 
 @Module({
     imports: [DatabaseModule, HtmlValidatorModule],
@@ -36,6 +37,10 @@ import { ValidateTaskService } from './validateTask/validateTask.service';
             provide: VALIDATE_TASK_PORT,
             useClass: ValidateTaskService,
         },
+        {
+            provide: LEVEL_PROGRESS_PORT,
+            useClass: LevelProgressionService,
+        },
     ],
     exports: [
         GET_PLAYER_PROGRESS_PORT,
@@ -43,6 +48,7 @@ import { ValidateTaskService } from './validateTask/validateTask.service';
         GET_ACTIVE_SCREEN_PORT,
         GET_LEVEL_PORT,
         VALIDATE_TASK_PORT,
+        LEVEL_PROGRESS_PORT,
     ],
 })
 export class UCServicesModule {}

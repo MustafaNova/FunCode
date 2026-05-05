@@ -3,3 +3,5 @@ export const CHANGE_ACTIVE_SCREEN_PORT = 'CHANGE_ACTIVE_SCREEN_PORT' as const;
 export const GET_ACTIVE_SCREEN_PORT = 'GET_ACTIVE_SCREEN_PORT' as const;
 export const GET_LEVEL_PORT = 'GET_LEVEL_PORT' as const;
 export const VALIDATE_TASK_PORT = 'VALIDATE_TASK_PORT' as const;
+export const LEVEL_PROGRESS_PORT = 'LEVEL_PROGRESS_PORT' as const;
+

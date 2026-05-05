@@ -9,6 +9,7 @@ type ActiveScreen = {
 
 type ActiveScreenStore = ActiveScreen & {
     setAC: (data: ActiveScreen) => void,
+    unlockNextLevel: () => void,
 };
 
 
@@ -24,6 +25,7 @@ export const useActiveScreen = create<ActiveScreenStore>()(
                 module: data.module,
                 unlockedLevel: data.unlockedLevel
             }),
+            unlockNextLevel: () => set((state) => ({unlockedLevel: state.unlockedLevel + 1}))
         }),
         {
             name: 'active-screen-storage',

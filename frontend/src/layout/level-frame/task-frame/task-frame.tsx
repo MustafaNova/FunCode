@@ -4,16 +4,19 @@ import { useState } from 'react';
 import { Preview } from '../../../features/codeEditor/preview.tsx';
 import { submitLevelTask } from '../../../services/learning.progression.ts';
 import { useNavigate } from 'react-router-dom';
+import { useActiveScreen } from '../../../store/activeScreenStore.ts';
 
 
 export function TaskFrame({isVisible, data, onHeartLose} : props) {
     const navigate = useNavigate()
+    const unlockLevel = useActiveScreen((state) => state.unlockNextLevel)
     const [code, setCode] = useState("")
     const [isCorrect, setIsCorrect] = useState<boolean | null>(null)
     async function submit() {
         const response = await submitLevelTask({ taskId: data.id, code })
         setIsCorrect(response.res)
-        if (isCorrect) {
+        if (response.res) {
+            unlockLevel()
             navigate("/levelWin")
         } else {
             onHeartLose()

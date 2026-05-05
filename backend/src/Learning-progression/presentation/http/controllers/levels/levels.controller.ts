@@ -10,7 +10,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { type GetLevelPort } from '../../../../application/ports/inbound/getLevel.port';
 import {
-    GET_LEVEL_PORT,
+    GET_LEVEL_PORT, LEVEL_PROGRESS_PORT,
     VALIDATE_TASK_PORT,
 } from '../../../../infrastructure/uc-wiring/tokens';
 import { GetLevelCmd } from '../../../../application/use-cases/getLevel/getLevel.cmd';
@@ -19,6 +19,7 @@ import { LevelAccessGuard } from './levelAccessGuard';
 import { GetLevelDto } from './getLevelReq';
 import type { ValidateTaskPort } from '../../../../application/ports/inbound/validate.task.port';
 import type { ValidateLevelTaskRes } from '@funcode/shared';
+import { type LevelProgressionPort } from '../../../../application/ports/inbound/LevelProgression.port';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('levels')
@@ -28,6 +29,8 @@ export class LevelsController {
         private readonly levelService: GetLevelPort,
         @Inject(VALIDATE_TASK_PORT)
         private readonly taskValidation: ValidateTaskPort,
+        @Inject(LEVEL_PROGRESS_PORT)
+        private readonly levelProgress: LevelProgressionPort,
     ) {}
 
     @Get(':course/:module/:level')
@@ -47,6 +50,7 @@ export class LevelsController {
             taskId: req.taskId,
             code: req.code,
         });
+        // this.levelProgress.unlockNextLevel();
         return { res: validationRes.res };
     }
 }
