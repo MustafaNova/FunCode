@@ -23,22 +23,21 @@ export const LEVEL_TASKS: Record<string, TaskTab> = {
         goals: [
             'Erstelle eine h1 Überschrift mit dem Text: "Meine Seite"',
             'Erstelle einen Button mit dem Text: "Ändern"',
-            'Beim Klick soll sich der Text der Überschrift zu "Geändert!" ändern',
+            'Beim Klick soll sich der Text der Überschrift mit der id "#result" zu "Geändert!" ändern',
         ],
         hint: 'Tipp: Nutze document.getElementById() und addEventListener().',
     },
-    LOAD_DATA: {
-        id: 'LOAD_DATA',
+    TOGGLE_VISIBILITY: {
+        id: 'TOGGLE_VISIBILITY',
         type: 'htmlE2E',
-        title: 'Aufgabe: Erste Fullstack Verbindung',
-        subtitle:
-            'Simuliere eine einfache Kommunikation zwischen Frontend und Backend.',
+        title: 'Aufgabe: Sichtbarkeit umschalten',
+        subtitle: 'Lerne, wie du Elemente ein- und ausblendest.',
         goals: [
-            'Erstelle eine HTML-Seite mit einem Button "Daten laden"',
-            'Simuliere eine API (z. B. mit einer JSON-Datei oder Mock-Daten)',
-            'Zeige beim Klick auf den Button Daten im Browser an',
+            'Erstelle einen span-tag mit dem Inhalt: "Hallo Welt"',
+            'Erstelle einen Button mit dem Text: "Toggle"',
+            'Beim Klick soll der span-tag ein- und ausgeblendet werden',
         ],
-        hint: 'Tipp: Nutze fetch() oder einfache JavaScript-Objekte als Mock-Daten.',
+        hint: 'Tipp: Nutze style.display oder classList.toggle().',
     },
     FETCH: {
         id: 'FETCH',

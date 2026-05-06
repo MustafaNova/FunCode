@@ -1,6 +1,6 @@
 import { LevelProgressionUC } from '../../../application/use-cases/LevelProgression/levelProgression.uc';
 import { Inject, Injectable } from '@nestjs/common';
-import { LevelProgressionRepositoryPort } from '../../../application/ports/outbound/LevelProgressionRepository.port';
+import { type LevelProgressionRepositoryPort } from '../../../application/ports/outbound/LevelProgressionRepository.port';
 import { LEVEL_PROGRESS_REPO_PORT } from '../../database/tokens';
 
 @Injectable()

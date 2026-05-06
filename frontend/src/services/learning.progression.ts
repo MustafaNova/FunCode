@@ -32,7 +32,7 @@ export async function submitLevelTask(req: ValidateLevelTaskReq): Promise<Valida
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ taskId: req.taskId, code: req.code })
+        body: JSON.stringify({ taskId: req.taskId, code: req.code, course: req.course, module: req.module })
     })
     return res.json();
 }

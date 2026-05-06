@@ -10,16 +10,25 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { type GetLevelPort } from '../../../../application/ports/inbound/getLevel.port';
 import {
-    GET_LEVEL_PORT, LEVEL_PROGRESS_PORT,
+    GET_LEVEL_PORT,
+    LEVEL_PROGRESS_PORT,
     VALIDATE_TASK_PORT,
 } from '../../../../infrastructure/uc-wiring/tokens';
 import { GetLevelCmd } from '../../../../application/use-cases/getLevel/getLevel.cmd';
-import type { GetLevelRes, ValidateLevelTaskReq } from '@funcode/shared';
+import {
+    Course,
+    type GetLevelRes,
+    type ValidateLevelTaskReq,
+} from '@funcode/shared';
 import { LevelAccessGuard } from './levelAccessGuard';
 import { GetLevelDto } from './getLevelReq';
 import type { ValidateTaskPort } from '../../../../application/ports/inbound/validate.task.port';
 import type { ValidateLevelTaskRes } from '@funcode/shared';
 import { type LevelProgressionPort } from '../../../../application/ports/inbound/LevelProgression.port';
+import {
+    AuthUser,
+    UserPayload,
+} from '../../../../../common/utils/user-payload.decorator';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('levels')
@@ -44,13 +53,21 @@ export class LevelsController {
 
     @Post('submit')
     async validateLevelTask(
+        @UserPayload() user: AuthUser,
         @Body() req: ValidateLevelTaskReq,
     ): Promise<ValidateLevelTaskRes> {
+        console.log('req validateLevelTask from: ', user.userId);
         const validationRes = await this.taskValidation.validate({
             taskId: req.taskId,
             code: req.code,
         });
-        // this.levelProgress.unlockNextLevel();
+        if (validationRes) {
+            await this.levelProgress.unlockNextLevel(
+                user.userId,
+                req.course as Course,
+                req.module,
+            );
+        }
         return { res: validationRes.res };
     }
 }

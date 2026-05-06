@@ -10,10 +10,13 @@ import { useActiveScreen } from '../../../store/activeScreenStore.ts';
 export function TaskFrame({isVisible, data, onHeartLose} : props) {
     const navigate = useNavigate()
     const unlockLevel = useActiveScreen((state) => state.unlockNextLevel)
+    const course = useActiveScreen((state) => state.course)
+    const module = useActiveScreen((state) => state.module)
     const [code, setCode] = useState("")
     const [isCorrect, setIsCorrect] = useState<boolean | null>(null)
     async function submit() {
-        const response = await submitLevelTask({ taskId: data.id, code })
+        if (!course || !module) return
+        const response = await submitLevelTask({ taskId: data.id, code, course, module })
         setIsCorrect(response.res)
         if (response.res) {
             unlockLevel()

@@ -6,7 +6,11 @@ export class LevelProgressionUC implements LevelProgressionPort {
     constructor(
         private readonly levelProgressionRepo: LevelProgressionRepositoryPort,
     ) {}
-    async unlockNextLevel(course: Course, module: string): Promise<void> {
-        await this.levelProgressionRepo.completeLevel(course, module);
+    async unlockNextLevel(
+        userId: string,
+        course: Course,
+        module: string,
+    ): Promise<void> {
+        await this.levelProgressionRepo.completeLevel(userId, course, module);
     }
 }

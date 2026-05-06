@@ -17,4 +17,12 @@ type Check =
               selector: string;
               text: string;
           };
+      }
+    | {
+          type: 'element_visibility_changes';
+          selector: string;
+          trigger: {
+              event: 'click';
+              selector: string;
+          };
       };

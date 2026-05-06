@@ -25,4 +25,51 @@ export const TASK_TESTS: Record<string, TaskTest> = {
             },
         ],
     },
+    CHANGE: {
+        type: 'htmlE2E',
+        checks: [
+            {
+                type: 'element_exists',
+                selector: 'h1',
+                text: 'Meine Seite',
+            },
+            {
+                type: 'element_exists',
+                selector: 'button',
+                text: 'Ändern',
+            },
+            {
+                type: 'interaction',
+                action: 'click',
+                target: 'button',
+                result: {
+                    selector: '#result',
+                    text: 'Geändert!',
+                },
+            },
+        ],
+    },
+    TOGGLE_VISIBILITY: {
+        type: 'htmlE2E',
+        checks: [
+            {
+                type: 'element_exists',
+                selector: 'span',
+                text: 'Hallo Welt',
+            },
+            {
+                type: 'element_exists',
+                selector: 'button',
+                text: 'Toggle',
+            },
+            {
+                type: 'element_visibility_changes',
+                selector: 'span',
+                trigger: {
+                    event: 'click',
+                    selector: 'button',
+                },
+            },
+        ],
+    },
 };

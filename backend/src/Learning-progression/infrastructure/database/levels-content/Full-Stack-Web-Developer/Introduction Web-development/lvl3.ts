@@ -84,6 +84,6 @@ export const levelThree: LevelModel = {
             visualTwo: 'Full-Stack-Developer/client.server.png',
         },
         quiz: quizDataThree,
-        task: LEVEL_TASKS.LOAD_DATA,
+        task: LEVEL_TASKS.TOGGLE_VISIBILITY,
     },
 };
