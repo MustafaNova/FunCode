@@ -72,4 +72,22 @@ export const TASK_TESTS: Record<string, TaskTest> = {
             },
         ],
     },
+    INPUT_PREVIEW: {
+        type: 'htmlE2E',
+        checks: [
+            {
+                type: 'element_exists',
+                selector: 'input',
+            },
+            {
+                type: 'element_exists',
+                selector: 'p',
+            },
+            {
+                type: 'input_sync',
+                inputId: '#input',
+                targetId: '#output',
+            },
+        ]
+    },
 };

@@ -88,6 +88,6 @@ export const levelFour: LevelModel = {
             visualTwo: 'Full-Stack-Developer/fetch.api.png',
         },
         quiz: quizDataFour,
-        task: LEVEL_TASKS.FETCH,
+        task: LEVEL_TASKS.INPUT_PREVIEW,
     },
 };

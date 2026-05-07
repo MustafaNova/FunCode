@@ -35,21 +35,21 @@ export const LEVEL_TASKS: Record<string, TaskTab> = {
         goals: [
             'Erstelle einen span-tag mit dem Inhalt: "Hallo Welt"',
             'Erstelle einen Button mit dem Text: "Toggle"',
-            'Beim Klick soll der span-tag ein- und ausgeblendet werden',
+            'Beim Klick auf Button soll der span-tag ein- und ausgeblendet werden',
         ],
         hint: 'Tipp: Nutze style.display oder classList.toggle().',
     },
-    FETCH: {
-        id: 'FETCH',
+    INPUT_PREVIEW: {
+        id: 'INPUT_PREVIEW',
         type: 'htmlE2E',
-        title: 'Aufgabe: API Daten anzeigen',
-        subtitle: 'Hole Daten von einer API und zeige sie im Frontend an.',
+        title: 'Aufgabe: Live Texteingabe anzeigen',
+        subtitle: 'Lerne, wie du auf Eingaben reagierst.',
         goals: [
-            'Erstelle einen Button "Daten laden"',
-            'Nutze fetch(), um Daten von einer API zu laden (z. B. JSONPlaceholder)',
-            'Zeige die geladenen Daten im HTML an (z. B. Titel eines Posts)',
+            'Erstelle ein input-Feld mit #input',
+            'Erstelle einen paragraph-tag #output',
+            'Während der Benutzer tippt, soll der Inhalt des paragraph-tags aktualisiert werden',
         ],
-        hint: 'Tipp: Nutze fetch().then() oder async/await und console.log() zum Testen.',
+        hint: 'Tipp: Nutze das input-Event und textContent.',
     },
     ADD: {
         id: 'ADD',
