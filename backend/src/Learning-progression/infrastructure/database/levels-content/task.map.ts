@@ -51,18 +51,18 @@ export const LEVEL_TASKS: Record<string, TaskTab> = {
         ],
         hint: 'Tipp: Nutze das input-Event und textContent.',
     },
-    ADD: {
-        id: 'ADD',
-        type: 'htmlStatic',
-        title: 'Aufgabe: Dynamische Liste',
-        subtitle: 'Erstelle eine interaktive Liste mit JavaScript.',
+    FORM_SUBMIT: {
+        id: 'FORM_SUBMIT',
+        type: 'htmlE2E',
+        title: 'Aufgabe: Formular absenden',
+        subtitle: 'Lerne, wie Formulare verarbeitet werden.',
         goals: [
-            'Erstelle ein Eingabefeld und einen Button "Hinzufügen"',
-            'Speichere Einträge in einem Array (State)',
-            'Zeige die Liste im HTML an',
-            'Aktualisiere die Liste bei jedem neuen Eintrag',
+            'Erstelle ein input-Feld mit der id "#name"',
+            'Erstelle einen Button mit dem Text: "Senden"',
+            'Erstelle einen paragraph-tag mit der id "#result"',
+            'Beim Klick auf den Button soll im paragraph-tag stehen: "Hallo, NAME"',
         ],
-        hint: 'Tipp: Nutze ein Array als State und render() die Liste neu.',
+        hint: 'Tipp: Nutze value und textContent.',
     },
     SERVER: {
         id: 'SERVER',

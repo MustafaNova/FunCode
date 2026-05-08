@@ -61,7 +61,9 @@ export class LevelsController {
             taskId: req.taskId,
             code: req.code,
         });
-        if (validationRes) {
+        console.log('validationRes in Controller: ', validationRes);
+        if (validationRes.res) {
+            console.log(`unlockNextLevel for userId: ${user.userId}`);
             await this.levelProgress.unlockNextLevel(
                 user.userId,
                 req.course as Course,

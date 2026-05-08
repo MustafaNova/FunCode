@@ -88,6 +88,32 @@ export const TASK_TESTS: Record<string, TaskTest> = {
                 inputId: '#input',
                 targetId: '#output',
             },
-        ]
+        ],
+    },
+    FORM_SUBMIT: {
+        type: 'htmlE2E',
+        checks: [
+            {
+                type: 'element_exists',
+                selector: 'input#name',
+            },
+            {
+                type: 'element_exists',
+                selector: 'button',
+                text: 'Senden',
+            },
+            {
+                type: 'element_exists',
+                selector: 'p#result',
+            },
+            {
+                type: 'formGreeting',
+                inputSelector: 'input#name',
+                buttonSelector: 'button',
+                targetSelector: 'p#result',
+                inputValue: 'Name',
+                expectedValue: 'Hallo, Name',
+            },
+        ],
     },
 };

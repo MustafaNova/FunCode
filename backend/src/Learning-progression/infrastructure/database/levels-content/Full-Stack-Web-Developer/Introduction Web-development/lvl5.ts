@@ -91,6 +91,6 @@ export const levelFive: LevelModel = {
             visualTwo: 'Full-Stack-Developer/dynamic.ui.png',
         },
         quiz: quizDataFive,
-        task: LEVEL_TASKS.ADD,
+        task: LEVEL_TASKS.FORM_SUBMIT,
     },
 };

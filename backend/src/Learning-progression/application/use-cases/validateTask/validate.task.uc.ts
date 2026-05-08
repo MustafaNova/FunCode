@@ -27,6 +27,7 @@ export class ValidateTaskUC implements ValidateTaskPort {
                     taskTest,
                     cmd.code,
                 );
+                console.log('htmlE2E result: ', validatorRes);
                 return { res: validatorRes.res };
             }
 

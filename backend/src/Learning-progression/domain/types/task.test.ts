@@ -34,8 +34,18 @@ export type InputSync = {
     targetId: string;
 };
 
+export type FormGreeting = {
+    type: 'formGreeting';
+    inputSelector: string;
+    buttonSelector: string;
+    targetSelector: string;
+    inputValue: string;
+    expectedValue: string;
+};
+
 export type Check =
     | ElementExistsCheck
     | InteractionCheck
     | ElementVisibilityChangesCheck
-    | InputSync;
+    | InputSync
+    | FormGreeting;

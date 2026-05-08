@@ -4,6 +4,7 @@ import {
     Check,
     ElementExistsCheck,
     ElementVisibilityChangesCheck,
+    FormGreeting,
     InputSync,
     InteractionCheck,
     TaskTest,
@@ -14,6 +15,7 @@ import { chromium, Page } from 'playwright';
 @Injectable()
 export class HtmlE2eValidatorAdapter implements HtmlE2eValidatorPort {
     async validate(test: TaskTest, code: string): Promise<HtmlValidatorRes> {
+        console.log('started HtmlE2eValidatorAdapter');
         const browser = await chromium.launch();
         const page = await browser.newPage();
         await page.setContent(code);
@@ -39,6 +41,8 @@ export class HtmlE2eValidatorAdapter implements HtmlE2eValidatorPort {
                 return await this.validateElementVisibilityChange(page, check);
             case 'input_sync':
                 return await this.validateInputSync(page, check);
+            case 'formGreeting':
+                return await this.validateFormGreeting(page, check);
             default:
                 return false;
         }
@@ -98,5 +102,26 @@ export class HtmlE2eValidatorAdapter implements HtmlE2eValidatorPort {
         });
 
         return text == value;
+    }
+
+    private async validateFormGreeting(page: Page, check: FormGreeting) {
+        const input = page.locator(check.inputSelector);
+        const button = page.locator(check.buttonSelector);
+        const target = page.locator(check.targetSelector);
+
+        if (!input || !button || !target) {
+            return false;
+        }
+
+        await input.fill(check.inputValue);
+        await button.click();
+
+        const text = await target.textContent();
+
+        if (!text) {
+            return false;
+        }
+        console.log(`validateFormGreetin res: ${text?.trim()}, ${check.expectedValue}`);
+        return text?.trim() == check.expectedValue;
     }
 }
