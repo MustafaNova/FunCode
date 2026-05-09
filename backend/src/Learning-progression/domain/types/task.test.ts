@@ -43,9 +43,46 @@ export type FormGreeting = {
     expectedValue: string;
 };
 
+export type CounterIncrement = {
+    type: 'counterIncrement';
+    buttonSelector: string;
+    counterSelector: string;
+    incrementBy: number;
+};
+
+export type InputType = {
+    type: 'inputType';
+    selector: string;
+    expectedInputType: string;
+};
+
+export type BackgroundColorChange = {
+    type: 'backgroundColorChange';
+    inputSelector: string;
+};
+
+export type RandomNumber = {
+    type: 'randomNumber';
+    buttonSelector: string;
+    targetSelector: string;
+    min: number;
+    max: number;
+};
+
+export type CharCount = {
+    type: 'charCount';
+    inputSelector: string;
+    targetSelector: string;
+};
+
 export type Check =
     | ElementExistsCheck
     | InteractionCheck
     | ElementVisibilityChangesCheck
     | InputSync
-    | FormGreeting;
+    | FormGreeting
+    | CounterIncrement
+    | InputType
+    | BackgroundColorChange
+    | RandomNumber
+    | CharCount;

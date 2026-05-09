@@ -91,6 +91,6 @@ export const levelNine: LevelModel = {
             visualTwo: 'Full-Stack-Developer/fullstack.deploy.png',
         },
         quiz: quizDataNine,
-        task: LEVEL_TASKS.DEPLOYMENT,
+        task: LEVEL_TASKS.CHAR_COUNTER,
     },
 };

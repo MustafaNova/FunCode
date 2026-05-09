@@ -90,6 +90,6 @@ export const levelSeven: LevelModel = {
             visualTwo: 'Full-Stack-Developer/db.flow.png',
         },
         quiz: quizDataSeven,
-        task: LEVEL_TASKS.DATABASE,
+        task: LEVEL_TASKS.COLOR_PICKER,
     },
 };

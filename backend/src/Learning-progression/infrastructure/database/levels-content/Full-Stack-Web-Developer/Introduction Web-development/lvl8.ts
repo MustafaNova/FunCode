@@ -83,6 +83,6 @@ export const levelEight: LevelModel = {
             visualTwo: 'Full-Stack-Developer/jwt.flow.png',
         },
         quiz: quizDataEight,
-        task: LEVEL_TASKS.REGISTRATION,
+        task: LEVEL_TASKS.RANDOM_NUMBER,
     },
 };

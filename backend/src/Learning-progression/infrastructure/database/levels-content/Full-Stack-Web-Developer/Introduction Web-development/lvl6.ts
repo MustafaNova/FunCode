@@ -86,6 +86,6 @@ export const levelSix: LevelModel = {
             visualTwo: 'Full-Stack-Developer/node.server.png',
         },
         quiz: quizDataSix,
-        task: LEVEL_TASKS.SERVER,
+        task: LEVEL_TASKS.COUNTER,
     },
 };

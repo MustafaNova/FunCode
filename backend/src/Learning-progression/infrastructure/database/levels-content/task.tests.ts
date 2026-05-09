@@ -116,4 +116,78 @@ export const TASK_TESTS: Record<string, TaskTest> = {
             },
         ],
     },
+    COUNTER: {
+        type: 'htmlE2E',
+        checks: [
+            {
+                type: 'element_exists',
+                selector: 'p#count',
+                text: '0',
+            },
+            {
+                type: 'element_exists',
+                selector: 'button',
+                text: '+',
+            },
+            {
+                type: 'counterIncrement',
+                buttonSelector: 'button',
+                counterSelector: 'p#count',
+                incrementBy: 1,
+            },
+        ],
+    },
+    COLOR_PICKER: {
+        type: 'htmlE2E',
+        checks: [
+            {
+                type: 'inputType',
+                selector: 'input',
+                expectedInputType: 'color',
+            },
+            {
+                type: 'backgroundColorChange',
+                inputSelector: 'input',
+            },
+        ],
+    },
+    RANDOM_NUMBER: {
+        type: 'htmlE2E',
+        checks: [
+            {
+                type: 'element_exists',
+                selector: 'button',
+                text: 'Zufall',
+            },
+            {
+                type: 'element_exists',
+                selector: 'p#result',
+            },
+            {
+                type: 'randomNumber',
+                buttonSelector: 'button',
+                targetSelector: 'p#result',
+                min: 1,
+                max: 10,
+            },
+        ],
+    },
+    CHAR_COUNTER: {
+        type: 'htmlE2E',
+        checks: [
+            {
+                type: 'element_exists',
+                selector: 'textarea',
+            },
+            {
+                type: 'element_exists',
+                selector: 'p#count',
+            },
+            {
+                type: 'charCount',
+                inputSelector: 'textarea',
+                targetSelector: 'p#count',
+            },
+        ],
+    },
 };
