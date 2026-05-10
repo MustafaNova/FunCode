@@ -87,6 +87,7 @@ export class GameService {
     async createNewRoom1v1(roomId: string, userId1: string, userId2: string) {
         const player1 = this.connectedPlayers.get(userId1)!;
         const player2 = this.connectedPlayers.get(userId2)!;
+        console.log(player1.data.room, player2.data.room);
         player1.data.room = roomId;
         player2.data.room = roomId;
         await player1.join(roomId);
