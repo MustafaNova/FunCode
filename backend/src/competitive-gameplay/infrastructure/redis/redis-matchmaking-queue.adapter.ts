@@ -27,14 +27,15 @@ export class RedisMatchmakingQueueAdapter implements MatchmakingQueuePort {
         players: PlayerCount,
     ): Promise<void> {
         const time = Date.now();
-        const entry: PlayerEntry = {
-            userId: queueEntry.userId,
-            username: queueEntry.username,
-        };
-        const value = JSON.stringify(entry);
-
+        const value = this.toPlayerEntryValue(queueEntry);
         const key = this.getQueueKey(type, players);
         await this.redis.zadd(key, time, value);
+    }
+
+    async remove(queueEntry: QueueEntry, type: MatchType, players: PlayerCount): Promise<void> {
+        const value = this.toPlayerEntryValue(queueEntry);
+        const key = this.getQueueKey(type, players);
+        await this.redis.zrem(key, value);
     }
 
     async getEntryCount(
@@ -77,5 +78,12 @@ export class RedisMatchmakingQueueAdapter implements MatchmakingQueuePort {
                 if (type == MatchType.UNRANKED) return this.key_2vs2_unranked;
                 else return this.key_2vs2_ranked;
         }
+    }
+
+    private toPlayerEntryValue(queueEntry: QueueEntry) {
+        return JSON.stringify({
+                userId: queueEntry.userId,
+                username: queueEntry.username,
+            })
     }
 }

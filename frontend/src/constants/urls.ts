@@ -3,7 +3,8 @@ export const SERVER_URL = 'http://localhost:3000'
 export const API_URLS = {
     REGISTER: `${SERVER_URL}/auth/register`,
     LOGIN: `${SERVER_URL}/auth/login`,
-    MATCHMAKING: `${SERVER_URL}/matchmaking/join`,
+    JOIN_MATCHMAKING: `${SERVER_URL}/matchmaking/join`,
+    LEAVE_MATCHMAKING: `${SERVER_URL}/matchmaking/leave`,
     ACTIVE_SCREEN: `${SERVER_URL}/active-screen`,
     LEVELS: `${SERVER_URL}/levels`,
     SUBMIT_LEVEL_TASK: `${SERVER_URL}/levels/submit`,

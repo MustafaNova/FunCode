@@ -4,15 +4,16 @@ WORKDIR /app
 
 RUN npm install -g pnpm
 
-COPY backend/package.json backend/pnpm-lock.yaml ./
-COPY ./shared ../shared
+COPY ./pnpm-workspace.yaml ./
+COPY ./package.json ./
+COPY ./pnpm-lock.yaml ./
 
-RUN pnpm install
+COPY ./backend ./backend
+COPY ./shared ./shared
 
-COPY ./backend .
+RUN pnpm install --prod=false
 
-RUN pnpm exec playwright install --with-deps chromium
-RUN pnpm build
+RUN pnpm --filter backend exec playwright install --with-deps chromium
 
 EXPOSE 3000
-CMD ["pnpm", "start:dev"]
+CMD ["pnpm", "--filter", "backend", "run", "start:dev"]

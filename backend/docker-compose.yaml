@@ -7,9 +7,8 @@ services:
     ports:
       - "3000:3000"
     volumes:
-    - .:/app
-    - backendT:/app/node_modules
-    - ../shared:/app/node_modules/@funcode/shared
+    - .:/app/backend
+    - mustTest:/app/backend/node_modules
     environment:
       DB_HOST: db
       DB_PORT: "5432"
@@ -42,4 +41,4 @@ services:
 
 volumes:
   postgres_data:
-  backendT:
+  mustTest:

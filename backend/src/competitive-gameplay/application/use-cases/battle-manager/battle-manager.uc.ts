@@ -31,7 +31,7 @@ export class BattleManagerUC implements BattleManagerPort {
         const roomId = battle.roomId!;
         const p1 = battle.player1;
         const p2 = battle.player2;
-        console.log(`creating now 1v1 for ${p1.username} and ${p2.username}`);
+        console.log(`creating now 1v1 for ${p1.username}, id(${p1.userId}) and ${p2.username}, id(${p2.userId})`);
         this.roomToPlayers.set(roomId, [p1, p2]);
         await this.playerGateway.joinPlayersToRoom1v1(
             roomId,

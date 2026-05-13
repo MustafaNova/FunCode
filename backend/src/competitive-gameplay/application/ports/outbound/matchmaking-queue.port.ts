@@ -8,6 +8,11 @@ export interface MatchmakingQueuePort {
         type: MatchType,
         players: PlayerCount,
     ): Promise<void>;
+    remove(
+        queueEntry: QueueEntry,
+        type: MatchType,
+        players: PlayerCount,
+    ): Promise<void>;
     getEntryCount(type: MatchType, players: PlayerCount): Promise<number>;
     popTwoPlayers(type: MatchType, players: PlayerCount): Promise<QueueEntry[]>;
 }

@@ -1,6 +1,6 @@
 import s from './arena1v1.module.scss'
 import { useState } from 'react';
-import { matchmakingUnranked1v1 } from '../../services/matchmaking.ts';
+import { leaveUnranked1v1, matchmakingUnranked1v1 } from '../../services/matchmaking.ts';
 import { Socket } from 'socket.io-client';
 import { useNavigate } from 'react-router-dom';
 import { SOCKET_EVENTS } from '@funcode/shared';
@@ -21,9 +21,13 @@ export function Arena1v1() {
             setSearching(false);
         });
     }
+    const cancelUnranked1v1 = async () => {
+        await leaveUnranked1v1()
+        setSearching(false)
+    }
 
     if (searching) {
-        return <SearchingScreen cancel={() => setSearching(false)} />
+        return <SearchingScreen cancel={cancelUnranked1v1} />
     }
 
     return (
