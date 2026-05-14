@@ -21,11 +21,11 @@ export function Match() {
             setSubmitResponse(res);
         })
 
-        const offWin = onWin((res) => {
+        const offWin = onWin(() => {
             navigate('win');
         })
 
-        const offLose = onLose((res) => {
+        const offLose = onLose(() => {
             navigate('lose');
         })
 
