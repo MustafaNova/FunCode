@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "pnpm -C ../shared install && pnpm -C ../shared build",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
