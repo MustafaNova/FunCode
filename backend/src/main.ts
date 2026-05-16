@@ -18,6 +18,7 @@ async function bootstrap() {
         origin: [
             'http://localhost:5173',
             'https://fun-code-frontend.vercel.app'],
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
         credentials: true,
     });
     app.use(cookieParser());
