@@ -17,7 +17,7 @@ async function bootstrap() {
     app.enableCors({
         origin: [
             'http://localhost:5173',
-            'https://fun-code-frontend.vercel.app/'],
+            'https://fun-code-frontend.vercel.app'],
         credentials: true,
     });
     app.use(cookieParser());
