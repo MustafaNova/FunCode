@@ -1,4 +1,4 @@
-export const SERVER_URL = 'http://localhost:3000'
+export const SERVER_URL = 'https://funcode-g40h.onrender.com'
 
 export const API_URLS = {
     REGISTER: `${SERVER_URL}/auth/register`,
