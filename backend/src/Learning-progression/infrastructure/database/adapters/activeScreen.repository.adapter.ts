@@ -61,6 +61,7 @@ export class ActiveScreenRepositoryAdapter implements ActiveScreenRepositoryPort
         });
 
         if (!activeProgress) {
+            console.log('EXCEPTION: activeScreen.repository.adapter.ts z.64')
             throw new NotFoundException();
         }
 
