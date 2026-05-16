@@ -15,7 +15,9 @@ async function bootstrap() {
     );
     app.useGlobalFilters(new HttpExceptionFilter());
     app.enableCors({
-        origin: 'http://localhost:5173',
+        origin: [
+            'http://localhost:5173',
+            'https://fun-code-frontend.vercel.app/'],
         credentials: true,
     });
     app.use(cookieParser());
