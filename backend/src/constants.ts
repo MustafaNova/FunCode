@@ -1,1 +1,1 @@
-export const FRONTEND_URL = 'http://localhost:5173';
+export const FRONTEND_URL = 'https://fun-code-frontend.vercel.app';
