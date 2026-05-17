@@ -1,13 +1,17 @@
 import { HtmlE2eValidatorPort } from '../../application/ports/outbound/html.e2e.validator.port';
 import { Injectable } from '@nestjs/common';
 import {
-    BackgroundColorChange, CharCount,
-    Check, CounterIncrement,
+    BackgroundColorChange,
+    CharCount,
+    Check,
+    CounterIncrement,
     ElementExistsCheck,
     ElementVisibilityChangesCheck,
     FormGreeting,
-    InputSync, InputType,
-    InteractionCheck, RandomNumber,
+    InputSync,
+    InputType,
+    InteractionCheck,
+    RandomNumber,
     TaskTest,
 } from '../../domain/types/task.test';
 import { HtmlValidatorRes } from '../../application/ports/dtos/html.validator.res';

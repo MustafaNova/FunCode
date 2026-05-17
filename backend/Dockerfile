@@ -15,7 +15,29 @@ RUN pnpm --filter backend install
 
 RUN pnpm --filter backend build
 
-RUN pnpm --filter backend exec playwright install --with-deps chromium
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libnss3 \
+    libnspr4 \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libcups2 \
+    libdrm2 \
+    libatspi2.0-0 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxfixes3 \
+    libxrandr2 \
+    libgbm1 \
+    libxkbcommon0 \
+    libpango-1.0-0 \
+    libcairo2 \
+    libasound2 \
+    libwayland-client0 \
+    fonts-liberation \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pnpm --filter backend exec playwright install --only-shell chromium
 
 EXPOSE 3000
 CMD ["pnpm", "--filter", "backend", "run", "start:prod"]

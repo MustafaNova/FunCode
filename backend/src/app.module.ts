@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CompetitiveGameplayModule } from './competitive-gameplay/competitive-gameplay.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { LearningProgressionModule } from './Learning-progression/learning-progression.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
     imports: [
@@ -17,6 +18,10 @@ import { LearningProgressionModule } from './Learning-progression/learning-progr
             synchronize: true,
         }),
         EventEmitterModule.forRoot(),
+        ConfigModule.forRoot({
+            isGlobal: true,
+            envFilePath: ['.env', '../.env'],
+        })
     ],
     controllers: [],
     providers: [],

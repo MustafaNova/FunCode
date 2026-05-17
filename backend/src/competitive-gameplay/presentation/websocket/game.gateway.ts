@@ -9,7 +9,6 @@ import type { SubmitReq } from '@funcode/shared';
 import { Server, Socket } from 'socket.io';
 import type {
     CreateNewRoom1v1Event,
-    ErrorEvent,
     LoseEvent,
     NotifyRoomEvent,
     RoomSocket,
@@ -20,13 +19,12 @@ import { OnEvent } from '@nestjs/event-emitter';
 import { BattleEvent } from '../../domain/enums/battle.events';
 import { RoomGuard } from './guards/room.guard';
 import { GameService } from './game.service';
-import { FRONTEND_URL } from '../../../constants';
 import { WsExceptionFilter } from '../../../common/ws.exception.filter';
 
 @UseFilters(new WsExceptionFilter())
 @WebSocketGateway({
     cors: {
-        origin: FRONTEND_URL,
+        origin: process.env['FRONTEND_URL'],
         credentials: true,
     },
 })
