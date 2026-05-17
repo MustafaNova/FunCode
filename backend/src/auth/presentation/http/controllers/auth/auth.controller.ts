@@ -47,7 +47,12 @@ export class AuthController {
     async login(@Body() req: UserLoginReq, @Res() res: Response) {
         const cmd = LoginUserCmd.create(req.username, req.password);
         const loginRes = await this.loginService.login(cmd);
-        res.cookie('token', loginRes.token, { httpOnly: true });
+        const isProduction = process.env.NODE_ENV === 'production';
+        res.cookie('token', loginRes.token, {
+            httpOnly: true,
+            secure: isProduction,
+            sameSite: isProduction ? 'none' : 'lax',
+        });
         console.log(`login request token: ${loginRes.token}`);
         return res.json(
             UserLoginResponse.create(loginRes.token, loginRes.expiresIn),
