@@ -23,7 +23,6 @@ export class MatchmakingController {
 
     @Post('join')
     async join(@UserPayload() user: AuthUser, @Body() payload: MatchMakingPayload) {
-        console.log('NEW PLAYER JOINED QUEUE');
         const cmd = JoinCmd.create(
             user.userId,
             user.username,
@@ -36,7 +35,6 @@ export class MatchmakingController {
 
     @Post('leave')
     async leave(@UserPayload() user: AuthUser, @Body() payload: MatchMakingPayload) {
-        console.log(`${user.username} LEAVES QUEUE`);
         const cmd = LeaveCmd.create(
             user.userId,
             user.username,

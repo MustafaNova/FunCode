@@ -35,7 +35,6 @@ export class GameService {
     notifyWin(userId: string, payload: WinRes) {
         const client = this.connectedPlayers.get(userId);
         if (!client) {
-            console.log('undefined client at notifyWin');
         }
         client?.emit('WIN', payload);
     }
@@ -43,20 +42,17 @@ export class GameService {
     notifyLose(userId: string, payload: LoseRes) {
         const client = this.connectedPlayers.get(userId);
         if (!client) {
-            console.log('undefined client at notifyLose');
         }
         client?.emit('LOSE', payload);
     }
 
     sendRoom(roomId: string, event: string, msg: unknown) {
-        console.log(`sendRoom: ${event}, ${msg}`);
         this.server.to(roomId).emit(event, msg);
     }
 
     registerNewPlayer(client: Socket, token: string | undefined) {
         if (!token) {
             this.disconnectUnauthorized(client);
-            console.log('disconnect unauthorized');
             return;
         }
         try {
@@ -64,8 +60,6 @@ export class GameService {
             client.data.user = payload; // eslint-disable-line
             this.connectedPlayers.set(payload.userId, client as GameSocket);
             this.battleManager.registerNewPlayer(payload.userId);
-            console.log(`new gateway connection userId:${payload.userId}`);
-            console.log(`connectedPlayers updated ${this.connectedPlayers.has(payload.userId)}`);
         } catch {
             this.disconnectUnauthorized(client);
         }
@@ -88,13 +82,6 @@ export class GameService {
     async createNewRoom1v1(roomId: string, userId1: string, userId2: string) {
         const player1 = this.connectedPlayers.get(userId1)!;
         const player2 = this.connectedPlayers.get(userId2)!;
-        if (!player1) {
-            console.log("player1 not found:", userId1);
-        }
-
-        if (!player2) {
-            console.log("player2 not found:", userId2);
-        }
         player1.data.room = roomId;
         player2.data.room = roomId;
         await player1.join(roomId);
@@ -119,7 +106,6 @@ export class GameService {
                 SubmitCmd.create(userId, roomId, playerName, taskId, solution),
             );
         } catch (err) {
-            console.log('throwing now Error: ', err.message);
             throw new WsException((err as Error).message);
         }
     }

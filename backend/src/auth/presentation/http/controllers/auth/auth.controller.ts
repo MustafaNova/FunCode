@@ -53,7 +53,6 @@ export class AuthController {
             secure: isProduction,
             sameSite: isProduction ? 'none' : 'lax',
         });
-        console.log(`login request token: ${loginRes.token}`);
         return res.json(
             UserLoginResponse.create(loginRes.token, loginRes.expiresIn),
         );

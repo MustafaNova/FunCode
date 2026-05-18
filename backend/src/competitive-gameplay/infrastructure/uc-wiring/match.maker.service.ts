@@ -45,7 +45,6 @@ export class MatchMakerService
             try {
                 await this.match1v1Unranked();
             } catch (err) {
-                console.log(err);
             }
             await this.sleep(1000);
         }

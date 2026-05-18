@@ -45,7 +45,6 @@ export class LevelsController {
     @Get(':course/:module/:level')
     @UseGuards(LevelAccessGuard)
     getLevel(@Param() req: GetLevelDto): GetLevelRes {
-        console.log('request getLevel');
         const cmd = GetLevelCmd.create(req.course, req.module, req.level);
         const levelContent = this.levelService.execute(cmd);
         return { data: levelContent };
@@ -56,14 +55,11 @@ export class LevelsController {
         @UserPayload() user: AuthUser,
         @Body() req: ValidateLevelTaskReq,
     ): Promise<ValidateLevelTaskRes> {
-        console.log('req validateLevelTask from: ', user.userId);
         const validationRes = await this.taskValidation.validate({
             taskId: req.taskId,
             code: req.code,
         });
-        console.log('validationRes in Controller: ', validationRes);
         if (validationRes.res) {
-            console.log(`unlockNextLevel for userId: ${user.userId}`);
             await this.levelProgress.unlockNextLevel(
                 user.userId,
                 req.course as Course,

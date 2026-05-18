@@ -8,7 +8,6 @@ export class GetActiveScreenUC implements GetActiveScreenPort {
     ) {}
 
     async getActiveScreen(userId: string): Promise<GetActiveScreenRes> {
-        console.log('start getActiveScreen use case');
         const res = await this.activeScreenRepo.findByUserId(userId);
         return {
             course: res.course,

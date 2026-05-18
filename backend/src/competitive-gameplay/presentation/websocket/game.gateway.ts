@@ -80,7 +80,6 @@ export class GameGateway
     @UseGuards(RoomGuard)
     @SubscribeMessage('PLAYER_READY')
     handlePlayerReady(client: RoomSocket) {
-        console.log('PLAYER_READY MESSAGE ARRIVED!!!');
         const userId = client.data.user.userId;
         const roomId = client.data.room;
         this.gs.playerReady(userId, roomId, client.data.roomSize);

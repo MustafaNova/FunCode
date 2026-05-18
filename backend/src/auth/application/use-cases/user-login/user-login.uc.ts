@@ -19,13 +19,11 @@ export class UserLoginUC implements LoginUserPort {
         const user = await this.userRepo.findByUsername(loginUsername);
 
         if (!user) {
-            console.log('username not found for login');
             throw new InvalidCredentialsError();
         }
 
         const correctPassword = await user.verifyPassword(loginData.password);
         if (!correctPassword) {
-            console.log('wrong password for login');
             throw new InvalidCredentialsError();
         }
 
