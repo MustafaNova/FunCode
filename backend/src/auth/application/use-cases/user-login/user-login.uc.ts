@@ -15,6 +15,7 @@ export class UserLoginUC implements LoginUserPort {
     ) {}
 
     async login(loginData: LoginUserCmd): Promise<LoginUserRes> {
+        console.log("login use case")
         const loginUsername = Username.create(loginData.username);
         const user = await this.userRepo.findByUsername(loginUsername);
 
@@ -32,6 +33,6 @@ export class UserLoginUC implements LoginUserPort {
         const token = await this.tokenService.sign(
             TokenPayload.create(user.id as UserId, loginUsername),
         );
-        return LoginUserRes.create(token.token, token.expiresIn);
+        return LoginUserRes.create(token.token, token.expiresIn, loginData.username, user.hasCompletedOnboarding);
     }
 }

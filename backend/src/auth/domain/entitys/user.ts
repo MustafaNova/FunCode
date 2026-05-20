@@ -9,6 +9,7 @@ export class User {
         public readonly username: Username,
         public readonly email: Email,
         public readonly password: Password,
+        public readonly hasCompletedOnboarding: boolean
     ) {}
 
     async verifyPassword(raw: string) {
