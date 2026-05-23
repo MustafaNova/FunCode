@@ -20,7 +20,6 @@ import { chromium, Page } from 'playwright';
 @Injectable()
 export class HtmlE2eValidatorAdapter implements HtmlE2eValidatorPort {
     async validate(test: TaskTest, code: string): Promise<HtmlValidatorRes> {
-        console.log('started HtmlE2eValidatorAdapter');
         const browser = await chromium.launch();
         const page = await browser.newPage();
         await page.setContent(code);
@@ -77,7 +76,6 @@ export class HtmlE2eValidatorAdapter implements HtmlE2eValidatorPort {
                 return false;
         }
 
-        console.log(`[${check.type}] =>`, result);
         return result;
     }
 

@@ -40,7 +40,6 @@ export class ActiveScreenController {
     async getActiveScreen(
         @UserPayload() user: AuthUser,
     ): Promise<GetActiveScreenRes> {
-        console.log('request getActiveScreen');
         const res = await this.getACPort.getActiveScreen(user.userId);
         return {
             course: res.course,

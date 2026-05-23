@@ -46,10 +46,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         ) {
             status = HttpStatus.BAD_REQUEST;
         }
-        console.log('catched http exception', {
-            type: 'error',
-            message: error.message,
-        });
+
         res.status(status).json({
             type: 'error',
             message: error.message,

@@ -63,7 +63,6 @@ export class AuthController {
             secure: this.isProduction,
             sameSite: this.isProduction ? 'none' : 'lax',
         });
-        console.log("login controller success");
         return res.json(
             UserLoginResponse.create(loginRes.token, loginRes.expiresIn, loginRes.username, loginRes.hasCompletedOnboarding),
         );

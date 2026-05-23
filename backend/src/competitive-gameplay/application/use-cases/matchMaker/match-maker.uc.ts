@@ -22,7 +22,6 @@ export class MatchMakerUC implements MatchMakerPort {
             type,
             playerNum,
         );
-        console.log('entryCount:', playerCount);
         if (playerCount < 2) return;
         const twoPlayers = await this.matchMaking.popTwoPlayers(
             type,
@@ -30,7 +29,6 @@ export class MatchMakerUC implements MatchMakerPort {
         );
         const p1 = twoPlayers[0];
         const p2 = twoPlayers[1];
-        console.log(`popped ${p1.username} and ${p2.username}`);
 
         const roomId = this.idGenerator.generate();
         const battle = Battle1vs1.create(
