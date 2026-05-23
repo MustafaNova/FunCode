@@ -5,32 +5,30 @@ import { loginUser } from '../../../services/auth.ts';
 import { getActiveScreen } from '../../../services/learning.progression.ts';
 import { useTypingCode } from '../useTypingCode.ts';
 
-const loginCodeSnippets = [
-    `async function loginPlayer() {
-  const token = await auth.login(tag);
-  arena.join(token);
-}`,
-    `if (player.ready) {
-  queue.match("ranked-1v1");
-  deploy(skill);
-}`,
-];
-
-const terminalCrashCode = `SYSTEM PANIC: unauthorized input
-> write access denied
-> arena terminal crashed
-> reboot required...`;
-
 export function Login() {
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isTerminalCrashed, setIsTerminalCrashed] = useState(false);
+    const loginCodeSnippets = [
+        `async function loginPlayer() {
+  const token = await auth.login(tag);
+  arena.join(token);
+}`,
+        `if (player.ready) {
+  queue.match("ranked-1v1");
+  deploy(skill);
+}`,
+    ];
+    const terminalCrashCode = `SYSTEM PANIC: unauthorized input
+> write access denied
+> arena terminal crashed
+> reboot required...`;
     const animatedCode = useTypingCode(loginCodeSnippets);
+
 
     const handleTerminalInput = (e: KeyboardEvent<HTMLDivElement>) => {
         if (e.key === 'Tab') return;
-
         e.preventDefault();
         e.stopPropagation();
         setIsTerminalCrashed(true);
