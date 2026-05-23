@@ -7,6 +7,7 @@ import { PlayerProgressEntity } from '../entities/player.progress.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ActiveScreen } from '../../../domain/entities/activeScreen';
 import { NotFoundException } from '../errors/notFoundException.err';
+import { CourseMapService } from '../levels-content/course.map';
 
 @Injectable()
 export class ActiveScreenRepositoryAdapter implements ActiveScreenRepositoryPort {
@@ -17,27 +18,33 @@ export class ActiveScreenRepositoryAdapter implements ActiveScreenRepositoryPort
         private readonly progressRepo: Repository<PlayerProgressEntity>,
     ) {}
 
-    async updateActiveScreen(
+    async initActiveScreen(
         userId: string,
         course: Course,
-        module: string,
     ): Promise<void> {
         const activeScreen = await this.activeScreenRepo.findOne({
             where: { userId },
         });
 
         if (!activeScreen) {
+            const firstModule = CourseMapService.getModuleName(course, 1);
+            if (!firstModule) {
+                throw new Error()
+            }
+
             const newProgress = this.progressRepo.create({
                 userId,
                 course,
-                module,
+                module: firstModule,
                 unlockedLevel: 1,
             });
+
             const saved = await this.progressRepo.save(newProgress);
             const newActiveScreen = this.activeScreenRepo.create({
                 userId,
                 progressId: saved.progressId,
             });
+
             await this.activeScreenRepo.save(newActiveScreen);
         }
     }
@@ -61,7 +68,6 @@ export class ActiveScreenRepositoryAdapter implements ActiveScreenRepositoryPort
         });
 
         if (!activeProgress) {
-            console.log('EXCEPTION: activeScreen.repository.adapter.ts z.64')
             throw new NotFoundException();
         }
 

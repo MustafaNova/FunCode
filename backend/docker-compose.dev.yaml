@@ -1,0 +1,18 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile.dev
+    container_name: backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app/backend
+      - nodeModulesA:/app/backend/node_modules
+      - ../shared:/app/shared
+    env_file:
+      - .env
+
+
+volumes:
+  nodeModulesA:

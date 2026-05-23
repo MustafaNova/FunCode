@@ -1,13 +1,17 @@
 import { HtmlE2eValidatorPort } from '../../application/ports/outbound/html.e2e.validator.port';
 import { Injectable } from '@nestjs/common';
 import {
-    BackgroundColorChange, CharCount,
-    Check, CounterIncrement,
+    BackgroundColorChange,
+    CharCount,
+    Check,
+    CounterIncrement,
     ElementExistsCheck,
     ElementVisibilityChangesCheck,
     FormGreeting,
-    InputSync, InputType,
-    InteractionCheck, RandomNumber,
+    InputSync,
+    InputType,
+    InteractionCheck,
+    RandomNumber,
     TaskTest,
 } from '../../domain/types/task.test';
 import { HtmlValidatorRes } from '../../application/ports/dtos/html.validator.res';
@@ -16,7 +20,6 @@ import { chromium, Page } from 'playwright';
 @Injectable()
 export class HtmlE2eValidatorAdapter implements HtmlE2eValidatorPort {
     async validate(test: TaskTest, code: string): Promise<HtmlValidatorRes> {
-        console.log('started HtmlE2eValidatorAdapter');
         const browser = await chromium.launch();
         const page = await browser.newPage();
         await page.setContent(code);
@@ -73,7 +76,6 @@ export class HtmlE2eValidatorAdapter implements HtmlE2eValidatorPort {
                 return false;
         }
 
-        console.log(`[${check.type}] =>`, result);
         return result;
     }
 

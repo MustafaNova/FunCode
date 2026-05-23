@@ -15,23 +15,22 @@ export class UserLoginUC implements LoginUserPort {
     ) {}
 
     async login(loginData: LoginUserCmd): Promise<LoginUserRes> {
+        console.log("login use case")
         const loginUsername = Username.create(loginData.username);
         const user = await this.userRepo.findByUsername(loginUsername);
 
         if (!user) {
-            console.log('username not found for login');
             throw new InvalidCredentialsError();
         }
 
         const correctPassword = await user.verifyPassword(loginData.password);
         if (!correctPassword) {
-            console.log('wrong password for login');
             throw new InvalidCredentialsError();
         }
 
         const token = await this.tokenService.sign(
             TokenPayload.create(user.id as UserId, loginUsername),
         );
-        return LoginUserRes.create(token.token, token.expiresIn);
+        return LoginUserRes.create(token.token, token.expiresIn, loginData.username, user.hasCompletedOnboarding);
     }
 }

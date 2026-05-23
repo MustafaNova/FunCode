@@ -20,7 +20,6 @@ export class RoomGuard implements CanActivate {
             throw new WsException('Room does not exist');
         }
         client.data.roomSize = room.size;
-        console.log('ROOMGUARD PASSED');
         return true;
     }
 }

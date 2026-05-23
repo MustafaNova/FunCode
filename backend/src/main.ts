@@ -15,9 +15,7 @@ async function bootstrap() {
     );
     app.useGlobalFilters(new HttpExceptionFilter());
     app.enableCors({
-        origin: [
-            'http://localhost:5173',
-            'https://fun-code-frontend.vercel.app'],
+        origin: process.env['FRONTEND_URL'],
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
         credentials: true,
     });

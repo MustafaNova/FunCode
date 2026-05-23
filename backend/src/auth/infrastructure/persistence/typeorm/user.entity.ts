@@ -15,4 +15,7 @@ export class UserEntity {
 
     @Column({ type: 'varchar' })
     password: string;
+
+    @Column({ type: 'boolean', default: false })
+    hasCompletedOnboarding: boolean;
 }
