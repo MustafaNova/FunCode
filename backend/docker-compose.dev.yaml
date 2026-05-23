@@ -8,10 +8,11 @@ services:
       - "3000:3000"
     volumes:
       - .:/app/backend
-      - nodeModules:/app/backend/node_modules
+      - nodeModulesA:/app/backend/node_modules
+      - ../shared:/app/shared
     env_file:
       - .env
 
 
 volumes:
-  nodeModules:
+  nodeModulesA:

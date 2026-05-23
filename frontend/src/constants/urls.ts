@@ -7,6 +7,7 @@ export const API_URLS = {
     JOIN_MATCHMAKING: `${SERVER_URL}/matchmaking/join`,
     LEAVE_MATCHMAKING: `${SERVER_URL}/matchmaking/leave`,
     ACTIVE_SCREEN: `${SERVER_URL}/active-screen`,
+    START_COURSE: `${SERVER_URL}/active-screen/start-course`,
     LEVELS: `${SERVER_URL}/levels`,
     SUBMIT_LEVEL_TASK: `${SERVER_URL}/levels/submit`,
 }

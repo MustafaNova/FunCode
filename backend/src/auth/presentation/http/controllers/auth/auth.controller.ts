@@ -22,7 +22,7 @@ import { LoginUserCmd } from '../../../../application/use-cases/user-login/dtos/
 import { UserLoginResponse } from './dtos/user-login.response';
 import { AuthUser, UserPayload } from '../../../../../common/utils/user-payload.decorator';
 import { type GetCurrentUserPort } from '../../../../application/ports/inbound/GetCurrentUser.port';
-import { MeRes } from './dtos/me.res';
+import { MeRes } from '@funcode/shared';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')

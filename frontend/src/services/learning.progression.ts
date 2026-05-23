@@ -17,6 +17,17 @@ export async function getActiveScreen() {
     useActiveScreen.getState().setAC(res);
 }
 
+export async function initActiveScreen(course: string) {
+    await fetch(API_URLS.START_COURSE, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ course })
+    })
+}
+
 export async function getLevel(req: GetLevelReq): Promise<GetLevelRes> {
     const res = await fetch(`${API_URLS.LEVELS}/${req.course}/${req.module}/${req.level}`, {
         method: 'GET',
