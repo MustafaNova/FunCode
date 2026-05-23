@@ -4,26 +4,14 @@ import { type FormEvent, type KeyboardEvent, useState } from 'react';
 import { loginUser } from '../../../services/auth.ts';
 import { getActiveScreen } from '../../../services/learning.progression.ts';
 import { useTypingCode } from '../useTypingCode.ts';
+import { loginCodeSnippets, terminalCrashCode } from './loginTerminalContent.ts';
 
 export function Login() {
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isTerminalCrashed, setIsTerminalCrashed] = useState(false);
-    const loginCodeSnippets = [
-        `async function loginPlayer() {
-  const token = await auth.login(tag);
-  arena.join(token);
-}`,
-        `if (player.ready) {
-  queue.match("ranked-1v1");
-  deploy(skill);
-}`,
-    ];
-    const terminalCrashCode = `SYSTEM PANIC: unauthorized input
-> write access denied
-> arena terminal crashed
-> reboot required...`;
+    const [isLeaving, setIsLeaving] = useState(false);
     const animatedCode = useTypingCode(loginCodeSnippets);
 
 
@@ -38,13 +26,21 @@ export function Login() {
         e.preventDefault();
         const req = { username, password };
         const res = await loginUser(req);
-        if (!res) return
+        if (!res) {
+            return;
+        }
+        if (!res.hasCompletedOnboarding) {
+            setIsLeaving(true);
+            window.sessionStorage.setItem('onboarding_entry', 'from_login');
+            window.setTimeout(() => navigate('/onboarding'), 280);
+            return;
+        }
         await getActiveScreen();
-        navigate('/home')
+        navigate('/home');
     }
 
     return (
-        <form className={s.container} onSubmit={(e) => handleSubmit(e)}>
+        <form className={`${s.container} ${isLeaving ? s.pageExit : ''}`} onSubmit={(e) => handleSubmit(e)}>
             <div className={s.arenaPanel}>
                 <div className={s.statusRow}>
                     <span>Compile</span>
