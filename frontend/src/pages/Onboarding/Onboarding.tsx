@@ -3,12 +3,18 @@ import { me } from '../../services/auth.ts';
 import { useEffect, useState } from 'react';
 import type { MeRes } from '@funcode/shared';
 import { useNavigate } from 'react-router-dom';
+import { useTypingCode } from '../auth/useTypingCode.ts';
 
 export function Onboarding() {
     const navigate = useNavigate();
     const [user, setUser] = useState<MeRes | null>(null);
-    const [typedName, setTypedName] = useState('');
-    const [fromLogin, setFromLogin] = useState(false);
+    const [isLeaving, setIsLeaving] = useState(false);
+    const [fromLogin] = useState(() => {
+        const entry = window.sessionStorage.getItem('onboarding_entry');
+        window.sessionStorage.removeItem('onboarding_entry');
+        return entry === 'from_login';
+    });
+    const typedName = useTypingCode([user?.username ? `Hello ${user.username}` : '']);
 
     useEffect(() => {
         const loadUser = async () => {
@@ -18,35 +24,14 @@ export function Onboarding() {
         loadUser();
     }, [])
 
-    useEffect(() => {
-        const entry = window.sessionStorage.getItem('onboarding_entry');
-        if (entry === 'from_login') {
-            setFromLogin(true);
-        }
-        window.sessionStorage.removeItem('onboarding_entry');
-    }, []);
-
-    useEffect(() => {
-        if (!user?.username) return;
-
-        const greeting = `Hello ${user.username}`;
-        setTypedName('');
-        let index = 0;
-
-        const intervalId = window.setInterval(() => {
-            index += 1;
-            setTypedName(greeting.slice(0, index));
-
-            if (index >= greeting.length) {
-                window.clearInterval(intervalId);
-            }
-        }, 55);
-
-        return () => window.clearInterval(intervalId);
-    }, [user?.username])
+    function handleContinue() {
+        setIsLeaving(true);
+        window.sessionStorage.setItem('course_selection_entry', 'from_onboarding');
+        window.setTimeout(() => navigate("courses"), 280);
+    }
 
     return (
-        <section className={`${s.screen} ${fromLogin ? s.screenFromLogin : ''}`}>
+        <section className={`${s.screen} ${fromLogin ? s.screenFromLogin : ''} ${isLeaving ? s.pageExit : ''}`}>
             <div className={s.arenaPanel}>
                 <div className={s.statusRow}>
                     <span>Boot sequence</span>
@@ -75,7 +60,7 @@ export function Onboarding() {
                     </div>
                 </div>
 
-                <button className={s.submitButton} onClick={() => navigate("courses")}>
+                <button className={s.submitButton} onClick={handleContinue}>
                     Continue
                 </button>
             </div>

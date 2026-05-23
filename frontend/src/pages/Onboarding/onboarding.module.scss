@@ -30,6 +30,11 @@
   animation: onboardFromLogin 340ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 
+.pageExit {
+  animation: onboardExit 300ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  pointer-events: none;
+}
+
 .screen::before {
   background-image:
     linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
@@ -246,6 +251,18 @@
   }
 }
 
+@keyframes onboardExit {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+
 @media (max-width: 860px) {
   .screen {
     gap: 14px;
@@ -282,5 +299,10 @@
 @media (prefers-reduced-motion: reduce) {
   .screen {
     animation: none;
+  }
+
+  .pageExit {
+    animation: none;
+    opacity: 0;
   }
 }
