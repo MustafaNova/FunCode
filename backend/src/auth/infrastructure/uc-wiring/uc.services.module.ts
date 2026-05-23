@@ -3,7 +3,8 @@ import { UserLoginService } from './user.login.service';
 import { UserRegistrationService } from './user.registration.service';
 import { PersistenceModule } from '../persistence/persistence.module';
 import { TokenServiceModule } from '../token_service/token.service.module';
-import { LOGIN_USER_PORT, REGISTER_USER_PORT } from './tokens';
+import { GET_CURRENT_USER_PORT, LOGIN_USER_PORT, REGISTER_USER_PORT } from './tokens';
+import { GetCurrentUserService } from './getCurrentUser.service';
 
 @Module({
     imports: [PersistenceModule, TokenServiceModule],
@@ -16,7 +17,11 @@ import { LOGIN_USER_PORT, REGISTER_USER_PORT } from './tokens';
             provide: LOGIN_USER_PORT,
             useClass: UserLoginService,
         },
+        {
+            provide: GET_CURRENT_USER_PORT,
+            useClass: GetCurrentUserService,
+        }
     ],
-    exports: [REGISTER_USER_PORT, LOGIN_USER_PORT],
+    exports: [REGISTER_USER_PORT, LOGIN_USER_PORT, GET_CURRENT_USER_PORT],
 })
 export class UCServicesModule {}

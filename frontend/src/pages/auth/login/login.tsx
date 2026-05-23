@@ -1,6 +1,6 @@
 import s from './login.module.scss';
 import { Link, useNavigate } from 'react-router-dom';
-import { type FormEvent, useState } from 'react';
+import { type SubmitEvent, useState } from 'react';
 import { loginUser } from '../../../services/auth.ts';
 import { getActiveScreen } from '../../../services/learning.progression.ts';
 
@@ -9,13 +9,19 @@ export function Login() {
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const handleSubmit = async (e: FormEvent) => {
+    const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
         const req = { username, password };
         const res = await loginUser(req);
-        if (!res) return
+        if (!res) {
+            return;
+        }
+        if (!res.hasCompletedOnboarding) {
+            navigate('/onboarding');
+            return;
+        }
         await getActiveScreen();
-        navigate('/home')
+        navigate('/home');
     }
 
     return (

@@ -17,6 +17,8 @@ import { Lose } from './pages/lose/lose.tsx';
 import { LevelFrame } from './layout/level-frame/level-frame.tsx';
 import { LevelLoseScreen } from './pages/LevelLoseScreen/LevelLoseScreen.tsx';
 import { LevelWinScreen } from './pages/LevelWinScreen/LevelWinScreen.tsx';
+import { Onboarding } from './pages/Onboarding/Onboarding.tsx';
+import { CourseSelection } from './pages/Onboarding/CourseSelection/CourseSelection.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -35,6 +37,8 @@ createRoot(document.getElementById('root')!).render(
                   <Route path='clan' element={<Clan/>}></Route>
                   <Route path='practice' element={<Practice/>}></Route>
               </Route>
+              <Route path='onboarding' element={<Onboarding/>}></Route>
+              <Route path='onboarding/courses' element={<CourseSelection/>}></Route>
               <Route path="/level/:course/:module/:level" element={<LevelFrame/>}/>
               <Route path="/levelLose" element={<LevelLoseScreen/>}></Route>
               <Route path="/levelWin" element={<LevelWinScreen/>}></Route>

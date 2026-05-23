@@ -27,7 +27,7 @@ export class UserRegistrationUC implements RegisterUserPort {
             throw new EmailAlreadyExistsError();
         }
 
-        const user = new User(null, username, email, password);
+        const user = new User(null, username, email, password, false);
         await this.userRepo.save(user);
 
         return RegisterUserResult.from(user);
