@@ -51,15 +51,9 @@ export function TaskFrame({isVisible, data, onHeartLose} : props) {
                         <div className={s.taskBox}>
                             <b>Goals:</b>
                             <ul id="goals">
-                                <li id="goal1">
-                                    {data.goals[0]}
-                                </li>
-                                <li id="goal2">
-                                    {data.goals[1]}
-                                </li>
-                                <li id="goal3">
-                                    {data.goals[2]}
-                                </li>
+                                {data.goals.map((goal) => (
+                                    <li>{goal}</li>
+                                ))}
                             </ul>
                             <div className={s.tip} id="hint">
                                 {data.hint}
