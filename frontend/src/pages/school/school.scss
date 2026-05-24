@@ -1,115 +1,269 @@
-.level-btn, .project-btn {
-  width: 95px;
-  height: 95px;
-  border: none;
-  border-radius: 30px 30px 35px 35px ;
-  background-color: #C77DFF;
-  color: white;
-}
+.school-screen {
+  --panel: rgba(14, 25, 42, 0.9);
+  --stroke: rgba(192, 239, 255, 0.18);
+  --cyan: #36e4ff;
+  --green: #8bff9c;
+  --gold: #ffd166;
 
-
-.project-btn {
-  height: 150px;
-  width: 300px;
-}
-
-.course-title {
-  height: 50px;
+  background:
+    linear-gradient(135deg, rgba(255, 79, 135, 0.16), transparent 25%),
+    radial-gradient(circle at 88% 10%, rgba(54, 228, 255, 0.22), transparent 30%),
+    linear-gradient(180deg, #071019 0%, #10151f 52%, #111827 100%);
+  color: #f5fbff;
   display: grid;
-  place-items: center;
-  font-size: 25px;
-  font-weight: 600;
-  margin-bottom: 35px;
-  color: black;
+  gap: clamp(14px, 2.8vw, 24px);
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: clamp(12px, 3vw, 34px);
+  padding-bottom: calc(var(--bottom-bar-height) + clamp(20px, 4vw, 42px));
 }
 
-.level-row {
-  position: relative;
+.school-screen,
+.school-screen * {
+  box-sizing: border-box;
+}
+
+.school-hero {
+  align-items: stretch;
+  border: 1px solid var(--stroke);
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
+  min-height: clamp(240px, 31vh, 360px);
+  overflow: hidden;
+}
+
+.school-copy {
+  background: linear-gradient(145deg, rgba(10, 28, 44, 0.82), rgba(19, 12, 26, 0.9));
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  height: auto;
-  width: 100%
+  padding: clamp(18px, 4vw, 46px);
 }
 
-.moveToRight {
-  position: relative;
-  left: 120px
+.school-kicker,
+.school-project-tag {
+  color: var(--cyan);
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
-.level-btns {
-  display: flex;
-  gap: 40px;
+.school-copy h1 {
+  font-size: clamp(1.8rem, 5.2vw, 4.3rem);
+  line-height: 0.95;
+  margin: 10px 0 12px;
+  max-width: 11ch;
 }
 
-.moveLeft-btns {
-  display: flex;
-  gap: 15px;
-  position: relative;
-  right: 56px
+.school-copy p {
+  color: rgba(245, 251, 255, 0.7);
+  line-height: 1.5;
+  margin: 0;
+  max-width: 44ch;
 }
 
-.moveRight-btns {
-  display: flex;
-  gap: 15px;
-  position: relative;
-  left: 56px
-}
-
-
-.inside-btn {
-  background-color: #2A003F;
-  height: 86%;
-  border-radius: 30px;
-  position: relative;
-  bottom: 5px;
+.school-terminal {
+  background:
+    linear-gradient(90deg, transparent 0 48%, rgba(54, 228, 255, 0.16) 50%, transparent 52%),
+    rgba(3, 8, 16, 0.9);
+  background-size: 78px 78px;
   display: grid;
+  min-width: 0;
+  padding: clamp(10px, 2vw, 18px);
   place-items: center;
-  font-weight: 700;
-  font-size: 23px
 }
 
-.adjustToRight {
+.school-progress {
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  border-radius: 8px;
+  display: grid;
+  gap: 12px;
+  padding: clamp(14px, 2.5vw, 22px);
+}
+
+.school-progress-head {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.school-progress-head span {
+  color: rgba(245, 251, 255, 0.74);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.school-progress-head strong {
+  font-size: clamp(1.2rem, 2.8vw, 1.9rem);
+}
+
+.school-progress-track {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  height: 14px;
+  overflow: hidden;
+}
+
+.school-progress-track span {
+  background: linear-gradient(90deg, var(--cyan), var(--green));
+  border-radius: inherit;
+  display: block;
+  height: 100%;
+  min-width: 8px;
+}
+
+.school-level-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.school-level-card,
+.school-project-card {
+  background: rgba(14, 25, 42, 0.92);
+  border: 1px solid var(--stroke);
+  border-radius: 8px;
+  color: #f5fbff;
+  cursor: pointer;
+  min-height: 124px;
+  overflow: hidden;
   position: relative;
+  transition: border-color 160ms ease, filter 160ms ease, transform 160ms ease;
+}
+
+.school-level-card:hover:not(:disabled),
+.school-project-card:hover:not(:disabled) {
+  border-color: var(--cyan);
+  transform: translateY(-2px);
+}
+
+.school-level-card:focus-visible,
+.school-project-card:focus-visible {
+  outline: 3px solid rgba(255, 209, 102, 0.85);
+  outline-offset: 4px;
+}
+
+.school-level-card {
+  align-items: flex-start;
   display: flex;
-  align-items: center;
-  left: 100px
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px;
+  text-align: left;
 }
 
-.centerY {
-  display: flex;
-  align-items: center;
-}
-
-.d-flex {
-  display: flex
-}
-
-
-.project-wrapper {
-  height: 300px;
-  display: flex;
-  flex-direction: column
-}
-
-
-.done {
-  position: relative;
-  color: gray;
-}
-
-.done::after {
+.school-level-card::before,
+.school-project-card::before {
+  background: linear-gradient(90deg, var(--cyan), var(--green));
   content: "";
-  position: absolute;
-  top: 45%;
-  left: 0%;
-  width: 100%;
   height: 4px;
-  background-color: #C77DFF;
-  transform: rotate(-45deg);
-  pointer-events: none;
+  inset: 0 0 auto;
+  position: absolute;
 }
 
-.locked {
-  opacity: 0.4;
-  filter: grayscale(1);
+.school-level-number {
+  font-size: clamp(1.9rem, 4.6vw, 3rem);
+  font-weight: 950;
+  line-height: 1;
+}
+
+.school-level-label {
+  color: rgba(245, 251, 255, 0.68);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.school-project-card {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  grid-column: span 2;
+  justify-content: center;
+  padding: 20px;
+  text-align: left;
+}
+
+.school-project-card strong {
+  font-size: clamp(1.35rem, 3.5vw, 2.2rem);
+  line-height: 1;
+}
+
+.school-project-card span:last-child {
+  color: rgba(245, 251, 255, 0.68);
+  font-weight: 800;
+}
+
+.school-screen .done {
+  border-color: rgba(139, 255, 156, 0.45);
+}
+
+.school-screen .done::after {
+  color: var(--green);
+  content: "CLEARED";
+  font-size: 0.7rem;
+  font-weight: 950;
+  position: absolute;
+  right: 12px;
+  top: 12px;
+}
+
+.school-screen .locked {
+  cursor: not-allowed;
+  filter: grayscale(0.8);
+  opacity: 0.46;
+}
+
+@media (max-width: 980px) {
+  .school-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .school-copy h1 {
+    max-width: 13ch;
+  }
+
+  .school-level-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .school-level-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .school-project-card {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 520px) {
+  .school-screen {
+    gap: 12px;
+    padding: 10px;
+    padding-bottom: calc(var(--bottom-bar-height) + 18px);
+  }
+
+  .school-terminal {
+    display: none;
+  }
+
+  .school-level-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .school-project-card {
+    grid-column: auto;
+  }
 }

@@ -1,28 +1,15 @@
 import "./bottomBar.scss"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faSchool,
-    faTrophy,
-    faPen,
-    faUser,
-} from "@fortawesome/free-solid-svg-icons";
-import {useState} from "react";
-import { useNavigate } from "react-router-dom";
-
-type TabName = "school" | "arena" | "practice" | "clan"
+import { useLocation, useNavigate } from "react-router-dom";
+import { getActiveTab, type TabName, tabs } from './configs.ts';
 
 export function BottomBar() {
     const navigate = useNavigate()
-    const [activeTab, setActiveTab] = useState<TabName>("school")
-    const tabs = [
-        {name: "school", icon: faSchool, path: ""},
-        {name: "arena", icon: faTrophy, path: "arena"},
-        {name: "practice", icon: faPen, path: "practice"},
-        {name: "clan", icon: faUser, path: "clan"}
-    ]
+    const { pathname } = useLocation();
+    const activeTab = getActiveTab(pathname);
 
     function handleClick(tab: TabName, path: string) {
-        setActiveTab(tab)
+        if (tab === activeTab) return;
         navigate(path)
     }
 
@@ -30,10 +17,11 @@ export function BottomBar() {
         <div className="bottom-bar">
             {tabs.map(tab => (
                     <button
+                        key={tab.name}
                         className={`section ${activeTab === tab.name ? "selected" : ""}`}
                         onClick={() => handleClick(tab.name as TabName, tab.path)}>
-                        <FontAwesomeIcon icon={tab.icon} className={`icon ${activeTab === tab.name ? "selected" : ""}`}/>
-                        <span>{tab.name}</span>
+                        <FontAwesomeIcon icon={tab.icon} className="icon"/>
+                        <span className="label">{tab.name}</span>
                     </button>
                 )
             )}
