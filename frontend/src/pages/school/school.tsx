@@ -19,7 +19,7 @@ export function School() {
             <div className="school-hero">
                 <div className="school-copy">
                     <span className="school-kicker">{course}</span>
-                    <h1>Introduction Web-development</h1>
+                    <h1>{module}</h1>
                     <p>Level up your coding skills and unlock your first complete project.</p>
                 </div>
                 <div className="school-terminal" aria-hidden="true">

@@ -1,47 +1,44 @@
-import "./goal-frame.scss"
+import "./goal-frame.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faListCheck,
-    faBullseye,
-} from "@fortawesome/free-solid-svg-icons";
-import type { props } from './types.ts';
+import { faListCheck, faBullseye } from "@fortawesome/free-solid-svg-icons";
+import type { props } from "./types.ts";
 
-
-export function Goal({isVisible, data}: props) {
-
+export function Goal({ isVisible, data }: props) {
     return (
-        <div className={`step-content ${!isVisible && "hidden"}`}>
-            <div className="goal-component">
-                <div className="topic">
+        <div className={`goal-frame ${!isVisible ? "goal-frame--hidden" : ""}`}>
+            <div className="goal-frame__panel">
+                <div className="goal-frame__topic">
+                    <FontAwesomeIcon icon={faBullseye} className="goal-frame__topic-icon" />
                     <div>
-                       <FontAwesomeIcon icon={faBullseye} className="fs-35"/>
-                    </div>
-                    <div>
-                        <h1 className="title">Level 1: Erste Schritte</h1>
-                        <span className="subtitle" id="subtitle">
+                        <h2 className="goal-frame__heading">Mission Briefing</h2>
+                        <p className="goal-frame__subtitle" id="subtitle">
                             {data.subtitle}
-                        </span>
+                        </p>
                     </div>
                 </div>
-                <div className="topic-content">
-                    <div className="mission-header">
-                        <span className="mission-icon">
-                            <FontAwesomeIcon icon={faListCheck}/>
+
+                <div className="goal-frame__mission">
+                    <div className="goal-frame__mission-header">
+                        <span className="goal-frame__mission-badge">
+                            <FontAwesomeIcon icon={faListCheck} />
                             Mission
                         </span>
-                        <span className="fw-800" id="title">{data.title}</span>
+                        <span className="goal-frame__mission-title" id="title">
+                            {data.title}
+                        </span>
                     </div>
-                    <ul className="goal-list" id="objectives">
-                        <li>{data.objectives[0]}</li>
-                        <li>{data.objectives[1]}</li>
-                        <li>{data.objectives[2]}</li>
-                        <li>{data.objectives[3]}</li>
+
+                    <ul className="goal-frame__list" id="objectives">
+                        {data.objectives.map((objective) => (
+                            <li>{objective}</li>
+                        ))}
                     </ul>
-                    <span className="hint-txt" id="hint">
+
+                    <span className="goal-frame__hint" id="hint">
                         {data.hint}
                     </span>
                 </div>
             </div>
         </div>
-    )
+    );
 }
