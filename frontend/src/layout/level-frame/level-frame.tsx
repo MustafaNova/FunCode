@@ -2,10 +2,6 @@ import "./level-frame.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faHeart,
-    faBullseye,
-    faBook,
-    faQuestion,
-    faCode,
     faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as emptyHeart } from "@fortawesome/free-regular-svg-icons";
@@ -14,10 +10,12 @@ import { ConceptFrame } from "./concept-frame/concept-frame.tsx";
 import { QuizFrame } from "./quiz-frame/quiz-frame.tsx";
 import { TaskFrame } from "./task-frame/task-frame.tsx";
 import { useEffect, useState } from "react";
-import type { LevelStep, LevelTabs } from './types.ts';
+import type { LevelTabs } from './types.ts';
 import { useNavigate, useParams } from "react-router-dom";
 import { getLevel } from "../../services/learning.progression.ts";
 import { Course, type LevelModelDto } from "@funcode/shared";
+import { LevelLoading } from "./level-loading/level-loading.tsx";
+import { steps } from './steps.ts';
 
 export function LevelFrame() {
     const { course, module, level } = useParams();
@@ -26,14 +24,9 @@ export function LevelFrame() {
     const [levelContent, setLevelContent] = useState<LevelModelDto>();
     const [showModal, setShowModal] = useState(false);
     const [quizFinished, setQuizFinished] = useState(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const maxHearts = 2;
     const [hearts, setHearts] = useState<number>(maxHearts);
-    const steps: LevelStep[] = [
-        { icon: faBullseye, tab: "goal"},
-        { icon: faBook, tab: "concept"},
-        { icon: faQuestion, tab: "quiz"},
-        { icon: faCode, tab: "task"},
-    ];
     const isLastTab = curTab === steps[steps.length - 1].tab;
     const continueDisabled = (curTab === "quiz" && !quizFinished) || isLastTab;
 
@@ -56,12 +49,13 @@ export function LevelFrame() {
         const fetchLevel = async () => {
             const res = await getLevel({ course: course as Course, module, level: Number(level) });
             setLevelContent(res.data);
+            setTimeout(() => setIsLoading(false), 1500)
         };
         void fetchLevel();
     }, [course, module, level]);
 
-    if (!levelContent) {
-        return <div className="level-frame-loading">...loading</div>;
+    if (isLoading || !levelContent) {
+        return <LevelLoading />;
     }
 
     return (
