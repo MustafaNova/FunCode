@@ -1,11 +1,16 @@
 import s from './arena1v1.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faTerminal } from '@fortawesome/free-solid-svg-icons';
+import { useState } from 'react';
+import { hints } from './hints.ts';
 
 type CancelSearch = {
     cancel: () => void
 }
 export function SearchingScreen({ cancel }: CancelSearch) {
+    const [hint] = useState(() => {
+        return hints[Math.floor(Math.random() * hints.length)]
+    })
     return (
         <main className={s.screen}>
             <section className={`${s.panel} ${s.searchPanel}`}>
@@ -15,8 +20,8 @@ export function SearchingScreen({ cancel }: CancelSearch) {
 
                 <div className={s.hero}>
                     <p className={s.kicker}>Matchmaking</p>
-                    <h1>Searching opponent</h1>
-                    <p>Keeping your socket warm while a challenger joins the arena.</p>
+                    <h1>Searching</h1>
+                    <p>hint: {hint}</p>
                 </div>
 
                 <div className={s.searchTerminal}>
