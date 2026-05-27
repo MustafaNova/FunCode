@@ -31,10 +31,23 @@
   gap: 18px;
   padding: clamp(18px, 4vw, 34px);
   box-sizing: border-box;
-  border: 1px solid rgba(192, 239, 255, 0.18);
+  border: 1px solid transparent;
   border-radius: 18px;
-  background: rgba(13, 17, 31, 0.9);
-  box-shadow: var(--shadow);
+  background:
+    linear-gradient(rgba(13, 17, 31, 0.92), rgba(13, 17, 31, 0.9)) padding-box,
+    conic-gradient(
+        from 145deg,
+        rgba(54, 228, 255, 0.72),
+        rgba(139, 255, 156, 0.52),
+        rgba(255, 209, 102, 0.36),
+        rgba(255, 79, 135, 0.5),
+        rgba(54, 228, 255, 0.72)
+      )
+      border-box;
+  box-shadow:
+    var(--shadow),
+    0 0 38px rgba(54, 228, 255, 0.16),
+    0 0 54px rgba(255, 79, 135, 0.09);
   backdrop-filter: blur(12px);
   position: relative;
   overflow: hidden;
@@ -82,7 +95,7 @@
 
 .hero p:last-child {
   margin: 0;
-  max-width: 58ch;
+  max-width: 77ch;
   color: var(--muted);
   line-height: 1.5;
 }

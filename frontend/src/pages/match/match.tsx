@@ -35,7 +35,7 @@ export function Match() {
             offLose();
             offError();
         }
-    }, [])
+    }, [navigate])
 
     function submitCode() {
         if (code.trim() === '' || matchTask?.id == null) return;
