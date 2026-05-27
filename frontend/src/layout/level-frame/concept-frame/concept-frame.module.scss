@@ -1,70 +1,61 @@
-$text: rgba(255, 255, 255, 0.92);
-$muted: rgba(255, 255, 255, 0.72);
-$border: 1px solid rgba(255, 255, 255, 0.12);
-
-.closed {
-  display: none !important;
-}
-
 .conceptComponent {
-  height: 410px;
+  height: 100%;
+  min-height: 0;
   overflow-y: auto;
-  color: $text;
+  color: var(--text);
   display: grid;
-  gap: 15px;
+  gap: 14px;
 }
 
+.hidden {
+  display: none;
+}
 
 .panel {
-  border-radius: 20px;
-  border: $border;
-  background: rgba(0, 0, 0, 0.18);
-  padding: 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.24);
+  padding: clamp(12px, 1.8vw, 18px);
   display: grid;
   gap: 10px;
 }
-
 
 .introduction {
   display: flex;
   align-items: center;
-  gap: 12px
+  gap: 12px;
 }
 
+.htmlIcon {
+  color: #ff7347;
+  font-size: clamp(28px, 3.2vw, 42px);
+}
 
 .title {
-  font-weight: 700;
-  margin-top: 0;
-  margin-bottom: 4px;
-  font-size: 15px;
+  margin: 0;
+  font-weight: 800;
+  font-size: clamp(17px, 2vw, 22px);
+  line-height: 1.2;
 }
 
 .muted {
-  color: $muted
+  color: var(--muted);
+  font-size: clamp(13px, 1.7vw, 15px);
 }
 
+.blocks {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 12px;
+}
 
 .block {
-  border-radius: 18px;
-  border: $border;
-  background: rgba(255, 255, 255, 0.05);
-  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.22);
+  padding: clamp(12px, 1.8vw, 16px);
   display: grid;
   gap: 10px;
-}
-
-
-.badge {
-  font-size: 12px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(45, 212, 191, 0.14);
-  color: rgba(255, 255, 255, 0.9);
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 2px;
 }
 
 .header {
@@ -72,31 +63,46 @@ $border: 1px solid rgba(255, 255, 255, 0.12);
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(45, 212, 191, 0.32);
+  background: rgba(45, 212, 191, 0.14);
+  color: rgba(255, 255, 255, 0.92);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fw700 {
+  font-weight: 700;
 }
 
 .fs15 {
-  font-size: 15px
+  font-size: clamp(14px, 1.7vw, 16px);
+  line-height: 1.45;
 }
 
 .hint {
-  color: $muted;
-  font-size: 11px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
 }
 
 .media {
   border-radius: 16px;
-  border: $border;
-  background: rgba(0, 0, 0, 0.20);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.22);
   overflow: hidden;
-  min-height: 160px;
+  min-height: 180px;
   display: grid;
   place-items: center;
   position: relative;
-}
-
-.blocks {
-  display: grid;
-  gap: 10px;
 }
 
 .visualBadge {
@@ -104,49 +110,56 @@ $border: 1px solid rgba(255, 255, 255, 0.12);
   left: 12px;
   top: 12px;
   font-size: 12px;
+  font-weight: 700;
   padding: 6px 10px;
-  border-radius: 16px;
-  border: $border;
-  background: rgba(124, 92, 255, 0.16);
-}
-
-
-.fw700 {
-  font-weight: 700;
-}
-
-.stepTxt {
-  font-weight: 700;
-  font-size: 12px;
-  color: $muted
-}
-
-.stepNum {
-  width: 28px;
-  height: 28px;
-  border-radius: 10px;
-  display: grid;
-  place-items: center;
-  font-weight: 900;
-  background: rgba(124, 92, 255, 0.18);
+  border-radius: 14px;
   border: 1px solid rgba(124, 92, 255, 0.35);
-}
-
-.htmlIcon {
-  color: red;
-  font-size: 40px;
-}
-
-.hidden {
-  display: none;
-}
-
-.steps {
-  margin-top: 15px;
-  display: grid;
-  gap: 15px;
+  background: rgba(124, 92, 255, 0.18);
 }
 
 .img {
-  height: 95px;
+  max-width: 100%;
+  max-height: 240px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.steps {
+  margin-top: 2px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.stepNum {
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 900;
+  background: rgba(124, 92, 255, 0.2);
+  border: 1px solid rgba(124, 92, 255, 0.38);
+}
+
+.stepTxt {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+@media (max-width: 900px) {
+  .blocks {
+    grid-template-columns: 1fr;
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+  }
+
+  .media {
+    min-height: 160px;
+  }
 }

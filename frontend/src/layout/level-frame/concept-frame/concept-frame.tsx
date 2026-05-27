@@ -40,7 +40,7 @@ export function ConceptFrame({isVisible, data} : props) {
                 </div>
                 <div className={s.media}>
                     <span className={s.visualBadge}>Visual</span>
-                    <img className={s.img} src={data.visualOne}  alt="Visual" id="visualOne"/>
+                    <img className={s.img} src={data.visualOne} alt="Visual" id="visualOne" />
                 </div>
             </section>
             <section className={s.panel}>
@@ -109,7 +109,7 @@ export function ConceptFrame({isVisible, data} : props) {
                 </div>
                 <div className={s.media}>
                     <span className={s.visualBadge}>Visual</span>
-                    <img src={data.visualTwo} alt="" id="visualTwo" />
+                    <img src={data.visualTwo} id="visualTwo" />
                 </div>
             </section>
         </div>

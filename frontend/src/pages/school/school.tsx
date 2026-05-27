@@ -1,6 +1,7 @@
 import "./school.scss"
 import { useActiveScreen } from '../../store/activeScreenStore.ts';
 import { useNavigate } from 'react-router-dom';
+import { SchoolLiveTerminal } from './liveTerminal/SchoolLiveTerminal.tsx';
 
 export function School() {
     const navigate = useNavigate();
@@ -8,110 +9,65 @@ export function School() {
     const module = useActiveScreen((state) => state.module);
     const unlockedLevel = useActiveScreen((state) => state.unlockedLevel);
     const goToLevel = (id: number) => navigate(`/level/${course}/${module}/${id}`);
-    const isDisabled = (level: number) => level != unlockedLevel;
+    const isDisabled = (level: number) => level !== unlockedLevel;
+    const completedLevels = Math.max(0, Math.min(unlockedLevel - 1, 9));
+    const progress = Math.round((completedLevels / 9) * 100);
+    const LEVELS = [1,2,3,4,5,6,7,8]
+
     return (
-        <div>
-            <div className="course-title">
-                Introduction Web-development
+        <section className="school-screen">
+            <div className="school-hero">
+                <div className="school-copy">
+                    <span className="school-kicker">{course}</span>
+                    <h1>{module}</h1>
+                    <p>Level up your coding skills and unlock your first complete project.</p>
+                </div>
+                <div className="school-terminal" aria-hidden="true">
+                    <SchoolLiveTerminal />
+                </div>
             </div>
-            <div className="level-row">
-                <div className="adjustToRight">
+
+            <div className="school-progress">
+                <div className="school-progress-head">
+                    <span>Campaign progress</span>
+                    <strong>{progress}% complete</strong>
+                </div>
+                <div className="school-progress-track" aria-hidden="true">
+                    <span style={{ width: `${progress}%` }} />
+                </div>
+            </div>
+
+            <div className="school-level-grid" aria-label="Course levels">
+                {LEVELS.map((level) => {
+                    const isDone = level < unlockedLevel;
+                    const isLocked = level > unlockedLevel;
+
+                    return (
+                        <button
+                            key={level}
+                            disabled={isDisabled(level)}
+                            className={`school-level-card ${isDone ? "done" : ""} ${isLocked ? "locked" : ""}`}
+                            onClick={() => goToLevel(level)}
+                        >
+                            <span className="school-level-number">{level}</span>
+                            <span className="school-level-label">
+                                {isDone ? "Cleared" : isLocked ? "Locked" : "Current battle"}
+                            </span>
+                        </button>
+                    );
+                })}
                 <button
-                    disabled={isDisabled(1)}
-                    className={`level-btn ${1 < unlockedLevel && "done"} ${1 > unlockedLevel && "locked"}`}
-                    onClick={() => goToLevel(1)}>
-                    <div className="inside-btn">1</div>
-                </button>
-                <svg width="200" height="130" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M-1,60 Q95,50 65,181" stroke="#C77DFF" stroke-width="15" fill="transparent"/>
-                </svg>
-            </div>
-            </div>
-            <div className="level-row">
-                <button
-                    disabled={isDisabled(2)}
-                    className={`level-btn moveToRight ${2 < unlockedLevel && "done"} ${2 > unlockedLevel && "locked"}`}
-                    onClick={() => goToLevel(2)}>
-                    <div className="inside-btn">2</div>
+                    disabled={isDisabled(9)}
+                    className={`school-project-card ${9 < unlockedLevel ? "done" : ""} ${9 > unlockedLevel ? "locked" : ""}`}
+                    onClick={() => goToLevel(9)}
+                >
+                    <span className="school-project-tag">Final quest</span>
+                    <strong>Your First Project</strong>
+                    <span>
+                        {9 === unlockedLevel ? "Ready to launch" : 9 < unlockedLevel ? "Completed" : "Unlock all levels"}
+                    </span>
                 </button>
             </div>
-            <div className="level-row">
-                <div className="d-flex">
-                    <svg width="200" height="140" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M201,48 Q115,42 140,181" stroke="#C77DFF" stroke-width="15" fill="transparent"/>
-                    </svg>
-                    <button
-                        disabled={isDisabled(3)}
-                        className={`level-btn ${3 < unlockedLevel && "done"} ${3 > unlockedLevel && "locked"}`}
-                        onClick={() => goToLevel(3)}>
-                        <div className="inside-btn">3</div>
-                    </button>
-                    <svg width="200" height="130" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0,48 Q75,50 75,-1" stroke="#C77DFF" stroke-width="15" fill="transparent"/>
-                    </svg>
-                </div>
-            </div>
-            <div className="level-row">
-                <div className="level-btns moveLeft-btns">
-                    <button
-                        disabled={isDisabled(4)}
-                        className={`level-btn ${4 < unlockedLevel && "done"} ${4 > unlockedLevel && "locked"}`}
-                        onClick={() => goToLevel(4)}>
-                        <div className="inside-btn">4</div>
-                    </button>
-                    <button
-                        disabled={isDisabled(5)}
-                        className={`level-btn ${5 < unlockedLevel && "done"} ${5 > unlockedLevel && "locked"}`}
-                        onClick={() => goToLevel(5)}>
-                        <div className="inside-btn">5</div>
-                    </button>
-                </div>
-            </div>
-            <div className="level-row">
-                <div className="centerY">
-                    <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M201,95 Q130,100 135,-1" stroke="#C77DFF" stroke-width="15" fill="transparent"/>
-                    </svg>
-                    <button
-                        disabled={isDisabled(6)}
-                        className={`level-btn ${6 < unlockedLevel && "done"} ${6 > unlockedLevel && "locked"}`}
-                        onClick={() => goToLevel(6)}>
-                        <div className="inside-btn">6</div>
-                    </button>
-                    <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M-1,95 Q65,99 65,201" stroke="#C77DFF" stroke-width="15" fill="transparent"/>
-                    </svg>
-                </div>
-            </div>
-            <div className="level-row">
-                <div className="level-btns moveRight-btns">
-                    <button
-                        disabled={isDisabled(7)}
-                        className={`level-btn ${7 < unlockedLevel && "done"} ${7 > unlockedLevel && "locked"}`}
-                        onClick={() => goToLevel(7)}>
-                        <div className="inside-btn">7</div>
-                    </button>
-                    <button
-                        disabled={isDisabled(8)}
-                        className={`level-btn ${8 < unlockedLevel && "done"} ${8 > unlockedLevel && "locked"}`}
-                        onClick={() => goToLevel(8)}>
-                        <div className="inside-btn">8</div>
-                    </button>
-                </div>
-            </div>
-            <div className="level-row">
-                <div className="project-wrapper">
-                    <svg className="line-svg" width="100%" height="60" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M260,0 260,60" stroke="#C77DFF" stroke-width="15" fill="transparent"/>
-                    </svg>
-                    <button
-                        disabled={isDisabled(9)}
-                        className={`project-btn ${9 < unlockedLevel && "done"} ${9 > unlockedLevel && "locked"}`}
-                        onClick={() => goToLevel(9)}>
-                        <div className="inside-btn">Your first Project !</div>
-                    </button>
-                </div>
-            </div>
-        </div>
+        </section>
     )
 }

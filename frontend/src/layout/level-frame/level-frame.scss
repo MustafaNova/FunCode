@@ -1,219 +1,234 @@
-$card : rgba(255, 255, 255, 0.06);
-$card-border: rgba(255, 255, 255, 0.12);
-$border-rad: 14px;
-$border: 1px solid rgba(255, 255, 255, 0.14);
-$shadow: 0 18px 60px rgba(0, 0, 0, 0.65);
-$padding: 18px;
-$background-darker: rgba(0, 0, 0, 0.22);
-$white-color: rgba(255, 255, 255, 0.86);
-$muted: rgba(255, 255, 255, 0.72);
-$text: rgba(255, 255, 255, 0.92);
-
-.black {
-  color: black;
-}
-
-.goals-tab {
-  width: 97%;
-  height: 98%;
-  background: $card;
-  border: 1px solid $card-border;
-  border-radius: $border-rad;
-  box-shadow: $shadow;
-  backdrop-filter: blur(10px);
+.level-frame-shell {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
   display: flex;
-  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  width: 100%;
+  min-height: 100dvh;
+  padding: clamp(10px, 2vw, 24px);
+  box-sizing: border-box;
+  background: var(--galaxy-background);
 }
 
-
-.close-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: $border-rad;
-  color: $white-color;
-  background: rgba(255, 255, 255, 0.06);
-  border: $border;
+.level-frame {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: clamp(10px, 1.8vw, 16px);
+  padding: clamp(12px, 2vw, 22px);
+  box-sizing: border-box;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
 }
 
 .level-frame-header {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  padding: 18px 10px
+  gap: 12px;
 }
 
-.hearts {
-  color: red;
-  padding: 10px;
-  border-radius: $border-rad;
-  background: $background-darker;
-  border: $border
-}
-
-
-
-
-.tab {
-  background:
-          radial-gradient(900px 500px at 20% 15%, rgba(124, 92, 255, 0.35), transparent 60%),
-          radial-gradient(900px 500px at 80% 20%, rgba(45, 212, 191, 0.22), transparent 60%),
-          radial-gradient(900px 700px at 50% 90%, rgba(255, 77, 109, 0.14), transparent 55%),
-          #0b1020;
-  height: 100%;
-  width: var(--app-width);
-  position:fixed;
-  top: 0;
-  z-index: 20;
-  transition: all 0.4s ease;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.closed {
-  transform: translateY(100%);
-}
-
-
-.footer {
-  height: 50px;
+.level-frame-close-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.24);
+  color: var(--text);
   display: grid;
   place-items: center;
-  padding: $padding;
-  background: $background-darker;
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  border-bottom-left-radius: 14px;
-  border-bottom-right-radius: 14px;
-}
-
-
-.next-btn {
-  width: 100%;
-  height: 54px;
-  border: 0;
-  border-radius: 18px;
-  font-weight: 800;
-  font-size: 16px;
-  letter-spacing: 0.4px;
   cursor: pointer;
-  color: $white-color;
-  background: linear-gradient(135deg, rgba(124, 92, 255, 0.95), rgba(45, 212, 191, 0.85));
-  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.next-btn:disabled {
-  opacity: 0.5;
+.level-frame-close-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  transform: translateY(-1px);
+}
+
+.level-frame-hearts {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.24);
+  color: #ff5b80;
+}
+
+.level-frame-heart-icon {
+  font-size: 18px;
+}
+
+.level-frame-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.level-frame-step {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(0, 0, 0, 0.26);
+  border-radius: 14px;
+  color: var(--text);
+  min-height: 44px;
+  padding: 10px 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.level-frame-step:hover:not(:disabled) {
+  border-color: rgba(124, 92, 255, 0.55);
+  transform: translateY(-1px);
+}
+
+.level-frame-step.is-active {
+  border-color: rgba(124, 92, 255, 0.65);
+  background: rgba(124, 92, 255, 0.22);
+}
+
+.level-frame-step:disabled {
+  opacity: 0.45;
   cursor: not-allowed;
 }
 
-.steps {
-  display: flex;
-  gap: 5px;
-  padding: 0 10px 4px;
+.level-frame-content {
+  min-height: 0;
+  overflow: hidden;
 }
 
-
-.step {
-  background: $background-darker;
-  border: $border;
-  border-radius: 100px;
-  padding: 10px 24px;
-  font-size: 15px;
-  color: $white-color;
+.level-frame-footer {
+  padding-top: 2px;
 }
 
-
-.content {
-  display: flex;
-  padding: 3px 10px;
-  flex: 1;
-}
-
-
-.fs-35 {
-  font-size: 35px
-}
-
-
-
-.mg-0 {
-  margin: 0
-}
-
-
-.fw-800 {
-  font-weight: 800;
-}
-
-.active {
-  border-color: rgba(124, 92, 255, 0.55);
-  background: rgba(124, 92, 255, 0.18);
-  color: rgba(255, 255, 255, 0.92);
-}
-
-.hidden {
-  transform: translateY(100%);
-}
-
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
+.level-frame-next-btn {
   width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
+  height: 52px;
+  border: 0;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.96);
+  background: linear-gradient(135deg, rgba(124, 92, 255, 0.95), rgba(45, 212, 191, 0.88));
+  cursor: pointer;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.d-none {
+.level-frame-next-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.level-frame-next-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.level-frame-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(5, 8, 18, 0.72);
+}
+
+.level-frame-overlay.is-hidden {
   display: none;
 }
 
-.modal {
-  background: white;
-  padding: 24px 32px;
-  border-radius: 12px;
-  width: 60vw;
-  text-align: center;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  font-family: Arial, sans-serif;
+.level-frame-modal {
+  width: min(420px, 100%);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(13, 17, 31, 0.96);
+  color: var(--text);
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.48);
+  padding: 22px;
+  box-sizing: border-box;
 }
 
-.title {
-  margin-bottom: 12px;
+.level-frame-modal__title {
+  margin: 0;
+  font-size: 20px;
 }
 
-.text {
-  margin-bottom: 20px;
-  color: #555;
+.level-frame-modal__text {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.45;
 }
 
-.actions {
-  display: flex;
+.level-frame-modal__actions {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
-  justify-content: center;
 }
 
-.btn {
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: none;
+.level-frame-modal__btn {
+  height: 44px;
+  border-radius: 12px;
+  font-weight: 700;
   cursor: pointer;
-  transition: 0.2s;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--text);
 }
 
-.btn:hover {
-  opacity: 0.9;
+.level-frame-modal__btn--cancel {
+  background: rgba(255, 255, 255, 0.08);
 }
 
-.btn-cancel {
-  background: #ddd;
+.level-frame-modal__btn--leave {
+  border: 0;
+  background: linear-gradient(135deg, rgba(255, 77, 109, 0.95), rgba(255, 106, 126, 0.88));
 }
 
-.btn-leave {
-  background: #e74c3c;
-  color: white;
+@media (max-width: 1024px) {
+  .level-frame-shell {
+    padding: 0;
+  }
+
+  .level-frame {
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .level-frame {
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .level-frame-step span {
+    display: none;
+  }
+
+  .level-frame-step {
+    min-height: 40px;
+    padding: 8px 10px;
+  }
+
+  .level-frame-next-btn {
+    height: 48px;
+  }
 }

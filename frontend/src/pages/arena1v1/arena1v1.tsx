@@ -4,10 +4,9 @@ import { leaveUnranked1v1, matchmakingUnranked1v1 } from '../../services/matchma
 import { Socket } from 'socket.io-client';
 import { useNavigate } from 'react-router-dom';
 import { SOCKET_EVENTS } from '@funcode/shared';
-
-type CancelSearch = {
-    cancel: () => void
-}
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBug, faCodeBranch, faLock, faShieldHalved, faUserNinja } from '@fortawesome/free-solid-svg-icons';
+import { SearchingScreen } from './searchingScreen.tsx';
 
 export function Arena1v1() {
     const [searching, setSearching] = useState(false);
@@ -31,22 +30,63 @@ export function Arena1v1() {
     }
 
     return (
-        <div className={s.container}>
-            <button className={s.button} onClick={startUnranked1v1}>unranked</button>
-            <button className='notAvailable'>Bug Hunt</button>
-            <button className='notAvailable'>Random Programming Language</button>
-        </div>
+        <main className={s.screen}>
+            <section className={s.panel}>
+                <div className={s.terminal}>
+                    <div className={s.terminalHeader}>
+                        <span />
+                        <span />
+                        <span />
+                    </div>
+                    <div className={s.codeLines}>
+                        <span className={s.prompt}>funcode@arena:~$</span>
+                        <span>queue_1v1_mode()</span>
+                        <span className={s.cursor}>_</span>
+                    </div>
+                </div>
+
+                <div className={s.hero}>
+                    <p className={s.kicker}>1v1 Arena</p>
+                    <h1>Choose your duel</h1>
+                    <p>Pick a battle queue and solve faster than your opponent.</p>
+                </div>
+
+                <div className={s.modeGrid}>
+                    <button className={`${s.modeCard} ${s.modeCardActive}`} onClick={startUnranked1v1}>
+                        <span className={s.modeIcon}>
+                            <FontAwesomeIcon icon={faShieldHalved} />
+                        </span>
+                        <span className={s.modeContent}>
+                            <strong>Unranked</strong>
+                            <span>Practice duel without rank pressure</span>
+                        </span>
+                        <FontAwesomeIcon className={s.modeAction} icon={faUserNinja} />
+                    </button>
+
+                    <button className={s.modeCard} disabled>
+                        <span className={s.modeIcon}>
+                            <FontAwesomeIcon icon={faBug} />
+                        </span>
+                        <span className={s.modeContent}>
+                            <strong>Bug Hunt</strong>
+                            <span>Debug race</span>
+                        </span>
+                        <FontAwesomeIcon className={s.modeAction} icon={faLock} />
+                    </button>
+
+                    <button className={s.modeCard} disabled>
+                        <span className={s.modeIcon}>
+                            <FontAwesomeIcon icon={faCodeBranch} />
+                        </span>
+                        <span className={s.modeContent}>
+                            <strong>Random Language</strong>
+                            <span>Surprise stack challenge</span>
+                        </span>
+                        <FontAwesomeIcon className={s.modeAction} icon={faLock} />
+                    </button>
+                </div>
+            </section>
+        </main>
     )
 }
 
-
-function SearchingScreen({ cancel }: CancelSearch) {
-    return (
-        <div className={s.searchingScreen}>
-            <div>Searching for opponent...</div>
-            <button className={s.button} onClick={cancel}>
-                cancel
-            </button>
-        </div>
-    )
-}

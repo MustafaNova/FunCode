@@ -1,0 +1,77 @@
+.liveTerminal {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  width: 100%;
+}
+
+.editorPane,
+.previewPane {
+  background: rgba(3, 8, 16, 0.9);
+  border: 1px solid rgba(192, 239, 255, 0.2);
+  border-radius: 8px;
+  min-height: 230px;
+  overflow: hidden;
+}
+
+.paneHeader {
+  background: rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(192, 239, 255, 0.16);
+  color: rgba(245, 251, 255, 0.76);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  padding: 11px 12px;
+  text-transform: uppercase;
+}
+
+.code {
+  color: #b7f7ff;
+  font: 700 clamp(0.73rem, 1.3vw, 0.92rem) / 1.7 "Cascadia Code", "Fira Code", Consolas, monospace;
+  margin: 0;
+  max-height: 230px;
+  min-height: 190px;
+  overflow: auto;
+  padding: 12px;
+  white-space: pre-wrap;
+}
+
+.cursor {
+  animation: blink 900ms steps(2, start) infinite;
+  color: #ffd166;
+}
+
+.previewFrame {
+  background: #09101a;
+  border: 0;
+  display: block;
+  height: 230px;
+  width: 100%;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 980px) {
+  .liveTerminal {
+    grid-template-columns: 1fr;
+  }
+
+  .editorPane,
+  .previewPane {
+    min-height: 190px;
+  }
+
+  .code {
+    max-height: 200px;
+    min-height: 150px;
+  }
+
+  .previewFrame {
+    height: 210px;
+  }
+}

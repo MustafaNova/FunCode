@@ -7,4 +7,3 @@ export type props = {
     onFinish: () => void,
     onHeartLose: () => void,
 }
-export type Selected = number | null;

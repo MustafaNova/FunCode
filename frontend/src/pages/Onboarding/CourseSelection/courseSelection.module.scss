@@ -1,24 +1,185 @@
 .screen {
+  --panel-strong: rgba(14, 25, 42, 0.94);
+  --stroke: rgba(192, 239, 255, 0.18);
+  --cyan: #36e4ff;
+  --green: #8bff9c;
+  --pink: #ff4f87;
+  --gold: #ffd166;
+
+  background:
+    linear-gradient(135deg, rgba(255, 79, 135, 0.18), transparent 28%),
+    radial-gradient(circle at 82% 18%, rgba(54, 228, 255, 0.24), transparent 32%),
+    linear-gradient(180deg, #071019 0%, #10151f 48%, #190d19 100%);
+  color: #f5fbff;
+  animation: courseEnter 280ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.screen,
+.screen * {
+  box-sizing: border-box;
+}
+
+.screenFromOnboarding {
+  animation: courseFromOnboarding 320ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.screen::before {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  background-size: 42px 42px;
+  content: "";
+  inset: 0;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent);
+  pointer-events: none;
   position: fixed;
-  width: 100vw;
+}
+
+.selectionCard {
+  background: var(--panel-strong);
   display: flex;
-  gap: 20px;
   flex-direction: column;
-  align-items: center;
+  gap: 20px;
   justify-content: center;
-  top: 0;
-  bottom: 0;
-  z-index: 10;
-  background: var(--galaxy-background)
+  min-height: 100dvh;
+  padding: clamp(24px, 6vw, 84px);
+  position: relative;
+  width: 100%;
+  z-index: 1;
 }
 
-.course {
-  padding: 12px 24px;
-  border-radius: 12px;
+.header {
+  display: grid;
+  gap: 8px;
 }
 
-.disabled {
-  padding: 12px 24px;
-  border-radius: 12px;
-  opacity: 0.5;
+.kicker {
+  color: var(--cyan);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  font-size: clamp(2.2rem, 6.2vw, 4.4rem);
+  line-height: 0.95;
+  margin: 0;
+}
+
+.header p {
+  color: rgba(245, 251, 255, 0.68);
+  line-height: 1.5;
+  margin: 0;
+  max-width: 55ch;
+}
+
+.courseGrid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.courseCard {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(192, 239, 255, 0.16);
+  border-radius: 8px;
+  color: #f5fbff;
+  cursor: pointer;
+  display: grid;
+  gap: 10px;
+  min-height: 170px;
+  padding: 16px;
+  text-align: left;
+  transition: border-color 160ms ease, filter 160ms ease, transform 160ms ease;
+}
+
+.courseCard:hover:not(:disabled) {
+  border-color: var(--cyan);
+  transform: translateY(-2px);
+}
+
+.courseCard:focus-visible {
+  outline: 3px solid rgba(255, 209, 102, 0.85);
+  outline-offset: 4px;
+}
+
+.courseCard strong {
+  font-size: 1.15rem;
+  line-height: 1.2;
+}
+
+.courseCard p {
+  color: rgba(245, 251, 255, 0.72);
+  margin: 0;
+}
+
+.cardTag,
+.cardAction {
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.available .cardTag,
+.available .cardAction {
+  color: var(--green);
+}
+
+.locked {
+  cursor: not-allowed;
+  filter: grayscale(0.75);
+  opacity: 0.52;
+}
+
+.locked .cardTag,
+.locked .cardAction {
+  color: rgba(245, 251, 255, 0.6);
+}
+
+@keyframes courseEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes courseFromOnboarding {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 560px) {
+  .selectionCard {
+    gap: 16px;
+    padding: 14px;
+  }
+
+  .courseGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .screen,
+  .screenFromOnboarding {
+    animation: none;
+  }
 }
