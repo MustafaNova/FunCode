@@ -1,28 +1,353 @@
-.container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  gap: 30px;
+.screen {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: clamp(16px, 4vw, 34px);
+  box-sizing: border-box;
+  color: var(--text);
+  background:
+    linear-gradient(135deg, rgba(255, 79, 135, 0.16), transparent 28%),
+    radial-gradient(circle at 82% 18%, rgba(54, 228, 255, 0.22), transparent 32%),
+    var(--galaxy-background);
+  overflow: hidden;
+  position: relative;
 }
 
-.button {
-  height: var(--arena-btn-height);
-  width: var(--arena-btn-width);
-}
-
-
-.searchingScreen {
+.screen::before {
+  content: "";
   position: fixed;
-  width: 100vw;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent);
+}
+
+.panel {
+  width: min(820px, 100%);
+  display: grid;
+  gap: 18px;
+  padding: clamp(18px, 4vw, 34px);
+  box-sizing: border-box;
+  border: 1px solid rgba(192, 239, 255, 0.18);
+  border-radius: 18px;
+  background: rgba(13, 17, 31, 0.9);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+}
+
+.panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent 0 48%, rgba(54, 228, 255, 0.16) 50%, transparent 52%),
+    linear-gradient(0deg, transparent 0 48%, rgba(255, 79, 135, 0.12) 50%, transparent 52%);
+  background-size: 84px 84px;
+  opacity: 0.28;
+}
+
+.terminal,
+.hero,
+.modeGrid,
+.searchIcon,
+.searchTerminal,
+.progress,
+.cancelButton {
+  position: relative;
+  z-index: 1;
+}
+
+.terminal {
+  overflow: hidden;
+  border: 1px solid rgba(54, 228, 255, 0.25);
+  border-radius: 8px;
+  background: rgba(3, 8, 16, 0.88);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.terminalHeader {
   display: flex;
-  gap: 20px;
-  flex-direction: column;
+  gap: 7px;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.terminalHeader span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ff4f87;
+}
+
+.terminalHeader span:nth-child(2) {
+  background: #ffd166;
+}
+
+.terminalHeader span:nth-child(3) {
+  background: #8bff9c;
+}
+
+.codeLines {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 74px;
+  padding: 0 16px;
+  color: #b7f7ff;
+  font: 700 clamp(0.88rem, 2vw, 1.15rem) / 1.4 "Cascadia Code", "Fira Code", Consolas, monospace;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.prompt {
+  color: #8bff9c;
+}
+
+.cursor {
+  color: #ffd166;
+  animation: blink 900ms steps(2, start) infinite;
+}
+
+.hero {
+  display: grid;
+  gap: 8px;
+}
+
+.kicker {
+  margin: 0;
+  color: #36e4ff;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(2.25rem, 6vw, 4.5rem);
+  line-height: 0.95;
+}
+
+.hero p:last-child {
+  margin: 0;
+  max-width: 52ch;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.modeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.modeCard {
+  min-height: 150px;
+  display: grid;
+  align-content: space-between;
+  gap: 14px;
+  padding: 16px;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: not-allowed;
+}
+
+.modeCardActive {
+  cursor: pointer;
+  border-color: rgba(54, 228, 255, 0.28);
+  background: linear-gradient(135deg, rgba(54, 228, 255, 0.13), rgba(139, 255, 156, 0.09));
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.modeCardActive:hover {
+  border-color: rgba(139, 255, 156, 0.48);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+.modeCard:disabled {
+  opacity: 0.58;
+}
+
+.modeIcon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(54, 228, 255, 0.25);
+  border-radius: 8px;
+  background: rgba(3, 8, 16, 0.58);
+  color: #2dd4bf;
+  font-size: 1.1rem;
+  filter: drop-shadow(0 0 14px rgba(45, 212, 191, 0.24));
+}
+
+.modeContent {
+  min-width: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.modeContent strong {
+  font-size: clamp(1.1rem, 2.4vw, 1.55rem);
+  line-height: 1.05;
+}
+
+.modeContent span {
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.35;
+}
+
+.modeAction {
+  justify-self: end;
+  color: #ffd166;
+}
+
+.searchPanel {
+  width: min(600px, 100%);
+  text-align: center;
+  justify-items: center;
+}
+
+.searchPanel .hero {
+  justify-items: center;
+}
+
+.searchIcon {
+  width: 76px;
+  height: 76px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(54, 228, 255, 0.28);
+  border-radius: 18px;
+  background: rgba(3, 8, 16, 0.62);
+  color: #36e4ff;
+  font-size: 1.75rem;
+  box-shadow: 0 0 34px rgba(54, 228, 255, 0.16);
+}
+
+.searchTerminal {
+  width: min(420px, 100%);
+  display: flex;
   align-items: center;
   justify-content: center;
-  top: 0;
-  bottom: 0;
-  z-index: 10;
-  background: var(--galaxy-background)
+  gap: 10px;
+  min-height: 52px;
+  padding: 0 14px;
+  box-sizing: border-box;
+  border: 1px solid rgba(54, 228, 255, 0.25);
+  border-radius: 8px;
+  background: rgba(3, 8, 16, 0.88);
+  color: #b7f7ff;
+  font: 700 0.9rem / 1.4 "Cascadia Code", "Fira Code", Consolas, monospace;
+}
+
+.searchTerminal svg {
+  color: #8bff9c;
+}
+
+.progress {
+  width: min(420px, 100%);
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.progress span {
+  display: block;
+  width: 45%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #36e4ff, #8bff9c);
+  animation: load 1300ms ease-in-out infinite;
+}
+
+.cancelButton {
+  min-width: 180px;
+  min-height: 48px;
+  padding: 0 18px;
+  border: 1px solid rgba(255, 79, 135, 0.36);
+  border-radius: 8px;
+  background: rgba(255, 79, 135, 0.13);
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.cancelButton:hover {
+  border-color: rgba(255, 79, 135, 0.68);
+  background: rgba(255, 79, 135, 0.2);
+  transform: translateY(-1px);
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes load {
+  0% {
+    transform: translateX(-105%);
+  }
+
+  100% {
+    transform: translateX(235%);
+  }
+}
+
+@media (max-width: 760px) {
+  .modeGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .modeCard {
+    min-height: 120px;
+  }
+}
+
+@media (max-width: 640px) {
+  .panel {
+    gap: 14px;
+    border-radius: 8px;
+  }
+
+  .codeLines {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+    min-height: 96px;
+    justify-content: center;
+  }
+
+  .searchTerminal {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 12px 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor,
+  .progress span,
+  .modeCardActive,
+  .cancelButton {
+    animation: none;
+    transition: none;
+  }
 }

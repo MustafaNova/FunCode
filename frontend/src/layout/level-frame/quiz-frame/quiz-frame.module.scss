@@ -1,151 +1,158 @@
-$muted : rgba(255, 255, 255, 0.72);
-$border: 1px solid rgba(255, 255, 255, 0.14);
-$radius100: 100px;
-$purple: rgba(124, 92, 255, 0.85);
+.content {
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  display: grid;
+  gap: 12px;
+}
 
 .panel {
-  border-radius: 20px;
-  border: $border;
-  background: rgba(0, 0, 0, 0.18);
-  padding: 18px;
-  margin-bottom: 10px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.24);
+  padding: clamp(12px, 1.8vw, 18px);
 }
 
 .header {
-  font-size: 22px;
-  display: flex;
-  font-weight: bold;
-  margin-bottom: 8px;
+  font-size: clamp(20px, 2.4vw, 26px);
+  font-weight: 800;
+  margin-bottom: 6px;
 }
 
 .subtitle {
   font-size: 13px;
-  color: $muted;
+  line-height: 1.5;
+  color: var(--muted);
   margin-bottom: 8px;
 }
 
-
-.statsBox {
-  display: flex;
-  gap: 10px;
-  padding: 12px 14px;
-  border-radius: $radius100;
-  border: $border;
-  background: rgba(255, 255, 255, 0.05);
-  font-weight: 800;
-  font-size: 13px;
+.infos {
+  display: grid;
+  gap: 8px;
 }
 
 .curStats {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 8px;
+}
+
+.statsBox {
+  display: inline-flex;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  font-weight: 800;
+  font-size: 12px;
 }
 
 .progressBar {
   height: 10px;
-  border-radius: $radius100;
-  border: $border;
-  background: rgba(0, 0, 0, 0.18);
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(0, 0, 0, 0.2);
+  overflow: hidden;
 }
 
 .barFill {
   height: 100%;
   width: 0;
-  border-radius: $radius100;
-  background: linear-gradient(135deg, rgba(124, 92, 255, 0.95), rgba(45, 212, 191, 0.85));
-  transition: all 0.5s ease
-}
-
-
-.qNum {
-  width: 28px;
-  height: 28px;
-  border-radius: 10px;
-  display: grid;
-  place-items: center;
-  font-weight: 900;
-  background: rgba(124, 92, 255, 0.18);
-  border: 1px solid rgba(124, 92, 255, 0.35);
-  flex: 0 0 auto;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(124, 92, 255, 0.95), rgba(45, 212, 191, 0.9));
+  transition: width 0.35s ease;
 }
 
 .quizHeader {
   display: flex;
   gap: 10px;
+  align-items: flex-start;
   margin-bottom: 8px;
 }
 
+.qNum {
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  font-size: 13px;
+  background: rgba(124, 92, 255, 0.2);
+  border: 1px solid rgba(124, 92, 255, 0.4);
+  flex: 0 0 auto;
+}
+
 .question {
-  font-weight: bold;
+  font-size: clamp(15px, 1.9vw, 18px);
+  font-weight: 700;
+  line-height: 1.4;
 }
 
 .options {
   display: grid;
-  gap: 12px;
-  margin-top: 15px;
+  gap: 10px;
+  margin-top: 12px;
 }
 
-.opt, .nextQ {
+.opt,
+.nextQ {
   all: unset;
+  box-sizing: border-box;
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 12px;
   display: flex;
-  justify-content: left;
-  border-radius: 18px;
-  border: $border;
-  background: rgba(255, 255, 255, 0.05);
-  padding: 12px 12px;
+  align-items: flex-start;
   gap: 10px;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.opt {
   cursor: pointer;
-  width: 90%;
-  color: inherit;
-  font: inherit;
-  transition: all 0.1s ease;
 }
 
 .nextQ {
   justify-content: center;
-  opacity: 0.55;
-}
-
-.content {
-  overflow-y: auto;
-  height: 410px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 0;
+  background: linear-gradient(135deg, rgba(124, 92, 255, 0.94), rgba(45, 212, 191, 0.86));
 }
 
 .opt.wrong {
-  border-color: rgba(255, 77, 109, 0.45);
-  background: rgba(255, 77, 109, 0.10);
+  border-color: rgba(255, 77, 109, 0.5);
+  background: rgba(255, 77, 109, 0.14);
 }
-
 
 .opt.correct {
-  border-color: rgba(45, 212, 191, 0.45);
-  background: rgba(45, 212, 191, 0.12);
-}
-
-.hidden {
-  display: none
+  border-color: rgba(45, 212, 191, 0.5);
+  background: rgba(45, 212, 191, 0.14);
 }
 
 .ok {
   display: flex;
-  border-color: rgba(45, 212, 191, 0.40);
-  background: rgba(45, 212, 191, 0.10);
+  border-color: rgba(45, 212, 191, 0.45);
+  background: rgba(45, 212, 191, 0.12);
 }
 
 .bad {
   display: flex;
-  border-color: rgba(255, 77, 109, 0.40);
-  background: rgba(255, 77, 109, 0.08);
+  border-color: rgba(255, 77, 109, 0.45);
+  background: rgba(255, 77, 109, 0.1);
 }
-
 
 .radio {
   width: 18px;
   height: 18px;
-  border-radius: $radius100;
+  border-radius: 999px;
   border: 2px solid rgba(255, 255, 255, 0.35);
-  background: rgba(0, 0, 0, 0.18);
+  background: rgba(0, 0, 0, 0.2);
   display: grid;
   place-items: center;
   flex: 0 0 auto;
@@ -155,17 +162,32 @@ $purple: rgba(124, 92, 255, 0.85);
   content: "";
   width: 10px;
   height: 10px;
-  border-radius: $radius100;
-  background: $purple;
-  transition: background 0.1s ease;
+  border-radius: 999px;
+  background: rgba(124, 92, 255, 0.95);
+  transition: opacity 0.15s ease;
   opacity: 0;
 }
 
-
 .purpleBorder {
-  border-color: $purple;
+  border-color: rgba(124, 92, 255, 0.95);
 }
 
 .purpleBorder::after {
   opacity: 1;
+}
+
+@media (max-width: 640px) {
+  .opt,
+  .nextQ {
+    padding: 11px;
+  }
+
+  .statsBox {
+    padding: 8px 10px;
+  }
+}
+
+
+.hidden {
+  display: none;
 }

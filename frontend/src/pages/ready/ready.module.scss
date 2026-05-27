@@ -1,18 +1,380 @@
-.readyScreen {
-  position: fixed;
-  width: 100vw;
-  display: flex;
-  gap: 20px;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  top: 0;
-  bottom: 0;
-  z-index: 10;
-  background: var(--galaxy-background)
+.screen {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: clamp(16px, 4vw, 34px);
+  box-sizing: border-box;
+  color: var(--text);
+  background:
+    linear-gradient(135deg, rgba(255, 79, 135, 0.16), transparent 28%),
+    radial-gradient(circle at 82% 18%, rgba(54, 228, 255, 0.22), transparent 32%),
+    var(--galaxy-background);
+  overflow: hidden;
+  position: relative;
 }
 
-.btn {
-  width: 100px;
-  height: 50px;
+.screen::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent);
+}
+
+.panel {
+  width: min(1080px, 100%);
+  display: grid;
+  gap: 18px;
+  padding: clamp(18px, 4vw, 34px);
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  border-radius: 18px;
+  background:
+    linear-gradient(rgba(13, 17, 31, 0.92), rgba(13, 17, 31, 0.9)) padding-box,
+    conic-gradient(
+        from 145deg,
+        rgba(54, 228, 255, 0.72),
+        rgba(139, 255, 156, 0.52),
+        rgba(255, 209, 102, 0.36),
+        rgba(255, 79, 135, 0.5),
+        rgba(54, 228, 255, 0.72)
+      )
+      border-box;
+  box-shadow:
+    var(--shadow),
+    0 0 38px rgba(54, 228, 255, 0.16),
+    0 0 54px rgba(255, 79, 135, 0.09);
+  backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+}
+
+.panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent 0 48%, rgba(54, 228, 255, 0.16) 50%, transparent 52%),
+    linear-gradient(0deg, transparent 0 48%, rgba(255, 79, 135, 0.12) 50%, transparent 52%);
+  background-size: 84px 84px;
+  opacity: 0.28;
+}
+
+.hero,
+.toolbar,
+.terminalGrid,
+.statusBar {
+  position: relative;
+  z-index: 1;
+}
+
+.hero {
+  display: grid;
+  gap: 8px;
+}
+
+.kicker {
+  margin: 0;
+  color: #36e4ff;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(2.35rem, 6vw, 4.8rem);
+  line-height: 0.95;
+}
+
+.hero p:last-child {
+  margin: 0;
+  max-width: 77ch;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.languageToggle {
+  display: inline-grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  background: rgba(3, 8, 16, 0.62);
+}
+
+.languageToggle button,
+.readyButton {
+  min-height: 44px;
+  border: 0;
+  border-radius: 8px;
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+}
+
+.languageToggle button {
+  min-width: 118px;
+  padding: 0 14px;
+  background: transparent;
+  color: var(--muted);
+}
+
+.languageToggle .activeLanguage {
+  background: linear-gradient(135deg, rgba(54, 228, 255, 0.22), rgba(139, 255, 156, 0.16));
+  color: #ffffff;
+  box-shadow: inset 0 0 0 1px rgba(54, 228, 255, 0.25);
+}
+
+.readyButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-width: 150px;
+  padding: 0 18px;
+  background: linear-gradient(90deg, #36e4ff, #8bff9c);
+  color: #061018;
+  transition: filter 160ms ease, transform 160ms ease;
+}
+
+.readyButton:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.terminalPanel {
+  min-width: 0;
+  min-height: 360px;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  overflow: hidden;
+  border: 1px solid rgba(54, 228, 255, 0.25);
+  border-radius: 8px;
+  background: rgba(3, 8, 16, 0.88);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.terminalHeader {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.windowDots {
+  display: flex;
+  gap: 7px;
+}
+
+.windowDots span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ff4f87;
+}
+
+.windowDots span:nth-child(2) {
+  background: #ffd166;
+}
+
+.windowDots span:nth-child(3) {
+  background: #8bff9c;
+}
+
+.terminalTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(245, 251, 255, 0.78);
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.terminalTitle svg {
+  color: #8bff9c;
+}
+
+.terminalPrompt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 14px;
+  color: #b7f7ff;
+  font: 700 0.9rem / 1.4 "Cascadia Code", "Fira Code", Consolas, monospace;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.runRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 14px;
+  color: #b7f7ff;
+  font: 700 0.9rem / 1.4 "Cascadia Code", "Fira Code", Consolas, monospace;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.runButton {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #36e4ff, #8bff9c);
+  color: #061018;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+  transition: filter 160ms ease, transform 160ms ease;
+}
+
+.runButton:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.prompt {
+  color: #8bff9c;
+}
+
+.cursor {
+  color: #ffd166;
+  animation: blink 900ms steps(2, start) infinite;
+}
+
+.codeInput,
+.output {
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  box-sizing: border-box;
+  margin: 0;
+  border: 0;
+  background: rgba(1, 5, 12, 0.52);
+  color: #d8fbff;
+  font: 700 0.95rem / 1.6 "Cascadia Code", "Fira Code", Consolas, monospace;
+}
+
+.codeInput {
+  resize: none;
+  outline: none;
+  padding: 16px;
+}
+
+.codeInput:focus {
+  background: rgba(54, 228, 255, 0.06);
+  box-shadow: inset 0 0 0 2px rgba(54, 228, 255, 0.18);
+}
+
+.output {
+  overflow: auto;
+  padding: 16px;
+  white-space: pre-wrap;
+}
+
+.statusBar {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  width: fit-content;
+  padding: 8px 11px;
+  border: 1px solid rgba(139, 255, 156, 0.22);
+  border-radius: 999px;
+  background: rgba(139, 255, 156, 0.09);
+  color: rgba(245, 251, 255, 0.76);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.statusBar svg {
+  color: #8bff9c;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 860px) {
+  .terminalPanel {
+    min-height: 280px;
+  }
+}
+
+@media (max-width: 640px) {
+  .panel {
+    gap: 14px;
+    border-radius: 8px;
+  }
+
+  .toolbar,
+  .readyButton {
+    width: 100%;
+  }
+
+  .languageToggle {
+    width: 100%;
+  }
+
+  .languageToggle button {
+    min-width: 0;
+  }
+
+  .terminalHeader {
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px 14px;
+  }
+
+  .terminalPrompt {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 14px;
+  }
+
+  .runRow {
+    align-items: stretch;
+    flex-direction: column;
+    padding: 12px 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor,
+  .readyButton,
+  .runButton {
+    animation: none;
+    transition: none;
+  }
 }

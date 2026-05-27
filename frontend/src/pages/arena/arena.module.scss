@@ -1,15 +1,263 @@
-.dFlex {
+.screen {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: clamp(16px, 4vw, 34px);
+  box-sizing: border-box;
+  color: var(--text);
+  background:
+    linear-gradient(135deg, rgba(255, 79, 135, 0.16), transparent 28%),
+    radial-gradient(circle at 82% 18%, rgba(54, 228, 255, 0.22), transparent 32%),
+    var(--galaxy-background);
+  overflow: hidden;
+  position: relative;
+}
+
+.screen::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent);
+}
+
+.panel {
+  width: min(760px, 100%);
+  display: grid;
+  gap: 18px;
+  padding: clamp(18px, 4vw, 34px);
+  box-sizing: border-box;
+  border: 1px solid rgba(192, 239, 255, 0.18);
+  border-radius: 18px;
+  background: rgba(13, 17, 31, 0.9);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+}
+
+.panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent 0 48%, rgba(54, 228, 255, 0.16) 50%, transparent 52%),
+    linear-gradient(0deg, transparent 0 48%, rgba(255, 79, 135, 0.12) 50%, transparent 52%);
+  background-size: 84px 84px;
+  opacity: 0.28;
+}
+
+.terminal,
+.hero,
+.modeGrid,
+.statusBar {
+  position: relative;
+  z-index: 1;
+}
+
+.terminal {
+  overflow: hidden;
+  border: 1px solid rgba(54, 228, 255, 0.25);
+  border-radius: 8px;
+  background: rgba(3, 8, 16, 0.88);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.terminalHeader {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  gap: 7px;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.terminalHeader span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ff4f87;
+}
+
+.terminalHeader span:nth-child(2) {
+  background: #ffd166;
+}
+
+.terminalHeader span:nth-child(3) {
+  background: #8bff9c;
+}
+
+.codeLines {
+  display: flex;
   align-items: center;
-  height: 100%;
-  gap: 40px;
+  gap: 10px;
+  min-height: 74px;
+  padding: 0 16px;
+  color: #b7f7ff;
+  font: 700 clamp(0.88rem, 2vw, 1.15rem) / 1.4 "Cascadia Code", "Fira Code", Consolas, monospace;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
-
-.button {
-  height: var(--arena-btn-height);
-  width: var(--arena-btn-width);
+.prompt {
+  color: #8bff9c;
 }
 
+.cursor {
+  color: #ffd166;
+  animation: blink 900ms steps(2, start) infinite;
+}
+
+.hero {
+  display: grid;
+  gap: 8px;
+}
+
+.kicker {
+  margin: 0;
+  color: #36e4ff;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  line-height: 0.95;
+}
+
+.hero p:last-child {
+  margin: 0;
+  max-width: 52ch;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.modeGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.modeCard {
+  min-height: 118px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: not-allowed;
+}
+
+.modeCardActive {
+  cursor: pointer;
+  border-color: rgba(54, 228, 255, 0.28);
+  background: linear-gradient(135deg, rgba(54, 228, 255, 0.13), rgba(139, 255, 156, 0.09));
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.modeCardActive:hover {
+  border-color: rgba(139, 255, 156, 0.48);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+.modeCard:disabled {
+  opacity: 0.58;
+}
+
+.modeIcon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(54, 228, 255, 0.25);
+  border-radius: 8px;
+  background: rgba(3, 8, 16, 0.58);
+  color: #2dd4bf;
+  font-size: 1.1rem;
+  filter: drop-shadow(0 0 14px rgba(45, 212, 191, 0.24));
+}
+
+.modeContent {
+  min-width: 0;
+  display: grid;
+  gap: 5px;
+}
+
+.modeContent strong {
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  line-height: 1;
+}
+
+.modeContent span {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.modeAction {
+  color: #ffd166;
+}
+
+.statusBar {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  width: fit-content;
+  padding: 8px 11px;
+  border: 1px solid rgba(139, 255, 156, 0.22);
+  border-radius: 999px;
+  background: rgba(139, 255, 156, 0.09);
+  color: rgba(245, 251, 255, 0.76);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.statusBar svg {
+  color: #8bff9c;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .panel {
+    gap: 14px;
+    border-radius: 8px;
+  }
+
+  .modeGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .codeLines {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+    min-height: 96px;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor,
+  .modeCardActive {
+    animation: none;
+    transition: none;
+  }
+}

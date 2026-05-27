@@ -1,0 +1,292 @@
+.readyScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: clamp(16px, 4vw, 34px);
+  box-sizing: border-box;
+  color: var(--text);
+  background:
+    linear-gradient(135deg, rgba(139, 255, 156, 0.2), transparent 30%),
+    radial-gradient(circle at 78% 18%, rgba(54, 228, 255, 0.22), transparent 34%),
+    var(--galaxy-background);
+  overflow: hidden;
+}
+
+.readyScreen::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent);
+}
+
+.resultPanel {
+  width: min(560px, 100%);
+  display: grid;
+  justify-items: center;
+  gap: 22px;
+  padding: clamp(24px, 6vw, 44px);
+  box-sizing: border-box;
+  border: 1px solid rgba(139, 255, 156, 0.24);
+  border-radius: 8px;
+  background: rgba(13, 17, 31, 0.92);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  animation: panelEnter 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.resultPanel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent 0 48%, rgba(139, 255, 156, 0.12) 50%, transparent 52%),
+    linear-gradient(0deg, transparent 0 48%, rgba(54, 228, 255, 0.1) 50%, transparent 52%);
+  background-size: 84px 84px;
+  opacity: 0.32;
+  animation: gridSweep 3.2s linear infinite;
+}
+
+.effectLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.effectLayer span {
+  position: absolute;
+  top: 18%;
+  left: 50%;
+  width: 8px;
+  height: 20px;
+  border-radius: 3px;
+  background: #8bff9c;
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(var(--rotate));
+  animation: confettiBurst 1.25s ease-out infinite;
+}
+
+.effectLayer span:nth-child(1) {
+  --rotate: -34deg;
+  --x: -190px;
+  --y: 112px;
+  background: #36e4ff;
+}
+
+.effectLayer span:nth-child(2) {
+  --rotate: 28deg;
+  --x: 184px;
+  --y: 96px;
+  background: #8bff9c;
+  animation-delay: 90ms;
+}
+
+.effectLayer span:nth-child(3) {
+  --rotate: 72deg;
+  --x: -126px;
+  --y: 184px;
+  background: #ffd166;
+  animation-delay: 160ms;
+}
+
+.effectLayer span:nth-child(4) {
+  --rotate: -78deg;
+  --x: 132px;
+  --y: 176px;
+  background: #ff4f87;
+  animation-delay: 240ms;
+}
+
+.effectLayer span:nth-child(5) {
+  --rotate: 12deg;
+  --x: -64px;
+  --y: 224px;
+  background: #f5fbff;
+  animation-delay: 320ms;
+}
+
+.effectLayer span:nth-child(6) {
+  --rotate: -12deg;
+  --x: 62px;
+  --y: 232px;
+  background: #36e4ff;
+  animation-delay: 390ms;
+}
+
+.resultIcon,
+.resultContent,
+.leaveButton {
+  position: relative;
+  z-index: 2;
+}
+
+.resultIcon {
+  width: 78px;
+  height: 78px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(139, 255, 156, 0.34);
+  border-radius: 8px;
+  background: rgba(139, 255, 156, 0.11);
+  color: #8bff9c;
+  font-size: 2rem;
+  filter: drop-shadow(0 0 20px rgba(139, 255, 156, 0.28));
+  animation: trophyPop 1.8s ease-in-out infinite;
+}
+
+.resultContent {
+  display: grid;
+  gap: 9px;
+}
+
+.kicker {
+  margin: 0;
+  color: #36e4ff;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.resultContent h1 {
+  margin: 0;
+  color: #f5fbff;
+  font-size: clamp(3rem, 12vw, 6.25rem);
+  line-height: 0.92;
+  text-shadow: 0 0 26px rgba(139, 255, 156, 0.28);
+  animation: titleGlow 2.2s ease-in-out infinite;
+}
+
+.resultContent p:last-child {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.leaveButton {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #36e4ff, #8bff9c);
+  color: #061018;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+  transition: filter 160ms ease, transform 160ms ease;
+}
+
+.leaveButton:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+@keyframes panelEnter {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes trophyPop {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+    box-shadow: 0 0 0 rgba(139, 255, 156, 0);
+  }
+
+  30% {
+    transform: scale(1.12) rotate(-4deg);
+    box-shadow: 0 0 34px rgba(139, 255, 156, 0.24);
+  }
+
+  52% {
+    transform: scale(1.04) rotate(3deg);
+  }
+}
+
+@keyframes titleGlow {
+  0%,
+  100% {
+    text-shadow: 0 0 18px rgba(139, 255, 156, 0.18);
+  }
+
+  50% {
+    text-shadow: 0 0 34px rgba(54, 228, 255, 0.34), 0 0 18px rgba(139, 255, 156, 0.26);
+  }
+}
+
+@keyframes confettiBurst {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.7) rotate(var(--rotate));
+  }
+
+  12% {
+    opacity: 1;
+  }
+
+  72% {
+    opacity: 0.95;
+    transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1) rotate(calc(var(--rotate) + 160deg));
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y) + 30px)) scale(0.86) rotate(calc(var(--rotate) + 230deg));
+  }
+}
+
+@keyframes gridSweep {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 84px 84px;
+  }
+}
+
+@media (max-width: 520px) {
+  .resultPanel {
+    gap: 18px;
+    padding: 22px;
+  }
+
+  .leaveButton {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .resultPanel,
+  .resultPanel::after,
+  .effectLayer span,
+  .resultIcon,
+  .resultContent h1,
+  .leaveButton {
+    transition: none;
+    animation: none;
+  }
+}
