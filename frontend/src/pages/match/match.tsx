@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import { onError, onLose, onWin, onWrongSubmit, sendCode } from '../../services/socket.ts';
 import type { SubmitReq, SubmitResponse } from '@funcode/shared';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBolt, faCode, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 
 export function Match() {
     const navigate = useNavigate();
@@ -47,41 +49,75 @@ export function Match() {
     }
 
     return (
-        <div className={s.matchScreen}>
-            <div className={s.taskCard}>
-                <div className={s.taskHeader}>
-                    <h2 className={s.taskTitle}>
-                        {matchTask?.name}
-                        ({matchTask?.difficulty})
-                    </h2>
-                </div>
-                <div className={s.taskSection}>
-                    <h3>Description</h3>
-                    <p>{matchTask?.description}</p>
-                </div>
-                <div className={s.taskSection}>
-                    <h3>Examples</h3>
-                    <pre className={s.taskCode}>
-                        {matchTask?.examples?.join('\n\n')}
-                    </pre>
-                </div>
-                <div className={s.taskSection}>
-                    <h3>Constraints</h3>
-                    <p>{matchTask?.constraints}</p>
-                </div>
-            </div>
-            <div>
-                <button className={s.submitBtn} onClick={submitCode}>submit</button>
-                <div>
-                    {submitResponse?.type == 'wrong' && (
-                        <span>{submitResponse.playerName} has failed</span>
-                    )}
-                    {submitResponse?.type == 'error' && (
-                        <span>{submitResponse.message}</span>
-                    )}
-                </div>
-            </div>
-            <Editor value={matchTask?.starterCode} onChange={(userCode) => setCode(userCode ?? '')}  height={'300px'} language={'JavaScript'} theme={'vs-dark'}/>
-        </div>
+        <main className={s.matchScreen}>
+            <section className={s.matchShell}>
+                <aside className={s.taskCard}>
+                    <div className={s.taskHeader}>
+                        <p className={s.kicker}>Live duel</p>
+                        <h2 className={s.taskTitle}>{matchTask?.name}</h2>
+                        <span className={s.difficultyBadge}>{matchTask?.difficulty}</span>
+                    </div>
+
+                    <div className={s.taskContent}>
+                        <div className={s.taskSection}>
+                            <h3>Description</h3>
+                            <p>{matchTask?.description}</p>
+                        </div>
+
+                        <div className={s.taskSection}>
+                            <h3>Examples</h3>
+                            <pre className={s.taskCode}>
+                                {matchTask?.examples?.join('\n\n')}
+                            </pre>
+                        </div>
+
+                        <div className={s.taskSection}>
+                            <h3>Constraints</h3>
+                            <p>{matchTask?.constraints}</p>
+                        </div>
+                    </div>
+                </aside>
+
+                <section className={s.codePanel}>
+                    <div className={s.editorToolbar}>
+                        <div className={s.editorTitle}>
+                            <FontAwesomeIcon icon={faCode} />
+                            <span>JavaScript</span>
+                        </div>
+
+                        <button className={s.submitBtn} onClick={submitCode}>
+                            <FontAwesomeIcon icon={faBolt} />
+                            Submit
+                        </button>
+                    </div>
+
+                    <div className={s.feedbackArea}>
+                        {submitResponse?.type == 'wrong' && (
+                            <span className={s.feedbackMessage}>
+                                <FontAwesomeIcon icon={faTriangleExclamation} />
+                                {submitResponse.playerName} had a failed submit
+                            </span>
+                        )}
+
+                        {submitResponse?.type == 'error' && (
+                            <span className={s.feedbackMessage}>
+                                <FontAwesomeIcon icon={faTriangleExclamation} />
+                                {submitResponse.message}
+                            </span>
+                        )}
+                    </div>
+
+                    <div className={s.editorFrame}>
+                        <Editor
+                            value={matchTask?.starterCode}
+                            onChange={(userCode) => setCode(userCode ?? '')}
+                            height="100%"
+                            language="javascript"
+                            theme="vs-dark"
+                        />
+                    </div>
+                </section>
+            </section>
+        </main>
     )
 }

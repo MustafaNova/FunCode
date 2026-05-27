@@ -1,45 +1,284 @@
 .matchScreen {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: clamp(14px, 3vw, 28px);
+  box-sizing: border-box;
+  color: var(--text);
+  background:
+    linear-gradient(135deg, rgba(255, 79, 135, 0.14), transparent 30%),
+    radial-gradient(circle at 82% 18%, rgba(54, 228, 255, 0.2), transparent 32%),
+    var(--galaxy-background);
+  overflow: hidden;
+  position: relative;
+}
+
+.matchScreen::before {
+  content: "";
   position: fixed;
-  width: 100vw;
-  display: flex;
-  gap: 20px;
-  flex-direction: column;
-  align-items: center;
-  top: 0;
-  bottom: 0;
-  z-index: 10;
-  background: var(--galaxy-background)
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent);
+}
+
+.matchShell {
+  width: min(1320px, 100%);
+  height: min(820px, calc(100dvh - clamp(28px, 6vw, 56px)));
+  min-height: 560px;
+  display: grid;
+  grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.35fr);
+  gap: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.taskCard,
+.codePanel {
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid rgba(192, 239, 255, 0.18);
+  border-radius: 8px;
+  background: rgba(13, 17, 31, 0.9);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+  overflow: hidden;
 }
 
 .taskCard {
-  font-size: 10px;
-  flex: 1;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
 }
 
 .taskHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 12px;
+  align-items: start;
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(135deg, rgba(54, 228, 255, 0.14), rgba(139, 255, 156, 0.08)),
+    rgba(3, 8, 16, 0.42);
+}
+
+.kicker {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #36e4ff;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .taskTitle {
+  min-width: 0;
   margin: 0;
-  font-size: 24px;
+  font-size: clamp(1.45rem, 3vw, 2.25rem);
+  line-height: 1.05;
+  overflow-wrap: anywhere;
 }
 
+.difficultyBadge {
+  align-self: start;
+  max-width: 130px;
+  padding: 7px 10px;
+  border: 1px solid rgba(255, 209, 102, 0.36);
+  border-radius: 999px;
+  background: rgba(255, 209, 102, 0.12);
+  color: #ffd166;
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-align: center;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
 
+.taskContent {
+  min-height: 0;
+  display: grid;
+  gap: 18px;
+  padding: 20px;
+  overflow: auto;
+}
 
 .taskSection {
-  margin-top: 20px;
+  display: grid;
+  gap: 9px;
 }
 
 .taskSection h3 {
-  margin-bottom: 8px;
-  border-bottom: 1px solid #444;
-  padding-bottom: 4px;
+  margin: 0;
+  padding-bottom: 7px;
+  border-bottom: 1px solid rgba(54, 228, 255, 0.22);
+  color: #b7f7ff;
+  font-size: 0.84rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.taskSection p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.taskCode {
+  max-width: 100%;
+  margin: 0;
+  padding: 14px;
+  border: 1px solid rgba(54, 228, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(3, 8, 16, 0.7);
+  color: #d8fbff;
+  font: 700 0.88rem / 1.55 "Cascadia Code", "Fira Code", Consolas, monospace;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+
+.codePanel {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  background: rgba(3, 8, 16, 0.88);
+}
+
+.editorToolbar {
+  min-height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  box-sizing: border-box;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.editorTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: rgba(245, 251, 255, 0.82);
+  font-size: 0.88rem;
+  font-weight: 900;
+}
+
+.editorTitle svg {
+  color: #8bff9c;
 }
 
 .submitBtn {
-  width: 90px;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #36e4ff, #8bff9c);
+  color: #061018;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+  transition: filter 160ms ease, transform 160ms ease;
+}
+
+.submitBtn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.feedbackArea {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  box-sizing: border-box;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.feedbackMessage {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  padding: 7px 10px;
+  border: 1px solid rgba(255, 79, 135, 0.36);
+  border-radius: 999px;
+  background: rgba(255, 79, 135, 0.12);
+  color: #ffd6df;
+  font-size: 0.83rem;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.feedbackMessage svg {
+  flex: 0 0 auto;
+  color: #ffd166;
+}
+
+.editorFrame {
+  min-width: 0;
+  min-height: 0;
+}
+
+@media (max-width: 920px) {
+  .matchScreen {
+    overflow: auto;
+  }
+
+  .matchShell {
+    height: auto;
+    min-height: 0;
+    grid-template-columns: 1fr;
+  }
+
+  .taskCard {
+    max-height: 42dvh;
+  }
+
+  .codePanel {
+    min-height: 520px;
+  }
+}
+
+@media (max-width: 560px) {
+  .matchScreen {
+    padding: 10px;
+  }
+
+  .taskHeader {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+
+  .difficultyBadge {
+    max-width: none;
+    width: fit-content;
+  }
+
+  .taskContent {
+    padding: 16px;
+  }
+
+  .editorToolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .submitBtn {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .submitBtn {
+    transition: none;
+  }
 }
