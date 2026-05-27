@@ -12,8 +12,9 @@ import { Login } from './pages/auth/login/login.tsx';
 import { Registration } from './pages/auth/registration/registration.tsx';
 import { ReadyScreen } from './pages/ready/readyScreen.tsx';
 import { Match } from './pages/match/match.tsx';
-import { Win } from './pages/win/win.tsx';
-import { Lose } from './pages/lose/lose.tsx';
+
+import { MatchWin } from './pages/match/MatchWin/MatchWin.tsx';
+import { MatchLose } from './pages/match/MatchLose/MatchLose.tsx';
 import { LevelFrame } from './layout/level-frame/level-frame.tsx';
 import { LevelLoseScreen } from './pages/LevelLoseScreen/LevelLoseScreen.tsx';
 import { LevelWinScreen } from './pages/LevelWinScreen/LevelWinScreen.tsx';
@@ -28,8 +29,8 @@ createRoot(document.getElementById('root')!).render(
               <Route path='/register' element={<Registration/>}></Route>
               <Route path='/match' element={<Match/>}></Route>
               <Route path='/match/ready' element={<ReadyScreen/>}></Route>
-              <Route path='/match/win' element={<Win/>}></Route>
-              <Route path='/match/lose' element={<Lose/>}></Route>
+              <Route path='/match/win' element={<MatchWin/>}></Route>
+              <Route path='/match/lose' element={<MatchLose/>}></Route>
               <Route path='home' element={<App/>}>
                   <Route index element={<School/>}></Route>
                   <Route path='arena' element={<Arena/>}></Route>
