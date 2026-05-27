@@ -1,0 +1,259 @@
+.screen {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: clamp(16px, 4vw, 34px);
+  box-sizing: border-box;
+  color: var(--text);
+  background:
+    linear-gradient(135deg, rgba(255, 79, 135, 0.18), transparent 30%),
+    radial-gradient(circle at 82% 18%, rgba(54, 228, 255, 0.18), transparent 34%),
+    var(--galaxy-background);
+  overflow: hidden;
+  position: relative;
+}
+
+.screen::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent);
+}
+
+.panel {
+  width: min(760px, 100%);
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  padding: clamp(18px, 4vw, 34px);
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 79, 135, 0.24);
+  border-radius: 8px;
+  background: rgba(13, 17, 31, 0.92);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+}
+
+.panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent 0 48%, rgba(255, 79, 135, 0.12) 50%, transparent 52%),
+    linear-gradient(0deg, transparent 0 48%, rgba(54, 228, 255, 0.1) 50%, transparent 52%);
+  background-size: 84px 84px;
+  opacity: 0.28;
+  animation: gridSweep 3.2s linear infinite;
+}
+
+.terminal,
+.content,
+.homeLink,
+.statusBar {
+  position: relative;
+  z-index: 1;
+}
+
+.terminal {
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(255, 79, 135, 0.25);
+  border-radius: 8px;
+  background: rgba(3, 8, 16, 0.88);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.terminalHeader {
+  display: flex;
+  gap: 7px;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.terminalHeader span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ff4f87;
+}
+
+.terminalHeader span:nth-child(2) {
+  background: #ffd166;
+}
+
+.terminalHeader span:nth-child(3) {
+  background: #8bff9c;
+}
+
+.codeLines {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 74px;
+  padding: 0 16px;
+  color: #b7f7ff;
+  font: 700 clamp(0.84rem, 2vw, 1.05rem) / 1.4 "Cascadia Code", "Fira Code", Consolas, monospace;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.prompt {
+  color: #8bff9c;
+}
+
+.error {
+  color: #ffb3c8;
+}
+
+.cursor {
+  color: #ffd166;
+  animation: blink 900ms steps(2, start) infinite;
+}
+
+.content {
+  display: grid;
+  justify-items: center;
+  gap: 9px;
+  text-align: center;
+}
+
+.statusIcon {
+  width: 74px;
+  height: 74px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 79, 135, 0.34);
+  border-radius: 8px;
+  background: rgba(255, 79, 135, 0.11);
+  color: #ff4f87;
+  font-size: 1.8rem;
+  filter: drop-shadow(0 0 18px rgba(255, 79, 135, 0.24));
+  animation: searchPulse 1.8s ease-in-out infinite;
+}
+
+.kicker {
+  margin: 0;
+  color: #ffd166;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.content h1 {
+  margin: 0;
+  color: #f5fbff;
+  font-size: clamp(4rem, 18vw, 8rem);
+  line-height: 0.9;
+  text-shadow: 0 0 28px rgba(255, 79, 135, 0.24);
+}
+
+.content p:last-child {
+  margin: 0;
+  max-width: 48ch;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.homeLink {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 0 18px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #36e4ff, #8bff9c);
+  color: #061018;
+  font-weight: 900;
+  text-decoration: none;
+  transition: filter 160ms ease, transform 160ms ease;
+}
+
+.homeLink:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.statusBar {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  width: fit-content;
+  padding: 8px 11px;
+  border: 1px solid rgba(255, 209, 102, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 209, 102, 0.09);
+  color: rgba(245, 251, 255, 0.76);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.statusBar svg {
+  color: #ffd166;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes searchPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(255, 79, 135, 0);
+  }
+
+  50% {
+    transform: scale(1.07);
+    box-shadow: 0 0 30px rgba(255, 79, 135, 0.2);
+  }
+}
+
+@keyframes gridSweep {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: -84px 84px;
+  }
+}
+
+@media (max-width: 640px) {
+  .panel {
+    gap: 14px;
+  }
+
+  .codeLines {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+    min-height: 112px;
+    justify-content: center;
+  }
+
+  .homeLink {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel::after,
+  .cursor,
+  .statusIcon,
+  .homeLink {
+    transition: none;
+    animation: none;
+  }
+}

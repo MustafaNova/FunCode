@@ -19,6 +19,7 @@ import { LevelWinScreen } from './pages/LevelWinScreen/LevelWinScreen.tsx';
 import { Onboarding } from './pages/Onboarding/Onboarding.tsx';
 import { CourseSelection } from './pages/Onboarding/CourseSelection/CourseSelection.tsx';
 import { ComingSoon } from './pages/ComingSoon/ComingSoon.tsx';
+import { NotFound } from './pages/NotFound/NotFound.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -42,6 +43,8 @@ createRoot(document.getElementById('root')!).render(
               <Route path="/level/:course/:module/:level" element={<LevelFrame/>}/>
               <Route path="/levelLose" element={<LevelLoseScreen/>}></Route>
               <Route path="/levelWin" element={<LevelWinScreen/>}></Route>
+
+              <Route path="*" element={<NotFound />}></Route>
           </Routes>
       </BrowserRouter>
   </StrictMode>,
