@@ -1,4 +1,4 @@
-export const SERVER_URL = import.meta.env.VITE_SERVER_URL
+export const SERVER_URL = "/api"
 
 export const API_URLS = {
     REGISTER: `${SERVER_URL}/auth/register`,
