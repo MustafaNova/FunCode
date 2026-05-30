@@ -1,5 +1,4 @@
 import { io, type Socket } from 'socket.io-client';
-import { SERVER_URL } from '../constants/urls.ts';
 import {
     type LoseRes,
     type SubmitReq,
@@ -10,10 +9,11 @@ import {
 } from '@funcode/shared';
 
 let socket: Socket | null = null;
+const SOCKET_URL = import.meta.env.SERVER_URL
 
 export function getSocket(): Socket {
     if (!socket) {
-        socket = io(SERVER_URL, { withCredentials: true });
+        socket = io(SOCKET_URL, { withCredentials: true });
     }
     return socket;
 }
