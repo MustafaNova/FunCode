@@ -38,13 +38,16 @@ export class GameGateway
     }
 
     handleConnection(client: Socket): any {
+        console.log('handleConnection');
         const token = this.gs.getTokenFromCookie(
             client.handshake.headers.cookie,
         );
+        console.log('handleConnection token: ', token);
         this.gs.registerNewPlayer(client, token);
     }
 
     handleDisconnect(client: Socket): any {
+        console.log('handleDisconnect');
         this.gs.unRegisterPlayer(client.id);
     }
 
