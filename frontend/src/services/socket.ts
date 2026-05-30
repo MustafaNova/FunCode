@@ -9,7 +9,7 @@ import {
 } from '@funcode/shared';
 
 let socket: Socket | null = null;
-const SOCKET_URL = import.meta.env.SERVER_URL
+const SOCKET_URL = import.meta.env.VITE_SERVER_URL
 
 export function getSocket(): Socket {
     if (!socket) {
