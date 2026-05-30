@@ -38,7 +38,7 @@ export class GameGateway
     }
 
     handleConnection(client: Socket): any {
-        console.log('handleConnection');
+        console.log('handleConnection. cookie: ', client.handshake.headers.cookie);
         const token = this.gs.getTokenFromCookie(
             client.handshake.headers.cookie,
         );
