@@ -1,12 +1,12 @@
 import s from './arena1v1.module.scss'
 import { useState } from 'react';
 import { leaveUnranked1v1, matchmakingUnranked1v1 } from '../../services/matchmaking.ts';
-import { Socket } from 'socket.io-client';
 import { useNavigate } from 'react-router-dom';
 import { SOCKET_EVENTS } from '@funcode/shared';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBug, faCodeBranch, faLock, faShieldHalved, faUserNinja } from '@fortawesome/free-solid-svg-icons';
 import { SearchingScreen } from './searchingScreen.tsx';
+import { getSocket } from '../../services/socket.ts';
 
 export function Arena1v1() {
     const [searching, setSearching] = useState(false);
@@ -14,11 +14,14 @@ export function Arena1v1() {
 
     const startUnranked1v1 = async () => {
         setSearching(true)
-        const socket: Socket = await matchmakingUnranked1v1();
-        socket.on(SOCKET_EVENTS.MATCH_FOUND, () => {
+        const socket = await getSocket()
+        socket.off(SOCKET_EVENTS.MATCH_FOUND)
+        socket.once(SOCKET_EVENTS.MATCH_FOUND, () => {
             navigate('/match/ready');
             setSearching(false);
         });
+        await matchmakingUnranked1v1();
+
     }
     const cancelUnranked1v1 = async () => {
         await leaveUnranked1v1()
