@@ -34,7 +34,7 @@ export function TaskFrame({ isVisible, data, onHeartLose }: props) {
                         <div className={s.logo} aria-hidden="true">
                             <span>WP</span>
                         </div>
-                        <div style={{ width: "100%" }}>
+                        <div className={s.brandBody}>
                             <div className={s.taskTitle}>
                                 <div>
                                     <h1 id="title">{data.title}</h1>

@@ -3,8 +3,10 @@
 }
 
 .frame {
+  width: 100%;
   height: 100%;
   min-height: 0;
+  overflow: hidden;
 }
 
 .content {
@@ -14,6 +16,7 @@
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   gap: 12px;
+  overflow: hidden;
 }
 
 .panel {
@@ -25,12 +28,19 @@
 }
 
 .brand {
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
+.brandBody {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
 .logo {
+  flex: 0 0 auto;
   width: 42px;
   height: 42px;
   border-radius: 14px;
@@ -45,6 +55,7 @@
   margin: 0;
   font-size: clamp(20px, 2.2vw, 28px);
   line-height: 1.2;
+  overflow-wrap: anywhere;
 }
 
 .subtitle {
@@ -52,6 +63,7 @@
   color: var(--muted);
   font-size: clamp(13px, 1.7vw, 15px);
   line-height: 1.45;
+  overflow-wrap: anywhere;
 }
 
 .grid {
@@ -75,6 +87,7 @@
   padding: 14px;
   display: grid;
   gap: 10px;
+  line-height: 1.45;
 }
 
 .taskBox ul {
@@ -121,6 +134,7 @@
 .actions {
   display: flex;
   gap: 8px;
+  min-width: 0;
 }
 
 .btnSmall {
@@ -211,18 +225,95 @@
 
 @media (max-width: 1024px) {
   .grid {
+    overflow: auto;
+    align-content: start;
+    padding-bottom: 2px;
+  }
+
+  .grid {
     grid-template-columns: 1fr;
   }
 
+  .task {
+    overflow: visible;
+  }
+
+  .editorWrap {
+    min-height: 360px;
+  }
+
+  .output {
+    min-height: 340px;
+  }
+
   .output :global(iframe) {
-    min-height: 240px;
+    min-height: 280px;
   }
 }
 
 @media (max-width: 640px) {
+  .frame {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .content {
+    height: auto;
+    min-height: 100%;
+    grid-template-rows: auto auto;
+    gap: 10px;
+    overflow: visible;
+  }
+
+  .panel {
+    border-radius: 14px;
+    padding: 12px;
+  }
+
+  .brand {
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .logo {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    font-size: 13px;
+  }
+
+  .taskTitle h1 {
+    font-size: clamp(18px, 6vw, 22px);
+  }
+
+  .subtitle {
+    margin-top: 4px;
+  }
+
+  .grid {
+    min-height: auto;
+    overflow: visible;
+  }
+
+  .task {
+    gap: 10px;
+  }
+
+  .taskBox {
+    border-radius: 14px;
+    padding: 12px;
+  }
+
+  .editorWrap {
+    min-height: 330px;
+    border-radius: 14px;
+    padding: 10px;
+  }
+
   .editorHeader {
     flex-direction: column;
     align-items: stretch;
+    gap: 8px;
   }
 
   .actions {
@@ -231,5 +322,43 @@
 
   .btnSmall {
     flex: 1;
+    min-width: 0;
+    border-radius: 10px;
+  }
+
+  .editor {
+    min-height: 250px;
+    resize: none;
+  }
+
+  .output {
+    min-height: 320px;
+    border-radius: 14px;
+  }
+
+  .outputTop {
+    padding: 10px;
+  }
+
+  .output :global(iframe) {
+    min-height: 260px;
+  }
+}
+
+@media (max-width: 420px) {
+  .panel {
+    padding: 10px;
+  }
+
+  .taskBox ul {
+    padding-left: 16px;
+  }
+
+  .outputTop {
+    align-items: center;
+  }
+
+  .outputHint {
+    display: none;
   }
 }

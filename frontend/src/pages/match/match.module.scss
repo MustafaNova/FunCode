@@ -230,32 +230,41 @@
 
 @media (max-width: 920px) {
   .matchScreen {
+    place-items: start center;
     overflow: auto;
   }
 
   .matchShell {
+    width: 100%;
     height: auto;
     min-height: 0;
     grid-template-columns: 1fr;
+    gap: 12px;
   }
 
   .taskCard {
-    max-height: 42dvh;
+    max-height: 44dvh;
   }
 
   .codePanel {
-    min-height: 520px;
+    min-height: clamp(460px, 70dvh, 620px);
   }
 }
 
 @media (max-width: 560px) {
   .matchScreen {
-    padding: 10px;
+    padding: 8px;
+    align-items: start;
   }
 
   .taskHeader {
     grid-template-columns: 1fr;
-    padding: 16px;
+    padding: 14px;
+    gap: 8px;
+  }
+
+  .taskTitle {
+    font-size: clamp(1.25rem, 8vw, 1.7rem);
   }
 
   .difficultyBadge {
@@ -264,16 +273,50 @@
   }
 
   .taskContent {
-    padding: 16px;
+    gap: 14px;
+    padding: 14px;
+  }
+
+  .taskSection p,
+  .taskCode {
+    font-size: 0.82rem;
+  }
+
+  .codePanel {
+    min-height: min(560px, 76dvh);
   }
 
   .editorToolbar {
+    min-height: auto;
     align-items: stretch;
     flex-direction: column;
+    padding: 10px;
   }
 
   .submitBtn {
     width: 100%;
+  }
+
+  .feedbackArea {
+    min-height: 0;
+    padding: 8px 10px;
+  }
+
+  .feedbackMessage {
+    align-items: flex-start;
+    border-radius: 8px;
+    line-height: 1.35;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 420px) {
+  .taskCard {
+    max-height: none;
+  }
+
+  .codePanel {
+    min-height: 520px;
   }
 }
 
