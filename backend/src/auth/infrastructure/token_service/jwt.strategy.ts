@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import type { Request } from 'express';
 
 interface JwtPayload {
     userId: string;
@@ -16,10 +17,16 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
                 ExtractJwt.fromAuthHeaderAsBearerToken(),
             ]),
             secretOrKey: 'test',
+            passReqToCallback: true,
         });
     }
 
-    validate(payload: JwtPayload) {
-        return { userId: payload.userId, username: payload.username };
+    validate(req: Request, payload: JwtPayload) {
+        const token = req.cookies?.token
+        return {
+            userId: payload.userId,
+            username: payload.username,
+            token
+        };
     }
 }

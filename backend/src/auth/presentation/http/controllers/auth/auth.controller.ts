@@ -4,7 +4,9 @@ import {
     Body,
     Inject,
     BadRequestException,
-    Res, Get, UseGuards,
+    Res,
+    Get,
+    UseGuards,
 } from '@nestjs/common';
 import type { Response } from 'express';
 import { UserRegistrationReq } from './dtos/user-registration.request';
@@ -73,7 +75,6 @@ export class AuthController {
     async me(@UserPayload() user: AuthUser): Promise<MeRes> {
         console.log('started me');
         const res = await this.currentUserService.me(user.username);
-        console.log("id auth", res.id?.get())
         if (!res.id) {
             throw new Error();
         }
@@ -82,7 +83,8 @@ export class AuthController {
             id: res.id.get(),
             username: res.username.get(),
             email: res.email.get(),
-            hasCompletedOnboarding: res.hasCompletedOnboarding
+            hasCompletedOnboarding: res.hasCompletedOnboarding,
+            token: user.token
         }
     }
 

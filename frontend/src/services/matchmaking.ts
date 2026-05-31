@@ -3,7 +3,7 @@ import { createMatchMakingPayload } from '../utils/payloadBuilder.ts';
 import { getSocket } from './socket.ts';
 
 export async function matchmakingUnranked1v1() {
-    const socket = getSocket()
+    const socket = await getSocket()
     await fetch(API_URLS.JOIN_MATCHMAKING, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

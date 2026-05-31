@@ -7,13 +7,19 @@ import {
     type WinRes,
     SOCKET_EVENTS, type ErrorResponse,
 } from '@funcode/shared';
+import { me } from './auth.ts';
 
 let socket: Socket | null = null;
 const SOCKET_URL = import.meta.env.VITE_SERVER_URL
 
-export function getSocket(): Socket {
+export async function getSocket(): Promise<Socket> {
     if (!socket) {
-        socket = io(SOCKET_URL, { withCredentials: true });
+        const meRes = await me();
+        socket = io(SOCKET_URL, {
+            auth: {
+                token: meRes.token
+            }
+        });
     }
     return socket;
 }
