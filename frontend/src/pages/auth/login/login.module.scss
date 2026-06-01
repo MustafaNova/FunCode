@@ -66,12 +66,14 @@
   background:
     linear-gradient(90deg, transparent 0 48%, rgba(54, 228, 255, 0.2) 50%, transparent 52%),
     linear-gradient(0deg, transparent 0 48%, rgba(255, 79, 135, 0.16) 50%, transparent 52%);
+  animation: arenaSquaresDrift 5s linear infinite;
   background-size: 84px 84px;
   content: "";
   inset: 0;
   opacity: 0.45;
   pointer-events: none;
   position: absolute;
+  will-change: background-position;
 }
 
 .statusRow,
@@ -191,7 +193,21 @@
   }
 }
 
+@keyframes arenaSquaresDrift {
+  from {
+    background-position: 0 0, 0 0;
+  }
+
+  to {
+    background-position: 84px 84px, -84px 84px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .arenaPanel::after {
+    animation: none;
+  }
+
   .pageExit {
     animation: none;
     opacity: 0;

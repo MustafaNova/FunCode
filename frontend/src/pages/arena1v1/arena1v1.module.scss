@@ -23,6 +23,19 @@
     linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
   background-size: 42px 42px;
   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent);
+  animation: arenaSquaresDrift 5s linear infinite;
+  will-change: background-position;
+}
+
+
+@keyframes arenaSquaresDrift {
+  from {
+    background-position: 0 0, 0 0;
+  }
+
+  to {
+    background-position: 84px 84px, -84px 84px;
+  }
 }
 
 .panel {
