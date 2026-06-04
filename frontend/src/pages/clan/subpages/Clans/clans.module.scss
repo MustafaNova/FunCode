@@ -1,0 +1,31 @@
+
+.clansTab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.clans {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: black;
+  gap: 5px;
+}
+
+.clans div {
+  display: flex;
+  gap: 150px;
+  background-color: gray;
+  padding: 5px;
+}
+
+.infoBox {
+  background-color: #2dd4bf;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  align-items: center;
+}

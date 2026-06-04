@@ -1,0 +1,39 @@
+.clanScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: black;
+  background-color: dodgerblue;
+  padding: 10px;
+}
+
+
+.inputField {
+  color: black;
+  display: flex;
+  gap: 10px;
+}
+
+.textArea {
+  width: 200px;
+  height: 100px;
+  resize: none;
+}
+
+.createBtn {
+  width: 100px;
+  height: 50px;
+  cursor: pointer;
+}
+
+
+.emptyNameError {
+  color: red;
+}

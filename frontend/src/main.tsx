@@ -20,6 +20,9 @@ import { Onboarding } from './pages/Onboarding/Onboarding.tsx';
 import { CourseSelection } from './pages/Onboarding/CourseSelection/CourseSelection.tsx';
 import { ComingSoon } from './pages/ComingSoon/ComingSoon.tsx';
 import { NotFound } from './pages/NotFound/NotFound.tsx';
+import { Clan } from './pages/clan/Clan.tsx';
+import { Clans } from './pages/clan/subpages/Clans/Clans.tsx';
+import { Create } from './pages/clan/subpages/Create/Create.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -35,7 +38,10 @@ createRoot(document.getElementById('root')!).render(
                   <Route index element={<School/>}></Route>
                   <Route path='arena' element={<Arena/>}></Route>
                   <Route path='arena/1v1' element={<Arena1v1/>}></Route>
-                  <Route path='clan' element={<ComingSoon />}></Route>
+                  <Route path='clan' element={<Clan />}>
+                      <Route index element={<Clans />}></Route>
+                      <Route path='create' element={<Create />}></Route>
+                  </Route>
                   <Route path='practice' element={<ComingSoon />}></Route>
               </Route>
               <Route path='onboarding' element={<Onboarding/>}></Route>

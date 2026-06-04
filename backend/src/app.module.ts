@@ -5,12 +5,14 @@ import { CompetitiveGameplayModule } from './competitive-gameplay/competitive-ga
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { LearningProgressionModule } from './Learning-progression/learning-progression.module';
 import { ConfigModule } from '@nestjs/config';
+import { ClansModule } from './clans/clans.module';
 
 @Module({
     imports: [
         CompetitiveGameplayModule,
         AuthModule,
         LearningProgressionModule,
+        ClansModule,
         TypeOrmModule.forRoot({
             type: 'postgres',
             url: process.env['DATABASE_URL'],

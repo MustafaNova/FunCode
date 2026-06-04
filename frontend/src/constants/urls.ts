@@ -10,4 +10,5 @@ export const API_URLS = {
     START_COURSE: `${API_URL}/active-screen/start-course`,
     LEVELS: `${API_URL}/levels`,
     SUBMIT_LEVEL_TASK: `${API_URL}/levels/submit`,
+    CREATE_CLAN: `${API_URL}/clans`,
 }

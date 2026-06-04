@@ -1,0 +1,1 @@
+export const CREATE_CLAN = 'CREATE_CLAN' as const;
