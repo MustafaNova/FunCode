@@ -13,8 +13,8 @@ export class ClansController {
     ) {}
 
     @Post()
-    createClan(@Body() req: CreateClanDto) {
-        this.createClanUC.createClan(req)
+    async createClan(@Body() req: CreateClanDto) {
+        await this.createClanUC.createClan(req)
     }
 
 }

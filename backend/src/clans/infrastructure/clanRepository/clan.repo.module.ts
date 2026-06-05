@@ -3,11 +3,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClanEntity } from '../entities/clan.entity';
 import { ClanRepositoryAdapter } from './clan.repository.adapter';
 import { CLAN_REPO_PORT } from './tokens';
+import { ClanMemberEntity } from '../entities/clan-member.entity';
 
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([ClanEntity])
+        TypeOrmModule.forFeature([ClanEntity, ClanMemberEntity])
     ],
     providers: [
         {

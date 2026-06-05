@@ -1,9 +1,9 @@
-import type { CreateClanReq } from '@funcode/shared';
+import type { CreateClanReq, ErrorResponse } from '@funcode/shared';
 import { API_URLS } from '../constants/urls.ts';
 
 
 export async function createClan(req: CreateClanReq) {
-    await fetch(API_URLS.CREATE_CLAN, {
+    const res = await fetch(API_URLS.CREATE_CLAN, {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -11,4 +11,10 @@ export async function createClan(req: CreateClanReq) {
         },
         body: JSON.stringify(req)
     })
+
+    if (!res.ok) {
+        const err: ErrorResponse = await res.json()
+        throw new Error(err.message)
+    }
+
 }

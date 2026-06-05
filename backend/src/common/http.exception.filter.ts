@@ -13,26 +13,24 @@ import { PasswordError } from '../auth/domain/errors/PasswordError';
 import { UsernameError } from '../auth/domain/errors/UsernameError';
 import { LevelNotFoundException } from '../Learning-progression/infrastructure/database/errors/levelNotFound.err';
 import { ErrorResponse } from '@funcode/shared';
+import { ClanNameAlreadyExistsError } from '../clans/application/errors/clan.name.already.exists.error';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
     catch(error: Error, host: ArgumentsHost): any {
         const res = host.switchToHttp().getResponse();
-
+        console.log("aufgerufen: HttpExceptionFilter")
         let status = HttpStatus.INTERNAL_SERVER_ERROR;
 
         if (
             error instanceof EmailAlreadyExistsError ||
-            error instanceof UsernameAlreadyExistsError
+            error instanceof UsernameAlreadyExistsError ||
+            error instanceof ClanNameAlreadyExistsError
         ) {
             status = HttpStatus.CONFLICT;
-        }
-
-        if (error instanceof InvalidCredentialsError) {
+        } else if (error instanceof InvalidCredentialsError) {
             status = HttpStatus.UNAUTHORIZED;
-        }
-
-        if (
+        } else if (
             error instanceof NotFoundException ||
             error instanceof LevelNotFoundException
         ) {
