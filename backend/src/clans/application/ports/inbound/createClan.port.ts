@@ -1,5 +1,6 @@
-import { CreateClanReq } from '@funcode/shared';
+import { CreateClanCmd } from '../../use-cases/createClan/createClan.cmd';
+import { Clan } from '../../../domain/entities/clan';
 
 export interface CreateClanPort {
-    createClan(req: CreateClanReq): Promise<void>;
+    createClan(req: CreateClanCmd): Promise<Clan>;
 }

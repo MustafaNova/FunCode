@@ -14,6 +14,7 @@ import { UsernameError } from '../auth/domain/errors/UsernameError';
 import { LevelNotFoundException } from '../Learning-progression/infrastructure/database/errors/levelNotFound.err';
 import { ErrorResponse } from '@funcode/shared';
 import { ClanNameAlreadyExistsError } from '../clans/application/errors/clan.name.already.exists.error';
+import { UserAlreadyInClanError } from '../clans/application/errors/userAlreadyInClan.error';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -25,7 +26,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
         if (
             error instanceof EmailAlreadyExistsError ||
             error instanceof UsernameAlreadyExistsError ||
-            error instanceof ClanNameAlreadyExistsError
+            error instanceof ClanNameAlreadyExistsError ||
+            error instanceof UserAlreadyInClanError
         ) {
             status = HttpStatus.CONFLICT;
         } else if (error instanceof InvalidCredentialsError) {

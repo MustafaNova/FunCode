@@ -1,4 +1,4 @@
-import type { CreateClanReq, ErrorResponse } from '@funcode/shared';
+import type { CreateClanReq, CreateClanRes, ErrorResponse } from '@funcode/shared';
 import { API_URLS } from '../constants/urls.ts';
 
 
@@ -17,4 +17,5 @@ export async function createClan(req: CreateClanReq) {
         throw new Error(err.message)
     }
 
+    return await res.json() as CreateClanRes
 }
