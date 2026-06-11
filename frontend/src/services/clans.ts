@@ -19,3 +19,12 @@ export async function createClan(req: CreateClanReq) {
 
     return await res.json() as CreateClanRes
 }
+
+export async function isUserInClan() {
+    const res = await fetch(API_URLS.GET_MY_CLAN, {
+        method: 'GET',
+        credentials: 'include'
+    });
+    console.log('isUserInClan: ', res.ok);
+    return res.ok;
+}

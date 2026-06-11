@@ -1,1 +1,2 @@
-export const CREATE_CLAN = 'CREATE_CLAN' as const;
+export const CREATE_CLAN_PORT = 'CREATE_CLAN_PORT' as const;
+export const GET_MY_CLAN_PORT = 'GET_MY_CLAN_PORT' as const;

@@ -1,4 +1,4 @@
-export class NotFoundException extends Error {
+export class NotFoundProgressIdException extends Error {
     constructor() {
         super('ProgressId doesnt exists');
     }

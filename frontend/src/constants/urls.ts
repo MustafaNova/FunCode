@@ -1,4 +1,4 @@
-export const API_URL = "/api"
+const API_URL = "/api"
 
 export const API_URLS = {
     REGISTER: `${API_URL}/auth/register`,
@@ -11,4 +11,5 @@ export const API_URLS = {
     LEVELS: `${API_URL}/levels`,
     SUBMIT_LEVEL_TASK: `${API_URL}/levels/submit`,
     CREATE_CLAN: `${API_URL}/clans`,
+    GET_MY_CLAN: `${API_URL}/clans/me`,
 }

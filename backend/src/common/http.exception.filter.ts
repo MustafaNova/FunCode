@@ -2,12 +2,12 @@ import {
     ArgumentsHost,
     Catch,
     ExceptionFilter,
-    HttpStatus,
+    HttpStatus, NotFoundException,
 } from '@nestjs/common';
 import { EmailAlreadyExistsError } from '../auth/application/use-cases/user-registration/errors/EmailAlreadyExistsError';
 import { UsernameAlreadyExistsError } from '../auth/application/use-cases/user-registration/errors/UsernameAlreadyExistsError';
 import { InvalidCredentialsError } from '../auth/application/use-cases/user-login/errors/InvalidCredentialsError';
-import { NotFoundException } from '../Learning-progression/infrastructure/database/errors/notFoundException.err';
+import { NotFoundProgressIdException } from '../Learning-progression/infrastructure/database/errors/notFoundException.err';
 import { EmailError } from '../auth/domain/errors/EmailError';
 import { PasswordError } from '../auth/domain/errors/PasswordError';
 import { UsernameError } from '../auth/domain/errors/UsernameError';
@@ -33,8 +33,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
         } else if (error instanceof InvalidCredentialsError) {
             status = HttpStatus.UNAUTHORIZED;
         } else if (
-            error instanceof NotFoundException ||
-            error instanceof LevelNotFoundException
+            error instanceof NotFoundProgressIdException ||
+            error instanceof LevelNotFoundException ||
+            error instanceof NotFoundException
         ) {
             status = HttpStatus.NOT_FOUND;
         }

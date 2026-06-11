@@ -1,12 +1,13 @@
 import s from './create.module.scss';
 import { useState } from 'react';
 import { createClan } from '../../../../services/clans.ts';
+import { useNavigate } from 'react-router-dom';
 export function Create() {
+    const navigate = useNavigate();
     const [clanName, setClanName] = useState<string>("");
     const [description, setDescription] = useState<string>("");
     const [emptyNameError, setEmptyNameError] = useState<boolean>(false)
     const [errorMsg, setErrorMsg] = useState<string>()
-    const [successMsg, setSuccessMsg] = useState<string>()
     const emptyNameWarning = 'empty name is invalid'
     const isClanNameEmpty = clanName.trim() === '';
     async function handleCreateClan(){
@@ -17,9 +18,8 @@ export function Create() {
         setEmptyNameError(false)
 
         try {
-            const data = await createClan({ name: clanName, description })
-            setErrorMsg('')
-            setSuccessMsg(data.message)
+            await createClan({ name: clanName, description })
+            navigate('/home/clan')
         } catch (err) {
             if (err instanceof Error) {
                 setErrorMsg(err.message)
@@ -44,7 +44,6 @@ export function Create() {
             </div>
             <button className={s.createBtn} onClick={handleCreateClan}>Create</button>
             { errorMsg && <span className={s.errorTxt}>{errorMsg}</span> }
-            { successMsg && <span className={s.successTxt}>{successMsg}</span> }
         </div>
     )
 }

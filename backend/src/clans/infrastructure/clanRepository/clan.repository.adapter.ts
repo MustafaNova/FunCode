@@ -9,6 +9,7 @@ import { AddClanMemberData } from '../../application/ports/outbound/data/addClan
 import { ClanMapper } from '../mapper/clan.mapper';
 import { ClanMemberMapper } from '../mapper/clanMember.mapper';
 import { ClanMember } from '../../domain/entities/clanMember';
+import { MyClan } from '../../domain/types/myClan.type';
 
 
 export class ClanRepositoryAdapter implements ClanRepositoryPort {
@@ -48,5 +49,30 @@ export class ClanRepositoryAdapter implements ClanRepositoryPort {
         })
         const savedClanMember = await this.clanMemberRepo.save(clanMemberEntity)
         return ClanMemberMapper.toDomain(savedClanMember)
+    }
+
+    async getMyClan(userId: string): Promise<MyClan | null> {
+        const clanMemberEntity = await this.clanMemberRepo.findOne({
+            where: { userId }
+        })
+
+        if (!clanMemberEntity) {
+            return null
+        }
+
+        const clanEntity = await this.clanRepo.findOne({
+            where: { id: clanMemberEntity.clanId }
+        })
+
+        if (!clanEntity) {
+            return null
+        }
+
+        return {
+            clanId: clanEntity.id,
+            name: clanEntity.name,
+            description: clanEntity.description,
+            role: clanMemberEntity.role
+        }
     }
 }
