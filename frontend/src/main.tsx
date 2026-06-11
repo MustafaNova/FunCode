@@ -27,6 +27,7 @@ import { Friends } from './pages/clan/subpages/Search/Friends.tsx';
 import { Chat } from './pages/clan/subpages/Chat/chat.tsx';
 import { War } from './pages/clan/subpages/War/war.tsx';
 import { ClanIndexRedirect } from './pages/clan/subpages/ClanIndexRedirect/clanIndexRedirect.tsx';
+import { ClanMemberGuard, NoClanMemberGuard } from './utils/guards.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -45,12 +46,17 @@ createRoot(document.getElementById('root')!).render(
                   <Route path='clan' element={<Clan />}>
                       <Route index element={<ClanIndexRedirect />}></Route>
 
-                      <Route path='clans' element={<Clans />}></Route>
-                      <Route path='create' element={<Create />}></Route>
-                      <Route path='friends' element={<Friends />}></Route>
+                      <Route element={<NoClanMemberGuard />}>
+                          <Route path='clans' element={<Clans />}></Route>
+                          <Route path='create' element={<Create />}></Route>
+                      </Route>
 
-                      <Route path='chat' element={<Chat />}></Route>
-                      <Route path='war' element={<War />}></Route>
+                      <Route element={<ClanMemberGuard />}>
+                          <Route path='chat' element={<Chat />}></Route>
+                          <Route path='war' element={<War />}></Route>
+                      </Route>
+
+                      <Route path='friends' element={<Friends />}></Route>
                   </Route>
                   <Route path='practice' element={<ComingSoon />}></Route>
               </Route>
