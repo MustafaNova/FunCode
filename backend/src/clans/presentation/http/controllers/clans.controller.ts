@@ -23,6 +23,7 @@ export class ClansController {
         @Body() req: CreateClanDto,
         @UserPayload() user: AuthUser
     ): Promise<CreateClanRes> {
+        console.log('createClan req');
         const cmd: CreateClanCmd = {
             name: req.name,
             description: req.description,
@@ -37,12 +38,13 @@ export class ClansController {
 
     @Get('me')
     async getMyClan(@UserPayload() user: AuthUser): Promise<GetMyClanRes> {
+        console.log('request getMyClan');
         const res = await this.getMyClanUC.getMyClan(user.userId);
         return {
             clanId: res.clanId,
             name: res.name,
             description: res.description,
             role: res.role,
-        }
+        };
     }
 }

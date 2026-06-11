@@ -1,3 +1,4 @@
 export type ClanOutletContext = {
-    isInClan: boolean
+    isInClan: boolean,
+    loadIsInClan: () => Promise<void>,
 }

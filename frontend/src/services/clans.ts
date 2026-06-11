@@ -25,6 +25,5 @@ export async function isUserInClan() {
         method: 'GET',
         credentials: 'include'
     });
-    console.log('isUserInClan: ', res.ok);
     return res.ok;
 }

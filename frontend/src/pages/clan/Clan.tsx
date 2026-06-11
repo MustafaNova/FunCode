@@ -7,12 +7,13 @@ import { isUserInClan } from '../../services/clans.ts';
 export function Clan() {
     const navigate = useNavigate();
     const [isInClan, setIsInClan] = useState<boolean | undefined>(undefined)
+    async function loadIsInClan() {
+        const res = await isUserInClan()
+        setIsInClan(res)
+    }
 
     useEffect(() => {
-        async function loadIsInClan() {
-            const res = await isUserInClan()
-            setIsInClan(res)
-        }
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         void loadIsInClan();
     }, [])
 
@@ -20,7 +21,7 @@ export function Clan() {
         return <div className={s.loadingScreen}>...loading</div>
     }
 
-    const context: ClanOutletContext = { isInClan }
+    const context: ClanOutletContext = { isInClan, loadIsInClan }
 
     return (
         <div className={s.clanScreen}>
