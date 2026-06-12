@@ -2,14 +2,17 @@ import s from './clan.module.scss';
 import { Outlet, useNavigate } from 'react-router-dom';
 import type { ClanOutletContext } from './clanOutletContext.type.ts';
 import { useEffect, useState } from 'react';
-import { isUserInClan } from '../../services/clans.ts';
+import { getMyClan } from '../../services/clans.ts';
+import type { GetMyClanRes } from '@funcode/shared';
 
 export function Clan() {
     const navigate = useNavigate();
     const [isInClan, setIsInClan] = useState<boolean | undefined>(undefined)
+    const [myClan, setMyClan] = useState<GetMyClanRes | null | undefined>(undefined)
     async function loadIsInClan() {
-        const res = await isUserInClan()
-        setIsInClan(res)
+        const clan = await getMyClan()
+        setMyClan(clan)
+        setIsInClan(clan !== null)
     }
 
     useEffect(() => {
@@ -17,11 +20,11 @@ export function Clan() {
         void loadIsInClan();
     }, [])
 
-    if (isInClan === undefined) {
+    if (isInClan === undefined || myClan === undefined) {
         return <div className={s.loadingScreen}>...loading</div>
     }
 
-    const context: ClanOutletContext = { isInClan, loadIsInClan }
+    const context: ClanOutletContext = { isInClan, loadIsInClan, myClan }
 
     return (
         <div className={s.clanScreen}>

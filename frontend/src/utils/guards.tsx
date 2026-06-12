@@ -2,21 +2,21 @@ import { Navigate, Outlet, useOutletContext } from 'react-router-dom';
 import type { ClanOutletContext } from '../pages/clan/clanOutletContext.type.ts';
 
 export function ClanMemberGuard() {
-    const { isInClan } = useOutletContext<ClanOutletContext>();
+    const context = useOutletContext<ClanOutletContext>();
 
-    if (!isInClan) {
+    if (!context.isInClan) {
         return <Navigate to="/home/clan/clans" replace />;
     }
 
-    return <Outlet />;
+    return <Outlet context={context} />;
 }
 
 export function NoClanMemberGuard() {
-    const { isInClan } = useOutletContext<ClanOutletContext>();
+    const context= useOutletContext<ClanOutletContext>();
 
-    if (isInClan) {
+    if (context.isInClan) {
         return <Navigate to="/home/clan/chat" replace />;
     }
 
-    return <Outlet />;
+    return <Outlet context={context} />;
 }

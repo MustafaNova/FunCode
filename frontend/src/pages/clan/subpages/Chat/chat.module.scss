@@ -1,4 +1,60 @@
 
-.txt {
+.chatScreen {
   color: black;
+}
+
+.clanNameBtn {
+  background-color: #2dd4bf;
+  width: 200px;
+  height: 50px;
+  cursor: pointer;
+}
+
+.titlePopUp {
+  display: flex;
+  align-items: center;
+}
+
+.clanPopUp {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background-color: gray;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.leavePopUp {
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  background-color: #2dd4bf;
+}
+
+.leavePopUp_btns {
+  display: flex;
+  gap: 10px;
+}
+
+.leavePopUpContent {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+
+.leaveBtn {
+  cursor: pointer;
+  background-color: red;
+  width: 100px;
+
+}
+
+.crossBtn {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
 }

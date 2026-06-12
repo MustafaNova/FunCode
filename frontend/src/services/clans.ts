@@ -1,4 +1,4 @@
-import type { CreateClanReq, CreateClanRes, ErrorResponse } from '@funcode/shared';
+import type { CreateClanReq, CreateClanRes, ErrorResponse, GetMyClanRes } from '@funcode/shared';
 import { API_URLS } from '../constants/urls.ts';
 
 
@@ -20,10 +20,15 @@ export async function createClan(req: CreateClanReq) {
     return await res.json() as CreateClanRes
 }
 
-export async function isUserInClan() {
+export async function getMyClan() {
     const res = await fetch(API_URLS.GET_MY_CLAN, {
         method: 'GET',
         credentials: 'include'
     });
-    return res.ok;
+
+    if (!res.ok) {
+        return null;
+    }
+    const body: GetMyClanRes = await res.json();
+    return body;
 }
