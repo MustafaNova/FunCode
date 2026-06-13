@@ -75,4 +75,27 @@ export class ClanRepositoryAdapter implements ClanRepositoryPort {
             role: clanMemberEntity.role
         }
     }
+
+    async leaveClan(userId: string): Promise<void> {
+        const clanMemberEntity = await this.clanMemberRepo.findOne({
+            where: { userId }
+        })
+
+        if (!clanMemberEntity) {
+            return;
+        }
+
+        await this.clanMemberRepo.remove(clanMemberEntity);
+
+        const memberCount = await this.clanMemberRepo.count({
+            where: { clanId: clanMemberEntity.clanId }
+        })
+
+        if (memberCount === 0) {
+            await this.clanRepo.delete({
+                id: clanMemberEntity.clanId
+            })
+        }
+
+    }
 }

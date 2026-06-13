@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
-import { CREATE_CLAN_PORT, GET_MY_CLAN_PORT } from './tokens';
+import { CREATE_CLAN_PORT, GET_MY_CLAN_PORT, LEAVE_CLAN_PORT } from './tokens';
 import { CreateClanService } from './createClan/createClan.service';
 import { ClanRepoModule } from '../clanRepository/clan.repo.module';
 import { GetMyClanService } from './getMyClan/getMyClan.service';
+import { LeaveClanService } from './leaveClan/leaveClan.service';
 
 
 @Module({
@@ -15,8 +16,12 @@ import { GetMyClanService } from './getMyClan/getMyClan.service';
         {
             provide: GET_MY_CLAN_PORT,
             useClass: GetMyClanService,
+        },
+        {
+            provide: LEAVE_CLAN_PORT,
+            useClass: LeaveClanService,
         }
     ],
-    exports: [CREATE_CLAN_PORT, GET_MY_CLAN_PORT]
+    exports: [CREATE_CLAN_PORT, GET_MY_CLAN_PORT, LEAVE_CLAN_PORT]
 })
 export class UCServicesModule {}

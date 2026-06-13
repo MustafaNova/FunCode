@@ -12,4 +12,5 @@ export const API_URLS = {
     SUBMIT_LEVEL_TASK: `${API_URL}/levels/submit`,
     CREATE_CLAN: `${API_URL}/clans`,
     GET_MY_CLAN: `${API_URL}/clans/me`,
+    LEAVE_CLAN: `${API_URL}/clans/me`,
 }

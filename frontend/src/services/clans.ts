@@ -32,3 +32,12 @@ export async function getMyClan() {
     const body: GetMyClanRes = await res.json();
     return body;
 }
+
+
+export async function leaveClan() {
+    const res = await fetch(API_URLS.LEAVE_CLAN, {
+        method: 'DELETE',
+        credentials: 'include'
+    })
+    return res.ok
+}

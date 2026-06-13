@@ -11,7 +11,7 @@ export function Create() {
     const [errorMsg, setErrorMsg] = useState<string>()
     const emptyNameWarning = 'empty name is invalid'
     const isClanNameEmpty = clanName.trim() === '';
-    const { loadIsInClan } = useOutletContext<ClanOutletContext>();
+    const { loadMyClan } = useOutletContext<ClanOutletContext>();
     async function handleCreateClan(){
         if (isClanNameEmpty) {
             setEmptyNameError(true)
@@ -21,7 +21,7 @@ export function Create() {
 
         try {
             await createClan({ name: clanName, description })
-            await loadIsInClan()
+            await loadMyClan()
             navigate('/home/clan')
         } catch (err) {
             if (err instanceof Error) {

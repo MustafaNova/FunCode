@@ -10,4 +10,5 @@ export interface ClanRepositoryPort {
     createClan(data: CreateClanData): Promise<Clan>;
     addMember(data: AddClanMemberData): Promise<ClanMember>;
     getMyClan(userId: string): Promise<MyClan | null>
+    leaveClan(userId: string): Promise<void>;
 }

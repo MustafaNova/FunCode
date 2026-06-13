@@ -1,15 +1,24 @@
 import s from './chat.module.scss'
 import { useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import type { ClanOutletContext } from '../../clanOutletContext.type.ts';
+import { leaveClan } from '../../../../services/clans.ts';
 
 export function Chat() {
-    const { myClan } = useOutletContext<ClanOutletContext>();
+    const navigate = useNavigate();
+    const { myClan, loadMyClan } = useOutletContext<ClanOutletContext>();
     const clanName = myClan?.name;
     const clanDescription = myClan?.description;
     const [showClanInfo, setShowClanInfo] = useState(false);
     const [showLeavePopUp, setShowLeavePopUp] = useState(false);
     const leaveMsg = 'Do you really want to leave?';
+
+    async function handleYes() {
+        await leaveClan()
+        await loadMyClan()
+        navigate('/home/clan')
+    }
+
     return (
         <div className={s.chatScreen}>
             <button className={s.clanNameBtn} onClick={() => setShowClanInfo(true)}>{clanName}</button>
@@ -34,7 +43,7 @@ export function Chat() {
                         <span>{leaveMsg}</span>
                         <div className={s.leavePopUp_btns}>
                             <button onClick={() => setShowLeavePopUp(false)}>Cancel</button>
-                            <button>Yes</button>
+                            <button onClick={handleYes}>Yes</button>
                         </div>
                     </div>
                 </div>
