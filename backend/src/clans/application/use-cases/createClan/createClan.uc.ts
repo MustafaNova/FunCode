@@ -11,19 +11,19 @@ export class CreateClanUC implements CreateClanPort {
         private readonly clanRepo: ClanRepositoryPort,
     ) {}
 
-    async createClan(req: CreateClanCmd) {
-        const nameAlreadyExists = await this.clanRepo.existsByName(req.name);
+    async createClan(cmd: CreateClanCmd) {
+        const nameAlreadyExists = await this.clanRepo.existsByName(cmd.name);
         if (nameAlreadyExists) {
             throw new ClanNameAlreadyExistsError()
         }
 
-        const userAlreadyInClan = await this.clanRepo.isUserInClan(req.userId)
+        const userAlreadyInClan = await this.clanRepo.isUserInClan(cmd.userId)
         if (userAlreadyInClan) {
             throw new UserAlreadyInClanError()
         }
 
-        const clan = await this.clanRepo.createClan({ name: req.name, description: req.description })
-        await this.clanRepo.addMember({ userId: req.userId, clanId: clan.id, role: ClanRole.LEADER })
+        const clan = await this.clanRepo.createClan({ name: cmd.name, description: cmd.description })
+        await this.clanRepo.addMember({ userId: cmd.userId, clanId: clan.id, role: ClanRole.LEADER })
         return clan;
 
     }

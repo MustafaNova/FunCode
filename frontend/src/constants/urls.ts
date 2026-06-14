@@ -13,4 +13,5 @@ export const API_URLS = {
     CREATE_CLAN: `${API_URL}/clans`,
     GET_MY_CLAN: `${API_URL}/clans/me`,
     LEAVE_CLAN: `${API_URL}/clans/me`,
+    SEARCH_CLANS: `${API_URL}/clans/search`
 }

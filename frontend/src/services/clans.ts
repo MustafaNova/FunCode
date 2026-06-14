@@ -41,3 +41,10 @@ export async function leaveClan() {
     })
     return res.ok
 }
+
+export async function searchClans(name: string, page: number, limit: number) {
+    const url = `${API_URLS.SEARCH_CLANS}?name=${encodeURIComponent(name)}&page=${page}&limit=${limit}`
+    await fetch(url, {
+        credentials: 'include'
+    })
+}

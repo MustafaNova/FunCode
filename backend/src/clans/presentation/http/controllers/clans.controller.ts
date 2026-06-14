@@ -1,13 +1,19 @@
-import { Body, Controller, Delete, Get, Inject, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Post, Query, UseGuards } from '@nestjs/common';
 import { CreateClanDto } from './dto/createClan.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { type CreateClanPort } from '../../../application/ports/inbound/createClan.port';
-import { CREATE_CLAN_PORT, GET_MY_CLAN_PORT, LEAVE_CLAN_PORT } from '../../../infrastructure/uc-wiring/tokens';
+import {
+    CREATE_CLAN_PORT,
+    GET_MY_CLAN_PORT,
+    LEAVE_CLAN_PORT,
+    SEARCH_CLANS_PORT
+} from '../../../infrastructure/uc-wiring/tokens';
 import { AuthUser, UserPayload } from '../../../../common/utils/user-payload.decorator';
 import { CreateClanCmd } from '../../../application/use-cases/createClan/createClan.cmd';
 import { CreateClanRes, GetMyClanRes } from '@funcode/shared';
 import { type GetMyClanPort } from '../../../application/ports/inbound/getMyClan.port';
 import { type LeaveClanPort } from '../../../application/ports/inbound/leaveClan.port';
+import { type SearchClansPort } from '../../../application/ports/inbound/searchClans.port';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('clans')
@@ -19,6 +25,8 @@ export class ClansController {
         private readonly getMyClanUC: GetMyClanPort,
         @Inject(LEAVE_CLAN_PORT)
         private readonly leaveClanUC: LeaveClanPort,
+        @Inject(SEARCH_CLANS_PORT)
+        private readonly searchClansUC: SearchClansPort,
     ) {}
 
     @Post()
@@ -55,5 +63,13 @@ export class ClansController {
     async leaveClan(@UserPayload() user: AuthUser) {
         console.log('leaveClan req');
         await this.leaveClanUC.leaveClan(user.userId);
+    }
+
+    @Get('search')
+    async searchClans(
+        @Query('name') name: string,
+        @Query('page') page: string,
+        @Query('limit') limit: string,
+    ) {
     }
 }
