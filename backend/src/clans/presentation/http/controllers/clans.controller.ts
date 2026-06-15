@@ -14,6 +14,7 @@ import { CreateClanRes, GetMyClanRes } from '@funcode/shared';
 import { type GetMyClanPort } from '../../../application/ports/inbound/getMyClan.port';
 import { type LeaveClanPort } from '../../../application/ports/inbound/leaveClan.port';
 import { type SearchClansPort } from '../../../application/ports/inbound/searchClans.port';
+import { toLimitNumber, toPageNumber } from './utils/pagination.util';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('clans')
@@ -71,5 +72,10 @@ export class ClansController {
         @Query('page') page: string,
         @Query('limit') limit: string,
     ) {
+        await this.searchClansUC.search({
+            name,
+            page: toPageNumber(page),
+            limit: toLimitNumber(limit)
+        })
     }
 }

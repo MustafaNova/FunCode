@@ -1,6 +1,6 @@
 import { ClanRepositoryPort } from '../../application/ports/outbound/clan.repository.port';
 import { ClanEntity } from '../entities/clan.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ClanMemberEntity } from '../entities/clan-member.entity';
 import { CreateClanData } from '../../application/ports/outbound/data/createClan.data';
@@ -10,6 +10,8 @@ import { ClanMapper } from '../mapper/clan.mapper';
 import { ClanMemberMapper } from '../mapper/clanMember.mapper';
 import { ClanMember } from '../../domain/entities/clanMember';
 import { MyClan } from '../../domain/types/myClan.type';
+import { SearchClansData } from '../../application/ports/outbound/data/searchClans.data';
+import { SearchClansResData } from '../../application/ports/outbound/data/searchClansRes.data';
 
 
 export class ClanRepositoryAdapter implements ClanRepositoryPort {
@@ -97,5 +99,24 @@ export class ClanRepositoryAdapter implements ClanRepositoryPort {
             })
         }
 
+    }
+
+    async searchClans(data: SearchClansData): Promise<SearchClansResData[]> {
+        const clans = await this.clanRepo.find({
+            where: {
+                name: ILike(`%${data.name}%`)
+            },
+            relations: {
+                members: true
+            },
+            skip: (data.page - 1) * data.limit,
+            take: data.limit,
+        })
+
+        return clans.map((clan) => ({
+            name: clan.name,
+            description: clan.description,
+            memberCount: clan.members.length,
+        }))
     }
 }

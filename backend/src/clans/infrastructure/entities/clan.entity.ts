@@ -15,5 +15,4 @@ export class ClanEntity {
 
     @OneToMany(() => ClanMemberEntity, member => member.clan)
     members: ClanMemberEntity[];
-
 }

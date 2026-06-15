@@ -10,11 +10,10 @@ export class SearchClansUC implements SearchClansPort {
     ) {}
 
     async search(cmd: SearchClansCmd): Promise<SearchClansRes[]> {
-        console.log('search UC');
         return [{
-            name: 's',
-            description: 's',
-            memberCount: 1,
+            name: 'testUC',
+            description: 'testUC',
+            memberCount: 0,
         }]
     }
 }
