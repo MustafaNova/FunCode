@@ -6,7 +6,7 @@ export function Clans() {
     const placeHolder = 'Search for a clan...';
     const [search, setSearch] = useState<string>('');
     async function handleSearch() {
-        await searchClans(search, 1, 20);
+        await searchClans(search, 1, 1);
         setSearch('')
     }
     return (

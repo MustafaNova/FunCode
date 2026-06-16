@@ -10,10 +10,11 @@ export class SearchClansUC implements SearchClansPort {
     ) {}
 
     async search(cmd: SearchClansCmd): Promise<SearchClansRes[]> {
-        return [{
-            name: 'testUC',
-            description: 'testUC',
-            memberCount: 0,
-        }]
+        const res = await this.clanRepo.searchClans(cmd)
+        return res.map((clan) => ({
+            name: clan.name,
+            description: clan.description,
+            memberCount: clan.memberCount,
+        }))
     }
 }

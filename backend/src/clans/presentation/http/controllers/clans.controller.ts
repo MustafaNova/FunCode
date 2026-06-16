@@ -10,7 +10,7 @@ import {
 } from '../../../infrastructure/uc-wiring/tokens';
 import { AuthUser, UserPayload } from '../../../../common/utils/user-payload.decorator';
 import { CreateClanCmd } from '../../../application/use-cases/createClan/createClan.cmd';
-import { CreateClanRes, GetMyClanRes } from '@funcode/shared';
+import { CreateClanRes, GetMyClanRes, SearchClansResDto } from '@funcode/shared';
 import { type GetMyClanPort } from '../../../application/ports/inbound/getMyClan.port';
 import { type LeaveClanPort } from '../../../application/ports/inbound/leaveClan.port';
 import { type SearchClansPort } from '../../../application/ports/inbound/searchClans.port';
@@ -71,11 +71,17 @@ export class ClansController {
         @Query('name') name: string,
         @Query('page') page: string,
         @Query('limit') limit: string,
-    ) {
-        await this.searchClansUC.search({
+    ): Promise<SearchClansResDto> {
+        const res = await this.searchClansUC.search({
             name,
             page: toPageNumber(page),
             limit: toLimitNumber(limit)
-        })
+        });
+
+        return res.map((clan) => ({
+            name: clan.name,
+            description: clan.description,
+            memberCount: clan.memberCount
+        }));
     }
 }

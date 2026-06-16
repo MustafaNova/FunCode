@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ClanEntity } from './clan.entity';
 import { ClanRole } from '../../domain/enums/clanRole.enum';
 
@@ -21,5 +21,6 @@ export class ClanMemberEntity {
     role: ClanRole;
 
     @ManyToOne(() => ClanEntity, clan => clan.members)
+    @JoinColumn({ name: 'clanId' })
     clan: ClanEntity;
 }
