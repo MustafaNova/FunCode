@@ -11,14 +11,19 @@
   flex-direction: column;
   align-items: center;
   color: black;
-  gap: 5px;
+  gap: 20px;
+  height: 400px;
+  width: 392px;
+  overflow-y: auto;
 }
 
 .clans div {
+  width: 258px;
   display: flex;
   gap: 150px;
   background-color: gray;
   padding: 5px;
+  cursor: pointer;
 }
 
 .infoBox {

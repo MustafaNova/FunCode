@@ -109,6 +109,9 @@ export class ClanRepositoryAdapter implements ClanRepositoryPort {
             relations: {
                 members: true
             },
+            order: {
+                name: 'ASC'
+            },
             skip: (data.page - 1) * data.limit,
             take: data.limit,
         })

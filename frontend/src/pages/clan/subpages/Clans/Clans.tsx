@@ -1,13 +1,21 @@
 import s from './clans.module.scss';
 import { useState } from 'react';
 import { searchClans } from '../../../../services/clans.ts';
+import type { SearchClansResDto } from '@funcode/shared';
 
 export function Clans() {
     const placeHolder = 'Search for a clan...';
     const [search, setSearch] = useState<string>('');
+    const [clans, setClans] = useState<SearchClansResDto>([]);
+    const [hasSearched, setHasSearched] = useState<boolean>();
+    const noClansMsg = 'No Clans found..';
+    const limit = 10;
+
     async function handleSearch() {
-        await searchClans(search, 1, 1);
-        setSearch('')
+        const res = await searchClans(search, 1, limit);
+        setClans(res);
+        setHasSearched(true);
+        setSearch('');
     }
     return (
         <div className={s.clansTab}>
@@ -19,10 +27,13 @@ export function Clans() {
             <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={placeHolder}/>
             <button onClick={handleSearch}>Search</button>
             <div className={s.clans}>
-                <div>
-                    <span>Clan 1</span>
-                    <span>3/20</span>
-                </div>
+                {hasSearched && clans.length === 0 && ( <p>{noClansMsg}</p> )}
+                {clans.map((clan) => (
+                    <div>
+                        <span>{clan.name}</span>
+                        <span>{clan.memberCount}/20</span>
+                    </div>
+                ))}
             </div>
         </div>
     )

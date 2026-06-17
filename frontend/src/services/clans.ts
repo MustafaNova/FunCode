@@ -49,5 +49,5 @@ export async function searchClans(name: string, page: number, limit: number) {
     })
 
     const clans: SearchClansResDto = await res.json();
-    console.log(clans);
+    return clans;
 }
