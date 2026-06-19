@@ -1,19 +1,20 @@
 import s from './clans.module.scss';
-import { useState } from 'react';
-import { searchClans } from '../../../../services/clans.ts';
-import type { SearchClansResDto } from '@funcode/shared';
-import * as React from 'react';
+import { useState, type UIEvent } from 'react';
+import { joinClan, searchClans } from '../../../../services/clans.ts';
+import type { ClanDto, SearchClansResDto } from '@funcode/shared';
 
 export function Clans() {
     const placeHolder = 'Search for a clan...';
     const [search, setSearch] = useState<string>('');
     const [clans, setClans] = useState<SearchClansResDto>([]);
-    const [hasSearched, setHasSearched] = useState<boolean>();
+    const [hasSearched, setHasSearched] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const [hasMore, setHasMore] = useState<boolean>(true);
     const [page, setPage] = useState<number>(1);
     const [lastSearch, setLastSearch] = useState<string>('');
+    const [chosenClan, setChosenClan] = useState<ClanDto | null>(null);
     const noClansMsg = 'No Clans found..';
+    const maxMemberCount = 20;
     const limit = 10;
 
     async function handleSearch() {
@@ -47,7 +48,7 @@ export function Clans() {
         setLoading(false);
     }
 
-    function handleScroll(e: React.UIEvent<HTMLDivElement>) {
+    function handleScroll(e: UIEvent<HTMLDivElement>) {
         const element = e.currentTarget;
 
         const isBottom =
@@ -70,12 +71,21 @@ export function Clans() {
             <div className={s.clans} onScroll={handleScroll}>
                 {hasSearched && clans.length === 0 && ( <p>{noClansMsg}</p> )}
                 {clans.map((clan) => (
-                    <div>
+                    <button onClick={() => setChosenClan(clan)}>
                         <span>{clan.name}</span>
-                        <span>{clan.memberCount}/20</span>
-                    </div>
+                        <span>{clan.memberCount}/{maxMemberCount}</span>
+                    </button>
                 ))}
             </div>
+            {chosenClan && (
+                <div className={s.popUp}>
+                    <span>name: {chosenClan.name}</span>
+                    <span>description: {chosenClan.description}</span>
+                    <span>memberCount: {chosenClan.memberCount}</span>
+                    <button onClick={() => joinClan(chosenClan.id)}>Join</button>
+                    <button className={s.leavePopUp} onClick={() => setChosenClan(null)}>X</button>
+                </div>
+            )}
         </div>
     )
 }

@@ -1,10 +1,10 @@
-import { Body, Controller, Delete, Get, Inject, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { CreateClanDto } from './dto/createClan.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { type CreateClanPort } from '../../../application/ports/inbound/createClan.port';
 import {
     CREATE_CLAN_PORT,
-    GET_MY_CLAN_PORT,
+    GET_MY_CLAN_PORT, JOIN_CLAN_PORT,
     LEAVE_CLAN_PORT,
     SEARCH_CLANS_PORT
 } from '../../../infrastructure/uc-wiring/tokens';
@@ -15,6 +15,7 @@ import { type GetMyClanPort } from '../../../application/ports/inbound/getMyClan
 import { type LeaveClanPort } from '../../../application/ports/inbound/leaveClan.port';
 import { type SearchClansPort } from '../../../application/ports/inbound/searchClans.port';
 import { toLimitNumber, toPageNumber } from './utils/pagination.util';
+import { type JoinClanPort } from '../../../application/ports/inbound/joinClan.port';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('clans')
@@ -28,6 +29,8 @@ export class ClansController {
         private readonly leaveClanUC: LeaveClanPort,
         @Inject(SEARCH_CLANS_PORT)
         private readonly searchClansUC: SearchClansPort,
+        @Inject(JOIN_CLAN_PORT)
+        private readonly joinClanUC: JoinClanPort,
     ) {}
 
     @Post()
@@ -79,9 +82,19 @@ export class ClansController {
         });
 
         return res.map((clan) => ({
+            id: clan.id,
             name: clan.name,
             description: clan.description,
             memberCount: clan.memberCount
         }));
+    }
+
+
+    @Post('join/:clanId')
+    async join(
+        @Param('clanId') clanId: string,
+        @UserPayload() user: AuthUser
+    ) {
+        await this.joinClanUC.join({ userId: user.userId, clanId})
     }
 }

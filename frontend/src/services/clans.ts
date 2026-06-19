@@ -51,3 +51,11 @@ export async function searchClans(name: string, page: number, limit: number) {
     const clans: SearchClansResDto = await res.json();
     return clans;
 }
+
+export async function joinClan(clanId: string) {
+    const url = `${API_URLS.JOIN_CLAN}/${clanId}`;
+    await fetch(url, {
+        method: 'POST',
+        credentials: 'include'
+    })
+}

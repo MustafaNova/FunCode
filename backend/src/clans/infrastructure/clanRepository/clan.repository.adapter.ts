@@ -117,6 +117,7 @@ export class ClanRepositoryAdapter implements ClanRepositoryPort {
         })
 
         return clans.map((clan) => ({
+            id: clan.id,
             name: clan.name,
             description: clan.description,
             memberCount: clan.members.length,
