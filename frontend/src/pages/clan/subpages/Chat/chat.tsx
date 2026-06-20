@@ -1,12 +1,11 @@
 import s from './chat.module.scss'
 import { useState } from 'react';
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useOutletContext } from 'react-router-dom';
 import type { ClanOutletContext } from '../../clanOutletContext.type.ts';
 import { leaveClan } from '../../../../services/clans.ts';
 
 export function Chat() {
-    const navigate = useNavigate();
-    const { myClan, loadMyClan } = useOutletContext<ClanOutletContext>();
+    const { myClan, refreshClanState } = useOutletContext<ClanOutletContext>();
     const clanName = myClan?.name;
     const clanDescription = myClan?.description;
     const [showClanInfo, setShowClanInfo] = useState(false);
@@ -15,8 +14,7 @@ export function Chat() {
 
     async function handleYes() {
         await leaveClan()
-        await loadMyClan()
-        navigate('/home/clan')
+        await refreshClanState()
     }
 
     return (

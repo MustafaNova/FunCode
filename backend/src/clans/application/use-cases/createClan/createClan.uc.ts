@@ -1,8 +1,8 @@
 import { CreateClanPort } from '../../ports/inbound/createClan.port';
 import { ClanRepositoryPort } from '../../ports/outbound/clan.repository.port';
-import { ClanNameAlreadyExistsError } from '../../errors/clan.name.already.exists.error';
+import { ClanNameAlreadyExistsError } from '../errors/clan.name.already.exists.error';
 import { CreateClanCmd } from './createClan.cmd';
-import { UserAlreadyInClanError } from '../../errors/userAlreadyInClan.error';
+import { UserAlreadyInClanError } from '../errors/userAlreadyInClan.error';
 import { ClanRole } from '../../../domain/enums/clanRole.enum';
 
 

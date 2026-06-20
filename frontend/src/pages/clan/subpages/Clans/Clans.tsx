@@ -2,9 +2,11 @@ import s from './clans.module.scss';
 import { useState, type UIEvent } from 'react';
 import { joinClan, searchClans } from '../../../../services/clans.ts';
 import type { ClanDto, SearchClansResDto } from '@funcode/shared';
+import { useOutletContext } from 'react-router-dom';
+import type { ClanOutletContext } from '../../clanOutletContext.type.ts';
 
 export function Clans() {
-    const placeHolder = 'Search for a clan...';
+    const { refreshClanState } = useOutletContext<ClanOutletContext>();
     const [search, setSearch] = useState<string>('');
     const [clans, setClans] = useState<SearchClansResDto>([]);
     const [hasSearched, setHasSearched] = useState<boolean>(false);
@@ -13,7 +15,10 @@ export function Clans() {
     const [page, setPage] = useState<number>(1);
     const [lastSearch, setLastSearch] = useState<string>('');
     const [chosenClan, setChosenClan] = useState<ClanDto | null>(null);
+    const [showError, setShowError] = useState<boolean>(false);
+    const errorMsg = 'Something went wrong';
     const noClansMsg = 'No Clans found..';
+    const placeHolder = 'Search for a clan...';
     const maxMemberCount = 20;
     const limit = 10;
 
@@ -59,6 +64,20 @@ export function Clans() {
         }
     }
 
+    async function handleJoinClan() {
+        if (!chosenClan) return;
+
+        try {
+            setShowError(false);
+            await joinClan(chosenClan.id);
+            await refreshClanState()
+        } catch (err) {
+            if (err instanceof Error) {
+                setShowError(true);
+            }
+        }
+    }
+
     return (
         <div className={s.clansTab}>
             <div className={s.infoBox}>
@@ -82,9 +101,12 @@ export function Clans() {
                     <span>name: {chosenClan.name}</span>
                     <span>description: {chosenClan.description}</span>
                     <span>memberCount: {chosenClan.memberCount}</span>
-                    <button onClick={() => joinClan(chosenClan.id)}>Join</button>
+                    <button onClick={handleJoinClan}>Join</button>
                     <button className={s.leavePopUp} onClick={() => setChosenClan(null)}>X</button>
                 </div>
+            )}
+            {showError && (
+                <div className={s.errorMsg}>{errorMsg}</div>
             )}
         </div>
     )

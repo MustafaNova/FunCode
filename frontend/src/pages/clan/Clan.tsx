@@ -10,9 +10,14 @@ export function Clan() {
     const [isInClan, setIsInClan] = useState<boolean | undefined>(undefined)
     const [myClan, setMyClan] = useState<GetMyClanRes | null | undefined>(undefined)
     async function loadMyClan() {
-        const clan = await getMyClan()
-        setMyClan(clan)
-        setIsInClan(clan !== null)
+        const clan = await getMyClan();
+        setMyClan(clan);
+        setIsInClan(clan !== null);
+    }
+
+    async function refreshClanState() {
+        await loadMyClan();
+        navigate('/home/clan');
     }
 
     useEffect(() => {
@@ -24,7 +29,7 @@ export function Clan() {
         return <div className={s.loadingScreen}>...loading</div>
     }
 
-    const context: ClanOutletContext = { isInClan, loadMyClan, myClan }
+    const context: ClanOutletContext = { isInClan, refreshClanState, myClan }
 
     return (
         <div className={s.clanScreen}>

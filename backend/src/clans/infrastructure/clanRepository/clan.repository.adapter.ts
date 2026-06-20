@@ -123,4 +123,10 @@ export class ClanRepositoryAdapter implements ClanRepositoryPort {
             memberCount: clan.members.length,
         }))
     }
+
+    async clanExists(clanId: string): Promise<boolean> {
+        return this.clanRepo.exists({
+            where: {id: clanId}
+        });
+    }
 }

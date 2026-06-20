@@ -33,7 +33,6 @@ export async function getMyClan() {
     return body;
 }
 
-
 export async function leaveClan() {
     const res = await fetch(API_URLS.LEAVE_CLAN, {
         method: 'DELETE',
@@ -54,8 +53,12 @@ export async function searchClans(name: string, page: number, limit: number) {
 
 export async function joinClan(clanId: string) {
     const url = `${API_URLS.JOIN_CLAN}/${clanId}`;
-    await fetch(url, {
+    const res = await fetch(url, {
         method: 'POST',
         credentials: 'include'
     })
+    if (!res.ok) {
+        const errorRes: ErrorResponse = await res.json();
+        throw new Error(errorRes.message);
+    }
 }

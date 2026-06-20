@@ -13,8 +13,9 @@ import { PasswordError } from '../auth/domain/errors/PasswordError';
 import { UsernameError } from '../auth/domain/errors/UsernameError';
 import { LevelNotFoundException } from '../Learning-progression/infrastructure/database/errors/levelNotFound.err';
 import { ErrorResponse } from '@funcode/shared';
-import { ClanNameAlreadyExistsError } from '../clans/application/errors/clan.name.already.exists.error';
-import { UserAlreadyInClanError } from '../clans/application/errors/userAlreadyInClan.error';
+import { ClanNameAlreadyExistsError } from '../clans/application/use-cases/errors/clan.name.already.exists.error';
+import { UserAlreadyInClanError } from '../clans/application/use-cases/errors/userAlreadyInClan.error';
+import { ClanNotFoundError } from '../clans/application/use-cases/errors/ClanNotFoundError';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -35,7 +36,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
         } else if (
             error instanceof NotFoundProgressIdException ||
             error instanceof LevelNotFoundException ||
-            error instanceof NotFoundException
+            error instanceof NotFoundException ||
+            error instanceof ClanNotFoundError
         ) {
             status = HttpStatus.NOT_FOUND;
         }

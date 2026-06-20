@@ -1,17 +1,16 @@
 import s from './create.module.scss';
 import { useState } from 'react';
 import { createClan } from '../../../../services/clans.ts';
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useOutletContext } from 'react-router-dom';
 import type { ClanOutletContext } from '../../clanOutletContext.type.ts';
 export function Create() {
-    const navigate = useNavigate();
     const [clanName, setClanName] = useState<string>("");
     const [description, setDescription] = useState<string>("");
     const [emptyNameError, setEmptyNameError] = useState<boolean>(false)
     const [errorMsg, setErrorMsg] = useState<string>()
     const emptyNameWarning = 'empty name is invalid'
     const isClanNameEmpty = clanName.trim() === '';
-    const { loadMyClan } = useOutletContext<ClanOutletContext>();
+    const { refreshClanState } = useOutletContext<ClanOutletContext>();
     async function handleCreateClan(){
         if (isClanNameEmpty) {
             setEmptyNameError(true)
@@ -21,8 +20,7 @@ export function Create() {
 
         try {
             await createClan({ name: clanName, description })
-            await loadMyClan()
-            navigate('/home/clan')
+            await refreshClanState()
         } catch (err) {
             if (err instanceof Error) {
                 setErrorMsg(err.message)
