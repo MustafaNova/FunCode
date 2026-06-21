@@ -58,3 +58,34 @@
   right: 10px;
   cursor: pointer;
 }
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: gray;
+  height: 500px;
+  width: 700px;
+  overflow-y: auto;
+}
+
+.chatInput {
+  width: 300px;
+}
+
+.chatMsg {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  background-color: cornflowerblue;
+}
+
+.chatMsgTitle {
+  display: flex;
+  justify-content: space-between;
+}
+
+.chatMsgTimeStamp {
+  display: block;
+  text-align: right;
+}

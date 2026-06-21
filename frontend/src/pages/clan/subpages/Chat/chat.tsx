@@ -1,8 +1,9 @@
 import s from './chat.module.scss'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import type { ClanOutletContext } from '../../clanOutletContext.type.ts';
 import { leaveClan } from '../../../../services/clans.ts';
+import { getSocket } from '../../../../services/socket.ts';
 
 export function Chat() {
     const { myClan, refreshClanState } = useOutletContext<ClanOutletContext>();
@@ -11,16 +12,21 @@ export function Chat() {
     const [showClanInfo, setShowClanInfo] = useState(false);
     const [showLeavePopUp, setShowLeavePopUp] = useState(false);
     const leaveMsg = 'Do you really want to leave?';
-
     async function handleYes() {
-        await leaveClan()
-        await refreshClanState()
+        await leaveClan();
+        await refreshClanState();
     }
+    async function openSocketConnection() {
+        await getSocket()
+    }
+
+    useEffect(() => {
+        void openSocketConnection();
+    }, []);
 
     return (
         <div className={s.chatScreen}>
             <button className={s.clanNameBtn} onClick={() => setShowClanInfo(true)}>{clanName}</button>
-
             {showClanInfo && (
                 <div className={s.clanPopUp}>
                     <div className={s.titlePopUp}>
@@ -46,6 +52,22 @@ export function Chat() {
                     </div>
                 </div>
             )}
+            <div className={s.chat}>
+                <div className={s.chatMsg}>
+                    <div className={s.chatMsgTitle}>
+                        <span>Name</span>
+                        <span>Role</span>
+                    </div>
+                    <div>
+                        <span>test message</span>
+                    </div>
+                    <div>
+                        <span className={s.chatMsgTimeStamp}>20.02.2026</span>
+                    </div>
+                </div>
+
+            </div>
+            <input className={s.chatInput} />
         </div>
     )
 }
