@@ -23,6 +23,7 @@ import { WsExceptionFilter } from '../../../common/ws.exception.filter';
 
 @UseFilters(new WsExceptionFilter())
 @WebSocketGateway({
+    namespace: '/game',
     cors: {
         origin: process.env['FRONTEND_URL'],
         credentials: true,

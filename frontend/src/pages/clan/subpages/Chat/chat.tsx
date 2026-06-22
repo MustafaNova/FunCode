@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import type { ClanOutletContext } from '../../clanOutletContext.type.ts';
 import { leaveClan } from '../../../../services/clans.ts';
-import { getSocket } from '../../../../services/socket.ts';
+import { getSocket, socketDisconnect } from '../../../../services/socket/gameSocket.ts';
 
 export function Chat() {
     const { myClan, refreshClanState } = useOutletContext<ClanOutletContext>();
@@ -19,9 +19,16 @@ export function Chat() {
     async function openSocketConnection() {
         await getSocket()
     }
+    async function closeSocketConnection() {
+        await socketDisconnect();
+    }
 
     useEffect(() => {
         void openSocketConnection();
+
+        return () => {
+            void closeSocketConnection();
+        }
     }, []);
 
     return (

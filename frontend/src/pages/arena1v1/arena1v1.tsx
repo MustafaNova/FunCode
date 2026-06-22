@@ -6,7 +6,7 @@ import { SOCKET_EVENTS } from '@funcode/shared';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBug, faCodeBranch, faLock, faShieldHalved, faUserNinja } from '@fortawesome/free-solid-svg-icons';
 import { SearchingScreen } from './searchingScreen.tsx';
-import { getSocket } from '../../services/socket.ts';
+import { getSocket } from '../../services/socket/gameSocket.ts';
 
 export function Arena1v1() {
     const [searching, setSearching] = useState(false);

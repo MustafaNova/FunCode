@@ -24,8 +24,9 @@ export class GameService {
         this.server = server;
     }
 
-    getRoom(roomId: string) {
-        return this.server.sockets.adapter.rooms.get(roomId);
+    async getRoom(roomId: string) {
+        const res = await this.server.in(roomId).fetchSockets();
+        return res.length;
     }
 
     sendClient(client: Socket, event: string, msg: string) {
@@ -116,19 +117,11 @@ export class GameService {
     }
 
     async closeRoom(roomId: string) {
-        const room = this.server.sockets.adapter.rooms.get(roomId);
-        if (room) {
-            for (const socketId of room) {
-                const socket = this.server.sockets.sockets.get(socketId);
-                await socket?.leave(roomId);
-            }
+        const room = await this.server.in(roomId).fetchSockets();
+        for (const socket of room) {
+            socket.leave(roomId);
         }
+
     }
 
-    getTokenFromCookie(cookie: string | undefined) {
-        return cookie
-            ?.split(';')
-            .find((c) => c.startsWith('token='))
-            ?.split('=')[1];
-    }
 }

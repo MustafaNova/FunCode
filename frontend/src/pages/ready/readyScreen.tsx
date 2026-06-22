@@ -1,5 +1,5 @@
 import s from './ready.module.scss'
-import { onBattleStarted, sendPlayerReady } from '../../services/socket.ts';
+import { onBattleStarted, sendPlayerReady } from '../../services/socket/gameSocket.ts';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMatchStore } from '../../store/matchStore.ts';

@@ -7,19 +7,18 @@ import { WsException } from '@nestjs/websockets';
 export class RoomGuard implements CanActivate {
     constructor(private readonly gs: GameService) {}
 
-    canActivate(context: ExecutionContext): boolean {
+    async canActivate(context: ExecutionContext): Promise<boolean> {
         const client = context.switchToWs().getClient<GameSocket>();
         const roomId = client.data.room;
-        const userId = client.data.user.userId;
         if (!roomId) {
             throw new WsException('joined no room');
         }
 
-        const room = this.gs.getRoom(roomId);
-        if (!room) {
+        const room = await this.gs.getRoom(roomId);
+        if (room == 0) {
             throw new WsException('Room does not exist');
         }
-        client.data.roomSize = room.size;
+        client.data.roomSize = room;
         return true;
     }
 }
