@@ -53,20 +53,15 @@ export class GameService {
 
     registerNewPlayer(client: Socket, token: string | undefined) {
         if (!token) {
-            console.log('registerNewPlayer: !token error');
             this.disconnectUnauthorized(client);
             return;
         }
         try {
-            console.log('registerNewPlayer: at try block');
             const payload = verify(token, 'test') as Payload;
-            console.log('registerNewPlayer: verify token done');
             client.data.user = payload; // eslint-disable-line
             this.connectedPlayers.set(payload.userId, client as GameSocket);
-            console.log('registerNewPlayer: connectedPlayers.set done');
             this.battleManager.registerNewPlayer(payload.userId);
         } catch {
-            console.log('registerNewPlayer: catched error');
             this.disconnectUnauthorized(client);
         }
     }

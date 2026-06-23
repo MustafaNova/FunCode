@@ -9,6 +9,7 @@ import { SearchClansResData } from './data/searchClansRes.data';
 export interface ClanRepositoryPort {
     existsByName(name: string): Promise<boolean>;
     isUserInClan(userId: string): Promise<boolean>;
+    isUserInClanByClanId(userId: string, clanId: string): Promise<boolean>;
     createClan(data: CreateClanData): Promise<Clan>;
     addMember(data: AddClanMemberData): Promise<ClanMember>;
     getMyClan(userId: string): Promise<MyClan | null>

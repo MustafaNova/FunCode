@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import type { ClanOutletContext } from '../../clanOutletContext.type.ts';
 import { leaveClan } from '../../../../services/clans.ts';
-import { getSocket, socketDisconnect } from '../../../../services/socket/gameSocket.ts';
+import { getSocket, socketDisconnect } from '../../../../services/socket/clanChatSocket.ts';
 
 export function Chat() {
     const { myClan, refreshClanState } = useOutletContext<ClanOutletContext>();

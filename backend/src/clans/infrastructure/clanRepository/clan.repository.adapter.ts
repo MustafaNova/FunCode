@@ -34,6 +34,15 @@ export class ClanRepositoryAdapter implements ClanRepositoryPort {
         })
     }
 
+    async isUserInClanByClanId(userId: string, clanId: string): Promise<boolean> {
+        return this.clanMemberRepo.exists({
+            where: {
+                userId,
+                clanId,
+            },
+        });
+    }
+
     async createClan(data: CreateClanData): Promise<Clan> {
         const clanEntity = this.clanRepo.create({
             name: data.name,

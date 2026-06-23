@@ -39,9 +39,7 @@ export class GameGateway
     }
 
     handleConnection(client: Socket): any {
-        console.log('handleConnection. cookie: ', client.handshake.auth.token);
-        const token = client.handshake.auth.token
-        this.gs.registerNewPlayer(client, token);
+        this.gs.registerNewPlayer(client, client.handshake.auth.token);
     }
 
     handleDisconnect(client: Socket): any {
