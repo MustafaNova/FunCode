@@ -3,7 +3,12 @@ import { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import type { ClanOutletContext } from '../../clanOutletContext.type.ts';
 import { leaveClan } from '../../../../services/clans.ts';
-import { getSocket, socketDisconnect } from '../../../../services/socket/clanChatSocket.ts';
+import {
+    getSocket,
+    joinClanChatRoom, onNewMsg, sendClanMsg,
+    socketDisconnect
+} from '../../../../services/socket/clanChatSocket.ts';
+import type { ClanMsg } from '@funcode/shared';
 
 export function Chat() {
     const { myClan, refreshClanState } = useOutletContext<ClanOutletContext>();
@@ -11,25 +16,45 @@ export function Chat() {
     const clanDescription = myClan?.description;
     const [showClanInfo, setShowClanInfo] = useState(false);
     const [showLeavePopUp, setShowLeavePopUp] = useState(false);
+    const [clanMsg, setClanMsg] = useState('');
+    const [messages, setMessages] = useState<ClanMsg[]>([]);
     const leaveMsg = 'Do you really want to leave?';
     async function handleYes() {
         await leaveClan();
         await refreshClanState();
     }
-    async function openSocketConnection() {
-        await getSocket()
+    function handleNewMsg(msg: ClanMsg) {
+        setMessages((prevMessages) => [...prevMessages, msg]);
     }
     async function closeSocketConnection() {
         await socketDisconnect();
     }
 
     useEffect(() => {
-        void openSocketConnection();
+        let isActive = true;
+        let offNewMsg: (() => void) | undefined;
+
+        async function joinClanChat() {
+            await getSocket()
+            if (!isActive) return;
+
+            joinClanChatRoom(myClan?.clanId);
+            offNewMsg = onNewMsg(handleNewMsg)
+        }
+        void joinClanChat();
 
         return () => {
+            isActive = false;
+            offNewMsg?.();
             void closeSocketConnection();
         }
     }, []);
+
+    function handleSubmit() {
+        const curMsg = clanMsg;
+        setClanMsg('');
+        sendClanMsg(curMsg);
+    }
 
     return (
         <div className={s.chatScreen}>
@@ -60,21 +85,23 @@ export function Chat() {
                 </div>
             )}
             <div className={s.chat}>
-                <div className={s.chatMsg}>
-                    <div className={s.chatMsgTitle}>
-                        <span>Name</span>
-                        <span>Role</span>
+                {messages.map((msg) => (
+                    <div className={s.chatMsg}>
+                        <div className={s.chatMsgTitle}>
+                            <span>Name</span>
+                            <span>Role</span>
+                        </div>
+                        <div>
+                            <span>{msg.msg}</span>
+                        </div>
+                        <div>
+                            <span className={s.chatMsgTimeStamp}>{msg.createdAt}</span>
+                        </div>
                     </div>
-                    <div>
-                        <span>test message</span>
-                    </div>
-                    <div>
-                        <span className={s.chatMsgTimeStamp}>20.02.2026</span>
-                    </div>
-                </div>
-
+                ))}
             </div>
-            <input className={s.chatInput} />
+            <input value={clanMsg} onChange={(e) => setClanMsg(e.target.value)} className={s.chatInput} />
+            <button onClick={handleSubmit}>submit</button>
         </div>
     )
 }
