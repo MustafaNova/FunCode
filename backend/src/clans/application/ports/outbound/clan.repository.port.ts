@@ -16,4 +16,5 @@ export interface ClanRepositoryPort {
     leaveClan(userId: string): Promise<void>;
     searchClans(data: SearchClansData): Promise<SearchClansResData[]>;
     clanExists(clanId: string): Promise<boolean>;
+    getUserClanRole(userId: string): Promise<string | null>;
 }

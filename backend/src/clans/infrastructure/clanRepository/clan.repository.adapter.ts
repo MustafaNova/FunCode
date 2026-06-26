@@ -138,4 +138,13 @@ export class ClanRepositoryAdapter implements ClanRepositoryPort {
             where: {id: clanId}
         });
     }
+
+    async getUserClanRole(userId: string): Promise<string | null> {
+        const res = await this.clanMemberRepo.findOne({
+            where: { userId }
+        })
+        if (!res) return null;
+
+        return res.role
+    }
 }

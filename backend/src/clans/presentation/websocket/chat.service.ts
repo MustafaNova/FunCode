@@ -40,24 +40,30 @@ export class ChatService {
         await client.join(clanId);
     }
 
-    async leaveClanRoom(client: ChatSocket, clanId: string) {
-        delete client.data.clanId;
+    async leaveClanRoom(client: ChatSocket) {
+        const clanId = client.data.clanId;
+        if (!clanId) return;
+
         await client.leave(clanId);
+        delete client.data.clanId;
     }
 
     async sendClanMsg(client: ChatSocket, msg: string) {
         const clanId = client.data.clanId;
-        if (!msg.trim() || !clanId) {
+        const clanRole = await this.clanRepo.getUserClanRole(client.data.user.userId);
+        if (!msg.trim() || !clanId || !clanRole) {
             console.log("sendClanMsg not working:", !msg.trim(), !clanId);
             return;
         }
 
+
         const clanMsg: ClanMsg = {
             msg,
-            createdAt: new Date().toDateString(),
+            clanRole,
+            username: client.data.user.username,
+            createdAt: new Date().toISOString(),
         }
         this.server.to(clanId).emit(CLAN_SOCKET_EVENTS.NEW_CLAN_MSG, clanMsg);
-        console.log("sendClanMsg sended to clan");
     }
 
 }

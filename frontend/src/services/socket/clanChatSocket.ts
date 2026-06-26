@@ -1,6 +1,6 @@
 import { io, type Socket } from 'socket.io-client';
 import { me } from '../auth.ts';
-import { CLAN_SOCKET_EVENTS, type ClanMsg } from '@funcode/shared';
+import { CLAN_SOCKET_EVENTS, type ClanMsg, type JoinClanChatReq, type SendClanMsgReq } from '@funcode/shared';
 
 
 let chatSocket: Socket | null = null;
@@ -26,12 +26,13 @@ export async function socketDisconnect() {
 
 export function joinClanChatRoom(clanId: string | undefined) {
     if (!clanId) return;
-    chatSocket?.emit(CLAN_SOCKET_EVENTS.JOIN_CLAN_CHAT, { clanId });
+    const req: JoinClanChatReq = { clanId };
+    chatSocket?.emit(CLAN_SOCKET_EVENTS.JOIN_CLAN_CHAT, req);
 }
 
-export function sendClanMsg(message: string) {
-    if (!message.trim()) return;
-    chatSocket?.emit(CLAN_SOCKET_EVENTS.SEND_CLAN_MSG, { message });
+export function sendClanMsg(req: SendClanMsgReq) {
+    if (!req.message.trim()) return;
+    chatSocket?.emit(CLAN_SOCKET_EVENTS.SEND_CLAN_MSG, req);
 }
 
 export function onNewMsg(callback: (msg: ClanMsg) => void) {

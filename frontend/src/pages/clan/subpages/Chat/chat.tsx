@@ -9,6 +9,7 @@ import {
     socketDisconnect
 } from '../../../../services/socket/clanChatSocket.ts';
 import type { ClanMsg } from '@funcode/shared';
+import { timeAgo } from '../../../../utils/timeAgo.ts';
 
 export function Chat() {
     const { myClan, refreshClanState } = useOutletContext<ClanOutletContext>();
@@ -24,6 +25,7 @@ export function Chat() {
         await refreshClanState();
     }
     function handleNewMsg(msg: ClanMsg) {
+        console.log(msg.createdAt);
         setMessages((prevMessages) => [...prevMessages, msg]);
     }
     async function closeSocketConnection() {
@@ -53,7 +55,7 @@ export function Chat() {
     function handleSubmit() {
         const curMsg = clanMsg;
         setClanMsg('');
-        sendClanMsg(curMsg);
+        sendClanMsg({ message: curMsg });
     }
 
     return (
@@ -88,14 +90,14 @@ export function Chat() {
                 {messages.map((msg) => (
                     <div className={s.chatMsg}>
                         <div className={s.chatMsgTitle}>
-                            <span>Name</span>
-                            <span>Role</span>
+                            <span>{msg.username}</span>
+                            <span>{msg.clanRole}</span>
                         </div>
                         <div>
                             <span>{msg.msg}</span>
                         </div>
                         <div>
-                            <span className={s.chatMsgTimeStamp}>{msg.createdAt}</span>
+                            <span className={s.chatMsgTimeStamp}>{timeAgo(msg.createdAt)}</span>
                         </div>
                     </div>
                 ))}
