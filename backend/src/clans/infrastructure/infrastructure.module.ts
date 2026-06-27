@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ClanRepoModule } from './clanRepository/clan.repo.module';
+import { ClanRepoModule } from './clanRepo/clan.repo.module';
+import { ClanChatRepoModule } from './clanChatRepo/clanChat.repo.module';
 
 
 @Module({
-    imports: [ClanRepoModule],
-    exports: [ClanRepoModule]
+    imports: [ClanRepoModule, ClanChatRepoModule],
+    exports: [ClanRepoModule, ClanChatRepoModule]
 })
 export class InfrastructureModule {}

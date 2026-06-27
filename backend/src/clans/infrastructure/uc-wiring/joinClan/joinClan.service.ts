@@ -1,7 +1,7 @@
 import { JoinClanUC } from '../../../application/use-cases/joinClan/joinClan.uc';
 import { Inject, Injectable } from '@nestjs/common';
 import { type ClanRepositoryPort } from '../../../application/ports/outbound/clan.repository.port';
-import { CLAN_REPO_PORT } from '../../clanRepository/tokens';
+import { CLAN_REPO_PORT } from '../../clanRepo/tokens';
 
 @Injectable()
 export class JoinClanService extends JoinClanUC {
