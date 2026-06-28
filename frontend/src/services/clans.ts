@@ -1,7 +1,6 @@
 import type { CreateClanReq, CreateClanRes, ErrorResponse, GetMyClanRes, SearchClansResDto } from '@funcode/shared';
 import { API_URLS } from '../constants/urls.ts';
 
-
 export async function createClan(req: CreateClanReq) {
     const res = await fetch(API_URLS.CREATE_CLAN, {
         method: 'POST',
@@ -61,4 +60,18 @@ export async function joinClan(clanId: string) {
         const errorRes: ErrorResponse = await res.json();
         throw new Error(errorRes.message);
     }
+}
+
+export async function getClanMessages(limit: number, before?: string) {
+    const params = new URLSearchParams();
+    params.set('limit', String(limit));
+
+    if (before) {
+        params.set('before', before)
+    }
+
+    await fetch(`${API_URLS.GET_CLAN_MESSAGES}?${params.toString()}`, {
+        method: 'GET',
+        credentials: 'include',
+    })
 }

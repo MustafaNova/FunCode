@@ -2,7 +2,7 @@ import s from './chat.module.scss'
 import { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import type { ClanOutletContext } from '../../clanOutletContext.type.ts';
-import { leaveClan } from '../../../../services/clans.ts';
+import { getClanMessages, leaveClan } from '../../../../services/clans.ts';
 import {
     getSocket,
     joinClanChatRoom, onNewMsg, sendClanMsg,
@@ -25,7 +25,6 @@ export function Chat() {
         await refreshClanState();
     }
     function handleNewMsg(msg: ClanMsg) {
-        console.log(msg.createdAt);
         setMessages((prevMessages) => [...prevMessages, msg]);
     }
     async function closeSocketConnection() {
@@ -41,7 +40,8 @@ export function Chat() {
             if (!isActive) return;
 
             joinClanChatRoom(myClan?.clanId);
-            offNewMsg = onNewMsg(handleNewMsg)
+            await getClanMessages(50);
+            offNewMsg = onNewMsg(handleNewMsg);
         }
         void joinClanChat();
 

@@ -70,6 +70,7 @@ export class ChatService {
         })
 
         const clanMsg: ClanMsg = {
+            messageId: savedMsg.messageId,
             msg,
             clanRole,
             username,
