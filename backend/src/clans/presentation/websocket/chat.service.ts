@@ -66,7 +66,8 @@ export class ChatService {
         const savedMsg = await this.clanChatRepo.saveMessage({
             clanId,
             userId,
-            message: msg
+            message: msg,
+            username: client.data.user.username,
         })
 
         const clanMsg: ClanMsg = {

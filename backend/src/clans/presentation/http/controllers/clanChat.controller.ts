@@ -15,13 +15,13 @@ export class ClanChatController {
     ) {}
 
     @Get('messages')
-    getMessages(
+    async getMessages(
         @UserPayload() user: AuthUser,
         @Query('before') before?: string,
         @Query('limit') limit?: string,
     ) {
         console.log('arrived clan-chat/messages');
-        this.getMessagesUC.getClanMessages({
+        await this.getMessagesUC.getClanMessages({
             userId: user.userId,
             before,
             limit: limit ? Number(limit) : 50,
