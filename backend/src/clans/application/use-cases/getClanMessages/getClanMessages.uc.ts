@@ -15,15 +15,13 @@ export class GetClanMessagesUC implements GetClanMessagesPort {
     async getClanMessages(cmd: GetClanMessagesCmd): Promise<ClanMsg[]> {
         console.log('arrived UC getClanMessages');
         const myClan = await this.clanRepo.getMyClan(cmd.userId);
-        const clanId = myClan?.clanId;
-        const clanRole = myClan?.role;
 
-        if (!clanId || !clanRole) {
+        if (!myClan) {
             throw new ClanNotFoundError();
         }
 
         const messages = await this.clanChatRepo.getMessages({
-            clanId,
+            clanId: myClan.clanId,
             before: cmd.before,
             limit: cmd.limit,
         })
@@ -32,8 +30,8 @@ export class GetClanMessagesUC implements GetClanMessagesPort {
             messageId: msg.messageId,
             msg: msg.message,
             username: msg.username,
-            clanRole: myClan.role,
-            createdAt: msg.createdAt,
+            clanRole: msg.clanRole,
+            createdAt: msg.createdAt.toISOString(),
         }))
 
     }

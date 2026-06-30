@@ -1,5 +1,5 @@
 import s from './chat.module.scss'
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import type { ClanOutletContext } from '../../clanOutletContext.type.ts';
 import { getClanMessages, leaveClan } from '../../../../services/clans.ts';
@@ -19,10 +19,17 @@ export function Chat() {
     const [showLeavePopUp, setShowLeavePopUp] = useState(false);
     const [clanMsg, setClanMsg] = useState('');
     const [messages, setMessages] = useState<ClanMsg[]>([]);
+    const chatRef = useRef<HTMLDivElement | null>(null);
     const leaveMsg = 'Do you really want to leave?';
+    const messageLimit = 10;
     async function handleYes() {
         await leaveClan();
         await refreshClanState();
+    }
+    function scrollChatToBottom() {
+        chatRef.current?.scrollTo({
+            top: chatRef.current.scrollHeight,
+        });
     }
     function handleNewMsg(msg: ClanMsg) {
         setMessages((prevMessages) => [...prevMessages, msg]);
@@ -40,7 +47,8 @@ export function Chat() {
             if (!isActive) return;
 
             joinClanChatRoom(myClan?.clanId);
-            await getClanMessages(50);
+            const clanMessages = await getClanMessages(messageLimit);
+            setMessages(clanMessages);
             offNewMsg = onNewMsg(handleNewMsg);
         }
         void joinClanChat();
@@ -86,7 +94,7 @@ export function Chat() {
                     </div>
                 </div>
             )}
-            <div className={s.chat}>
+            <div className={s.chat} ref={chatRef}>
                 {messages.map((msg) => (
                     <div className={s.chatMsg}>
                         <div className={s.chatMsgTitle}>

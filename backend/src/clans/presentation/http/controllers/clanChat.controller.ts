@@ -3,6 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { AuthUser, UserPayload } from '../../../../common/utils/user-payload.decorator';
 import { type GetClanMessagesPort } from '../../../application/ports/inbound/getClanMessages.port';
 import { GET_CLAN_MESSAGES_PORT } from '../../../infrastructure/uc-wiring/tokens';
+import { ClanMsg } from '@funcode/shared';
 
 
 @UseGuards(AuthGuard('jwt'))
@@ -19,9 +20,9 @@ export class ClanChatController {
         @UserPayload() user: AuthUser,
         @Query('before') before?: string,
         @Query('limit') limit?: string,
-    ) {
+    ): Promise<ClanMsg[]> {
         console.log('arrived clan-chat/messages');
-        await this.getMessagesUC.getClanMessages({
+        return await this.getMessagesUC.getClanMessages({
             userId: user.userId,
             before,
             limit: limit ? Number(limit) : 50,

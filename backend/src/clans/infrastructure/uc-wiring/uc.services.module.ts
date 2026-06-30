@@ -14,10 +14,11 @@ import { LeaveClanService } from './leaveClan/leaveClan.service';
 import { SearchClansService } from './searchClans/searchClans.service';
 import { JoinClanService } from './joinClan/joinClan.service';
 import { GetClanMessagesService } from './getClanMessages/getClanMessages.service';
+import { ClanChatRepoModule } from '../clanChatRepo/clanChat.repo.module';
 
 
 @Module({
-    imports: [ClanRepoModule],
+    imports: [ClanRepoModule, ClanChatRepoModule],
     providers: [
         {
             provide: CREATE_CLAN_PORT,

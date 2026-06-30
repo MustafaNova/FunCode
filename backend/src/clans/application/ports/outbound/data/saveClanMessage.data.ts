@@ -3,4 +3,5 @@ export interface SaveClanMessageData {
     username: string,
     userId: string,
     message: string,
+    clanRole: string,
 }

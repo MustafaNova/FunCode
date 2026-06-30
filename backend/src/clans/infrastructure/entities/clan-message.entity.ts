@@ -17,6 +17,9 @@ export class ClanMessageEntity {
     @Column()
     message: string
 
+    @Column()
+    clanRole: string
+
     @CreateDateColumn()
     createdAt: Date
 }

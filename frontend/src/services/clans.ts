@@ -1,4 +1,11 @@
-import type { CreateClanReq, CreateClanRes, ErrorResponse, GetMyClanRes, SearchClansResDto } from '@funcode/shared';
+import type {
+    ClanMsg,
+    CreateClanReq,
+    CreateClanRes,
+    ErrorResponse,
+    GetMyClanRes,
+    SearchClansResDto
+} from '@funcode/shared';
 import { API_URLS } from '../constants/urls.ts';
 
 export async function createClan(req: CreateClanReq) {
@@ -62,7 +69,7 @@ export async function joinClan(clanId: string) {
     }
 }
 
-export async function getClanMessages(limit: number, before?: string) {
+export async function getClanMessages(limit: number, before?: string): Promise<ClanMsg[]> {
     const params = new URLSearchParams();
     params.set('limit', String(limit));
 
@@ -70,8 +77,10 @@ export async function getClanMessages(limit: number, before?: string) {
         params.set('before', before)
     }
 
-    await fetch(`${API_URLS.GET_CLAN_MESSAGES}?${params.toString()}`, {
+    const res = await fetch(`${API_URLS.GET_CLAN_MESSAGES}?${params.toString()}`, {
         method: 'GET',
         credentials: 'include',
-    })
+    });
+
+    return await res.json();
 }

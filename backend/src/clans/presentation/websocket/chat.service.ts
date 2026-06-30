@@ -67,7 +67,8 @@ export class ChatService {
             clanId,
             userId,
             message: msg,
-            username: client.data.user.username,
+            clanRole,
+            username,
         })
 
         const clanMsg: ClanMsg = {

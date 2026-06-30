@@ -4,5 +4,6 @@ export interface ClanMessageData {
     userId: string,
     username: string
     message: string,
+    clanRole: string,
     createdAt: Date,
 }

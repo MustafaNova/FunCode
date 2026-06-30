@@ -18,6 +18,7 @@ export class ClanChatRepoAdapter implements ClanChatRepositoryPort {
             clanId: data.clanId,
             username: data.username,
             userId: data.userId,
+            clanRole: data.clanRole,
             message: data.message,
         })
 
@@ -27,6 +28,7 @@ export class ClanChatRepoAdapter implements ClanChatRepositoryPort {
             messageId: savedEntity.messageId,
             clanId: savedEntity.clanId,
             userId: savedEntity.userId,
+            clanRole: savedEntity.clanRole,
             username: savedEntity.username,
             message: savedEntity.message,
             createdAt: savedEntity.createdAt,
@@ -65,10 +67,11 @@ export class ClanChatRepoAdapter implements ClanChatRepositoryPort {
     }
 
     private toClanMessageData(messages: ClanMessageEntity[]): ClanMessageData[] {
-        return messages.map(msg => ({
+        return messages.reverse().map(msg => ({
             messageId: msg.messageId,
             clanId: msg.clanId,
             userId: msg.userId,
+            clanRole: msg.clanRole,
             username: msg.username,
             message: msg.message,
             createdAt: msg.createdAt
