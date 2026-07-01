@@ -19,17 +19,15 @@ export function Chat() {
     const [showLeavePopUp, setShowLeavePopUp] = useState(false);
     const [clanMsg, setClanMsg] = useState('');
     const [messages, setMessages] = useState<ClanMsg[]>([]);
+    const [loadingOlder, setLoadingOlder] = useState<boolean>(false);
+    const [hasMoreMessages, setHasMoreMessages] = useState(true);
     const chatRef = useRef<HTMLDivElement | null>(null);
+    const didInitialScroll = useRef(false);
     const leaveMsg = 'Do you really want to leave?';
     const messageLimit = 10;
     async function handleYes() {
         await leaveClan();
         await refreshClanState();
-    }
-    function scrollChatToBottom() {
-        chatRef.current?.scrollTo({
-            top: chatRef.current.scrollHeight,
-        });
     }
     function handleNewMsg(msg: ClanMsg) {
         setMessages((prevMessages) => [...prevMessages, msg]);
@@ -60,10 +58,41 @@ export function Chat() {
         }
     }, []);
 
+    useEffect(() => {
+        if (didInitialScroll.current || messages.length === 0 || !chatRef.current) return;
+        chatRef.current.scrollTop = chatRef.current.scrollHeight;
+        didInitialScroll.current = true;
+    }, [messages]);
+
     function handleSubmit() {
         const curMsg = clanMsg;
         setClanMsg('');
         sendClanMsg({ message: curMsg });
+    }
+
+    async function loadOlderMessages() {
+        if ( !chatRef.current || loadingOlder || !hasMoreMessages || messages.length === 0 ) return;
+
+        setLoadingOlder(true);
+
+        const oldestMessage = messages[0];
+        const olderMessages = await getClanMessages(messageLimit, oldestMessage.messageId);
+
+        if (olderMessages.length < messageLimit) {
+            setHasMoreMessages(false);
+        }
+
+        setMessages(prev => [...olderMessages, ...prev]);
+
+        setLoadingOlder(false);
+    }
+
+    function handleScroll() {
+        if (!chatRef.current) return;
+
+        if (chatRef.current.scrollTop < 50 ) {
+            void loadOlderMessages()
+        }
     }
 
     return (
@@ -94,7 +123,11 @@ export function Chat() {
                     </div>
                 </div>
             )}
-            <div className={s.chat} ref={chatRef}>
+            <div
+                className={s.chat}
+                ref={chatRef}
+                onScroll={handleScroll}
+            >
                 {messages.map((msg) => (
                     <div className={s.chatMsg}>
                         <div className={s.chatMsgTitle}>
