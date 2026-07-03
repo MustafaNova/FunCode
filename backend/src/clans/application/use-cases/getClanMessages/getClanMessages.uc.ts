@@ -30,6 +30,7 @@ export class GetClanMessagesUC implements GetClanMessagesPort {
             messageId: msg.messageId,
             msg: msg.message,
             username: msg.username,
+            userId: msg.userId,
             clanRole: msg.clanRole,
             createdAt: msg.createdAt.toISOString(),
         }))

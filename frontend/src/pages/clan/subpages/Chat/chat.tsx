@@ -10,9 +10,11 @@ import {
 } from '../../../../services/socket/clanChatSocket.ts';
 import type { ClanMsg } from '@funcode/shared';
 import { timeAgo } from '../../../../utils/timeAgo.ts';
+import { useAuth } from '../../../../context/authContext.ts';
 
 export function Chat() {
     const { myClan, refreshClanState } = useOutletContext<ClanOutletContext>();
+    const { user } = useAuth();
     const clanName = myClan?.name;
     const clanDescription = myClan?.description;
     const [showClanInfo, setShowClanInfo] = useState(false);
@@ -20,20 +22,54 @@ export function Chat() {
     const [clanMsg, setClanMsg] = useState('');
     const [messages, setMessages] = useState<ClanMsg[]>([]);
     const [loadingOlder, setLoadingOlder] = useState<boolean>(false);
-    const [hasMoreMessages, setHasMoreMessages] = useState(true);
+    const [hasMoreMessages, setHasMoreMessages] = useState(false);
     const chatRef = useRef<HTMLDivElement | null>(null);
-    const didInitialScroll = useRef(false);
+    const bottomRef = useRef<HTMLDivElement | null>(null);
+    const firstScrollDone = useRef(false);
     const leaveMsg = 'Do you really want to leave?';
-    const messageLimit = 10;
+    const messageLimit = 50;
+
     async function handleYes() {
         await leaveClan();
         await refreshClanState();
     }
+
     function handleNewMsg(msg: ClanMsg) {
         setMessages((prevMessages) => [...prevMessages, msg]);
     }
+
     async function closeSocketConnection() {
         await socketDisconnect();
+    }
+
+    function handleSubmit() {
+        const curMsg = clanMsg;
+        setClanMsg('');
+        sendClanMsg({ message: curMsg });
+    }
+
+    function updateHasMoreMessages(loadedCount: number) {
+        setHasMoreMessages(loadedCount === messageLimit);
+    }
+
+    async function initialLoadMessages() {
+        const clanMessages = await getClanMessages(messageLimit);
+        updateHasMoreMessages(clanMessages.length);
+        setMessages(clanMessages);
+    }
+
+    async function loadOlderMessages() {
+        if (!chatRef.current || loadingOlder || !hasMoreMessages || messages.length === 0) return;
+
+        setLoadingOlder(true);
+
+        const oldestMessage = messages[0];
+        const olderMessages = await getClanMessages(messageLimit, oldestMessage.messageId);
+
+        updateHasMoreMessages(olderMessages.length);
+        setMessages(prev => [...olderMessages, ...prev]);
+
+        setLoadingOlder(false);
     }
 
     useEffect(() => {
@@ -45,8 +81,7 @@ export function Chat() {
             if (!isActive) return;
 
             joinClanChatRoom(myClan?.clanId);
-            const clanMessages = await getClanMessages(messageLimit);
-            setMessages(clanMessages);
+            await initialLoadMessages();
             offNewMsg = onNewMsg(handleNewMsg);
         }
         void joinClanChat();
@@ -59,41 +94,10 @@ export function Chat() {
     }, []);
 
     useEffect(() => {
-        if (didInitialScroll.current || messages.length === 0 || !chatRef.current) return;
-        chatRef.current.scrollTop = chatRef.current.scrollHeight;
-        didInitialScroll.current = true;
+        if (!bottomRef.current || messages.length == 0) return;
+        bottomRef.current.scrollIntoView({behavior: firstScrollDone.current ? 'smooth' : 'auto'});
+        firstScrollDone.current = true;
     }, [messages]);
-
-    function handleSubmit() {
-        const curMsg = clanMsg;
-        setClanMsg('');
-        sendClanMsg({ message: curMsg });
-    }
-
-    async function loadOlderMessages() {
-        if ( !chatRef.current || loadingOlder || !hasMoreMessages || messages.length === 0 ) return;
-
-        setLoadingOlder(true);
-
-        const oldestMessage = messages[0];
-        const olderMessages = await getClanMessages(messageLimit, oldestMessage.messageId);
-
-        if (olderMessages.length < messageLimit) {
-            setHasMoreMessages(false);
-        }
-
-        setMessages(prev => [...olderMessages, ...prev]);
-
-        setLoadingOlder(false);
-    }
-
-    function handleScroll() {
-        if (!chatRef.current) return;
-
-        if (chatRef.current.scrollTop < 50 ) {
-            void loadOlderMessages()
-        }
-    }
 
     return (
         <div className={s.chatScreen}>
@@ -126,10 +130,15 @@ export function Chat() {
             <div
                 className={s.chat}
                 ref={chatRef}
-                onScroll={handleScroll}
             >
+                {hasMoreMessages && (
+                    <button onClick={loadOlderMessages}>
+                        Load older messages
+                    </button>
+                )}
+
                 {messages.map((msg) => (
-                    <div className={s.chatMsg}>
+                    <div className={`${s.chatMsg} ${msg.userId === user?.userId ? s.ownMsg : ''}`}>
                         <div className={s.chatMsgTitle}>
                             <span>{msg.username}</span>
                             <span>{msg.clanRole}</span>
@@ -142,6 +151,7 @@ export function Chat() {
                         </div>
                     </div>
                 ))}
+                <div ref={bottomRef}></div>
             </div>
             <input value={clanMsg} onChange={(e) => setClanMsg(e.target.value)} className={s.chatInput} />
             <button onClick={handleSubmit}>submit</button>

@@ -28,6 +28,7 @@ import { Chat } from './pages/clan/subpages/Chat/chat.tsx';
 import { War } from './pages/clan/subpages/War/war.tsx';
 import { ClanIndexRedirect } from './pages/clan/subpages/ClanIndexRedirect/clanIndexRedirect.tsx';
 import { ClanMemberGuard, NoClanMemberGuard } from './utils/guards.tsx';
+import { AuthProvider } from './context/AuthProvider.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -39,7 +40,7 @@ createRoot(document.getElementById('root')!).render(
               <Route path='/match/ready' element={<ReadyScreen/>}></Route>
               <Route path='/match/win' element={<MatchWin/>}></Route>
               <Route path='/match/lose' element={<MatchLose/>}></Route>
-              <Route path='home' element={<App/>}>
+              <Route path='home' element={<AuthProvider children={<App/>} /> }>
                   <Route index element={<School/>}></Route>
                   <Route path='arena' element={<Arena/>}></Route>
                   <Route path='arena/1v1' element={<Arena1v1/>}></Route>
