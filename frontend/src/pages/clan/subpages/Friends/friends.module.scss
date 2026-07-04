@@ -1,0 +1,38 @@
+.flexColumn {
+  gap: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.inviteFriendBox {
+  display: flex;
+  flex-direction: column;
+  color: black;
+  background-color: gray;
+}
+
+.joinBox {
+  display: flex;
+  flex-direction: column;
+  color: black;
+  background-color: gray;
+  padding: 5px;
+}
+
+.friendsBox {
+  display: flex;
+  flex-direction: column;
+  color: black;
+  background-color: gray;
+  padding: 5px;
+  gap: 7px;
+}
+
+.friendsTitle {
+  display: flex;
+  justify-content: space-between;
+}
+
+.userBox {
+  background-color: #36e4ff;
+}

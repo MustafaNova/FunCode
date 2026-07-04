@@ -23,7 +23,7 @@ import { NotFound } from './pages/NotFound/NotFound.tsx';
 import { Clan } from './pages/clan/Clan.tsx';
 import { Clans } from './pages/clan/subpages/Clans/Clans.tsx';
 import { Create } from './pages/clan/subpages/Create/Create.tsx';
-import { Friends } from './pages/clan/subpages/Search/Friends.tsx';
+import { Friends } from './pages/clan/subpages/Friends/Friends.tsx';
 import { Chat } from './pages/clan/subpages/Chat/chat.tsx';
 import { War } from './pages/clan/subpages/War/war.tsx';
 import { ClanIndexRedirect } from './pages/clan/subpages/ClanIndexRedirect/clanIndexRedirect.tsx';
