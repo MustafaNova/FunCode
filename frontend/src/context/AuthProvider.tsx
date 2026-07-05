@@ -12,7 +12,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const res = await me();
         setUser({
             userId: res.id,
-            username: res.username
+            username: res.username,
+            inviteCode: res.inviteCode
         });
     }
 

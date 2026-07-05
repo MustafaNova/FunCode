@@ -29,23 +29,29 @@ export class UserRepositoryAdapter implements UserRepositoryPort {
             username: user.username.get(),
             email: user.email.get(),
             password: user.password.get(),
-            hasCompletedOnboarding: user.hasCompletedOnboarding
+            hasCompletedOnboarding: user.hasCompletedOnboarding,
+            inviteCode: user.inviteCode,
         });
 
         return this.repo.save(entity);
     }
 
     async findByUsername(username: Username): Promise<User | null> {
-        console.log('adapter findByUsername');
         const user = await this.repo.findOneBy({ username: username.get() });
         if (!user) return null;
-        console.log("adapter user:", user.id)
         return new User(
             UserId.create(user.id),
             Username.fromPersistence(user.username),
             Email.fromPersistence(user.email),
             Password.fromPersistence(user.password),
             user.hasCompletedOnboarding,
+            user.inviteCode
         );
+    }
+
+    async checkInviteCodeExists(inviteCode: string): Promise<boolean> {
+        return this.repo.exists({
+            where: { inviteCode }
+        })
     }
 }

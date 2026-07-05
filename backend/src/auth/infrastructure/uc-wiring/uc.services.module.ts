@@ -5,9 +5,10 @@ import { PersistenceModule } from '../persistence/persistence.module';
 import { TokenServiceModule } from '../token_service/token.service.module';
 import { GET_CURRENT_USER_PORT, LOGIN_USER_PORT, REGISTER_USER_PORT } from './tokens';
 import { GetCurrentUserService } from './getCurrentUser.service';
+import { InviteCodeGeneratorModule } from '../inviteCodeGenerator/inviteCodeGenerator.module';
 
 @Module({
-    imports: [PersistenceModule, TokenServiceModule],
+    imports: [PersistenceModule, TokenServiceModule, InviteCodeGeneratorModule],
     providers: [
         {
             provide: REGISTER_USER_PORT,
