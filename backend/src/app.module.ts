@@ -6,6 +6,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { LearningProgressionModule } from './Learning-progression/learning-progression.module';
 import { ConfigModule } from '@nestjs/config';
 import { ClansModule } from './clans/clans.module';
+import { FriendsModule } from './Friends/friends.module';
 
 @Module({
     imports: [
@@ -13,6 +14,7 @@ import { ClansModule } from './clans/clans.module';
         AuthModule,
         LearningProgressionModule,
         ClansModule,
+        FriendsModule,
         TypeOrmModule.forRoot({
             type: 'postgres',
             url: process.env['DATABASE_URL'],

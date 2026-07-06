@@ -1,20 +1,23 @@
 import s from './friends.module.scss'
+import { useAuth } from '../../../../context/authContext.ts';
 
 export function Friends() {
+    const { user, loading } = useAuth();
+    const loadingInviteCodeMsg = 'Generating code...';
+    const errorInviteCodeMsg = 'No invite code. Please try later';
     return (
         <div className={s.flexColumn}>
             <button>Regenerate Invite Code</button>
             <div className={s.inviteFriendBox}>
                 <span>Invite a Friend</span>
                 <span>Create an Invite-Code and share it with your friends</span>
-                <span>30MaDJWa</span>
+                <span>{loading ? loadingInviteCodeMsg : user?.inviteCode ?? errorInviteCodeMsg}</span>
             </div>
             <div className={s.joinBox}>
-                <span>Join with Invite Code</span>
                 <span>Enter an invite Code from your friend</span>
                 <div>
                     <input/>
-                    <button>Join</button>
+                    <button>send</button>
                 </div>
             </div>
             <div className={s.friendsBox}>

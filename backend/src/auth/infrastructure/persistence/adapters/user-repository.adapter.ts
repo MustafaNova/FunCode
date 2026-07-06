@@ -39,6 +39,7 @@ export class UserRepositoryAdapter implements UserRepositoryPort {
     async findByUsername(username: Username): Promise<User | null> {
         const user = await this.repo.findOneBy({ username: username.get() });
         if (!user) return null;
+
         return new User(
             UserId.create(user.id),
             Username.fromPersistence(user.username),
