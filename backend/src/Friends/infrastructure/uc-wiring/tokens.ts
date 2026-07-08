@@ -1,0 +1,1 @@
+export const CREATE_FRIEND_REQ_PORT = 'CREATE_FRIEND_REQ_PORT' as const;

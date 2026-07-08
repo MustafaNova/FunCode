@@ -1,10 +1,17 @@
 import s from './friends.module.scss'
 import { useAuth } from '../../../../context/authContext.ts';
+import { useState } from 'react';
+import { sendFriendReq } from '../../../../services/friends.ts';
 
 export function Friends() {
     const { user, loading } = useAuth();
     const loadingInviteCodeMsg = 'Generating code...';
-    const errorInviteCodeMsg = 'No invite code. Please try later';
+    const errorInviteCodeMsg = 'No invite code. Please reload the page';
+    const [inviteCodeInput, setInviteCodeInput] = useState('');
+    function handleSendFriendReq() {
+        void sendFriendReq({ inviteCode: inviteCodeInput });
+        setInviteCodeInput('');
+    }
     return (
         <div className={s.flexColumn}>
             <button>Regenerate Invite Code</button>
@@ -16,8 +23,11 @@ export function Friends() {
             <div className={s.joinBox}>
                 <span>Enter an invite Code from your friend</span>
                 <div>
-                    <input/>
-                    <button>send</button>
+                    <input
+                        value={inviteCodeInput}
+                        onChange={(e) => setInviteCodeInput(e.target.value)}
+                    />
+                    <button onClick={handleSendFriendReq}>send</button>
                 </div>
             </div>
             <div className={s.friendsBox}>

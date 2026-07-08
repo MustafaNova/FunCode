@@ -16,6 +16,7 @@ import { ErrorResponse } from '@funcode/shared';
 import { ClanNameAlreadyExistsError } from '../clans/application/use-cases/errors/clan.name.already.exists.error';
 import { UserAlreadyInClanError } from '../clans/application/use-cases/errors/userAlreadyInClan.error';
 import { ClanNotFoundError } from '../clans/application/use-cases/errors/ClanNotFoundError';
+import { InviteCodeNotFound } from '../Friends/application/use-cases/createFriendRequest/InviteCodeNotFound.err';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -37,12 +38,13 @@ export class HttpExceptionFilter implements ExceptionFilter {
             error instanceof NotFoundProgressIdException ||
             error instanceof LevelNotFoundException ||
             error instanceof NotFoundException ||
-            error instanceof ClanNotFoundError
+            error instanceof ClanNotFoundError ||
+            error instanceof InviteCodeNotFound
         ) {
             status = HttpStatus.NOT_FOUND;
         }
 
-        if (
+        else if (
             error instanceof EmailError ||
             error instanceof PasswordError ||
             error instanceof UsernameError
