@@ -16,7 +16,7 @@ import { ErrorResponse } from '@funcode/shared';
 import { ClanNameAlreadyExistsError } from '../clans/application/use-cases/errors/clan.name.already.exists.error';
 import { UserAlreadyInClanError } from '../clans/application/use-cases/errors/userAlreadyInClan.error';
 import { ClanNotFoundError } from '../clans/application/use-cases/errors/ClanNotFoundError';
-import { InviteCodeNotFound } from '../Friends/application/use-cases/createFriendRequest/InviteCodeNotFound.err';
+import { InviteCodeNotFound } from '../Friends/application/use-cases/createFriendRequest/errors/InviteCodeNotFound.err';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {

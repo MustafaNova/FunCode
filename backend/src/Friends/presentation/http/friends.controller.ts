@@ -3,7 +3,7 @@ import { AuthUser, UserPayload } from '../../../common/utils/user-payload.decora
 import { AuthGuard } from '@nestjs/passport';
 import { type CreateFriendRequestReq } from '@funcode/shared';
 import { type CreateFriendRequestPort } from '../../application/ports/inbound/createFriendRequest.port';
-import { CREATE_FRIEND_REQ_PORT } from '../../infrastructure/uc-wiring/tokens';
+import { CREATE_FRIEND_REQ_PORT } from '../../infrastructure/tokens';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('friends')

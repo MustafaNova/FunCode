@@ -1,3 +1,5 @@
+import { FriendRequest } from '../../../domain/types/friendRequest';
+
 export interface FriendRequestRepoPort {
-    save(): void
+    create(friendReq: FriendRequest): Promise<void>;
 }

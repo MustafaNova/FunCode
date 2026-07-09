@@ -1,0 +1,5 @@
+export const USER_LOOK_UP_PORT = 'USER_LOOK_UP_PORT' as const;
+export const FRIEND_REQUEST_REPO_PORT = 'FRIEND_REQUEST_REPO_PORT' as const;
+
+// UC-WIRING TOKENS
+export const CREATE_FRIEND_REQ_PORT = 'CREATE_FRIEND_REQ_PORT' as const;
