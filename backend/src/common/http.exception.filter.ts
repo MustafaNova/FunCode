@@ -17,12 +17,14 @@ import { ClanNameAlreadyExistsError } from '../clans/application/use-cases/error
 import { UserAlreadyInClanError } from '../clans/application/use-cases/errors/userAlreadyInClan.error';
 import { ClanNotFoundError } from '../clans/application/use-cases/errors/ClanNotFoundError';
 import { InviteCodeNotFound } from '../Friends/application/use-cases/createFriendRequest/errors/InviteCodeNotFound.err';
+import {
+    SelfFriendRequestError
+} from '../Friends/application/use-cases/createFriendRequest/errors/selfFriendRequest.err';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
     catch(error: Error, host: ArgumentsHost): any {
         const res = host.switchToHttp().getResponse();
-        console.log("aufgerufen: HttpExceptionFilter")
         let status = HttpStatus.INTERNAL_SERVER_ERROR;
 
         if (
@@ -47,7 +49,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
         else if (
             error instanceof EmailError ||
             error instanceof PasswordError ||
-            error instanceof UsernameError
+            error instanceof UsernameError ||
+            error instanceof SelfFriendRequestError
         ) {
             status = HttpStatus.BAD_REQUEST;
         }

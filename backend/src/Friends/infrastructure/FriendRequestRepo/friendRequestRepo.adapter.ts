@@ -18,4 +18,13 @@ export class FriendRequestRepoAdapter implements FriendRequestRepoPort {
         })
         await this.friendRequestRepo.save(friendRequestEntity)
     }
+
+    async existsBetweenUsers(friendReq: FriendRequest): Promise<boolean> {
+        return this.friendRequestRepo.exists({
+            where: {
+                senderUserId: friendReq.senderUserId,
+                receiverUserId: friendReq.receiverUserId
+            }
+        })
+    }
 }

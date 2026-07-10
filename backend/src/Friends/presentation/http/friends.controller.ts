@@ -1,4 +1,4 @@
-import { Body, Controller, Inject, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post, UseGuards } from '@nestjs/common';
 import { AuthUser, UserPayload } from '../../../common/utils/user-payload.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import { type CreateFriendRequestReq } from '@funcode/shared';
@@ -23,4 +23,10 @@ export class FriendsController {
         })
     }
 
+    @Get('friend-requests/incoming')
+    getIncomingFriendRequests(
+        @UserPayload() user: AuthUser
+    ) {
+
+    }
 }

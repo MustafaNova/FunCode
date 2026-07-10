@@ -11,11 +11,6 @@ export class FriendRequestEntity {
     @Column('uuid')
     receiverUserId: string;
 
-    @Column({
-        default: 'pending'
-    })
-    status: 'pending' | 'accepted' | 'declined'
-
     @CreateDateColumn()
     createdAt: Date;
 }
