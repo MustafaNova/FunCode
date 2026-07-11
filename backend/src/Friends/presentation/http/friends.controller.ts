@@ -3,14 +3,17 @@ import { AuthUser, UserPayload } from '../../../common/utils/user-payload.decora
 import { AuthGuard } from '@nestjs/passport';
 import { type CreateFriendRequestReq } from '@funcode/shared';
 import { type CreateFriendRequestPort } from '../../application/ports/inbound/createFriendRequest.port';
-import { CREATE_FRIEND_REQ_PORT } from '../../infrastructure/tokens';
+import { CREATE_FRIEND_REQ_PORT, GET_INCOMING_FRIEND_REQ_PORT } from '../../infrastructure/tokens';
+import { type GetIncomingFriendRequestsPort } from '../../application/ports/inbound/getIncomingFriendRequests.port';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('friends')
 export class FriendsController {
     constructor(
         @Inject(CREATE_FRIEND_REQ_PORT)
-        private readonly createFriendReqUC: CreateFriendRequestPort
+        private readonly createFriendReqUC: CreateFriendRequestPort,
+        @Inject(GET_INCOMING_FRIEND_REQ_PORT)
+        private readonly getIncomingFriendReqUC: GetIncomingFriendRequestsPort,
     ) {}
 
     @Post('friend-request')
@@ -24,9 +27,10 @@ export class FriendsController {
     }
 
     @Get('friend-requests/incoming')
-    getIncomingFriendRequests(
+    async getIncomingFriendRequests(
         @UserPayload() user: AuthUser
     ) {
-
+        console.log('controller getIncomingFriendRequests');
+        return this.getIncomingFriendReqUC.getIncomingFriendRequests(user.userId);
     }
 }

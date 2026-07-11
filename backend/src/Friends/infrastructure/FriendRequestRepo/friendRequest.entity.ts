@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { UserEntity } from '../../../auth/infrastructure/persistence/typeorm/user.entity';
 
 @Entity('friend_requests')
 export class FriendRequestEntity {
@@ -13,4 +14,8 @@ export class FriendRequestEntity {
 
     @CreateDateColumn()
     createdAt: Date;
+
+    @ManyToOne(() => UserEntity)
+    @JoinColumn({ name: 'senderUserId' })
+    sender: UserEntity
 }

@@ -1,7 +1,7 @@
 import s from './friends.module.scss'
 import { useAuth } from '../../../../context/authContext.ts';
-import { useState } from 'react';
-import { sendFriendReq } from '../../../../services/friends.ts';
+import { useEffect, useState } from 'react';
+import { getIncomingFriendRequests, sendFriendReq } from '../../../../services/friends.ts';
 
 export function Friends() {
     const { user, loading } = useAuth();
@@ -12,6 +12,11 @@ export function Friends() {
         void sendFriendReq({ inviteCode: inviteCodeInput });
         setInviteCodeInput('');
     }
+
+    useEffect(() => {
+        void getIncomingFriendRequests();
+    }, []);
+
     return (
         <div className={s.flexColumn}>
             <button>Regenerate Invite Code</button>

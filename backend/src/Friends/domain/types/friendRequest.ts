@@ -1,5 +1,7 @@
-
 export type FriendRequest = {
-    senderUserId: string,
-    receiverUserId: string,
+    friendRequestId: string,
+    senderId: string,
+    senderUsername: string,
+    receiverId: string,
+    createdAt: string,
 }

@@ -11,3 +11,12 @@ export async function sendFriendReq(payload: CreateFriendRequestReq) {
         body: JSON.stringify(payload),
     })
 }
+
+
+export async function getIncomingFriendRequests() {
+    const res = await fetch(API_URLS.GET_INCOMING_FRIEND_REQUESTS, {
+        method: 'GET',
+        credentials: 'include'
+    })
+    console.log(await res.json());
+}

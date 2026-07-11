@@ -17,4 +17,5 @@ export const API_URLS = {
     JOIN_CLAN: `${API_URL}/clans/join`,
     GET_CLAN_MESSAGES: `${API_URL}/clan-chat/messages`,
     SEND_FRIEND_REQUEST: `${API_URL}/friends/friend-request`,
+    GET_INCOMING_FRIEND_REQUESTS: `${API_URL}/friends/friend-requests/incoming`
 }

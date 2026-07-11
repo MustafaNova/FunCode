@@ -1,8 +1,9 @@
 import { FriendRequestRepoPort } from '../../application/ports/outbound/FriendRequestRepo.port';
-import { FriendRequest } from '../../domain/types/friendRequest';
+import { CreateFriendRequest } from '../../domain/types/CreateFriendRequest';
 import { Repository } from 'typeorm';
 import { FriendRequestEntity } from './friendRequest.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { FriendRequest } from '../../domain/types/friendRequest';
 
 
 export class FriendRequestRepoAdapter implements FriendRequestRepoPort {
@@ -11,7 +12,7 @@ export class FriendRequestRepoAdapter implements FriendRequestRepoPort {
         private readonly friendRequestRepo: Repository<FriendRequestEntity>
     ) {}
 
-    async create(friendReq: FriendRequest): Promise<void> {
+    async create(friendReq: CreateFriendRequest): Promise<void> {
         const friendRequestEntity= this.friendRequestRepo.create({
             senderUserId: friendReq.senderUserId,
             receiverUserId: friendReq.receiverUserId
@@ -19,12 +20,29 @@ export class FriendRequestRepoAdapter implements FriendRequestRepoPort {
         await this.friendRequestRepo.save(friendRequestEntity)
     }
 
-    async existsBetweenUsers(friendReq: FriendRequest): Promise<boolean> {
+    async existsBetweenUsers(friendReq: CreateFriendRequest): Promise<boolean> {
         return this.friendRequestRepo.exists({
             where: {
                 senderUserId: friendReq.senderUserId,
                 receiverUserId: friendReq.receiverUserId
             }
         })
+    }
+
+    async findAllByReceiverId(receiverId: string): Promise<FriendRequest[]> {
+        const friendRequests = await this.friendRequestRepo.find({
+            where: { receiverUserId: receiverId },
+            relations: {
+                sender: true
+            }
+        })
+
+        return friendRequests.map((entity) => ({
+            friendRequestId: entity.friendRequestId,
+            senderId: entity.senderUserId,
+            senderUsername: entity.sender.username,
+            receiverId: entity.receiverUserId,
+            createdAt: entity.createdAt.toISOString()
+        }))
     }
 }

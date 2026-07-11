@@ -1,5 +1,6 @@
 export interface IncomingFriendRequestResponse {
-    userId: string;
+    id: string;
+    senderUserId: string;
     senderUsername: string;
     createdAt: string;
 }

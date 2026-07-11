@@ -6,9 +6,16 @@ import { FriendRequestRepoPort } from '../../ports/outbound/FriendRequestRepo.po
 export class GetIncomingFriendRequestsUC implements GetIncomingFriendRequestsPort {
     constructor(
         private readonly friendReqRepo: FriendRequestRepoPort,
-    ) {
-    }
-    getIncomingFriendRequests(receiverId: string): IncomingFriendRequestResponse[] {
+    ) {}
 
+    async getIncomingFriendRequests(receiverId: string): Promise<IncomingFriendRequestResponse[]> {
+        console.log('use-case getIncomingFriendRequests');
+        const incomingFriendRequests = await this.friendReqRepo.findAllByReceiverId(receiverId);
+        return incomingFriendRequests.map((friendReq) => ({
+            id: friendReq.friendRequestId,
+            senderUserId: friendReq.senderId,
+            senderUsername: friendReq.senderUsername,
+            createdAt: friendReq.createdAt
+        }))
     }
 }

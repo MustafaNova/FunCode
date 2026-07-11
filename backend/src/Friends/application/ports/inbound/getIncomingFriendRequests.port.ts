@@ -3,5 +3,5 @@ import {
 } from '../../use-cases/getIncomingFriendRequests/incomingFriendRequest.response';
 
 export interface GetIncomingFriendRequestsPort {
-    getIncomingFriendRequests(receiverId: string): IncomingFriendRequestResponse[];
+    getIncomingFriendRequests(receiverId: string): Promise<IncomingFriendRequestResponse[]>;
 }
