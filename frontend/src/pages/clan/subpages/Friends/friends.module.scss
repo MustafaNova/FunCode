@@ -36,3 +36,26 @@
 .userBox {
   background-color: #36e4ff;
 }
+
+
+.incomingFriendRequests {
+  display: flex;
+  flex-direction: column;
+  color: black;
+  background-color: gray;
+  padding: 5px;
+  gap: 7px;
+}
+
+
+.friendReq {
+  background-color: blue;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+}
+
+.friendReqBtns {
+  display: flex;
+  gap: 5px;
+}

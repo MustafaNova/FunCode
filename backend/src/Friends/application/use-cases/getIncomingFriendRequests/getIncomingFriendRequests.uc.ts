@@ -1,6 +1,6 @@
 import { GetIncomingFriendRequestsPort } from '../../ports/inbound/getIncomingFriendRequests.port';
-import { IncomingFriendRequestResponse } from './incomingFriendRequest.response';
 import { FriendRequestRepoPort } from '../../ports/outbound/FriendRequestRepo.port';
+import { IncomingFriendRequestRes } from '@funcode/shared';
 
 
 export class GetIncomingFriendRequestsUC implements GetIncomingFriendRequestsPort {
@@ -8,7 +8,7 @@ export class GetIncomingFriendRequestsUC implements GetIncomingFriendRequestsPor
         private readonly friendReqRepo: FriendRequestRepoPort,
     ) {}
 
-    async getIncomingFriendRequests(receiverId: string): Promise<IncomingFriendRequestResponse[]> {
+    async getIncomingFriendRequests(receiverId: string): Promise<IncomingFriendRequestRes[]> {
         console.log('use-case getIncomingFriendRequests');
         const incomingFriendRequests = await this.friendReqRepo.findAllByReceiverId(receiverId);
         return incomingFriendRequests.map((friendReq) => ({

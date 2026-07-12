@@ -1,4 +1,4 @@
-export interface IncomingFriendRequestResponse {
+export interface IncomingFriendRequestRes {
     id: string;
     senderUserId: string;
     senderUsername: string;
