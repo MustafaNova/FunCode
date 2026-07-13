@@ -1,7 +1,6 @@
-import {
-    IncomingFriendRequestResponse
-} from '../../use-cases/getIncomingFriendRequests/incomingFriendRequest.response';
+import { IncomingFriendRequestRes } from '@funcode/shared';
+
 
 export interface GetIncomingFriendRequestsPort {
-    getIncomingFriendRequests(receiverId: string): Promise<IncomingFriendRequestResponse[]>;
+    getIncomingFriendRequests(receiverId: string): Promise<IncomingFriendRequestRes[]>;
 }

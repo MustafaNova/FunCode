@@ -21,3 +21,12 @@ export async function getIncomingFriendRequests() {
     const incomingFriendRequests: IncomingFriendRequestRes[] = await res.json();
     return incomingFriendRequests;
 }
+
+
+export async function acceptFriendRequest(friendReqId: string) {
+    const url = API_URLS.ACCEPT_FRIEND_REQUEST + `/${friendReqId}`;
+    await fetch(url, {
+        method: 'POST',
+        credentials: 'include'
+    });
+}

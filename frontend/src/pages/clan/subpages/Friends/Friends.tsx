@@ -1,7 +1,7 @@
 import s from './friends.module.scss'
 import { useAuth } from '../../../../context/authContext.ts';
 import { useEffect, useState } from 'react';
-import { getIncomingFriendRequests, sendFriendReq } from '../../../../services/friends.ts';
+import { acceptFriendRequest, getIncomingFriendRequests, sendFriendReq } from '../../../../services/friends.ts';
 import type { IncomingFriendRequestRes } from '@funcode/shared';
 import { timeAgo } from '../../../../utils/timeAgo.ts';
 
@@ -65,16 +65,14 @@ export function Friends() {
                             <span>{request.senderUsername}</span>
                             <span>{timeAgo(request.createdAt)}</span>
                             <div className={s.friendReqBtns}>
-                                <button>accept</button>
+                                <button onClick={() => acceptFriendRequest(request.id)}>accept</button>
                                 <button>decline</button>
                             </div>
                         </div>
                     ))
                 )
-
                 }
             </div>
-
         </div>
     )
 }
