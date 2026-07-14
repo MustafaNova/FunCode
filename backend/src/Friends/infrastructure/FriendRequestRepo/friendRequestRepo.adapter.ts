@@ -45,4 +45,27 @@ export class FriendRequestRepoAdapter implements FriendRequestRepoPort {
             createdAt: entity.createdAt.toISOString()
         }))
     }
+
+    async findById(friendRequestId: string): Promise<FriendRequest | null> {
+        const res = await this.friendRequestRepo.findOne({
+            where: { friendRequestId },
+            relations: {
+                sender: true
+            }
+        })
+
+        if (res == null) return null;
+
+        return {
+            friendRequestId: res.friendRequestId,
+            senderId: res.senderUserId,
+            senderUsername: res.sender.username,
+            receiverId: res.receiverUserId,
+            createdAt: res.createdAt.toISOString()
+        }
+    }
+
+    async deleteById(friendRequestId: string): Promise<void> {
+        await this.friendRequestRepo.delete({ friendRequestId });
+    }
 }

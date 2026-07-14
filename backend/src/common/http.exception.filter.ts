@@ -20,6 +20,12 @@ import { InviteCodeNotFound } from '../Friends/application/use-cases/createFrien
 import {
     SelfFriendRequestError
 } from '../Friends/application/use-cases/createFriendRequest/errors/selfFriendRequest.err';
+import {
+    FriendRequestNotFoundError
+} from '../Friends/application/use-cases/acceptFriendRequest/errors/FriendRequestNotFound.err';
+import {
+    FriendRequestAccessDeniedError
+} from '../Friends/application/use-cases/acceptFriendRequest/errors/FriendRequestAccessDenied.err';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -41,7 +47,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
             error instanceof LevelNotFoundException ||
             error instanceof NotFoundException ||
             error instanceof ClanNotFoundError ||
-            error instanceof InviteCodeNotFound
+            error instanceof InviteCodeNotFound ||
+            error instanceof FriendRequestNotFoundError
         ) {
             status = HttpStatus.NOT_FOUND;
         }
@@ -53,6 +60,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
             error instanceof SelfFriendRequestError
         ) {
             status = HttpStatus.BAD_REQUEST;
+        }
+        else if (error instanceof FriendRequestAccessDeniedError) {
+            status = HttpStatus.FORBIDDEN;
         }
 
         res.status(status).json({

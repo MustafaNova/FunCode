@@ -1,6 +1,8 @@
 import { AcceptFriendRequestPort } from '../../ports/inbound/acceptFriendRequest.port';
 import { AcceptFriendRequestCmd } from './acceptFriendRequest.cmd';
 import { FriendRequestRepoPort } from '../../ports/outbound/FriendRequestRepo.port';
+import { FriendRequestNotFoundError } from './errors/FriendRequestNotFound.err';
+import { FriendRequestAccessDeniedError } from './errors/FriendRequestAccessDenied.err';
 
 
 export class AcceptFriendRequestUC implements AcceptFriendRequestPort {
@@ -9,6 +11,16 @@ export class AcceptFriendRequestUC implements AcceptFriendRequestPort {
     ) {}
 
     async acceptFriendRequest(cmd: AcceptFriendRequestCmd): Promise<void> {
-        console.log('AcceptFriendRequestUC');
+        const friendRequest = await this.friendReqRepo.findById(cmd.friendRequestId);
+
+        if (friendRequest == null) {
+            throw new FriendRequestNotFoundError(cmd.friendRequestId);
+        }
+
+        if (friendRequest.receiverId !== cmd.currentUserId) {
+            throw new FriendRequestAccessDeniedError();
+        }
+
+
     }
 }
