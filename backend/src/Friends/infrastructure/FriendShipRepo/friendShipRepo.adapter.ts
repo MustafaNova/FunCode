@@ -3,8 +3,9 @@ import { CreateFriendship } from '../../domain/types/CreateFriendship';
 import { Repository } from 'typeorm';
 import { FriendshipEntity } from './friendShip.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable } from '@nestjs/common';
 
-
+@Injectable()
 export class FriendShipRepoAdapter implements FriendShipRepoPort {
     constructor(
         @InjectRepository(FriendshipEntity)
@@ -19,5 +20,32 @@ export class FriendShipRepoAdapter implements FriendShipRepoPort {
         });
 
         await this.friendshipRepo.save(friendshipEntity);
+    }
+
+    async getAllFriendsById(userId: string) {
+        const friendships = await this.friendshipRepo.find({
+            where: [
+                { firstUserId: userId },
+                { secondUserId: userId }
+            ],
+            relations: {
+                firstUser: true,
+                secondUser: true,
+            }
+        })
+
+        return friendships.map((friendship) => {
+            const friend =
+                friendship.firstUserId === userId
+                    ? friendship.secondUser
+                    : friendship.firstUser;
+
+            return {
+                userId: friend.id,
+                username: friend.username
+            }
+        })
+
+
     }
 }

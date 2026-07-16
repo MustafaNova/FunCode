@@ -5,9 +5,10 @@ import { ACCEPT_FRIEND_REQ_PORT, CREATE_FRIEND_REQ_PORT, GET_INCOMING_FRIEND_REQ
 import { FriendRequestRepoModule } from '../FriendRequestRepo/friendRequestRepo.module';
 import { GetIncomingFriendReqService } from './getIncomingFriendReq.service';
 import { AcceptFriendReqService } from './acceptFriendReq.service';
+import { AcceptFriendReqTransactionModule } from '../AcceptFriendReqTransaction/acceptFriendReqTransaction.module';
 
 @Module({
-    imports: [UserLookUpModule, FriendRequestRepoModule],
+    imports: [UserLookUpModule, FriendRequestRepoModule, AcceptFriendReqTransactionModule],
     providers: [
         {
             provide: CREATE_FRIEND_REQ_PORT,

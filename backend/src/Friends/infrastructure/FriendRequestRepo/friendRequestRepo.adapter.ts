@@ -4,8 +4,9 @@ import { Repository } from 'typeorm';
 import { FriendRequestEntity } from './friendRequest.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FriendRequest } from '../../domain/types/friendRequest';
+import { Injectable } from '@nestjs/common';
 
-
+@Injectable()
 export class FriendRequestRepoAdapter implements FriendRequestRepoPort {
     constructor(
         @InjectRepository(FriendRequestEntity)

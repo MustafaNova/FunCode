@@ -5,8 +5,9 @@ import { AcceptFriendRequestTransactionParams } from '../../domain/types/AcceptF
 import { DataSource } from 'typeorm';
 import { FriendshipEntity } from '../FriendShipRepo/friendShip.entity';
 import { FriendRequestEntity } from '../FriendRequestRepo/friendRequest.entity';
+import { Injectable } from '@nestjs/common';
 
-
+@Injectable()
 export class AcceptFriendReqTransactionAdapter implements AcceptFriendRequestTransactionPort {
     constructor(
         private readonly dataSource: DataSource,

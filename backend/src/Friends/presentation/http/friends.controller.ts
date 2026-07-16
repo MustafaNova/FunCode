@@ -23,6 +23,12 @@ export class FriendsController {
         private readonly acceptFriendReqUC: AcceptFriendRequestPort,
     ) {}
 
+
+    @Get()
+    async getFriends() {
+
+    }
+
     @Post('friend-request')
     async createFriendRequest(
         @UserPayload() user: AuthUser,
@@ -46,7 +52,7 @@ export class FriendsController {
         @Param('id') friendRequestId: string,
         @UserPayload() user: AuthUser,
     ) {
-        console.log("acceptFriendRequest", friendRequestId);
+        console.log("acceptFriendRequest", friendRequestId, user.userId);
         await this.acceptFriendReqUC.acceptFriendRequest({
             friendRequestId,
             currentUserId: user.userId
