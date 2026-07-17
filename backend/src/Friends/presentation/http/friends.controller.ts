@@ -5,11 +5,12 @@ import { type CreateFriendRequestReq } from '@funcode/shared';
 import { type CreateFriendRequestPort } from '../../application/ports/inbound/createFriendRequest.port';
 import {
     ACCEPT_FRIEND_REQ_PORT,
-    CREATE_FRIEND_REQ_PORT,
+    CREATE_FRIEND_REQ_PORT, GET_FRIENDS_PORT,
     GET_INCOMING_FRIEND_REQ_PORT
 } from '../../infrastructure/tokens';
 import { type GetIncomingFriendRequestsPort } from '../../application/ports/inbound/getIncomingFriendRequests.port';
 import { type AcceptFriendRequestPort } from '../../application/ports/inbound/acceptFriendRequest.port';
+import { type GetFriendsPort } from '../../application/ports/inbound/getFriends.port';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('friends')
@@ -21,12 +22,16 @@ export class FriendsController {
         private readonly getIncomingFriendReqUC: GetIncomingFriendRequestsPort,
         @Inject(ACCEPT_FRIEND_REQ_PORT)
         private readonly acceptFriendReqUC: AcceptFriendRequestPort,
+        @Inject(GET_FRIENDS_PORT)
+        private readonly getFriendsUC: GetFriendsPort
     ) {}
 
 
     @Get()
-    async getFriends() {
-
+    async getFriends(
+        @UserPayload() user: AuthUser,
+    ) {
+        return this.getFriendsUC.getFriends(user.userId)
     }
 
     @Post('friend-request')

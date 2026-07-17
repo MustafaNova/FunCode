@@ -7,3 +7,4 @@ export const FRIEND_REQ_TX_PORT = 'FRIEND_REQ_TX_PORT' as const;
 export const CREATE_FRIEND_REQ_PORT = 'CREATE_FRIEND_REQ_PORT' as const;
 export const GET_INCOMING_FRIEND_REQ_PORT = 'GET_INCOMING_FRIEND_REQ_PORT' as const;
 export const ACCEPT_FRIEND_REQ_PORT = 'ACCEPT_FRIEND_REQ_PORT' as const;
+export const GET_FRIENDS_PORT = 'GET_FRIENDS_PORT' as const;

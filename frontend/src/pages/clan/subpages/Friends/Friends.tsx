@@ -1,8 +1,13 @@
 import s from './friends.module.scss'
 import { useAuth } from '../../../../context/authContext.ts';
 import { useEffect, useState } from 'react';
-import { acceptFriendRequest, getIncomingFriendRequests, sendFriendReq } from '../../../../services/friends.ts';
-import type { IncomingFriendRequestRes } from '@funcode/shared';
+import {
+    acceptFriendRequest,
+    getFriends,
+    getIncomingFriendRequests,
+    sendFriendReq
+} from '../../../../services/friends.ts';
+import type { GetFriendsRes, IncomingFriendRequestRes } from '@funcode/shared';
 import { timeAgo } from '../../../../utils/timeAgo.ts';
 
 export function Friends() {
@@ -11,7 +16,9 @@ export function Friends() {
     const errorInviteCodeMsg = 'No invite code. Please reload the page';
     const [inviteCodeInput, setInviteCodeInput] = useState('');
     const [incomingFriendRequests, setIncomingFriendRequests] = useState<IncomingFriendRequestRes[]>([]);
+    const [friends, setFriends] = useState<GetFriendsRes[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [isGetFriendsLoading, setIsGetFriendsLoading] = useState<boolean>(true);
     function handleSendFriendReq() {
         void sendFriendReq({ inviteCode: inviteCodeInput });
         setInviteCodeInput('');
@@ -25,6 +32,17 @@ export function Friends() {
                 setIsLoading(false);
             }
         }
+
+        async function loadFriends() {
+            try {
+                const res = await getFriends();
+                setFriends(res);
+            } finally {
+                setIsGetFriendsLoading(false);
+            }
+        }
+
+        void loadFriends();
         void loadIncomingFriendRequests();
     }, []);
 
@@ -47,12 +65,19 @@ export function Friends() {
                 </div>
             </div>
             <div className={s.friendsBox}>
-                <div className={s.friendsTitle}>
-                    <span>Your Friends (2)</span>
-                    <input placeholder="Search Friends"/>
-                </div>
-                <div className={s.userBox}>User1</div>
-                <div className={s.userBox}>User2</div>
+                {isGetFriendsLoading ? (
+                    <div className={s.red}>loading</div>)
+                    : (<div>
+                            <div className={s.friendsTitle}>
+                                <span>Your Friends ({friends.length})</span>
+                                <input placeholder="Search Friends"/>
+                            </div>
+                            {friends.map((friend) => (
+                                <div className={s.userBox}>{friend.username}</div>
+                            ))}
+                    </div>)
+                }
+
             </div>
             <div className={s.incomingFriendRequests}>
                 {isLoading ? (

@@ -1,5 +1,5 @@
-import { GetFriendsRes } from '../../use-cases/getFriends/getFriends.res';
+import { GetFriendsRes } from '@funcode/shared';
 
 export interface GetFriendsPort {
-    getFriends(userId: string): GetFriendsRes[],
+    getFriends(userId: string): Promise<GetFriendsRes[]>,
 }
