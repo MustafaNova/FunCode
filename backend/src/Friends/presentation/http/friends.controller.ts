@@ -48,7 +48,6 @@ export class FriendsController {
     async getIncomingFriendRequests(
         @UserPayload() user: AuthUser
     ) {
-        console.log('controller getIncomingFriendRequests');
         return this.getIncomingFriendReqUC.getIncomingFriendRequests(user.userId);
     }
 
@@ -57,7 +56,6 @@ export class FriendsController {
         @Param('id') friendRequestId: string,
         @UserPayload() user: AuthUser,
     ) {
-        console.log("acceptFriendRequest", friendRequestId, user.userId);
         await this.acceptFriendReqUC.acceptFriendRequest({
             friendRequestId,
             currentUserId: user.userId

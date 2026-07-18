@@ -63,3 +63,10 @@
 .red {
   color: red
 }
+
+
+.friends {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}

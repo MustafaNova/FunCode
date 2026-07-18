@@ -17,7 +17,7 @@ export function Friends() {
     const [inviteCodeInput, setInviteCodeInput] = useState('');
     const [incomingFriendRequests, setIncomingFriendRequests] = useState<IncomingFriendRequestRes[]>([]);
     const [friends, setFriends] = useState<GetFriendsRes[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [isIncomingFriendReqLoading, setIsIncomingFriendReqLoading] = useState<boolean>(true);
     const [isGetFriendsLoading, setIsGetFriendsLoading] = useState<boolean>(true);
     function handleSendFriendReq() {
         void sendFriendReq({ inviteCode: inviteCodeInput });
@@ -29,7 +29,7 @@ export function Friends() {
                 const res = await getIncomingFriendRequests();
                 setIncomingFriendRequests(res);
             } finally {
-                setIsLoading(false);
+                setIsIncomingFriendReqLoading(false);
             }
         }
 
@@ -65,9 +65,11 @@ export function Friends() {
                 </div>
             </div>
             <div className={s.friendsBox}>
-                {isGetFriendsLoading ? (
-                    <div className={s.red}>loading</div>)
-                    : (<div>
+                {isGetFriendsLoading ?
+                    <div className={s.red}>loading</div>
+                    : friends.length === 0 ?
+                        <div>No friends</div> :
+                        <div className={s.friends}>
                             <div className={s.friendsTitle}>
                                 <span>Your Friends ({friends.length})</span>
                                 <input placeholder="Search Friends"/>
@@ -75,12 +77,10 @@ export function Friends() {
                             {friends.map((friend) => (
                                 <div className={s.userBox}>{friend.username}</div>
                             ))}
-                    </div>)
-                }
-
+                        </div>}
             </div>
             <div className={s.incomingFriendRequests}>
-                {isLoading ? (
+                {isIncomingFriendReqLoading ? (
                     <p>loading</p>
                 ) : incomingFriendRequests.length === 0 ? (
                     <p>No friendRequests</p>
