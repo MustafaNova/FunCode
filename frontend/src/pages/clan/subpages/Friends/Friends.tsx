@@ -19,10 +19,24 @@ export function Friends() {
     const [friends, setFriends] = useState<GetFriendsRes[]>([]);
     const [isIncomingFriendReqLoading, setIsIncomingFriendReqLoading] = useState<boolean>(true);
     const [isGetFriendsLoading, setIsGetFriendsLoading] = useState<boolean>(true);
+
     function handleSendFriendReq() {
         void sendFriendReq({ inviteCode: inviteCodeInput });
         setInviteCodeInput('');
     }
+
+    async function handleAcceptFriendReq(friendReqId: string) {
+        const newFriend = await acceptFriendRequest(friendReqId);
+
+        setIncomingFriendRequests((current) =>
+        current.filter(
+            (request) => request.id !== friendReqId
+        ))
+
+        setFriends((current) => [...current, newFriend])
+
+    }
+
     useEffect(() => {
         async function loadIncomingFriendRequests() {
             try {
@@ -90,7 +104,7 @@ export function Friends() {
                             <span>{request.senderUsername}</span>
                             <span>{timeAgo(request.createdAt)}</span>
                             <div className={s.friendReqBtns}>
-                                <button onClick={() => acceptFriendRequest(request.id)}>accept</button>
+                                <button onClick={() => handleAcceptFriendReq(request.id)}>accept</button>
                                 <button>decline</button>
                             </div>
                         </div>

@@ -4,10 +4,9 @@ import { FriendRequestRepoPort } from '../../ports/outbound/FriendRequestRepo.po
 import { FriendRequestNotFoundError } from './errors/FriendRequestNotFound.err';
 import { FriendRequestAccessDeniedError } from './errors/FriendRequestAccessDenied.err';
 import { AcceptFriendRequestTransactionPort } from '../../ports/outbound/AcceptFriendRequestTransaction.port';
-import { FriendShipRepoPort } from '../../ports/outbound/FriendShipRepo.port';
 import { UserLookUpPort } from '../../ports/outbound/UserLookUp.port';
 import { UserNotFoundError } from './errors/UserNotFound.err';
-
+import { AcceptFriendReqRes } from '@funcode/shared';
 
 export class AcceptFriendRequestUC implements AcceptFriendRequestPort {
     constructor(
@@ -16,7 +15,7 @@ export class AcceptFriendRequestUC implements AcceptFriendRequestPort {
         private readonly userLookUp: UserLookUpPort,
     ) {}
 
-    async acceptFriendRequest(cmd: AcceptFriendRequestCmd): Promise<void> {
+    async acceptFriendRequest(cmd: AcceptFriendRequestCmd): Promise<AcceptFriendReqRes> {
         const friendRequest = await this.friendReqRepo.findById(cmd.friendRequestId);
 
         if (friendRequest == null) {
@@ -36,6 +35,11 @@ export class AcceptFriendRequestUC implements AcceptFriendRequestPort {
         const newFriend = await this.userLookUp.findById(friendRequest.senderId);
         if (newFriend === null) {
             throw new UserNotFoundError(friendRequest.senderId);
+        }
+
+        return {
+            userId: newFriend.userId,
+            username: newFriend.username,
         }
 
     }

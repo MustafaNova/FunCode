@@ -26,6 +26,10 @@ import {
 import {
     FriendRequestAccessDeniedError
 } from '../Friends/application/use-cases/acceptFriendRequest/errors/FriendRequestAccessDenied.err';
+import { UserNotFoundError } from '../Friends/application/use-cases/acceptFriendRequest/errors/UserNotFound.err';
+import {
+    FriendshipAlreadyExistsError
+} from '../Friends/application/use-cases/createFriendRequest/errors/friendshipAlreadyExists.err';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -37,7 +41,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
             error instanceof EmailAlreadyExistsError ||
             error instanceof UsernameAlreadyExistsError ||
             error instanceof ClanNameAlreadyExistsError ||
-            error instanceof UserAlreadyInClanError
+            error instanceof UserAlreadyInClanError ||
+            error instanceof FriendshipAlreadyExistsError
         ) {
             status = HttpStatus.CONFLICT;
         } else if (error instanceof InvalidCredentialsError) {
@@ -48,7 +53,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
             error instanceof NotFoundException ||
             error instanceof ClanNotFoundError ||
             error instanceof InviteCodeNotFound ||
-            error instanceof FriendRequestNotFoundError
+            error instanceof FriendRequestNotFoundError ||
+            error instanceof UserNotFoundError
         ) {
             status = HttpStatus.NOT_FOUND;
         }

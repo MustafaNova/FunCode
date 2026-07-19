@@ -56,7 +56,7 @@ export class FriendsController {
         @Param('id') friendRequestId: string,
         @UserPayload() user: AuthUser,
     ) {
-        await this.acceptFriendReqUC.acceptFriendRequest({
+        return this.acceptFriendReqUC.acceptFriendRequest({
             friendRequestId,
             currentUserId: user.userId
         })

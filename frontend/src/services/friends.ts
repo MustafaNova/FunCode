@@ -1,5 +1,10 @@
 import { API_URLS } from '../constants/urls.ts';
-import type { CreateFriendRequestReq, GetFriendsRes, IncomingFriendRequestRes } from '@funcode/shared';
+import type {
+    AcceptFriendReqRes,
+    CreateFriendRequestReq,
+    GetFriendsRes,
+    IncomingFriendRequestRes
+} from '@funcode/shared';
 
 export async function sendFriendReq(payload: CreateFriendRequestReq) {
     await fetch(API_URLS.SEND_FRIEND_REQUEST, {
@@ -25,10 +30,13 @@ export async function getIncomingFriendRequests() {
 
 export async function acceptFriendRequest(friendReqId: string) {
     const url = API_URLS.ACCEPT_FRIEND_REQUEST + `/${friendReqId}`;
-    await fetch(url, {
+    const res = await fetch(url, {
         method: 'POST',
         credentials: 'include'
     });
+
+    const acceptedFriend: AcceptFriendReqRes = await res.json();
+    return acceptedFriend;
 }
 
 

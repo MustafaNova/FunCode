@@ -48,4 +48,19 @@ export class FriendShipRepoAdapter implements FriendShipRepoPort {
 
 
     }
+
+    existsBetweenUsers(firstUserId: string, secondUserId: string): Promise<boolean> {
+        return this.friendshipRepo.exists({
+            where: [
+                {
+                    firstUserId,
+                    secondUserId,
+                },
+                {
+                    firstUserId: secondUserId,
+                    secondUserId: firstUserId,
+                },
+            ],
+        });
+    }
 }
