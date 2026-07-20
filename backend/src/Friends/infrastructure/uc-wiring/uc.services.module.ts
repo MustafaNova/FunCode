@@ -3,7 +3,7 @@ import { CreateFriendReqService } from './createFriendReq.service';
 import { UserLookUpModule } from '../UserLookUp/userLookUp.module';
 import {
     ACCEPT_FRIEND_REQ_PORT,
-    CREATE_FRIEND_REQ_PORT,
+    CREATE_FRIEND_REQ_PORT, DECLINE_FRIEND_REQ_PORT,
     GET_FRIENDS_PORT,
     GET_INCOMING_FRIEND_REQ_PORT
 } from '../tokens';
@@ -13,6 +13,7 @@ import { AcceptFriendReqService } from './acceptFriendReq.service';
 import { AcceptFriendReqTransactionModule } from '../AcceptFriendReqTransaction/acceptFriendReqTransaction.module';
 import { FriendShipRepoModule } from '../FriendShipRepo/friendShipRepo.module';
 import { GetFriendsService } from './getFriends.service';
+import { DeclineFriendReqService } from './declineFriendReq.service';
 
 @Module({
     imports: [UserLookUpModule,
@@ -36,8 +37,18 @@ import { GetFriendsService } from './getFriends.service';
         {
             provide: GET_FRIENDS_PORT,
             useClass: GetFriendsService,
+        },
+        {
+            provide: DECLINE_FRIEND_REQ_PORT,
+            useClass: DeclineFriendReqService,
         }
     ],
-    exports: [CREATE_FRIEND_REQ_PORT, GET_INCOMING_FRIEND_REQ_PORT, ACCEPT_FRIEND_REQ_PORT, GET_FRIENDS_PORT],
+    exports: [
+        CREATE_FRIEND_REQ_PORT,
+        GET_INCOMING_FRIEND_REQ_PORT,
+        ACCEPT_FRIEND_REQ_PORT,
+        GET_FRIENDS_PORT,
+        DECLINE_FRIEND_REQ_PORT
+    ],
 })
 export class UcServicesModule {}

@@ -1,16 +1,17 @@
-import { Body, Controller, Get, Inject, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthUser, UserPayload } from '../../../common/utils/user-payload.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import { type CreateFriendRequestReq } from '@funcode/shared';
 import { type CreateFriendRequestPort } from '../../application/ports/inbound/createFriendRequest.port';
 import {
     ACCEPT_FRIEND_REQ_PORT,
-    CREATE_FRIEND_REQ_PORT, GET_FRIENDS_PORT,
+    CREATE_FRIEND_REQ_PORT, DECLINE_FRIEND_REQ_PORT, GET_FRIENDS_PORT,
     GET_INCOMING_FRIEND_REQ_PORT
 } from '../../infrastructure/tokens';
 import { type GetIncomingFriendRequestsPort } from '../../application/ports/inbound/getIncomingFriendRequests.port';
 import { type AcceptFriendRequestPort } from '../../application/ports/inbound/acceptFriendRequest.port';
 import { type GetFriendsPort } from '../../application/ports/inbound/getFriends.port';
+import { type DeclineFriendRequestPort } from '../../application/ports/inbound/declineFriendRequest.port';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('friends')
@@ -23,7 +24,9 @@ export class FriendsController {
         @Inject(ACCEPT_FRIEND_REQ_PORT)
         private readonly acceptFriendReqUC: AcceptFriendRequestPort,
         @Inject(GET_FRIENDS_PORT)
-        private readonly getFriendsUC: GetFriendsPort
+        private readonly getFriendsUC: GetFriendsPort,
+        @Inject(DECLINE_FRIEND_REQ_PORT)
+        private readonly declineFriendReqUC: DeclineFriendRequestPort,
     ) {}
 
 
@@ -61,4 +64,23 @@ export class FriendsController {
             currentUserId: user.userId
         })
     }
+
+    @Post('friend-requests/decline/:id')
+    async declineFriendRequest(
+        @Param('id') friendRequestId: string,
+        @UserPayload() user: AuthUser,
+    ) {
+        await this.declineFriendReqUC.declineFriendRequest({
+            friendRequestId,
+            currentUserId: user.userId,
+        })
+    }
+
+    @Delete(':friendUserId')
+    async deleteFriend(
+        @Param('friendUserId') friendUserId: string,
+        @UserPayload() user: AuthUser,
+    ): Promise<void> {
+    }
+
 }

@@ -39,6 +39,13 @@ export async function acceptFriendRequest(friendReqId: string) {
     return acceptedFriend;
 }
 
+export async function declineFriendRequest(friendReqId: string) {
+    const url = API_URLS.DECLINE_FRIEND_REQUEST + `/${friendReqId}`;
+    await fetch(url, {
+        method: 'POST',
+        credentials: 'include'
+    })
+}
 
 export async function getFriends() {
     const res = await fetch(API_URLS.GET_FRIENDS, {

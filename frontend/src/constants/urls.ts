@@ -19,5 +19,6 @@ export const API_URLS = {
     SEND_FRIEND_REQUEST: `${API_URL}/friends/friend-request`,
     GET_INCOMING_FRIEND_REQUESTS: `${API_URL}/friends/friend-requests/incoming`,
     ACCEPT_FRIEND_REQUEST: `${API_URL}/friends/friend-requests/accept`,
+    DECLINE_FRIEND_REQUEST: `${API_URL}/friends/friend-requests/decline`,
     GET_FRIENDS: `${API_URL}/friends`
 }

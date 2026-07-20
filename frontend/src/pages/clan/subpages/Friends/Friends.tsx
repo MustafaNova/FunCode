@@ -2,7 +2,7 @@ import s from './friends.module.scss'
 import { useAuth } from '../../../../context/authContext.ts';
 import { useEffect, useState } from 'react';
 import {
-    acceptFriendRequest,
+    acceptFriendRequest, declineFriendRequest,
     getFriends,
     getIncomingFriendRequests,
     sendFriendReq
@@ -35,6 +35,14 @@ export function Friends() {
 
         setFriends((current) => [...current, newFriend])
 
+    }
+
+    async function handleDeclineFriendReq(friendReqId: string) {
+        await declineFriendRequest(friendReqId);
+        setIncomingFriendRequests((current) =>
+            current.filter(
+                (request) => request.id !== friendReqId
+            ));
     }
 
     useEffect(() => {
@@ -89,7 +97,10 @@ export function Friends() {
                                 <input placeholder="Search Friends"/>
                             </div>
                             {friends.map((friend) => (
-                                <div className={s.userBox}>{friend.username}</div>
+                                <div className={s.userBox}>
+                                    {friend.username}
+                                    <button>delete</button>
+                                </div>
                             ))}
                         </div>}
             </div>
@@ -105,7 +116,7 @@ export function Friends() {
                             <span>{timeAgo(request.createdAt)}</span>
                             <div className={s.friendReqBtns}>
                                 <button onClick={() => handleAcceptFriendReq(request.id)}>accept</button>
-                                <button>decline</button>
+                                <button onClick={() => handleDeclineFriendReq(request.id)}>decline</button>
                             </div>
                         </div>
                     ))
