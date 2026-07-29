@@ -5,13 +5,14 @@ import { type CreateFriendRequestReq } from '@funcode/shared';
 import { type CreateFriendRequestPort } from '../../application/ports/inbound/createFriendRequest.port';
 import {
     ACCEPT_FRIEND_REQ_PORT,
-    CREATE_FRIEND_REQ_PORT, DECLINE_FRIEND_REQ_PORT, GET_FRIENDS_PORT,
+    CREATE_FRIEND_REQ_PORT, DECLINE_FRIEND_REQ_PORT, DELETE_FRIEND_PORT, GET_FRIENDS_PORT,
     GET_INCOMING_FRIEND_REQ_PORT
 } from '../../infrastructure/tokens';
 import { type GetIncomingFriendRequestsPort } from '../../application/ports/inbound/getIncomingFriendRequests.port';
 import { type AcceptFriendRequestPort } from '../../application/ports/inbound/acceptFriendRequest.port';
 import { type GetFriendsPort } from '../../application/ports/inbound/getFriends.port';
 import { type DeclineFriendRequestPort } from '../../application/ports/inbound/declineFriendRequest.port';
+import { type DeleteFriendPort } from '../../application/ports/inbound/deleteFriend.port';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('friends')
@@ -27,6 +28,8 @@ export class FriendsController {
         private readonly getFriendsUC: GetFriendsPort,
         @Inject(DECLINE_FRIEND_REQ_PORT)
         private readonly declineFriendReqUC: DeclineFriendRequestPort,
+        @Inject(DELETE_FRIEND_PORT)
+        private readonly deleteFriendUC: DeleteFriendPort,
     ) {}
 
 
@@ -81,6 +84,7 @@ export class FriendsController {
         @Param('friendUserId') friendUserId: string,
         @UserPayload() user: AuthUser,
     ): Promise<void> {
+        console.log('deleteFriend controller: ', friendUserId);
+        await this.deleteFriendUC.deleteFriend(friendUserId, user.userId);
     }
-
 }

@@ -2,7 +2,7 @@ import s from './friends.module.scss'
 import { useAuth } from '../../../../context/authContext.ts';
 import { useEffect, useState } from 'react';
 import {
-    acceptFriendRequest, declineFriendRequest,
+    acceptFriendRequest, declineFriendRequest, deleteFriend,
     getFriends,
     getIncomingFriendRequests,
     sendFriendReq
@@ -99,7 +99,7 @@ export function Friends() {
                             {friends.map((friend) => (
                                 <div className={s.userBox}>
                                     {friend.username}
-                                    <button>delete</button>
+                                    <button onClick={() => deleteFriend(friend.userId)}>delete</button>
                                 </div>
                             ))}
                         </div>}

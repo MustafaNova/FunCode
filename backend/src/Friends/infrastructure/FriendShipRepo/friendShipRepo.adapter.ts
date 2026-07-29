@@ -63,4 +63,18 @@ export class FriendShipRepoAdapter implements FriendShipRepoPort {
             ],
         });
     }
+
+    async deleteBetweenUsers(firstUserId: string, secondUserId: string): Promise<void> {
+        await this.friendshipRepo.delete([
+            {
+                firstUserId,
+                secondUserId
+            },
+            {
+                firstUserId: secondUserId,
+                secondUserId: firstUserId,
+            }
+        ])
+    }
+
 }

@@ -5,4 +5,5 @@ export interface FriendShipRepoPort {
     create(friendship: CreateFriendship): Promise<void>;
     getAllFriendsById(userId: string): Promise<Friend[]>;
     existsBetweenUsers(firstUserId: string, secondUserId: string): Promise<boolean>
+    deleteBetweenUsers(firstUserId: string, secondUserId: string): Promise<void>;
 }

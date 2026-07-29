@@ -30,6 +30,7 @@ import { UserNotFoundError } from '../Friends/application/use-cases/acceptFriend
 import {
     FriendshipAlreadyExistsError
 } from '../Friends/application/use-cases/createFriendRequest/errors/friendshipAlreadyExists.err';
+import { FriendshipNotFoundError } from '../Friends/application/use-cases/deleteFriend/errors/friendshipNotFound.err';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -54,7 +55,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
             error instanceof ClanNotFoundError ||
             error instanceof InviteCodeNotFound ||
             error instanceof FriendRequestNotFoundError ||
-            error instanceof UserNotFoundError
+            error instanceof UserNotFoundError ||
+            error instanceof FriendshipNotFoundError
         ) {
             status = HttpStatus.NOT_FOUND;
         }

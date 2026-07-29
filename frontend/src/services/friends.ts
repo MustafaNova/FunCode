@@ -44,15 +44,24 @@ export async function declineFriendRequest(friendReqId: string) {
     await fetch(url, {
         method: 'POST',
         credentials: 'include'
-    })
+    });
 }
 
 export async function getFriends() {
     const res = await fetch(API_URLS.GET_FRIENDS, {
         method: 'GET',
         credentials: 'include'
-    })
+    });
 
     const friends: GetFriendsRes[] = await res.json();
     return friends;
+}
+
+
+export async function deleteFriend(friendUserId: string) {
+    const url = API_URLS.DELETE_FRIEND + `/${friendUserId}`;
+    await fetch(url, {
+        method: 'DELETE',
+        credentials: 'include',
+    });
 }
