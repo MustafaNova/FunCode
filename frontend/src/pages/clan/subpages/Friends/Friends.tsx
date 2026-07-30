@@ -45,6 +45,13 @@ export function Friends() {
             ));
     }
 
+    async function handleDeleteFriend(friendId: string) {
+        await deleteFriend(friendId);
+        setFriends((current) =>
+        current.filter((friend) => friend.userId != friendId)
+        )
+    }
+
     useEffect(() => {
         async function loadIncomingFriendRequests() {
             try {
@@ -99,7 +106,7 @@ export function Friends() {
                             {friends.map((friend) => (
                                 <div className={s.userBox}>
                                     {friend.username}
-                                    <button onClick={() => deleteFriend(friend.userId)}>delete</button>
+                                    <button onClick={() => handleDeleteFriend(friend.userId)}>delete</button>
                                 </div>
                             ))}
                         </div>}

@@ -12,7 +12,7 @@ import { EmailError } from '../auth/domain/errors/EmailError';
 import { PasswordError } from '../auth/domain/errors/PasswordError';
 import { UsernameError } from '../auth/domain/errors/UsernameError';
 import { LevelNotFoundException } from '../Learning-progression/infrastructure/database/errors/levelNotFound.err';
-import { ErrorResponse } from '@funcode/shared';
+import { ERROR_CODES, ErrorResponse } from '@funcode/shared';
 import { ClanNameAlreadyExistsError } from '../clans/application/use-cases/errors/clan.name.already.exists.error';
 import { UserAlreadyInClanError } from '../clans/application/use-cases/errors/userAlreadyInClan.error';
 import { ClanNotFoundError } from '../clans/application/use-cases/errors/ClanNotFoundError';
@@ -31,6 +31,7 @@ import {
     FriendshipAlreadyExistsError
 } from '../Friends/application/use-cases/createFriendRequest/errors/friendshipAlreadyExists.err';
 import { FriendshipNotFoundError } from '../Friends/application/use-cases/deleteFriend/errors/friendshipNotFound.err';
+import { AppError } from './app.error';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -73,9 +74,21 @@ export class HttpExceptionFilter implements ExceptionFilter {
             status = HttpStatus.FORBIDDEN;
         }
 
+        const code =
+            error instanceof AppError
+                ? error.code
+                : ERROR_CODES.INTERNAL_SERVER_ERROR;
+
+        const message =
+            error instanceof AppError
+                ? error.message
+                : 'An unexpected error occurred';
+
+
         res.status(status).json({
-            type: 'error',
-            message: error.message,
+            statusCode: status,
+            code,
+            message,
         } satisfies ErrorResponse);
     }
 }

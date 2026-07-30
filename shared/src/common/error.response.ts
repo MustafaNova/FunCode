@@ -1,4 +1,7 @@
+import { ErrorCode } from './error.codes.js';
+
 export type ErrorResponse = {
-    type: 'error';
+    statusCode: number;
+    code: ErrorCode,
     message: string;
 }
