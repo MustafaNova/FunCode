@@ -2,12 +2,13 @@ import { API_URLS } from '../constants/urls.ts';
 import type {
     AcceptFriendReqRes,
     CreateFriendRequestReq,
+    ErrorResponse,
     GetFriendsRes,
     IncomingFriendRequestRes
 } from '@funcode/shared';
 
 export async function sendFriendReq(payload: CreateFriendRequestReq) {
-    await fetch(API_URLS.SEND_FRIEND_REQUEST, {
+    const res = await fetch(API_URLS.SEND_FRIEND_REQUEST, {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -15,6 +16,10 @@ export async function sendFriendReq(payload: CreateFriendRequestReq) {
         },
         body: JSON.stringify(payload),
     })
+
+    if (!res.ok) {
+        throw await res.json() as ErrorResponse;
+    }
 }
 
 

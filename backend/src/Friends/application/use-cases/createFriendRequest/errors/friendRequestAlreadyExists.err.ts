@@ -4,7 +4,7 @@ import { ERROR_CODES } from '@funcode/shared';
 export class FriendRequestAlreadyExistsError extends AppError {
     constructor() {
         super(
-            ERROR_CODES.FRIENDSHIP_ALREADY_EXISTS,
+            ERROR_CODES.FRIEND_REQUEST_ALREADY_EXISTS,
             'FriendRequest already exists'
         );
     }

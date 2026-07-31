@@ -73,3 +73,57 @@
   flex-direction: column;
   gap: 5px;
 }
+
+.popupOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.popup {
+  width: min(90%, 400px);
+  padding: 24px;
+  border-radius: 12px;
+
+  background: white;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+
+  text-align: center;
+
+  p {
+    margin: 0 0 24px;
+  }
+}
+
+.popupActions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.cancelButton,
+.deleteButton {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.cancelButton {
+  background: #e5e7eb;
+}
+
+.deleteButton {
+  background: #dc2626;
+  color: white;
+}
+
+.black {
+  color: black;
+}

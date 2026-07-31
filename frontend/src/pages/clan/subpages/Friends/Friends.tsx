@@ -7,22 +7,32 @@ import {
     getIncomingFriendRequests,
     sendFriendReq
 } from '../../../../services/friends.ts';
-import type { GetFriendsRes, IncomingFriendRequestRes } from '@funcode/shared';
+import type { ErrorResponse, GetFriendsRes, IncomingFriendRequestRes } from '@funcode/shared';
 import { timeAgo } from '../../../../utils/timeAgo.ts';
+import { getErrorMessage } from '../../../../utils/error.messages.ts';
 
 export function Friends() {
     const { user, loading } = useAuth();
     const loadingInviteCodeMsg = 'Generating code...';
     const errorInviteCodeMsg = 'No invite code. Please reload the page';
     const [inviteCodeInput, setInviteCodeInput] = useState('');
+    const [inviteCodeError, setInviteCodeError] = useState('');
+    const [friendToDelete, setFriendToDelete] = useState<GetFriendsRes | null>(null);
     const [incomingFriendRequests, setIncomingFriendRequests] = useState<IncomingFriendRequestRes[]>([]);
     const [friends, setFriends] = useState<GetFriendsRes[]>([]);
     const [isIncomingFriendReqLoading, setIsIncomingFriendReqLoading] = useState<boolean>(true);
     const [isGetFriendsLoading, setIsGetFriendsLoading] = useState<boolean>(true);
 
-    function handleSendFriendReq() {
-        void sendFriendReq({ inviteCode: inviteCodeInput });
-        setInviteCodeInput('');
+    async function handleSendFriendReq() {
+        try {
+            await sendFriendReq({ inviteCode: inviteCodeInput });
+            setInviteCodeInput('');
+            setInviteCodeError('');
+        } catch (err) {
+            const error = err as ErrorResponse;
+            const errorMsg = getErrorMessage(error.code);
+            setInviteCodeError(errorMsg);
+        }
     }
 
     async function handleAcceptFriendReq(friendReqId: string) {
@@ -45,11 +55,15 @@ export function Friends() {
             ));
     }
 
-    async function handleDeleteFriend(friendId: string) {
+    async function handleDeleteFriend() {
+        if (!friendToDelete) return;
+
+        const friendId = friendToDelete.userId;
         await deleteFriend(friendId);
         setFriends((current) =>
         current.filter((friend) => friend.userId != friendId)
         )
+        setFriendToDelete(null);
     }
 
     useEffect(() => {
@@ -92,6 +106,9 @@ export function Friends() {
                     />
                     <button onClick={handleSendFriendReq}>send</button>
                 </div>
+                <div className={s.red}>
+                    {inviteCodeError.length > 0 && inviteCodeError}
+                </div>
             </div>
             <div className={s.friendsBox}>
                 {isGetFriendsLoading ?
@@ -106,11 +123,37 @@ export function Friends() {
                             {friends.map((friend) => (
                                 <div className={s.userBox}>
                                     {friend.username}
-                                    <button onClick={() => handleDeleteFriend(friend.userId)}>delete</button>
+                                    <button onClick={() => setFriendToDelete(friend)}>delete</button>
                                 </div>
                             ))}
                         </div>}
             </div>
+            {friendToDelete && (
+                <div className={s.popupOverlay}>
+                    <div className={s.popup}>
+                        <p className={s.black}>
+                            Are you sure you want to delete{' '}
+                            <strong>{friendToDelete.username}</strong>?
+                        </p>
+
+                        <div className={s.popupActions}>
+                            <button
+                                className={s.cancelButton}
+                                onClick={() => setFriendToDelete(null)}
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                className={s.deleteButton}
+                                onClick={handleDeleteFriend}
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
             <div className={s.incomingFriendRequests}>
                 {isIncomingFriendReqLoading ? (
                     <p>loading</p>
