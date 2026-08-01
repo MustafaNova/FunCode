@@ -18,7 +18,6 @@ import { LevelLoseScreen } from './pages/LevelLoseScreen/LevelLoseScreen.tsx';
 import { LevelWinScreen } from './pages/LevelWinScreen/LevelWinScreen.tsx';
 import { Onboarding } from './pages/Onboarding/Onboarding.tsx';
 import { CourseSelection } from './pages/Onboarding/CourseSelection/CourseSelection.tsx';
-import { ComingSoon } from './pages/ComingSoon/ComingSoon.tsx';
 import { NotFound } from './pages/NotFound/NotFound.tsx';
 import { Clan } from './pages/clan/Clan.tsx';
 import { Clans } from './pages/clan/subpages/Clans/Clans.tsx';
@@ -29,6 +28,8 @@ import { War } from './pages/clan/subpages/War/war.tsx';
 import { ClanIndexRedirect } from './pages/clan/subpages/ClanIndexRedirect/clanIndexRedirect.tsx';
 import { ClanMemberGuard, NoClanMemberGuard } from './utils/guards.tsx';
 import { AuthProvider } from './context/AuthProvider.tsx';
+import { Practice } from './pages/practice/practice.tsx';
+import { BugHunter } from './pages/practice/games/bugHunter/bugHunter.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -59,7 +60,8 @@ createRoot(document.getElementById('root')!).render(
 
                       <Route path='friends' element={<Friends />}></Route>
                   </Route>
-                  <Route path='practice' element={<ComingSoon />}></Route>
+                  <Route path='practice' element={<Practice />}></Route>
+                  <Route path='practice/bug-hunter' element={<BugHunter />}></Route>
               </Route>
               <Route path='onboarding' element={<Onboarding/>}></Route>
               <Route path='onboarding/courses' element={<CourseSelection/>}></Route>
