@@ -1,5 +1,5 @@
 import s from './practice.module.scss';
-import { PRACTICE_GAME_MODES } from './practiceGameModes.ts';
+import { PRACTICE_GAME_MODES } from './games/practiceGameModes.ts';
 import { useNavigate } from 'react-router-dom';
 
 export function Practice() {

@@ -7,6 +7,7 @@ import { LearningProgressionModule } from './Learning-progression/learning-progr
 import { ConfigModule } from '@nestjs/config';
 import { ClansModule } from './clans/clans.module';
 import { FriendsModule } from './Friends/friends.module';
+import { PracticeModule } from './practice/practice.module';
 
 @Module({
     imports: [
@@ -15,6 +16,7 @@ import { FriendsModule } from './Friends/friends.module';
         LearningProgressionModule,
         ClansModule,
         FriendsModule,
+        PracticeModule,
         TypeOrmModule.forRoot({
             type: 'postgres',
             url: process.env['DATABASE_URL'],

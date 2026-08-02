@@ -89,6 +89,7 @@ export function Arena1v1() {
                     </button>
                 </div>
             </section>
+            <button onClick={() => navigate(-1)}>Go back</button>
         </main>
     )
 }

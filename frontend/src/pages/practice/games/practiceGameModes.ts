@@ -1,5 +1,5 @@
-import bugHunterImg from '../../assets/practice/bug-hunter.png';
-import codeGolfImg from '../../assets/practice/code-golf.png';
+import bugHunterImg from '../../../assets/practice/bugHunter/bug-hunter.png';
+import codeGolfImg from '../../../assets/practice/codeGolf/code-golf.png';
 
 
 const bugHunterTitle = 'Bug Hunter';
