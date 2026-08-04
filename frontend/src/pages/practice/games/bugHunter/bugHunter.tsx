@@ -1,10 +1,35 @@
 import { BUG_HUNTER_LEVELS } from './bugHunterLevels.ts';
 import s from './bugHunter.module.scss';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { getBugHunterHighestUnlockedLevel } from '../../../../services/practice.ts';
+import type { UnlockedLevelRes } from '@funcode/shared';
 
 
 export function BugHunter() {
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(true);
+    const [unlockedLevelRes, setUnlockedLevelRes] = useState<UnlockedLevelRes | null>(null);
+
+    useEffect(() => {
+        async function getProgress() {
+            try {
+                const res = await getBugHunterHighestUnlockedLevel();
+                setUnlockedLevelRes(res);
+            } finally {
+                setIsLoading(false);
+            }
+        }
+        void getProgress()
+    }, []);
+
+    if (isLoading) {
+        return <div className={s.txt}>...loading</div>
+    }
+
+    if (unlockedLevelRes === null) {
+        return <div className={s.txt}>Could not load progress</div>
+    }
 
     return (
         <section className={s.container}>
@@ -18,12 +43,12 @@ export function BugHunter() {
             </div>
 
             <div className={s.levelGrid}>
-                {BUG_HUNTER_LEVELS.map((level, index) => (
-                    <button key={level.id} className={s.levelCard}>
+                {BUG_HUNTER_LEVELS.map((level) => (
+                    <button className={`${s.levelCard} ${(unlockedLevelRes.unlockedLevel < level.level) && s.lockedCard} ${(unlockedLevelRes.unlockedLevel > level.level) && s.completedCard}`}>
                         <div className={s.imageWrapper}>
                             <img src={level.image} alt={level.imgAlt} className={s.levelImage} />
                             <span className={s.levelNumber}>
-                                Level {index + 1}
+                                Level {level.level}
                             </span>
                         </div>
                         <div className={s.levelContent}>

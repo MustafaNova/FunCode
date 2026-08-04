@@ -21,5 +21,6 @@ export const API_URLS = {
     ACCEPT_FRIEND_REQUEST: `${API_URL}/friends/friend-requests/accept`,
     DECLINE_FRIEND_REQUEST: `${API_URL}/friends/friend-requests/decline`,
     GET_FRIENDS: `${API_URL}/friends`,
-    DELETE_FRIEND: `${API_URL}/friends`
+    DELETE_FRIEND: `${API_URL}/friends`,
+    GET_BUG_HUNTER_HIGHEST_UNLOCKED_LEVEL: `${API_URL}/practice/bug-hunter/unlocked-level`,
 }

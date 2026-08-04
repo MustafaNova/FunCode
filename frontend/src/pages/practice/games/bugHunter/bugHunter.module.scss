@@ -105,3 +105,66 @@
   font-size: 0.9rem;
   font-weight: 600;
 }
+
+
+.txt {
+  color: black;
+  font-size: 50px;
+}
+
+
+.lockedCard {
+  opacity: 0.55;
+  cursor: not-allowed;
+  border-color: #555;
+
+  .levelImage {
+    filter: grayscale(1);
+  }
+
+  &:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: #555;
+  }
+}
+
+
+.completedCard {
+  position: relative;
+  border: 2px solid #22c55e;
+  background: linear-gradient(
+                  180deg,
+                  #171a21 0%,
+                  #13251a 100%
+  );
+
+  .levelImage {
+    filter: saturate(1.1);
+  }
+
+  .levelAction {
+    color: #4ade80;
+  }
+
+  &::after {
+    content: '✓ Completed';
+    position: absolute;
+    top: 14px;
+    right: 14px;
+
+    padding: 6px 10px;
+    border-radius: 999px;
+
+    background: rgba(34, 197, 94, 0.9);
+    color: white;
+
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  &:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}

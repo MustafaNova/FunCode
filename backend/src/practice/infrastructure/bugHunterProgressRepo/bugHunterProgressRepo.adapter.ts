@@ -11,13 +11,14 @@ export class BugHunterProgressRepoAdapter implements BugHunterProgressRepoPort {
         private readonly bugHunterProgressRepo: Repository<BugHunterProgressEntity>
     ) {}
 
-    async getHighestUnlockedLevel(userId: string): Promise<number | null> {
+    async getOrCreateHighestUnlockedLevel(userId: string): Promise<number> {
         const res = await this.bugHunterProgressRepo.findOne({
             where: { userId },
         })
 
         if (res == null) {
-            return null;
+            await this.bugHunterProgressRepo.insert({ userId })
+            return 1;
         }
 
         return res.highestUnlockedLevel;

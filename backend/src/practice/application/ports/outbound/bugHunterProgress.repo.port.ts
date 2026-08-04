@@ -1,5 +1,5 @@
 
 
 export interface BugHunterProgressRepoPort {
-    getHighestUnlockedLevel(userId: string): Promise<number | null>;
+    getOrCreateHighestUnlockedLevel(userId: string): Promise<number>;
 }
