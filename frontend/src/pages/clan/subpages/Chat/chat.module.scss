@@ -1,61 +1,146 @@
-
 .chatScreen {
-  color: black;
+  position: relative;
+  z-index: 1;
+  width: min(820px, 100%);
+  box-sizing: border-box;
+  display: grid;
+  gap: 12px;
+  padding: clamp(18px, 4vw, 30px);
+  border: 1px solid rgba(192, 239, 255, 0.18);
+  border-radius: 18px;
+  background: rgba(13, 17, 31, 0.9);
+  box-shadow: var(--shadow);
+  color: var(--text);
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+}
+
+.chatScreen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent 0 48%, rgba(54, 228, 255, 0.12) 50%, transparent 52%),
+    linear-gradient(0deg, transparent 0 48%, rgba(255, 79, 135, 0.09) 50%, transparent 52%);
+  background-size: 84px 84px;
+  opacity: 0.24;
+}
+
+.chatScreen > * {
+  position: relative;
+  z-index: 1;
 }
 
 .clanNameBtn {
-  background-color: #2dd4bf;
-  width: 200px;
-  height: 50px;
+  justify-self: start;
+  min-width: 200px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #36e4ff, #8bff9c);
+  color: #061018;
   cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+  transition: filter 160ms ease, transform 160ms ease;
+}
+
+.clanNameBtn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
 }
 
 .titlePopUp {
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.titlePopUp h1 {
+  margin: 0;
+  color: #36e4ff;
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
 }
 
 .clanPopUp {
+  left: 50%;
+  top: 50%;
+  z-index: 4;
   position: absolute;
-  width: 500px;
-  height: 500px;
-  background-color: gray;
+  width: min(500px, calc(100% - 28px));
+  min-height: 360px;
+  box-sizing: border-box;
+  padding: 28px;
+  border: 1px solid rgba(54, 228, 255, 0.35);
+  border-radius: 8px;
+  background: rgba(3, 8, 16, 0.96);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 15px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  box-shadow: var(--shadow), 0 0 38px rgba(54, 228, 255, 0.16);
+  color: var(--muted);
+  text-align: center;
+  transform: translate(-50%, -50%);
 }
 
 .leavePopUp {
+  left: 50%;
+  top: 50%;
+  z-index: 5;
   position: absolute;
-  width: 250px;
-  height: 250px;
-  background-color: #2dd4bf;
+  width: min(340px, calc(100% - 28px));
+  min-height: 220px;
+  box-sizing: border-box;
+  padding: 26px;
+  border: 1px solid rgba(255, 79, 135, 0.35);
+  border-radius: 8px;
+  background: rgba(3, 8, 16, 0.97);
+  box-shadow: var(--shadow);
+  transform: translate(-50%, -50%);
 }
 
 .leavePopUp_btns {
   display: flex;
   gap: 10px;
+  justify-content: center;
 }
 
 .leavePopUpContent {
   display: flex;
   flex-direction: column;
   gap: 25px;
+  align-items: center;
+  color: var(--muted);
 }
 
 
 .leaveBtn {
   cursor: pointer;
-  background-color: red;
-  width: 100px;
+  min-width: 100px;
+  min-height: 40px;
+  border: 1px solid rgba(255, 79, 135, 0.36);
+  border-radius: 8px;
+  background: rgba(255, 79, 135, 0.15);
+  color: #ffd5de;
+  font: inherit;
+  font-weight: 900;
 
 }
 
 .crossBtn {
   position: absolute;
   right: 10px;
+  top: 10px;
+  width: 34px;
+  min-height: 34px;
+  border: 1px solid rgba(255, 79, 135, 0.32);
+  border-radius: 8px;
+  background: rgba(255, 79, 135, 0.12);
+  color: #ffb3c4;
   cursor: pointer;
 }
 
@@ -63,33 +148,108 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background-color: gray;
-  height: 500px;
-  width: 700px;
+  height: min(48vh, 500px);
+  min-height: 320px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid rgba(54, 228, 255, 0.22);
+  border-radius: 8px;
+  background: rgba(3, 8, 16, 0.66);
   overflow-y: auto;
 }
 
+.chat button,
+.leavePopUp button {
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid rgba(54, 228, 255, 0.24);
+  border-radius: 8px;
+  background: rgba(54, 228, 255, 0.12);
+  color: #b7f7ff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+}
+
 .chatInput {
-  width: 300px;
+  width: 100%;
+  min-height: 44px;
+  box-sizing: border-box;
+  padding: 0 14px;
+  border: 1px solid rgba(54, 228, 255, 0.24);
+  border-radius: 8px;
+  outline: none;
+  background: rgba(3, 8, 16, 0.78);
+  color: #d8fbff;
+  font: inherit;
+}
+
+.chatInput:focus {
+  border-color: rgba(139, 255, 156, 0.48);
+  box-shadow: 0 0 0 3px rgba(54, 228, 255, 0.12);
+}
+
+.chatScreen > button:last-child {
+  justify-self: end;
+  min-width: 120px;
+  min-height: 42px;
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #36e4ff, #8bff9c);
+  color: #061018;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
 }
 
 .chatMsg {
   display: flex;
   flex-direction: column;
-  width: 300px;
-  background-color: cornflowerblue;
+  width: min(420px, 82%);
+  box-sizing: border-box;
+  gap: 6px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text);
+  overflow-wrap: anywhere;
 }
 
 .chatMsgTitle {
   display: flex;
   justify-content: space-between;
+  gap: 12px;
+  color: #b7f7ff;
+  font-size: 0.82rem;
+  font-weight: 900;
 }
 
 .chatMsgTimeStamp {
   display: block;
   text-align: right;
+  color: var(--muted);
+  font-size: 0.78rem;
 }
 
 .ownMsg {
   align-self: flex-end;
+  border-color: rgba(139, 255, 156, 0.28);
+  background: linear-gradient(135deg, rgba(54, 228, 255, 0.13), rgba(139, 255, 156, 0.09));
+}
+
+@media (max-width: 640px) {
+  .chatScreen {
+    border-radius: 8px;
+  }
+
+  .clanNameBtn,
+  .chatScreen > button:last-child {
+    justify-self: stretch;
+  }
+
+  .chatMsg {
+    width: 92%;
+  }
 }

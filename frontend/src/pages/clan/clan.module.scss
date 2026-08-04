@@ -1,26 +1,89 @@
 .clanScreen {
+  min-height: calc(100dvh - var(--bottom-bar-height));
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 40px;
+  gap: clamp(18px, 3vw, 28px);
+  padding: clamp(18px, 4vw, 34px) clamp(14px, 4vw, 34px) calc(var(--bottom-bar-height) + 24px);
+  color: var(--text);
+  background:
+    linear-gradient(135deg, rgba(255, 79, 135, 0.14), transparent 30%),
+    radial-gradient(circle at 82% 16%, rgba(54, 228, 255, 0.2), transparent 32%),
+    var(--galaxy-background);
+  overflow-x: hidden;
+  position: relative;
+}
+
+.clanScreen::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent);
 }
 
 .btns {
+  position: relative;
+  z-index: 1;
+  width: min(760px, 100%);
   display: flex;
-  gap: 20px;
+  justify-content: center;
+  gap: 8px;
+  padding: 6px;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  background: rgba(3, 8, 16, 0.62);
+  backdrop-filter: blur(12px);
 }
 
 .btns button {
-  width: 180px;
-  height: 30px;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
 }
 
+.btns button:hover,
+.btns button:focus-visible {
+  border-color: rgba(54, 228, 255, 0.28);
+  background: linear-gradient(135deg, rgba(54, 228, 255, 0.16), rgba(139, 255, 156, 0.1));
+  color: #ffffff;
+  outline: none;
+  transform: translateY(-1px);
+}
 
 .loadingScreen {
-  color: red;
+  min-height: calc(100dvh - var(--bottom-bar-height));
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  font-size: 50px;
+  color: #b7f7ff;
+  background: var(--galaxy-background);
+  font: 900 clamp(1.8rem, 7vw, 3.8rem) / 1 "Cascadia Code", "Fira Code", Consolas, monospace;
+}
+
+@media (max-width: 560px) {
+  .btns {
+    gap: 6px;
+  }
+
+  .btns button {
+    min-height: 42px;
+    padding: 0 8px;
+    font-size: 0.84rem;
+  }
 }

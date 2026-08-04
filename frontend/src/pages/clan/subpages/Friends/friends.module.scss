@@ -1,61 +1,167 @@
 .flexColumn {
-  gap: 15px;
+  position: relative;
+  z-index: 1;
+  width: min(760px, 100%);
+  box-sizing: border-box;
+  gap: 14px;
   display: flex;
   flex-direction: column;
+  padding: clamp(18px, 4vw, 30px);
+  border: 1px solid rgba(192, 239, 255, 0.18);
+  border-radius: 18px;
+  background: rgba(13, 17, 31, 0.9);
+  box-shadow: var(--shadow);
+  color: var(--text);
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+}
+
+.flexColumn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent 0 48%, rgba(54, 228, 255, 0.12) 50%, transparent 52%),
+    linear-gradient(0deg, transparent 0 48%, rgba(255, 79, 135, 0.09) 50%, transparent 52%);
+  background-size: 84px 84px;
+  opacity: 0.24;
+}
+
+.flexColumn > * {
+  position: relative;
+  z-index: 1;
+}
+
+.flexColumn button {
+  min-height: 36px;
+  border: 1px solid rgba(54, 228, 255, 0.24);
+  border-radius: 8px;
+  background: rgba(54, 228, 255, 0.12);
+  color: #b7f7ff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+}
+
+.flexColumn > button:first-child,
+.joinBox button {
+  background: linear-gradient(90deg, #36e4ff, #8bff9c);
+  border: 0;
+  color: #061018;
+  padding: 0 14px;
+}
+
+.flexColumn input {
+  min-height: 40px;
+  box-sizing: border-box;
+  padding: 0 12px;
+  border: 1px solid rgba(54, 228, 255, 0.24);
+  border-radius: 8px;
+  outline: none;
+  background: rgba(3, 8, 16, 0.78);
+  color: #d8fbff;
+  font: inherit;
+}
+
+.flexColumn input:focus {
+  border-color: rgba(139, 255, 156, 0.48);
+  box-shadow: 0 0 0 3px rgba(54, 228, 255, 0.12);
 }
 
 .inviteFriendBox {
   display: flex;
   flex-direction: column;
-  color: black;
-  background-color: gray;
+  gap: 6px;
+  color: var(--muted);
+  border: 1px solid rgba(139, 255, 156, 0.22);
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(54, 228, 255, 0.13), rgba(139, 255, 156, 0.09));
+  padding: 14px;
+}
+
+.inviteFriendBox span:first-child,
+.joinBox > span:first-child {
+  color: #36e4ff;
+  font-weight: 900;
 }
 
 .joinBox {
   display: flex;
   flex-direction: column;
-  color: black;
-  background-color: gray;
-  padding: 5px;
+  gap: 10px;
+  color: var(--muted);
+  border: 1px solid rgba(54, 228, 255, 0.22);
+  border-radius: 8px;
+  background: rgba(3, 8, 16, 0.66);
+  padding: 14px;
+}
+
+.joinBox > div {
+  display: flex;
+  gap: 8px;
+}
+
+.joinBox input {
+  flex: 1;
+  min-width: 0;
 }
 
 .friendsBox {
   display: flex;
   flex-direction: column;
-  color: black;
-  background-color: gray;
-  padding: 5px;
-  gap: 7px;
+  color: var(--text);
+  border: 1px solid rgba(54, 228, 255, 0.22);
+  border-radius: 8px;
+  background: rgba(3, 8, 16, 0.66);
+  padding: 14px;
+  gap: 10px;
 }
 
 .friendsTitle {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  color: #36e4ff;
+  font-weight: 900;
 }
 
 .userBox {
-  background-color: #36e4ff;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text);
   display: flex;
   justify-content: space-between;
-  padding: 2px;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
 }
 
 
 .incomingFriendRequests {
   display: flex;
   flex-direction: column;
-  color: black;
-  background-color: gray;
-  padding: 5px;
-  gap: 7px;
+  color: var(--text);
+  border: 1px solid rgba(54, 228, 255, 0.22);
+  border-radius: 8px;
+  background: rgba(3, 8, 16, 0.66);
+  padding: 14px;
+  gap: 10px;
 }
 
 
 .friendReq {
-  background-color: blue;
-  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text);
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
 }
 
 .friendReqBtns {
@@ -64,7 +170,8 @@
 }
 
 .red {
-  color: red
+  color: #ffd5de;
+  font-weight: 900;
 }
 
 
@@ -83,16 +190,17 @@
   align-items: center;
   justify-content: center;
 
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(3, 8, 16, 0.72);
+  backdrop-filter: blur(8px);
 }
 
 .popup {
   width: min(90%, 400px);
   padding: 24px;
-  border-radius: 12px;
-
-  background: white;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(54, 228, 255, 0.35);
+  border-radius: 8px;
+  background: rgba(3, 8, 16, 0.97);
+  box-shadow: var(--shadow);
 
   text-align: center;
 
@@ -116,14 +224,29 @@
 }
 
 .cancelButton {
-  background: #e5e7eb;
+  background: rgba(54, 228, 255, 0.12);
+  color: #b7f7ff;
 }
 
 .deleteButton {
-  background: #dc2626;
-  color: white;
+  background: rgba(255, 79, 135, 0.18);
+  color: #ffd5de;
 }
 
 .black {
-  color: black;
+  color: var(--text);
+}
+
+@media (max-width: 640px) {
+  .flexColumn {
+    border-radius: 8px;
+  }
+
+  .joinBox > div,
+  .friendsTitle,
+  .friendReq,
+  .userBox {
+    align-items: stretch;
+    flex-direction: column;
+  }
 }

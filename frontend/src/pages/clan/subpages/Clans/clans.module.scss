@@ -1,63 +1,205 @@
-
 .clansTab {
+  position: relative;
+  z-index: 1;
+  width: min(760px, 100%);
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 14px;
+  padding: clamp(18px, 4vw, 30px);
+  border: 1px solid rgba(192, 239, 255, 0.18);
+  border-radius: 18px;
+  background: rgba(13, 17, 31, 0.9);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+}
+
+.clansTab::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent 0 48%, rgba(54, 228, 255, 0.12) 50%, transparent 52%),
+    linear-gradient(0deg, transparent 0 48%, rgba(255, 79, 135, 0.09) 50%, transparent 52%);
+  background-size: 84px 84px;
+  opacity: 0.24;
+}
+
+.clansTab > * {
+  position: relative;
+  z-index: 1;
+}
+
+.clansTab input {
+  width: min(420px, 100%);
+  min-height: 44px;
+  box-sizing: border-box;
+  padding: 0 14px;
+  border: 1px solid rgba(54, 228, 255, 0.24);
+  border-radius: 8px;
+  outline: none;
+  background: rgba(3, 8, 16, 0.78);
+  color: #d8fbff;
+  font: inherit;
+}
+
+.clansTab input:focus {
+  border-color: rgba(139, 255, 156, 0.48);
+  box-shadow: 0 0 0 3px rgba(54, 228, 255, 0.12);
+}
+
+.clansTab > button,
+.clans button,
+.popUp button {
+  min-height: 40px;
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #36e4ff, #8bff9c);
+  color: #061018;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+  transition: filter 160ms ease, transform 160ms ease;
+}
+
+.clansTab > button:hover,
+.clans button:hover,
+.popUp button:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.clansTab > button {
+  min-width: 150px;
+  padding: 0 18px;
 }
 
 .clans {
+  width: min(520px, 100%);
+  height: 335px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  color: black;
-  gap: 20px;
-  height: 335px;
-  width: 392px;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid rgba(54, 228, 255, 0.22);
+  border-radius: 8px;
+  background: rgba(3, 8, 16, 0.66);
+  color: var(--muted);
   overflow-y: auto;
 }
 
-.clans div {
-  width: 258px;
+.clans p {
+  margin: auto;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.clans button {
+  width: 100%;
   display: flex;
-  gap: 150px;
-  background-color: gray;
-  padding: 5px;
-  cursor: pointer;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text);
+  text-align: left;
 }
 
 .infoBox {
-  background-color: #2dd4bf;
-  color: white;
+  width: min(520px, 100%);
+  box-sizing: border-box;
+  border: 1px solid rgba(139, 255, 156, 0.22);
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(54, 228, 255, 0.13), rgba(139, 255, 156, 0.09));
+  color: var(--text);
   display: flex;
   flex-direction: column;
-  padding: 5px;
+  gap: 6px;
+  padding: 14px;
   align-items: center;
+  text-align: center;
+}
+
+.infoBox span:first-child {
+  color: #36e4ff;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.infoBox span:not(:first-child) {
+  color: var(--muted);
 }
 
 .popUp {
+  left: 50%;
+  top: 50%;
+  z-index: 3;
+  width: min(420px, calc(100% - 28px));
+  min-height: 300px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   position: absolute;
-  background-color: #8bff9c;
-  height: 340px;
-  width: 400px;
-  gap: 10px;
+  gap: 14px;
+  padding: 28px;
+  border: 1px solid rgba(54, 228, 255, 0.35);
+  border-radius: 8px;
+  background: rgba(3, 8, 16, 0.96);
+  box-shadow: var(--shadow), 0 0 38px rgba(54, 228, 255, 0.16);
+  color: var(--text);
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+
+.popUp span {
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.popUp button:not(.leavePopUp) {
+  min-width: 120px;
+  padding: 0 16px;
 }
 
 .leavePopUp {
   position: absolute;
-  right: 5px;
-  top: 5px;
+  right: 10px;
+  top: 10px;
+  width: 34px;
+  min-height: 34px;
+  padding: 0;
+  border: 1px solid rgba(255, 79, 135, 0.32);
+  background: rgba(255, 79, 135, 0.12);
+  color: #ffb3c4;
   cursor: pointer;
 }
 
 .errorMsg {
-  position: absolute;
-  right: 10px;
-  background-color: red;
-  color: white;
-  width: 100px;
-  height: 50px;
+  position: fixed;
+  right: 18px;
+  top: 18px;
+  z-index: 10;
+  min-width: 180px;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 79, 135, 0.35);
+  border-radius: 8px;
+  background: rgba(255, 79, 135, 0.16);
+  color: #ffd5de;
+  font-weight: 900;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .clansTab {
+    border-radius: 8px;
+  }
 }

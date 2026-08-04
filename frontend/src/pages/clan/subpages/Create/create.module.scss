@@ -1,43 +1,133 @@
 .clanScreen {
+  position: relative;
+  z-index: 1;
+  width: min(620px, 100%);
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
+  padding: clamp(18px, 4vw, 30px);
+  border: 1px solid rgba(192, 239, 255, 0.18);
+  border-radius: 18px;
+  background: rgba(13, 17, 31, 0.9);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+}
+
+.clanScreen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent 0 48%, rgba(54, 228, 255, 0.12) 50%, transparent 52%),
+    linear-gradient(0deg, transparent 0 48%, rgba(255, 79, 135, 0.09) 50%, transparent 52%);
+  background-size: 84px 84px;
+  opacity: 0.24;
+}
+
+.clanScreen > * {
+  position: relative;
+  z-index: 1;
 }
 
 .title {
+  width: 100%;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: black;
-  background-color: dodgerblue;
-  padding: 10px;
+  gap: 6px;
+  color: var(--text);
+  border: 1px solid rgba(139, 255, 156, 0.22);
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(54, 228, 255, 0.13), rgba(139, 255, 156, 0.09));
+  padding: 16px;
+  text-align: center;
 }
 
+.title span:first-child {
+  color: #36e4ff;
+  font-size: clamp(1.45rem, 4vw, 2.35rem);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.title span:last-child {
+  color: var(--muted);
+}
 
 .inputField {
-  color: black;
+  width: min(420px, 100%);
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  gap: 7px;
+  color: var(--text);
+  font-weight: 800;
+}
+
+.inputField input,
+.textArea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgba(54, 228, 255, 0.24);
+  border-radius: 8px;
+  outline: none;
+  background: rgba(3, 8, 16, 0.78);
+  color: #d8fbff;
+  font: inherit;
+}
+
+.inputField input {
+  min-height: 44px;
+  padding: 0 14px;
+}
+
+.inputField input:focus,
+.textArea:focus {
+  border-color: rgba(139, 255, 156, 0.48);
+  box-shadow: 0 0 0 3px rgba(54, 228, 255, 0.12);
 }
 
 .textArea {
-  width: 200px;
-  height: 100px;
+  min-height: 120px;
+  padding: 12px 14px;
   resize: none;
 }
 
 .createBtn {
-  width: 100px;
-  height: 50px;
+  min-width: 150px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #36e4ff, #8bff9c);
+  color: #061018;
   cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+  transition: filter 160ms ease, transform 160ms ease;
+}
+
+.createBtn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
 }
 
 
 .errorTxt {
-  color: red;
+  color: #ffd5de;
+  font-weight: 900;
 }
 
 .successTxt {
-  color: green;
+  color: #8bff9c;
+}
+
+@media (max-width: 640px) {
+  .clanScreen {
+    border-radius: 8px;
+  }
 }

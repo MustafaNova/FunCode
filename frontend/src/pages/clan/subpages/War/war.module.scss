@@ -1,4 +1,35 @@
-
 .txt {
-  color: black;
+  position: relative;
+  z-index: 1;
+  width: min(620px, 100%);
+  box-sizing: border-box;
+  padding: clamp(28px, 7vw, 54px);
+  border: 1px solid rgba(192, 239, 255, 0.18);
+  border-radius: 18px;
+  background: rgba(13, 17, 31, 0.9);
+  box-shadow: var(--shadow);
+  color: var(--muted);
+  font-size: clamp(1.6rem, 6vw, 3.6rem);
+  font-weight: 900;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+}
+
+.txt::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent 0 48%, rgba(54, 228, 255, 0.12) 50%, transparent 52%),
+    linear-gradient(0deg, transparent 0 48%, rgba(255, 79, 135, 0.09) 50%, transparent 52%);
+  background-size: 84px 84px;
+  opacity: 0.24;
+}
+
+@media (max-width: 640px) {
+  .txt {
+    border-radius: 8px;
+  }
 }
