@@ -168,3 +168,119 @@
     box-shadow: none;
   }
 }
+
+
+.page {
+  min-height: 100%;
+  padding: 32px;
+  background: #f3f4f6;
+}
+
+.challengeHeader {
+  max-width: 760px;
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  color: #16a34a;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 8px 0 12px;
+  color: #111827;
+  font-size: 2.2rem;
+}
+
+.description {
+  margin: 0;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+
+  span {
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #e5e7eb;
+    color: #374151;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+}
+
+.editorSection {
+  overflow: hidden;
+  border: 1px solid #d1d5db;
+  border-radius: 18px;
+  background: white;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+}
+
+.editorHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.editorTitle {
+  margin: 0;
+  color: #111827;
+  font-size: 1.2rem;
+}
+
+.editorHint {
+  margin: 6px 0 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.editorWrapper {
+  overflow: hidden;
+  background: #1e1e1e;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 18px 24px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.resetButton,
+.backButton,
+.runButton {
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.resetButton,
+.backButton {
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #374151;
+}
+
+.runButton {
+  border: none;
+  background: #22c55e;
+  color: white;
+
+  &:hover {
+    background: #16a34a;
+  }
+}

@@ -2,8 +2,15 @@ import userAuthImg from '../../../../assets/practice/bugHunter/user-authenticati
 import shoppingCartImg from '../../../../assets/practice/bugHunter/shopping-cart.png';
 import bankAccountImg from '../../../../assets/practice/bugHunter/bank-account.png';
 
+type BugHunterLevel = {
+    id: string,
+    name: string,
+    level: number,
+    image: string,
+    imgAlt: string
+}
 
-export const BUG_HUNTER_LEVELS: bugHunterLevels = [
+export const BUG_HUNTER_LEVELS: BugHunterLevel[] = [
     {
         id: 'user-authentication',
         name: 'User Authentication',
@@ -27,11 +34,7 @@ export const BUG_HUNTER_LEVELS: bugHunterLevels = [
     }
 ]
 
-
-type bugHunterLevels = {
-    id: string,
-    name: string,
-    level: number,
-    image: string,
-    imgAlt: string
-} []
+export const BUG_HUNTER_LEVELS_BY_ID: Record<string, BugHunterLevel> =
+    Object.fromEntries(
+        BUG_HUNTER_LEVELS.map(level => [level.id, level])
+    )

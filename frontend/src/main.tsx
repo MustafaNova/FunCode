@@ -30,6 +30,7 @@ import { ClanMemberGuard, NoClanMemberGuard } from './utils/guards.tsx';
 import { AuthProvider } from './context/AuthProvider.tsx';
 import { Practice } from './pages/practice/practice.tsx';
 import { BugHunter } from './pages/practice/games/bugHunter/bugHunter.tsx';
+import { BugHunterLevel } from './pages/practice/games/bugHunter/bugHunterLevel.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -62,6 +63,7 @@ createRoot(document.getElementById('root')!).render(
                   </Route>
                   <Route path='practice' element={<Practice />}></Route>
                   <Route path='practice/bug-hunter' element={<BugHunter />}></Route>
+                  <Route path='practice/bug-hunter/:levelId' element={<BugHunterLevel />}></Route>
               </Route>
               <Route path='onboarding' element={<Onboarding/>}></Route>
               <Route path='onboarding/courses' element={<CourseSelection/>}></Route>
