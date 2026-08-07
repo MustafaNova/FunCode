@@ -34,8 +34,7 @@ export async function getIncomingFriendRequests() {
 
 
 export async function acceptFriendRequest(friendReqId: string) {
-    const url = API_URLS.ACCEPT_FRIEND_REQUEST + `/${friendReqId}`;
-    const res = await fetch(url, {
+    const res = await fetch(API_URLS.ACCEPT_FRIEND_REQUEST(friendReqId), {
         method: 'POST',
         credentials: 'include'
     });
@@ -45,8 +44,7 @@ export async function acceptFriendRequest(friendReqId: string) {
 }
 
 export async function declineFriendRequest(friendReqId: string) {
-    const url = API_URLS.DECLINE_FRIEND_REQUEST + `/${friendReqId}`;
-    await fetch(url, {
+    await fetch(API_URLS.DECLINE_FRIEND_REQUEST(friendReqId), {
         method: 'POST',
         credentials: 'include'
     });
@@ -64,8 +62,7 @@ export async function getFriends() {
 
 
 export async function deleteFriend(friendUserId: string) {
-    const url = API_URLS.DELETE_FRIEND + `/${friendUserId}`;
-    await fetch(url, {
+    await fetch(API_URLS.DELETE_FRIEND(friendUserId), {
         method: 'DELETE',
         credentials: 'include',
     });

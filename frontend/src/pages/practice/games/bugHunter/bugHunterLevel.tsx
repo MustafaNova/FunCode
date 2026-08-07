@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { Editor } from '@monaco-editor/react';
 import s from './bugHunter.module.scss';
 import { BUG_HUNTER_LEVELS_BY_ID } from './bugHunterLevels.ts';
+import { useEffect } from 'react';
 
 
 export function BugHunterLevel() {
@@ -19,6 +20,10 @@ export function BugHunterLevel() {
             top: 16,
         },
     };
+
+    useEffect(() => {
+
+    }, []);
 
     return (
         <main className={s.page}>

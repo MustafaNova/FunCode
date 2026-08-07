@@ -29,7 +29,7 @@ export async function initActiveScreen(course: string) {
 }
 
 export async function getLevel(req: GetLevelReq): Promise<GetLevelRes> {
-    const res = await fetch(`${API_URLS.LEVELS}/${req.course}/${req.module}/${req.level}`, {
+    const res = await fetch(API_URLS.LEVELS(req.course, req.module, req.level), {
         method: 'GET',
         credentials: 'include',
     });

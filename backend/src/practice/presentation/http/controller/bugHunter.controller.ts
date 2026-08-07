@@ -1,9 +1,10 @@
-import { Controller, Get, Inject, UseGuards } from '@nestjs/common';
+import { Controller, Get, Inject, Param, UseGuards } from '@nestjs/common';
 import { AuthUser, UserPayload } from '../../../../common/utils/user-payload.decorator';
 import { type GetBugHunterProgressPort } from '../../../application/ports/inbound/getBugHunterProgress.port';
-import { GET_BUG_HUNTER_PROGRESS_PORT } from '../../../infrastructure/tokens';
-import { UnlockedLevelRes } from '@funcode/shared';
+import { GET_BUG_HUNTER_LEVEL_PORT, GET_BUG_HUNTER_PROGRESS_PORT } from '../../../infrastructure/tokens';
+import { GetBugHunterLevelContentRes, UnlockedLevelRes } from '@funcode/shared';
 import { AuthGuard } from '@nestjs/passport';
+import { type GetBugHunterLevelPort } from '../../../application/ports/inbound/getBugHunterLevel.port';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('practice/bug-hunter')
@@ -11,6 +12,8 @@ export class BugHunterController {
     constructor(
         @Inject(GET_BUG_HUNTER_PROGRESS_PORT)
         private readonly getBugHunterProgressUC: GetBugHunterProgressPort,
+        @Inject(GET_BUG_HUNTER_LEVEL_PORT)
+        private readonly getBugHunterLevelUC: GetBugHunterLevelPort
     ) {}
 
     @Get('unlocked-level')
@@ -20,6 +23,19 @@ export class BugHunterController {
         const res = await this.getBugHunterProgressUC.getProgress(user.userId);
         return {
             unlockedLevel: res.highestUnlockedLevel
+        }
+    }
+
+    @Get('levels/:levelId')
+    async getLevelContent(
+        @UserPayload() user: AuthUser,
+        @Param('levelId') levelId: string,
+    ): Promise<GetBugHunterLevelContentRes> {
+        const res = await this.getBugHunterLevelUC.getLevel(user.userId, levelId);
+        return {
+            description: res.description,
+            initialCode: res.initialCode,
+            language: res.language,
         }
     }
 }

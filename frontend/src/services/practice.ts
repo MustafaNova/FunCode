@@ -10,3 +10,11 @@ export async function getBugHunterHighestUnlockedLevel() {
     const unlockedLevelRes: UnlockedLevelRes = await res.json();
     return unlockedLevelRes;
 }
+
+
+export async function getBugHunterLevel(levelId: string) {
+    const res = await fetch(API_URLS.GET_BUG_HUNTER_LEVEL(levelId), {
+        method: 'GET',
+        credentials: 'include'
+    })
+}

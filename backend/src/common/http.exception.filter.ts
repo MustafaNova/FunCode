@@ -32,6 +32,9 @@ import {
 } from '../Friends/application/use-cases/createFriendRequest/errors/friendshipAlreadyExists.err';
 import { FriendshipNotFoundError } from '../Friends/application/use-cases/deleteFriend/errors/friendshipNotFound.err';
 import { AppError } from './app.error';
+import {
+    BugHunterLevelNotFoundError
+} from '../practice/application/use-cases/getBugHunterLevel/errors/bugHunterLevelNotFound.err';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -57,7 +60,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
             error instanceof InviteCodeNotFound ||
             error instanceof FriendRequestNotFoundError ||
             error instanceof UserNotFoundError ||
-            error instanceof FriendshipNotFoundError
+            error instanceof FriendshipNotFoundError ||
+            error instanceof BugHunterLevelNotFoundError
         ) {
             status = HttpStatus.NOT_FOUND;
         }
