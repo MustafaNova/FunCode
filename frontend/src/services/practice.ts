@@ -1,5 +1,5 @@
 import { API_URLS } from '../constants/urls.ts';
-import { type UnlockedLevelRes } from '@funcode/shared';
+import { type GetBugHunterLevelContentRes, type UnlockedLevelRes } from '@funcode/shared';
 
 
 export async function getBugHunterHighestUnlockedLevel() {
@@ -17,4 +17,6 @@ export async function getBugHunterLevel(levelId: string) {
         method: 'GET',
         credentials: 'include'
     })
+    const levelContent: GetBugHunterLevelContentRes = await res.json();
+    return levelContent;
 }

@@ -16,6 +16,7 @@ import { getLevel } from "../../services/learning.progression.ts";
 import { Course, type LevelModelDto } from "@funcode/shared";
 import { LevelLoading } from "./level-loading/level-loading.tsx";
 import { steps } from './steps.ts';
+import { ConfirmModal } from '../../components/ConfirmModal/ConfirmModal.tsx';
 
 export function LevelFrame() {
     const { course, module, level } = useParams();
@@ -61,27 +62,13 @@ export function LevelFrame() {
     return (
         <div className="level-frame-shell">
             <div className="level-frame">
-                <div className={`level-frame-overlay ${!showModal ? "is-hidden" : ""}`}>
-                    <div className="level-frame-modal">
-                        <h3 className="level-frame-modal__title">Are you sure?</h3>
-                        <p className="level-frame-modal__text">Leave level? Your progress will not be saved.</p>
-                        <div className="level-frame-modal__actions">
-                            <button
-                                className="level-frame-modal__btn level-frame-modal__btn--cancel"
-                                onClick={() => setShowModal(false)}
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                className="level-frame-modal__btn level-frame-modal__btn--leave"
-                                onClick={() => navigate("/home")}
-                            >
-                                Leave
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
+                <ConfirmModal
+                    isOpen={showModal}
+                    title={'Are you sure?'}
+                    text={'Leave level? Your progress will not be saved.'}
+                    onConfirm={() => navigate("/home")}
+                    onCancel={() => setShowModal(false)}
+                />
                 <header className="level-frame-header">
                     <button
                         className="level-frame-close-btn"

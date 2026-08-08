@@ -46,7 +46,8 @@ export function BugHunter() {
                 {BUG_HUNTER_LEVELS.map((level) => (
                     <button
                         className={`${s.levelCard} ${(unlockedLevelRes.unlockedLevel < level.level) && s.lockedCard} ${(unlockedLevelRes.unlockedLevel > level.level) && s.completedCard}`}
-                        onClick={() => navigate(level.id)}>
+                        onClick={() => navigate(`/practice/bug-hunter/${level.id}`)}
+                        disabled={unlockedLevelRes.unlockedLevel != level.level}>
                         <div className={s.imageWrapper}>
                             <img src={level.image} alt={level.imgAlt} className={s.levelImage} />
                             <span className={s.levelNumber}>

@@ -2,12 +2,15 @@ import { useParams } from 'react-router-dom';
 import { Editor } from '@monaco-editor/react';
 import s from './bugHunter.module.scss';
 import { BUG_HUNTER_LEVELS_BY_ID } from './bugHunterLevels.ts';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { getBugHunterLevel } from '../../../../services/practice.ts';
+import type { GetBugHunterLevelContentRes } from '@funcode/shared';
+import { ConfirmModal } from '../../../../components/ConfirmModal/ConfirmModal.tsx';
 
 
 export function BugHunterLevel() {
     const { levelId } = useParams<{ levelId: string }>();
-    const level = BUG_HUNTER_LEVELS_BY_ID[levelId!];
+    const [levelContent, setLevelContent] = useState<GetBugHunterLevelContentRes | null>(null);
     const editorOptions = {
         automaticLayout: true,
         minimap: {
@@ -22,8 +25,23 @@ export function BugHunterLevel() {
     };
 
     useEffect(() => {
-
+        async function getLevelContent() {
+            if (!levelId) return;
+            const res = await getBugHunterLevel(levelId);
+            setLevelContent(res);
+        }
+        void getLevelContent();
     }, []);
+
+    if (!levelId) {
+        return <div>Error</div>
+    }
+
+    if (levelContent === null) {
+        return <div className={s.txt}>...loading</div>
+    }
+
+    const level = BUG_HUNTER_LEVELS_BY_ID[levelId];
 
     return (
         <main className={s.page}>
@@ -34,13 +52,11 @@ export function BugHunterLevel() {
                     {level.name}
                 </h1>
 
-                <p className={s.description}>
-                    The login function grants access incorrectly. Find the hidden
-                    bug, fix the code, and run the tests.
-                </p>
+                <p className={s.description}>{levelContent.description}</p>
 
                 <div className={s.meta}>
                     <span>Level {level.level}</span>
+                    <span>{levelContent.language}</span>
                 </div>
             </section>
 
@@ -54,20 +70,15 @@ export function BugHunterLevel() {
                             signature.
                         </p>
                     </div>
-
-                    <button
-                        className={s.resetButton}
-                        type="button">
-                        Reset
-                    </button>
                 </div>
 
                 <div className={s.editorWrapper}>
                     <Editor
                         height="520px"
-                        language="typescript"
+                        language={levelContent.language}
                         theme="vs-dark"
                         options={editorOptions}
+                        value={levelContent.initialCode}
                     />
                 </div>
 

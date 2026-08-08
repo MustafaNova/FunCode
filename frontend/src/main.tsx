@@ -63,8 +63,8 @@ createRoot(document.getElementById('root')!).render(
                   </Route>
                   <Route path='practice' element={<Practice />}></Route>
                   <Route path='practice/bug-hunter' element={<BugHunter />}></Route>
-                  <Route path='practice/bug-hunter/:levelId' element={<BugHunterLevel />}></Route>
               </Route>
+              <Route path='practice/bug-hunter/:levelId' element={<BugHunterLevel />}></Route>
               <Route path='onboarding' element={<Onboarding/>}></Route>
               <Route path='onboarding/courses' element={<CourseSelection/>}></Route>
               <Route path="/level/:course/:module/:level" element={<LevelFrame/>}/>
