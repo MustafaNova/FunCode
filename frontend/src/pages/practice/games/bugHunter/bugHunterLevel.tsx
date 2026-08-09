@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Editor } from '@monaco-editor/react';
 import s from './bugHunter.module.scss';
 import { BUG_HUNTER_LEVELS_BY_ID } from './bugHunterLevels.ts';
@@ -23,6 +23,10 @@ export function BugHunterLevel() {
             top: 16,
         },
     };
+    const [showModal, setShowModal] = useState(false);
+    const navigate = useNavigate();
+    const modalTitle = 'Leave level?';
+    const modalText = 'Your progress will be lost';
 
     useEffect(() => {
         async function getLevelContent() {
@@ -46,7 +50,17 @@ export function BugHunterLevel() {
     return (
         <main className={s.page}>
             <section className={s.challengeHeader}>
-                <span className={s.eyebrow}>Bug Hunter</span>
+                <div className={s.challengeHeaderTop}>
+                    <span className={s.eyebrow}>Bug Hunter</span>
+
+                    <button
+                        className={s.leaveButton}
+                        type="button"
+                        onClick={() => setShowModal(true)}
+                    >
+                        Leave
+                    </button>
+                </div>
 
                 <h1 className={s.title}>
                     {level.name}
@@ -59,7 +73,6 @@ export function BugHunterLevel() {
                     <span>{levelContent.language}</span>
                 </div>
             </section>
-
             <section className={s.editorSection}>
                 <div className={s.editorHeader}>
                     <div>
@@ -88,6 +101,7 @@ export function BugHunterLevel() {
                     </button>
                 </div>
             </section>
+            <ConfirmModal isOpen={showModal} title={modalTitle} text={modalText} onConfirm={() => navigate(-1)} onCancel={() => setShowModal(false)} />
         </main>
     )
 }

@@ -1,8 +1,8 @@
-import { Controller, Get, Inject, Param, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthUser, UserPayload } from '../../../../common/utils/user-payload.decorator';
 import { type GetBugHunterProgressPort } from '../../../application/ports/inbound/getBugHunterProgress.port';
 import { GET_BUG_HUNTER_LEVEL_PORT, GET_BUG_HUNTER_PROGRESS_PORT } from '../../../infrastructure/tokens';
-import { GetBugHunterLevelContentRes, UnlockedLevelRes } from '@funcode/shared';
+import { GetBugHunterLevelContentRes, type SubmitBugHunterLevelReq, UnlockedLevelRes } from '@funcode/shared';
 import { AuthGuard } from '@nestjs/passport';
 import { type GetBugHunterLevelPort } from '../../../application/ports/inbound/getBugHunterLevel.port';
 
@@ -38,4 +38,14 @@ export class BugHunterController {
             language: res.language,
         }
     }
+
+    @Post('levels/:levelId/submit')
+    submit(
+        @Param('levelId') levelId: string,
+        @Body() payload: SubmitBugHunterLevelReq,
+        @UserPayload() user: AuthUser,
+    ) {
+
+    }
+
 }
