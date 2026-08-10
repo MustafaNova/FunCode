@@ -2,7 +2,7 @@ import { GetBugHunterLevelPort } from '../../ports/inbound/getBugHunterLevel.por
 import { GetBugHunterLevelRes } from './getBugHunterLevel.res';
 import { BugHunterLevelRepoPort } from '../../ports/outbound/bugHunterLevel.repo.port';
 import { BugHunterProgressRepoPort } from '../../ports/outbound/bugHunterProgress.repo.port';
-import { BugHunterLevelNotFoundError } from './errors/bugHunterLevelNotFound.err';
+import { BugHunterLevelNotFoundError } from '../errors/bugHunterLevelNotFound.err';
 import { BugHunterLevelLockedError } from './errors/bugHunterLevelLocked.err';
 
 

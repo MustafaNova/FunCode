@@ -45,7 +45,6 @@ export class BugHunterController {
         @Body() payload: SubmitBugHunterLevelReq,
         @UserPayload() user: AuthUser,
     ) {
-
     }
 
 }

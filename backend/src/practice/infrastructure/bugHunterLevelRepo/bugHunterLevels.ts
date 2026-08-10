@@ -1,11 +1,177 @@
 import { BugHunterLevel } from '../../domain/value-objects/bugHunterLevel';
 
+const userAuthenticationTests = `
+const storedUser: User = {
+    email: 'test@example.com',
+    password: 'secret123',
+};
+
+const validCredentials: LoginCredentials = {
+    email: 'test@example.com',
+    password: 'secret123',
+};
+
+const wrongPasswordCredentials: LoginCredentials = {
+    email: 'test@example.com',
+    password: 'wrong-password',
+};
+
+const wrongEmailCredentials: LoginCredentials = {
+    email: 'other@example.com',
+    password: 'secret123',
+};
+
+const differentCaseEmailCredentials: LoginCredentials = {
+    email: 'TEST@EXAMPLE.COM',
+    password: 'secret123',
+};
+
+if (authenticateUser(storedUser, validCredentials) !== true) {
+    throw new Error('Valid credentials should authenticate successfully.');
+}
+
+if (authenticateUser(storedUser, wrongPasswordCredentials) !== false) {
+    throw new Error('Wrong password should not authenticate.');
+}
+
+if (authenticateUser(storedUser, wrongEmailCredentials) !== false) {
+    throw new Error('Wrong email should not authenticate.');
+}
+
+if (authenticateUser(storedUser, differentCaseEmailCredentials) !== true) {
+    throw new Error('Email comparison should be case-insensitive.');
+}
+`.trim();
+const shoppingCartTests = `
+# Exactly 100 euros -> 10% discount must apply
+result = calculate_cart_total([
+    {
+        "name": "Keyboard",
+        "price": 100,
+        "quantity": 1,
+    }
+])
+
+assert result["subtotal"] == 100
+assert result["discount"] == 10
+assert result["shipping"] == 0
+assert result["vat"] == 17.1
+assert result["total"] == 107.1
+
+
+# Below 100 euros -> no discount
+result = calculate_cart_total([
+    {
+        "name": "Mouse",
+        "price": 40,
+        "quantity": 2,
+    }
+])
+
+assert result["subtotal"] == 80
+assert result["discount"] == 0
+
+
+# Above 100 euros -> discount applies
+result = calculate_cart_total([
+    {
+        "name": "Monitor",
+        "price": 60,
+        "quantity": 2,
+    }
+])
+
+assert result["subtotal"] == 120
+assert result["discount"] == 12
+
+
+# Multiple items totaling exactly 100 euros
+result = calculate_cart_total([
+    {
+        "name": "Mouse",
+        "price": 25,
+        "quantity": 2,
+    },
+    {
+        "name": "Keyboard",
+        "price": 50,
+        "quantity": 1,
+    }
+])
+
+assert result["subtotal"] == 100
+assert result["discount"] == 10
+
+
+# Empty cart
+result = calculate_cart_total([])
+
+assert result == {
+    "subtotal": 0,
+    "discount": 0,
+    "shipping": 0,
+    "vat": 0,
+    "total": 0,
+}
+`.trim();
+const bankAccountTests = `
+# Exact balance for amount, but not enough for fee -> must fail
+account = BankAccount("Alice", 100)
+
+result = process_withdrawal(account, 100)
+
+assert result["success"] is False
+assert result["balance"] == 100
+
+
+# Enough balance for amount + fee -> must succeed
+account = BankAccount("Bob", 102)
+
+result = process_withdrawal(account, 100)
+
+assert result["success"] is True
+assert result["balance"] == 0
+
+
+# Minimum fee of 1 euro must also be covered
+account = BankAccount("Charlie", 50)
+
+result = process_withdrawal(account, 50)
+
+assert result["success"] is False
+assert result["balance"] == 50
+
+
+# Normal successful withdrawal
+account = BankAccount("David", 200)
+
+result = process_withdrawal(account, 100)
+
+assert result["success"] is True
+assert result["balance"] == 98
+
+
+# Withdrawal amount greater than balance -> fail
+account = BankAccount("Eve", 80)
+
+result = process_withdrawal(account, 100)
+
+assert result["success"] is False
+assert result["balance"] == 80
+
+
+# Failed withdrawal must not create a transaction
+account = BankAccount("Frank", 100)
+
+process_withdrawal(account, 100)
+
+assert len(account.get_transaction_history()) == 0
+`.trim();
 
 const userAuthenticationLevel: BugHunterLevel = {
     levelNumber: 1,
     description:
         'The login function should grant access only when the entered email and password match the stored user credentials. However, users can currently log in with an incorrect password. Find and fix the hidden bug without changing the function signature',
-
     initialCode: `
 type User = {
     email: string;
@@ -38,14 +204,14 @@ function authenticateUser(
     return true;
 }
 `.trim(),
-
     language: 'typescript',
+    tests: userAuthenticationTests
 };
+
 const shoppingCartLevel: BugHunterLevel = {
     levelNumber: 2,
     description:
         'An online shop calculates the subtotal, applies a 10% discount when the subtotal is at least 100 euros, adds shipping costs, and calculates VAT. Customers with an order subtotal of exactly 100 euros currently receive the wrong final price. Find and fix the hidden bug without changing any function names or parameters.',
-
     initialCode: `
 def validate_item(item):
     required_fields = ["name", "price", "quantity"]
@@ -126,14 +292,14 @@ def calculate_cart_total(items):
         "total": round(total, 2),
     }
 `.trim(),
-
     language: 'python',
+    tests: shoppingCartTests
 };
+
 const bankAccountLevel: BugHunterLevel = {
     levelNumber: 3,
     description:
         'A banking system manages deposits, withdrawals, transfer fees, and account history. Withdrawals must only be allowed when the account has enough money to cover both the requested amount and the transaction fee. However, one edge case currently allows the balance to become negative. Find and fix the hidden bug without changing any function names or parameters.',
-
     initialCode: `
 class BankAccount:
     def __init__(self, owner, initial_balance=0):
@@ -216,8 +382,8 @@ def process_withdrawal(account, amount):
             "balance": account.get_balance(),
         }
 `.trim(),
-
     language: 'python',
+    tests: bankAccountTests
 };
 
 export const BUG_HUNTER_LEVELS: Record<string, BugHunterLevel> = {

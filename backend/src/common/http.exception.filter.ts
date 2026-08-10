@@ -34,7 +34,7 @@ import { FriendshipNotFoundError } from '../Friends/application/use-cases/delete
 import { AppError } from './app.error';
 import {
     BugHunterLevelNotFoundError
-} from '../practice/application/use-cases/getBugHunterLevel/errors/bugHunterLevelNotFound.err';
+} from '../practice/application/use-cases/errors/bugHunterLevelNotFound.err';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {

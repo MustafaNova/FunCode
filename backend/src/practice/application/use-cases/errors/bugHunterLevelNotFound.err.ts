@@ -1,4 +1,4 @@
-import { AppError } from '../../../../../common/app.error';
+import { AppError } from '../../../../common/app.error';
 import { ERROR_CODES } from '@funcode/shared';
 
 
