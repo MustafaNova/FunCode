@@ -1,7 +1,7 @@
 import { GetMyClanPort } from '../../ports/inbound/getMyClan.port';
 import { ClanRepositoryPort } from '../../ports/outbound/clan.repository.port';
 import { GetMyClanRes } from './getMyClan.res';
-import { NotFoundException } from '@nestjs/common';
+import { ClanNotFoundError } from '../errors/ClanNotFoundError';
 
 
 export class GetMyClanUC implements GetMyClanPort {
@@ -11,8 +11,8 @@ export class GetMyClanUC implements GetMyClanPort {
 
     async getMyClan(userId: string): Promise<GetMyClanRes> {
         const myClan = await this.clanRepo.getMyClan(userId)
-        if (!myClan) {
-            throw new NotFoundException()
+        if (myClan === null) {
+            throw new ClanNotFoundError()
         }
 
         return {

@@ -22,6 +22,7 @@ export class SubmitBugHunterSolutionUC implements SubmitBugHunterSolutionPort {
         if (level.levelNumber !== highestUnlockedLevel) {
             throw new BugHunterLevelNotSubmittableError();
         }
+
         const executableCode = `
         ${cmd.code}
         ${level.tests}
