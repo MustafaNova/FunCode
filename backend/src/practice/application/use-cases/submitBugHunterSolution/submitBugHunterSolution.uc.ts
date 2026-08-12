@@ -29,6 +29,5 @@ export class SubmitBugHunterSolutionUC implements SubmitBugHunterSolutionPort {
         `;
 
 
-
     }
 }
