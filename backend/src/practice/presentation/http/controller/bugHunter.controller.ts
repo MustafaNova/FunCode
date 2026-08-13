@@ -1,10 +1,15 @@
 import { Body, Controller, Get, Inject, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthUser, UserPayload } from '../../../../common/utils/user-payload.decorator';
 import { type GetBugHunterProgressPort } from '../../../application/ports/inbound/getBugHunterProgress.port';
-import { GET_BUG_HUNTER_LEVEL_PORT, GET_BUG_HUNTER_PROGRESS_PORT } from '../../../infrastructure/tokens';
+import {
+    GET_BUG_HUNTER_LEVEL_PORT,
+    GET_BUG_HUNTER_PROGRESS_PORT,
+    SUBMIT_BUG_HUNTER_SOLUTION_PORT
+} from '../../../infrastructure/tokens';
 import { GetBugHunterLevelContentRes, type SubmitBugHunterLevelReq, UnlockedLevelRes } from '@funcode/shared';
 import { AuthGuard } from '@nestjs/passport';
 import { type GetBugHunterLevelPort } from '../../../application/ports/inbound/getBugHunterLevel.port';
+import { type SubmitBugHunterSolutionPort } from '../../../application/ports/inbound/submitBugHunterSolution.port';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('practice/bug-hunter')
@@ -13,7 +18,9 @@ export class BugHunterController {
         @Inject(GET_BUG_HUNTER_PROGRESS_PORT)
         private readonly getBugHunterProgressUC: GetBugHunterProgressPort,
         @Inject(GET_BUG_HUNTER_LEVEL_PORT)
-        private readonly getBugHunterLevelUC: GetBugHunterLevelPort
+        private readonly getBugHunterLevelUC: GetBugHunterLevelPort,
+        @Inject(SUBMIT_BUG_HUNTER_SOLUTION_PORT)
+        private readonly submitBugHunterSolUC: SubmitBugHunterSolutionPort
     ) {}
 
     @Get('unlocked-level')
@@ -40,11 +47,20 @@ export class BugHunterController {
     }
 
     @Post('levels/:levelId/submit')
-    submit(
+    async submit(
         @Param('levelId') levelId: string,
         @Body() payload: SubmitBugHunterLevelReq,
         @UserPayload() user: AuthUser,
     ) {
+        const res = await this.submitBugHunterSolUC.submit({
+            levelId,
+            code: payload.code,
+            userId: user.userId,
+        })
+
+        return {
+            success: res.success
+        }
     }
 
 }

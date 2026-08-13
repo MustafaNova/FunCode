@@ -9,10 +9,13 @@ import { spawn } from 'node:child_process';
 @Injectable()
 export class CodeExecutionAdapter implements CodeExecutionPort {
 
-    execute(language: string, code: string): Promise<boolean> {
+    execute(language: string, code: string) {
         switch (language) {
             case 'python':
                 return this.executePython(code);
+
+            case 'typescript':
+                return this.executeTypeScript(code);
 
             default:
                 throw new UnsupportedLanguageError();
@@ -20,7 +23,7 @@ export class CodeExecutionAdapter implements CodeExecutionPort {
     }
 
 
-    private async executePython(code: string): Promise<boolean> {
+    private async executePython(code: string) {
         const dir = await mkdtemp(join(tmpdir(), 'funcode-python-'))
         const file = join(dir, 'solution.py');
 
@@ -53,9 +56,41 @@ export class CodeExecutionAdapter implements CodeExecutionPort {
         }
     }
 
+    private async executeTypeScript(code: string) {
+        const dir = await mkdtemp(join(tmpdir(), 'funcode-ts-'));
+        const file = join(dir, 'solution.ts');
 
-    private runDocker(args: string[]): Promise<boolean> {
-        return new Promise((resolve) => {
+        try {
+            await writeFile(file, code);
+
+            return await this.runDocker([
+                'run',
+                '--rm',
+                '--network',
+                'none',
+                '--memory',
+                '128m',
+                '--cpus',
+                '0.5',
+                '--pids-limit',
+                '32',
+                '--read-only',
+                '-v',
+                `${file}:/app/solution.ts:ro`,
+                'funcode-typescript-runner',
+                'tsx',
+                '/app/solution.ts',
+            ]);
+        } finally {
+            await rm(dir, {
+                recursive: true,
+                force: true,
+            });
+        }
+    }
+
+    private runDocker(args: string[]) {
+        return new Promise<boolean>((resolve) => {
             const process = spawn('docker', args);
 
             const timeout = setTimeout(() => {
