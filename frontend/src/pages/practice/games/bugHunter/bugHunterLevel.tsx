@@ -3,7 +3,7 @@ import { Editor } from '@monaco-editor/react';
 import s from './bugHunter.module.scss';
 import { BUG_HUNTER_LEVELS_BY_ID } from './bugHunterLevels.ts';
 import { useEffect, useState } from 'react';
-import { getBugHunterLevel } from '../../../../services/practice.ts';
+import { getBugHunterLevel, submitBugHunterSolution } from '../../../../services/practice.ts';
 import type { GetBugHunterLevelContentRes } from '@funcode/shared';
 import { ConfirmModal } from '../../../../components/ConfirmModal/ConfirmModal.tsx';
 
@@ -11,6 +11,7 @@ import { ConfirmModal } from '../../../../components/ConfirmModal/ConfirmModal.t
 export function BugHunterLevel() {
     const { levelId } = useParams<{ levelId: string }>();
     const [levelContent, setLevelContent] = useState<GetBugHunterLevelContentRes | null>(null);
+    const [code, setCode] = useState<string>('');
     const editorOptions = {
         automaticLayout: true,
         minimap: {
@@ -19,6 +20,7 @@ export function BugHunterLevel() {
         fontSize: 15,
         scrollBeyondLastLine: false,
         tabSize: 4,
+        insertSpaces: true,
         padding: {
             top: 16,
         },
@@ -33,6 +35,7 @@ export function BugHunterLevel() {
             if (!levelId) return;
             const res = await getBugHunterLevel(levelId);
             setLevelContent(res);
+            setCode(res.initialCode);
         }
         void getLevelContent();
     }, []);
@@ -46,6 +49,11 @@ export function BugHunterLevel() {
     }
 
     const level = BUG_HUNTER_LEVELS_BY_ID[levelId];
+
+    function submitSolution() {
+        if (!levelId) return;
+        void submitBugHunterSolution(levelId, { code })
+    }
 
     return (
         <main className={s.page}>
@@ -91,13 +99,14 @@ export function BugHunterLevel() {
                         language={levelContent.language}
                         theme="vs-dark"
                         options={editorOptions}
-                        value={levelContent.initialCode}
+                        value={code}
+                        onChange={(value) => setCode(value ?? '') }
                     />
                 </div>
 
                 <div className={s.actions}>
-                    <button className={s.runButton} type="button">
-                        Run tests
+                    <button className={s.runButton} onClick={submitSolution} type="button">
+                        submit
                     </button>
                 </div>
             </section>

@@ -1,4 +1,4 @@
 
-export interface SubmitBugHunterLevelReq {
+export interface SubmitBugHunterSolutionReq {
     code: string
 }

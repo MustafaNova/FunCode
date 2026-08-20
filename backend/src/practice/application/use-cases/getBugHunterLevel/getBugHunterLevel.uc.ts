@@ -1,5 +1,5 @@
 import { GetBugHunterLevelPort } from '../../ports/inbound/getBugHunterLevel.port';
-import { GetBugHunterLevelRes } from './getBugHunterLevel.res';
+import { GetBugHunterLevelResult } from './getBugHunterLevel.res';
 import { BugHunterLevelRepoPort } from '../../ports/outbound/bugHunterLevel.repo.port';
 import { BugHunterProgressRepoPort } from '../../ports/outbound/bugHunterProgress.repo.port';
 import { BugHunterLevelNotFoundError } from '../errors/bugHunterLevelNotFound.err';
@@ -12,7 +12,7 @@ export class GetBugHunterLevelUC implements GetBugHunterLevelPort {
         private readonly bugHunterProgressRepo: BugHunterProgressRepoPort,
     ) {}
 
-    async getLevel(userId: string, levelId: string): Promise<GetBugHunterLevelRes> {
+    async getLevel(userId: string, levelId: string): Promise<GetBugHunterLevelResult> {
         const level = this.bugHunterLevelRepo.getById(levelId);
         if (level === null) {
             throw new BugHunterLevelNotFoundError();

@@ -207,7 +207,6 @@ function authenticateUser(
     language: 'typescript',
     tests: userAuthenticationTests
 };
-
 const shoppingCartLevel: BugHunterLevel = {
     levelNumber: 2,
     description:
@@ -295,7 +294,6 @@ def calculate_cart_total(items):
     language: 'python',
     tests: shoppingCartTests
 };
-
 const bankAccountLevel: BugHunterLevel = {
     levelNumber: 3,
     description:

@@ -1,3 +1,3 @@
-export interface SubmitBugHunterSolRes {
+export interface SubmitBugHunterSolResult {
     success: boolean
 }

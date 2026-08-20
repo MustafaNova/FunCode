@@ -8,4 +8,7 @@ export class BugHunterProgressEntity {
 
     @Column({ default: 1 })
     highestUnlockedLevel: number;
+
+    @Column({ default: false })
+    completedAllLevels: boolean;
 }

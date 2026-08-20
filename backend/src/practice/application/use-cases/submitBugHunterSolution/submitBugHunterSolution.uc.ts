@@ -5,7 +5,8 @@ import { BugHunterProgressRepoPort } from '../../ports/outbound/bugHunterProgres
 import { BugHunterLevelNotFoundError } from '../errors/bugHunterLevelNotFound.err';
 import { BugHunterLevelNotSubmittableError } from './errors/bugHunterLevelNotSubmittable.err';
 import { CodeExecutionPort } from '../../ports/outbound/codeExecution.port';
-import { SubmitBugHunterSolRes } from './submitBugHunterSolRes';
+import { SubmitBugHunterSolResult } from './submitBugHunterSolRes';
+import { MAX_BUG_HUNTER_LEVEL } from '../../../domain/constants/bugHunter.constants';
 
 
 export class SubmitBugHunterSolutionUC implements SubmitBugHunterSolutionPort {
@@ -15,7 +16,8 @@ export class SubmitBugHunterSolutionUC implements SubmitBugHunterSolutionPort {
         private readonly codeExecutor: CodeExecutionPort,
     ) {}
 
-    async submit(cmd: SubmitBugHunterSolutionCmd): Promise<SubmitBugHunterSolRes> {
+    async submit(cmd: SubmitBugHunterSolutionCmd): Promise<SubmitBugHunterSolResult> {
+        console.log('submitBugHunter use case');
         const level = this.bugHunterLevelRepo.getById(cmd.levelId);
         if (level === null) {
             throw new BugHunterLevelNotFoundError();
@@ -26,14 +28,21 @@ export class SubmitBugHunterSolutionUC implements SubmitBugHunterSolutionPort {
             throw new BugHunterLevelNotSubmittableError();
         }
 
-        const codeWithTests = `
-        ${cmd.code}
-        ${level.tests}
-        `;
+        const codeWithTests = `${cmd.code}\n${level.tests}`;
 
-        const res = await this.codeExecutor.execute(level.language, codeWithTests);
+        const testsPassed = await this.codeExecutor.execute(level.language, codeWithTests);
+
+        if (testsPassed) {
+            if (level.levelNumber === MAX_BUG_HUNTER_LEVEL) {
+                await this.bugHunterProgressRepo.markAllLevelsAsCompleted(cmd.userId)
+            } else {
+                await this.bugHunterProgressRepo.incrementUnlockedLevel(cmd.userId);
+            }
+        }
+
+
         return {
-            success: res
+            success: testsPassed
         }
 
     }

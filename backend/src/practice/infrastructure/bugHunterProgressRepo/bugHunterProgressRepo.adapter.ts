@@ -23,4 +23,30 @@ export class BugHunterProgressRepoAdapter implements BugHunterProgressRepoPort {
 
         return res.highestUnlockedLevel;
     }
+
+    async incrementUnlockedLevel(userId: string): Promise<void> {
+        await this.bugHunterProgressRepo.increment(
+            { userId },
+            'highestUnlockedLevel',
+            1,
+        )
+    }
+
+    async markAllLevelsAsCompleted(userId: string): Promise<void> {
+        await this.bugHunterProgressRepo.update(
+            { userId },
+            { completedAllLevels: true }
+        )
+    }
+
+    async getCompletedAllLevels(userId: string): Promise<boolean> {
+        const progress = await this.bugHunterProgressRepo.findOne({
+            where: { userId },
+            select: {
+                completedAllLevels: true,
+            },
+        });
+
+        return progress?.completedAllLevels ?? false;
+    }
 }

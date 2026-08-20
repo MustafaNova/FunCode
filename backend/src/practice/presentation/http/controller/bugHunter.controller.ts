@@ -6,7 +6,12 @@ import {
     GET_BUG_HUNTER_PROGRESS_PORT,
     SUBMIT_BUG_HUNTER_SOLUTION_PORT
 } from '../../../infrastructure/tokens';
-import { GetBugHunterLevelContentRes, type SubmitBugHunterLevelReq, UnlockedLevelRes } from '@funcode/shared';
+import {
+    GetBugHunterLevelContentRes,
+    SubmitBugHunterSolRes,
+    type SubmitBugHunterSolutionReq,
+    UnlockedLevelRes
+} from '@funcode/shared';
 import { AuthGuard } from '@nestjs/passport';
 import { type GetBugHunterLevelPort } from '../../../application/ports/inbound/getBugHunterLevel.port';
 import { type SubmitBugHunterSolutionPort } from '../../../application/ports/inbound/submitBugHunterSolution.port';
@@ -29,7 +34,8 @@ export class BugHunterController {
     ): Promise<UnlockedLevelRes> {
         const res = await this.getBugHunterProgressUC.getProgress(user.userId);
         return {
-            unlockedLevel: res.highestUnlockedLevel
+            unlockedLevel: res.highestUnlockedLevel,
+            completedAllLevels: res.completedAllLevels
         }
     }
 
@@ -49,9 +55,10 @@ export class BugHunterController {
     @Post('levels/:levelId/submit')
     async submit(
         @Param('levelId') levelId: string,
-        @Body() payload: SubmitBugHunterLevelReq,
+        @Body() payload: SubmitBugHunterSolutionReq,
         @UserPayload() user: AuthUser,
-    ) {
+    ): Promise<SubmitBugHunterSolRes> {
+        console.log('submitBugHunter controller');
         const res = await this.submitBugHunterSolUC.submit({
             levelId,
             code: payload.code,

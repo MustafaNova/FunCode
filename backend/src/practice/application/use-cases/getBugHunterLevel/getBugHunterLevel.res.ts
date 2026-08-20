@@ -1,6 +1,6 @@
 
 
-export interface GetBugHunterLevelRes {
+export interface GetBugHunterLevelResult {
     description: string,
     initialCode: string,
     language: string

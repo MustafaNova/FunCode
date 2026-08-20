@@ -5,9 +5,10 @@ import { BugHunterProgressRepoModule } from '../bugHunterProgressRepo/bugHunterP
 import { GetBugHunterLevelService } from './getBugHunterLevel.service';
 import { BugHunterLevelRepoModule } from '../bugHunterLevelRepo/bugHunterLevelRepo.module';
 import { SubmitBugHunterSolutionService } from './submitBugHunterSolution.service';
+import { CodeExecutionModule } from '../codeExecution/codeExecution.module';
 
 @Module({
-    imports: [BugHunterProgressRepoModule, BugHunterLevelRepoModule],
+    imports: [BugHunterProgressRepoModule, BugHunterLevelRepoModule, CodeExecutionModule],
     providers: [
         {
             provide: GET_BUG_HUNTER_PROGRESS_PORT,
