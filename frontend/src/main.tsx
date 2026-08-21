@@ -31,6 +31,7 @@ import { AuthProvider } from './context/AuthProvider.tsx';
 import { Practice } from './pages/practice/practice.tsx';
 import { BugHunter } from './pages/practice/games/bugHunter/bugHunter.tsx';
 import { BugHunterLevel } from './pages/practice/games/bugHunter/bugHunterLevel.tsx';
+import { BugHunterSuccessScreen } from './pages/practice/games/bugHunter/bugHunterSuccessScreen/bugHunterSuccessScreen.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -65,6 +66,7 @@ createRoot(document.getElementById('root')!).render(
                   <Route path='practice/bug-hunter' element={<BugHunter />}></Route>
               </Route>
               <Route path='practice/bug-hunter/:levelId' element={<BugHunterLevel />}></Route>
+              <Route path='practice/bug-hunter/:levelId/success' element={<BugHunterSuccessScreen />}></Route>
               <Route path='onboarding' element={<Onboarding/>}></Route>
               <Route path='onboarding/courses' element={<CourseSelection/>}></Route>
               <Route path="/level/:course/:module/:level" element={<LevelFrame/>}/>

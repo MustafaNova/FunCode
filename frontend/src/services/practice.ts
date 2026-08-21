@@ -1,5 +1,10 @@
 import { API_URLS } from '../constants/urls.ts';
-import { type GetBugHunterLevelContentRes, type SubmitBugHunterSolutionReq, type UnlockedLevelRes } from '@funcode/shared';
+import {
+    type GetBugHunterLevelContentRes,
+    type SubmitBugHunterSolRes,
+    type SubmitBugHunterSolutionReq,
+    type UnlockedLevelRes
+} from '@funcode/shared';
 
 
 export async function getBugHunterHighestUnlockedLevel() {
@@ -31,5 +36,8 @@ export async function submitBugHunterSolution(levelId: string, payload: SubmitBu
         },
         body: JSON.stringify(payload)
     })
-    console.log("Result submitBugHunter: ", await res.json());
+
+    const solutionResult: SubmitBugHunterSolRes = await res.json()
+    return solutionResult
+
 }

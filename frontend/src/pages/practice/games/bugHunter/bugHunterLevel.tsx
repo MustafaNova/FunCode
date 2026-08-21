@@ -26,9 +26,11 @@ export function BugHunterLevel() {
         },
     };
     const [showModal, setShowModal] = useState(false);
+    const [submitError, setSubmitError] = useState(false);
     const navigate = useNavigate();
     const modalTitle = 'Leave level?';
     const modalText = 'Your progress will be lost';
+    const errorDisplayDuration = 3000;
 
     useEffect(() => {
         async function getLevelContent() {
@@ -50,9 +52,22 @@ export function BugHunterLevel() {
 
     const level = BUG_HUNTER_LEVELS_BY_ID[levelId];
 
-    function submitSolution() {
+    async function submitSolution() {
         if (!levelId) return;
-        void submitBugHunterSolution(levelId, { code })
+        const res = await submitBugHunterSolution(levelId, { code })
+
+        if (!res.success) {
+            setSubmitError(true);
+
+            setTimeout(() => {
+                setSubmitError(false);
+            }, errorDisplayDuration)
+
+            return;
+        }
+
+        navigate('success')
+
     }
 
     return (
@@ -105,6 +120,7 @@ export function BugHunterLevel() {
                 </div>
 
                 <div className={s.actions}>
+                    {submitError && <span className={s.failedMsg}>Your solution is incorrect</span>}
                     <button className={s.runButton} onClick={submitSolution} type="button">
                         submit
                     </button>
