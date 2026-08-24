@@ -19,7 +19,7 @@ export function BugHunterSuccessScreen() {
                     <span className={s.xp}>+100 XP</span>
                 </div>
 
-                <button className={s.continueButton} onClick={() => navigate('/home/practice/bug-hunter')}>
+                <button className={s.continueButton} onClick={() => navigate('/practice/bug-hunter')}>
                     Continue
                 </button>
             </div>

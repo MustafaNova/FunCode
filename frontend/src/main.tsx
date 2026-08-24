@@ -32,6 +32,7 @@ import { Practice } from './pages/practice/practice.tsx';
 import { BugHunter } from './pages/practice/games/bugHunter/bugHunter.tsx';
 import { BugHunterLevel } from './pages/practice/games/bugHunter/bugHunterLevel.tsx';
 import { BugHunterSuccessScreen } from './pages/practice/games/bugHunter/bugHunterSuccessScreen/bugHunterSuccessScreen.tsx';
+import { CodeGolf } from './pages/practice/games/codeGolf/CodeGolf.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -63,8 +64,9 @@ createRoot(document.getElementById('root')!).render(
                       <Route path='friends' element={<Friends />}></Route>
                   </Route>
                   <Route path='practice' element={<Practice />}></Route>
-                  <Route path='practice/bug-hunter' element={<BugHunter />}></Route>
               </Route>
+              <Route path='practice/bug-hunter' element={<BugHunter />}></Route>
+              <Route path='practice/code-golf' element={<CodeGolf />}></Route>
               <Route path='practice/bug-hunter/:levelId' element={<BugHunterLevel />}></Route>
               <Route path='practice/bug-hunter/:levelId/success' element={<BugHunterSuccessScreen />}></Route>
               <Route path='onboarding' element={<Onboarding/>}></Route>

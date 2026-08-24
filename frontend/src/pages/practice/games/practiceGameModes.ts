@@ -15,15 +15,15 @@ export const PRACTICE_GAME_MODES: gameModes = [
         img: bugHunterImg,
         imgAlt: 'Bug Hunter game mode',
         available: true,
-        route: 'bug-hunter'
+        route: '/practice/bug-hunter'
     },
     {
         name: codeGolfTitle,
         description: codeGolfDescription,
         img: codeGolfImg,
         imgAlt: 'Code Golf game mode',
-        available: false,
-        route: 'code-golf'
+        available: true,
+        route: '/practice/code-golf'
     }
 ]
 

@@ -1,16 +1,9 @@
 import userAuthImg from '../../../../assets/practice/bugHunter/user-authentication.png';
 import shoppingCartImg from '../../../../assets/practice/bugHunter/shopping-cart.png';
 import bankAccountImg from '../../../../assets/practice/bugHunter/bank-account.png';
+import type { PracticeLevelCardData } from '../../../../types/practiceLevelCardData.ts';
 
-type BugHunterLevel = {
-    id: string,
-    name: string,
-    level: number,
-    image: string,
-    imgAlt: string
-}
-
-export const BUG_HUNTER_LEVELS: BugHunterLevel[] = [
+export const BUG_HUNTER_LEVELS: PracticeLevelCardData[] = [
     {
         id: 'user-authentication',
         name: 'User Authentication',
@@ -34,7 +27,7 @@ export const BUG_HUNTER_LEVELS: BugHunterLevel[] = [
     }
 ]
 
-export const BUG_HUNTER_LEVELS_BY_ID: Record<string, BugHunterLevel> =
+export const BUG_HUNTER_LEVELS_BY_ID: Record<string, PracticeLevelCardData> =
     Object.fromEntries(
         BUG_HUNTER_LEVELS.map(level => [level.id, level])
     )

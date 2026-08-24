@@ -1,0 +1,36 @@
+.container {
+  padding: 32px;
+}
+
+.header {
+  max-width: 640px;
+  margin-bottom: 32px;
+}
+
+.eyebrow {
+  color: #4ade80;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 8px 0 12px;
+  color: black;
+  font-size: 2rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.subtitle {
+  margin: 0;
+  color: #9ca3af;
+  line-height: 1.6;
+}
+
+.levelGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
