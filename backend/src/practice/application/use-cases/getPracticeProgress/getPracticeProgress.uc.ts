@@ -1,7 +1,7 @@
 import { GetPracticeProgressPort } from '../../ports/inbound/getPracticeProgress.port';
-import { PracticeGameMode } from '../../../domain/enums/practiceGameMode';
 import { GetPracticeProgressResult } from './getPracticeProgress.res';
 import { PracticeProgressRepoPort } from '../../ports/outbound/practiceProgress.repo.port';
+import { PracticeGameMode } from '@funcode/shared';
 
 
 export class GetPracticeProgressUC implements GetPracticeProgressPort {

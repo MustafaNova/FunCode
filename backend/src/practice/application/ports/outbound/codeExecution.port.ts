@@ -1,3 +1,5 @@
+import { PracticeProgrammingLanguage } from '../../../domain/types/practiceProgrammingLanguages';
+
 export interface CodeExecutionPort {
-    execute(language: string, code: string): Promise<boolean>;
+    execute(language: PracticeProgrammingLanguage, code: string): Promise<boolean>;
 }

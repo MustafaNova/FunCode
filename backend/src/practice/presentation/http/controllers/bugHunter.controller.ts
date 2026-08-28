@@ -58,7 +58,6 @@ export class BugHunterController {
         @Body() payload: SubmitBugHunterSolutionReq,
         @UserPayload() user: AuthUser,
     ): Promise<SubmitBugHunterSolRes> {
-        console.log('submitBugHunter controller');
         const res = await this.submitBugHunterSolUC.submit({
             levelId,
             code: payload.code,

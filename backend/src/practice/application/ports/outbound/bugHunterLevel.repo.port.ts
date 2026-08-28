@@ -1,4 +1,4 @@
-import { BugHunterLevel } from '../../../domain/value-objects/bugHunterLevel';
+import { BugHunterLevel } from '../../../domain/models/bugHunterLevel';
 
 
 export interface BugHunterLevelRepoPort {

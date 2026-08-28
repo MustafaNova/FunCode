@@ -1,11 +1,11 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { Editor } from '@monaco-editor/react';
-import s from './bugHunter.module.scss';
-import { BUG_HUNTER_LEVELS_BY_ID } from './bugHunterLevels.ts';
+import s from '../bugHunter.module.scss';
+import { BUG_HUNTER_LEVELS_BY_ID } from '../bugHunterLevels.ts';
 import { useEffect, useState } from 'react';
-import { getBugHunterLevel, submitBugHunterSolution } from '../../../../services/practice.ts';
+import { getBugHunterLevel, submitBugHunterSolution } from '../../../../../services/practice.ts';
 import type { GetBugHunterLevelContentRes } from '@funcode/shared';
-import { ConfirmModal } from '../../../../components/ConfirmModal/ConfirmModal.tsx';
+import { ConfirmModal } from '../../../../../components/ConfirmModal/ConfirmModal.tsx';
 
 
 export function BugHunterLevel() {

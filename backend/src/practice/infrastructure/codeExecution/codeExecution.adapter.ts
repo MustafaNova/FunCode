@@ -1,12 +1,12 @@
 import { CodeExecutionPort } from '../../application/ports/outbound/codeExecution.port';
 import { Injectable } from '@nestjs/common';
 import Sandbox from '@e2b/code-interpreter';
-import { BugHunterLanguages } from '../../domain/value-objects/bugHunterLanguages';
+import { PracticeProgrammingLanguage } from '../../domain/types/practiceProgrammingLanguages';
 
 @Injectable()
 export class CodeExecutionAdapter implements CodeExecutionPort {
 
-    async execute(language: BugHunterLanguages, code: string) {
+    async execute(language: PracticeProgrammingLanguage, code: string) {
         console.log('starting CodeExecutionAdapter')
 
         const sandbox = await Sandbox.create({apiKey: process.env.E2B_API_KEY});

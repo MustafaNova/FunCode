@@ -1,10 +1,10 @@
 import { PracticeProgressRepoPort } from '../../application/ports/outbound/practiceProgress.repo.port';
-import { PracticeGameMode } from '../../domain/enums/practiceGameMode';
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { PracticeProgressEntity } from './practiceProgress.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PracticeProgress } from '../../domain/models/practiceProgress';
+import { PracticeGameMode } from '@funcode/shared';
 
 @Injectable()
 export class PracticeProgressRepoAdapter implements PracticeProgressRepoPort {
@@ -26,10 +26,24 @@ export class PracticeProgressRepoAdapter implements PracticeProgressRepoPort {
                 completedAllLevels: false,
             };
         }
-
         return {
             highestUnlockedLevel: res.highestUnlockedLevel,
             completedAllLevels: res.completedAllLevels,
         };
+    }
+
+    async markAllLevelsAsCompleted(userId: string, gameMode: PracticeGameMode): Promise<void> {
+        await this.practiceProgressRepo.update(
+            { userId, gameMode },
+            { completedAllLevels: true }
+        )
+    }
+
+    async incrementUnlockedLevel(userId: string, gameMode: PracticeGameMode): Promise<void> {
+        await this.practiceProgressRepo.increment(
+            { userId, gameMode },
+            'highestUnlockedLevel',
+            1,
+        )
     }
 }

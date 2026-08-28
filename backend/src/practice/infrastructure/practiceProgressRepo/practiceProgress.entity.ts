@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { PracticeGameMode } from '../../domain/enums/practiceGameMode';
+import { type PracticeGameMode } from '@funcode/shared';
 
 
 @Entity('practice_progress')
@@ -10,10 +10,7 @@ export class PracticeProgressEntity {
     @Column()
     userId: string;
 
-    @Column({
-        type: 'enum',
-        enum: PracticeGameMode,
-    })
+    @Column()
     gameMode: PracticeGameMode;
 
     @Column({ default: 1 })

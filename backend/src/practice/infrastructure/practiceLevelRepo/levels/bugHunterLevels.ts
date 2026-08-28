@@ -1,4 +1,4 @@
-import { BugHunterLevel } from '../../domain/models/bugHunterLevel';
+import { BugHunterLevel } from '../../../domain/models/bugHunterLevel';
 
 const userAuthenticationTests = `
 const storedUser: User = {
@@ -169,6 +169,7 @@ assert len(account.get_transaction_history()) == 0
 `.trim();
 
 const userAuthenticationLevel: BugHunterLevel = {
+    gameMode: 'bug-hunter',
     levelNumber: 1,
     description:
         'The login function should grant access only when the entered email and password match the stored user credentials. However, users can currently log in with an incorrect password. Find and fix the hidden bug without changing the function signature',
@@ -208,6 +209,7 @@ function authenticateUser(
     tests: userAuthenticationTests
 };
 const shoppingCartLevel: BugHunterLevel = {
+    gameMode: 'bug-hunter',
     levelNumber: 2,
     description:
         'An online shop calculates the subtotal, applies a 10% discount when the subtotal is at least 100 euros, adds shipping costs, and calculates VAT. Customers with an order subtotal of exactly 100 euros currently receive the wrong final price. Find and fix the hidden bug without changing any function names or parameters.',
@@ -295,6 +297,7 @@ def calculate_cart_total(items):
     tests: shoppingCartTests
 };
 const bankAccountLevel: BugHunterLevel = {
+    gameMode: 'bug-hunter',
     levelNumber: 3,
     description:
         'A banking system manages deposits, withdrawals, transfer fees, and account history. Withdrawals must only be allowed when the account has enough money to cover both the requested amount and the transaction fee. However, one edge case currently allows the balance to become negative. Find and fix the hidden bug without changing any function names or parameters.',

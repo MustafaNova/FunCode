@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { BugHunterController } from './controller/bugHunter.controller';
+import { BugHunterController } from './controllers/bugHunter.controller';
 import { UCServicesModule } from '../../infrastructure/uc-wiring/uc.services.module';
-import { PracticeController } from './controller/practice.controller';
+import { PracticeController } from './controllers/practice.controller';
 
 
 @Module({

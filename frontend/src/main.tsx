@@ -30,15 +30,16 @@ import { ClanMemberGuard, NoClanMemberGuard } from './utils/guards.tsx';
 import { AuthProvider } from './context/AuthProvider.tsx';
 import { Practice } from './pages/practice/practice.tsx';
 import { BugHunter } from './pages/practice/games/bugHunter/bugHunter.tsx';
-import { BugHunterLevel } from './pages/practice/games/bugHunter/bugHunterLevel.tsx';
+import { BugHunterLevel } from './pages/practice/games/bugHunter/bugHunterLevel/bugHunterLevel.tsx';
 import { BugHunterSuccessScreen } from './pages/practice/games/bugHunter/bugHunterSuccessScreen/bugHunterSuccessScreen.tsx';
 import { CodeGolf } from './pages/practice/games/codeGolf/CodeGolf.tsx';
+import { CodeGolfLevel } from './pages/practice/games/codeGolf/codeGolfLevel/CodeGolfLevel.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
       <BrowserRouter>
           <Routes>
-              <Route path='/' element={<Login/>}></Route>
+              <Route path='/' element={<Login/>} />
               <Route path='/register' element={<Registration/>}></Route>
               <Route path='/match' element={<Match/>}></Route>
               <Route path='/match/ready' element={<ReadyScreen/>}></Route>
@@ -65,8 +66,9 @@ createRoot(document.getElementById('root')!).render(
                   </Route>
                   <Route path='practice' element={<Practice />}></Route>
               </Route>
-              <Route path='practice/bug-hunter' element={<BugHunter />}></Route>
               <Route path='practice/code-golf' element={<CodeGolf />}></Route>
+              <Route path='practice/code-golf/:levelId' element={<CodeGolfLevel />}/>
+              <Route path='practice/bug-hunter' element={<BugHunter />}></Route>
               <Route path='practice/bug-hunter/:levelId' element={<BugHunterLevel />}></Route>
               <Route path='practice/bug-hunter/:levelId/success' element={<BugHunterSuccessScreen />}></Route>
               <Route path='onboarding' element={<Onboarding/>}></Route>

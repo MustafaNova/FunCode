@@ -1,6 +1,7 @@
 import { API_URLS } from '../constants/urls.ts';
 import {
-    type GetBugHunterLevelContentRes,
+    type GetBugHunterLevelContentRes, type GetPracticeProgressRes,
+    type PracticeGameMode,
     type SubmitBugHunterSolRes,
     type SubmitBugHunterSolutionReq,
     type UnlockedLevelRes
@@ -14,6 +15,17 @@ export async function getBugHunterHighestUnlockedLevel() {
     })
     const unlockedLevelRes: UnlockedLevelRes = await res.json();
     return unlockedLevelRes;
+}
+
+export async function getGameProgress(gameMode: PracticeGameMode) {
+    const res = await fetch(API_URLS.GET_PRACTICE_PROGRESS(gameMode), {
+        method: 'GET',
+        credentials: 'include',
+    })
+    const practiceProgress: GetPracticeProgressRes = await res.json();
+    console.log(practiceProgress);
+    return practiceProgress;
+
 }
 
 

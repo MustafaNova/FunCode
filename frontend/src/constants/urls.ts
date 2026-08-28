@@ -1,3 +1,5 @@
+import type { PracticeGameMode } from '@funcode/shared';
+
 const API_URL = "/api"
 
 export const API_URLS = {
@@ -24,5 +26,6 @@ export const API_URLS = {
     DELETE_FRIEND: (friendUserId: string) => `${API_URL}/friends/${friendUserId}`,
     GET_BUG_HUNTER_HIGHEST_UNLOCKED_LEVEL: `${API_URL}/practice/bug-hunter/unlocked-level`,
     GET_BUG_HUNTER_LEVEL: (levelId: string) => `${API_URL}/practice/bug-hunter/levels/${levelId}`,
-    SUBMIT_BUG_HUNTER_SOL: (levelId: string) => `${API_URL}/practice/bug-hunter/levels/${levelId}/submit`
+    SUBMIT_BUG_HUNTER_SOL: (levelId: string) => `${API_URL}/practice/bug-hunter/levels/${levelId}/submit`,
+    GET_PRACTICE_PROGRESS: (gameMode: PracticeGameMode) => `${API_URL}/practice/${gameMode}/progress`,
 }
