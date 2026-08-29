@@ -1,4 +1,4 @@
-import { PracticeProgrammingLanguage } from '../../../../domain/types/practiceProgrammingLanguages';
+import { PracticeProgrammingLanguage } from '@funcode/shared';
 
 export type BugHunterLevelContent = {
     gameMode: 'bug-hunter',

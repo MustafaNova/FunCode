@@ -1,4 +1,4 @@
-import { PracticeProgrammingLanguage } from '../types/practiceProgrammingLanguages';
+import { PracticeProgrammingLanguage } from '@funcode/shared';
 
 export type CodeGolfLevel = {
     gameMode: 'code-golf',

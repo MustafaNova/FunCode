@@ -2,6 +2,7 @@ import { API_URLS } from '../constants/urls.ts';
 import {
     type GetBugHunterLevelContentRes, type GetPracticeProgressRes,
     type PracticeGameMode,
+    type PracticeLevelResponseByMode,
     type SubmitBugHunterSolRes,
     type SubmitBugHunterSolutionReq,
     type UnlockedLevelRes
@@ -52,4 +53,15 @@ export async function submitBugHunterSolution(levelId: string, payload: SubmitBu
     const solutionResult: SubmitBugHunterSolRes = await res.json()
     return solutionResult
 
+}
+
+
+export async function getPracticeLevel<T extends PracticeGameMode>(gameMode: T, levelId: string) {
+    const res = await fetch(API_URLS.GET_PRACTICE_LEVEL(gameMode, levelId), {
+        method: 'GET',
+        credentials: 'include'
+    })
+
+    const practiceLevel: PracticeLevelResponseByMode[T] = await res.json();
+    return practiceLevel;
 }

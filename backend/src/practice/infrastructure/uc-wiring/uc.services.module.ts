@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import {
-    GET_BUG_HUNTER_LEVEL_PORT, GET_BUG_HUNTER_PROGRESS_PORT,
+    GET_BUG_HUNTER_LEVEL_PORT, GET_BUG_HUNTER_PROGRESS_PORT, GET_PRACTICE_LEVEL_PORT,
     GET_PRACTICE_PROGRESS_REPO_PORT, SUBMIT_BUG_HUNTER_SOLUTION_PORT
 } from '../tokens';
 import { GetBugHunterProgressService } from './getBugHunterProgress.service';
@@ -11,6 +11,7 @@ import { SubmitBugHunterSolutionService } from './submitBugHunterSolution.servic
 import { CodeExecutionModule } from '../codeExecution/codeExecution.module';
 import { PracticeProgressRepoModule } from '../practiceProgressRepo/practiceProgressRepo.module';
 import { GetPracticeProgressService } from './getPracticeProgress.service';
+import { GetPracticeLevelService } from './getPracticeLevel.service';
 
 @Module({
     imports: [BugHunterProgressRepoModule, BugHunterLevelRepoModule, CodeExecutionModule, PracticeProgressRepoModule],
@@ -30,13 +31,18 @@ import { GetPracticeProgressService } from './getPracticeProgress.service';
         {
             provide: GET_PRACTICE_PROGRESS_REPO_PORT,
             useClass: GetPracticeProgressService,
+        },
+        {
+            provide: GET_PRACTICE_LEVEL_PORT,
+            useClass: GetPracticeLevelService,
         }
     ],
     exports: [
         GET_BUG_HUNTER_PROGRESS_PORT,
         GET_BUG_HUNTER_LEVEL_PORT,
         SUBMIT_BUG_HUNTER_SOLUTION_PORT,
-        GET_PRACTICE_PROGRESS_REPO_PORT
+        GET_PRACTICE_PROGRESS_REPO_PORT,
+        GET_PRACTICE_LEVEL_PORT
     ]
 })
 export class UCServicesModule {}

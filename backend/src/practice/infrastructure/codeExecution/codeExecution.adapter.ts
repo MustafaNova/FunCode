@@ -1,7 +1,7 @@
 import { CodeExecutionPort } from '../../application/ports/outbound/codeExecution.port';
 import { Injectable } from '@nestjs/common';
 import Sandbox from '@e2b/code-interpreter';
-import { PracticeProgrammingLanguage } from '../../domain/types/practiceProgrammingLanguages';
+import { PracticeProgrammingLanguage } from '@funcode/shared';
 
 @Injectable()
 export class CodeExecutionAdapter implements CodeExecutionPort {
