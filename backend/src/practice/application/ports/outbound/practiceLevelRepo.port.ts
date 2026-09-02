@@ -1,9 +1,9 @@
 import { PracticeGameMode } from '@funcode/shared';
-import { PracticeLevel } from '../../../domain/models/practiceLevel';
+import { PracticeLevelByMode } from '../../../domain/models/practiceLevelByMode';
 
 export interface PracticeLevelRepoPort {
-    getById(
-        gameMode: PracticeGameMode,
+    getById<T extends PracticeGameMode>(
+        gameMode: T,
         levelId: string,
-    ): PracticeLevel | null;
+    ): PracticeLevelByMode[T] | null;
 }

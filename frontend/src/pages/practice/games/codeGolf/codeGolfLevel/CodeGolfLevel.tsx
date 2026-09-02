@@ -1,18 +1,50 @@
 import Editor from '@monaco-editor/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import s from './codeGolfLevel.module.scss';
 import { ConfirmModal } from '../../../../../components/ConfirmModal/ConfirmModal.tsx';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getPracticeLevel } from '../../../../../services/practice.ts';
+import type { CodeGolfLevelRes } from '@funcode/shared';
 
 export function CodeGolfLevel() {
-    const [code, setCode] = useState(`function sum(a: number, b: number) {
-    return a + b;}`);
+    const { levelId } = useParams<{ levelId: string }>();
+    const [code, setCode] = useState('');
+    const [levelContent, setLevelContent] = useState<CodeGolfLevelRes | null>(null);
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const modalTitle = 'Leave?';
     const modalText = 'Your progress will be lost';
-
+    const editorOptions = {
+        automaticLayout: true,
+        minimap: {
+            enabled: false,
+        },
+        fontSize: 15,
+        scrollBeyondLastLine: false,
+        padding: {
+            top: 16,
+        },
+    }
     const characterCount = code.length;
+
+    useEffect(() => {
+        async function getLevelContent() {
+            if (!levelId) return;
+            const res = await getPracticeLevel('code-golf', levelId);
+            setLevelContent(res);
+            setCode(res.initialCode);
+        }
+        void getLevelContent();
+    }, []);
+
+    if (!levelId) {
+        return <div>Error</div>
+    }
+
+    if (levelContent === null) {
+        return <div className={s.txt}>...loading</div>
+    }
+
 
     return (
         <main className={s.page}>
@@ -20,10 +52,7 @@ export function CodeGolfLevel() {
                 <div>
                     <span className={s.eyebrow}>Code Golf</span>
                     <h1 className={s.title}>Ocean Breeze</h1>
-                    <p className={s.description}>
-                        Solve the challenge with the shortest correct code possible.
-                        Every character counts.
-                    </p>
+                    <p className={s.description}>{levelContent.description}</p>
                 </div>
 
                 <button
@@ -35,51 +64,41 @@ export function CodeGolfLevel() {
                 </button>
             </header>
 
-            <section className={s.challengeBox}>
-                <span className={s.challengeLabel}>Challenge</span>
-                <p>
-                    Write a function that returns the sum of two numbers.
-                    Keep your solution as short as possible.
-                </p>
-            </section>
-
             <section className={s.editorSection}>
                 <div className={s.editorHeader}>
                     <div>
                         <h2>Code Editor</h2>
-                        <span>TypeScript</span>
+                        <span>{levelContent.language}</span>
+                    </div>
+
+                    <div className={s.limitBox}>
+                        <span className={s.limitLabel}>Character limit</span>
+                        <strong className={s.limitValue}>
+                            {levelContent.maxCharacters}
+                        </strong>
                     </div>
                 </div>
 
                 <div className={s.editorWrapper}>
                     <Editor
                         height="520px"
-                        language="typescript"
+                        language={levelContent.language}
                         theme="vs-dark"
                         value={code}
                         onChange={(value) => setCode(value ?? '')}
-                        options={{
-                            automaticLayout: true,
-                            minimap: {
-                                enabled: false,
-                            },
-                            fontSize: 15,
-                            scrollBeyondLastLine: false,
-                            padding: {
-                                top: 16,
-                            },
-                        }}
+                        options={editorOptions}
                     />
                 </div>
 
                 <div className={s.footer}>
-                    <span className={s.characterCount}>
+                    <span className={`${s.characterCount} ${characterCount <= levelContent.maxCharacters ? s.green : s.red}`}>
                         {characterCount} characters
                     </span>
 
                     <button
                         type="button"
                         className={s.submitButton}
+                        disabled={characterCount > levelContent.maxCharacters}
                     >
                         Submit solution
                     </button>

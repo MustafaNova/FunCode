@@ -1,7 +1,7 @@
 import {
     GetPracticeLevelResult
-} from '../../../application/use-cases/getPracticeLevel/getPracticeLevelResult/getPracticeLevelResult';
-import { GetPracticeLevelRes, PracticeProgrammingLanguage } from '@funcode/shared';
+} from '../../../application/use-cases/shared/getPracticeLevel/getPracticeLevelResult/getPracticeLevelResult';
+import { GetPracticeLevelRes } from '@funcode/shared';
 
 export function mapPracticeLevelResultToRes(
     result: GetPracticeLevelResult,

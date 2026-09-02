@@ -3,14 +3,14 @@ import { Editor } from '@monaco-editor/react';
 import s from '../bugHunter.module.scss';
 import { BUG_HUNTER_LEVELS_BY_ID } from '../bugHunterLevels.ts';
 import { useEffect, useState } from 'react';
-import { getBugHunterLevel, submitBugHunterSolution } from '../../../../../services/practice.ts';
-import type { GetBugHunterLevelContentRes } from '@funcode/shared';
+import { getPracticeLevel, submitBugHunterSolution } from '../../../../../services/practice.ts';
+import type { BugHunterLevelRes } from '@funcode/shared';
 import { ConfirmModal } from '../../../../../components/ConfirmModal/ConfirmModal.tsx';
 
 
 export function BugHunterLevel() {
     const { levelId } = useParams<{ levelId: string }>();
-    const [levelContent, setLevelContent] = useState<GetBugHunterLevelContentRes | null>(null);
+    const [levelContent, setLevelContent] = useState<BugHunterLevelRes | null>(null);
     const [code, setCode] = useState<string>('');
     const editorOptions = {
         automaticLayout: true,
@@ -35,7 +35,7 @@ export function BugHunterLevel() {
     useEffect(() => {
         async function getLevelContent() {
             if (!levelId) return;
-            const res = await getBugHunterLevel(levelId);
+            const res = await getPracticeLevel('bug-hunter', levelId);
             setLevelContent(res);
             setCode(res.initialCode);
         }

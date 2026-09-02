@@ -1,0 +1,1 @@
+export const MAX_CODE_GOLF_LEVEL = 3;

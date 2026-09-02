@@ -1,4 +1,4 @@
-import { GetPracticeLevelUC } from '../../application/use-cases/getPracticeLevel/getPracticeLevel.uc';
+import { GetPracticeLevelUC } from '../../application/use-cases/shared/getPracticeLevel/getPracticeLevel.uc';
 import { Inject, Injectable } from '@nestjs/common';
 import { type PracticeLevelRepoPort } from '../../application/ports/outbound/practiceLevelRepo.port';
 import { type PracticeProgressRepoPort } from '../../application/ports/outbound/practiceProgress.repo.port';

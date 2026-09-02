@@ -1,56 +1,23 @@
-import { Body, Controller, Get, Inject, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Inject, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthUser, UserPayload } from '../../../../common/utils/user-payload.decorator';
-import { type GetBugHunterProgressPort } from '../../../application/ports/inbound/getBugHunterProgress.port';
 import {
-    GET_BUG_HUNTER_LEVEL_PORT,
-    GET_BUG_HUNTER_PROGRESS_PORT,
     SUBMIT_BUG_HUNTER_SOLUTION_PORT
 } from '../../../infrastructure/tokens';
 import {
-    GetBugHunterLevelContentRes,
     SubmitBugHunterSolRes,
     type SubmitBugHunterSolutionReq,
-    UnlockedLevelRes
 } from '@funcode/shared';
 import { AuthGuard } from '@nestjs/passport';
-import { type GetBugHunterLevelPort } from '../../../application/ports/inbound/getBugHunterLevel.port';
 import { type SubmitBugHunterSolutionPort } from '../../../application/ports/inbound/submitBugHunterSolution.port';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('practice/bug-hunter')
 export class BugHunterController {
     constructor(
-        @Inject(GET_BUG_HUNTER_PROGRESS_PORT)
-        private readonly getBugHunterProgressUC: GetBugHunterProgressPort,
-        @Inject(GET_BUG_HUNTER_LEVEL_PORT)
-        private readonly getBugHunterLevelUC: GetBugHunterLevelPort,
         @Inject(SUBMIT_BUG_HUNTER_SOLUTION_PORT)
         private readonly submitBugHunterSolUC: SubmitBugHunterSolutionPort
     ) {}
 
-    @Get('unlocked-level')
-    async getHighestUnlockedLevel(
-        @UserPayload() user: AuthUser,
-    ): Promise<UnlockedLevelRes> {
-        const res = await this.getBugHunterProgressUC.getProgress(user.userId);
-        return {
-            unlockedLevel: res.highestUnlockedLevel,
-            completedAllLevels: res.completedAllLevels
-        }
-    }
-
-    @Get('levels/:levelId')
-    async getLevelContent(
-        @UserPayload() user: AuthUser,
-        @Param('levelId') levelId: string,
-    ): Promise<GetBugHunterLevelContentRes> {
-        const res = await this.getBugHunterLevelUC.getLevel(user.userId, levelId);
-        return {
-            description: res.description,
-            initialCode: res.initialCode,
-            language: res.language,
-        }
-    }
 
     @Post('levels/:levelId/submit')
     async submit(

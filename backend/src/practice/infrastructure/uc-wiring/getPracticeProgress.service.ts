@@ -1,4 +1,4 @@
-import { GetPracticeProgressUC } from '../../application/use-cases/getPracticeProgress/getPracticeProgress.uc';
+import { GetPracticeProgressUC } from '../../application/use-cases/shared/getPracticeProgress/getPracticeProgress.uc';
 import { Inject, Injectable } from '@nestjs/common';
 import { type PracticeProgressRepoPort } from '../../application/ports/outbound/practiceProgress.repo.port';
 import { PRACTICE_PROGRESS_REPO_PORT } from '../tokens';

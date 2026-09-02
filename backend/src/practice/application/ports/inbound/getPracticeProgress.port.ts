@@ -1,4 +1,4 @@
-import { GetPracticeProgressResult } from '../../use-cases/getPracticeProgress/getPracticeProgress.res';
+import { GetPracticeProgressResult } from '../../use-cases/shared/getPracticeProgress/getPracticeProgress.res';
 import { PracticeGameMode } from '@funcode/shared';
 
 export interface GetPracticeProgressPort {
