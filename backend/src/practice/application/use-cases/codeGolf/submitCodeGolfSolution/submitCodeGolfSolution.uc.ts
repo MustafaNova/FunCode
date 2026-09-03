@@ -5,8 +5,6 @@ import { SubmitCodeGolfSolutionCmd } from './submitCodeGolfSolution.cmd';
 import { SubmitCodeGolfSolutionResult } from './submitCodeGolfSolution.res';
 import { PracticeLevelNotFoundError } from '../../shared/getPracticeLevel/errors/practiceLevelNotFound.err';
 import { CodeGolfCharacterLimitExceededError } from './errors/codeGolfCharacterLimitExceeded.err';
-import { MAX_BUG_HUNTER_LEVEL } from '../../../../domain/constants/bugHunter.constants';
-import { CODE_GOLF_LEVELS } from '../../../../infrastructure/practiceLevelRepo/levels/codeGolfLevels';
 import { MAX_CODE_GOLF_LEVEL } from '../../../../domain/constants/codeGolf.constants';
 
 

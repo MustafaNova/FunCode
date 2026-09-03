@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import s from './codeGolfLevel.module.scss';
 import { ConfirmModal } from '../../../../../components/ConfirmModal/ConfirmModal.tsx';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getPracticeLevel } from '../../../../../services/practice.ts';
+import { getPracticeLevel, submitCodeGolfSolution } from '../../../../../services/practice.ts';
 import type { CodeGolfLevelRes } from '@funcode/shared';
 
 export function CodeGolfLevel() {
@@ -43,6 +43,11 @@ export function CodeGolfLevel() {
 
     if (levelContent === null) {
         return <div className={s.txt}>...loading</div>
+    }
+
+    async function submitSolution() {
+        if (!levelId) return;
+        await submitCodeGolfSolution(levelId, { code });
     }
 
 
@@ -99,6 +104,7 @@ export function CodeGolfLevel() {
                         type="button"
                         className={s.submitButton}
                         disabled={characterCount > levelContent.maxCharacters}
+                        onClick={submitSolution}
                     >
                         Submit solution
                     </button>

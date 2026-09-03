@@ -25,8 +25,8 @@ export const API_URLS = {
     GET_FRIENDS: `${API_URL}/friends`,
     DELETE_FRIEND: (friendUserId: string) => `${API_URL}/friends/${friendUserId}`,
     GET_BUG_HUNTER_HIGHEST_UNLOCKED_LEVEL: `${API_URL}/practice/bug-hunter/unlocked-level`,
-    GET_BUG_HUNTER_LEVEL: (levelId: string) => `${API_URL}/practice/bug-hunter/levels/${levelId}`,
     SUBMIT_BUG_HUNTER_SOL: (levelId: string) => `${API_URL}/practice/bug-hunter/levels/${levelId}/submit`,
+    SUBMIT_CODE_GOLF_SOL: (levelId: string) => `${API_URL}/practice/code-golf/levels/${levelId}/submit`,
     GET_PRACTICE_PROGRESS: (gameMode: PracticeGameMode) => `${API_URL}/practice/${gameMode}/progress`,
     GET_PRACTICE_LEVEL: (gameMode: PracticeGameMode, levelId: string) => `${API_URL}/practice/levels/${gameMode}/${levelId}`
 

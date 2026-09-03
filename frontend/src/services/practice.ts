@@ -4,7 +4,7 @@ import {
     type PracticeGameMode,
     type PracticeLevelResponseByMode,
     type SubmitBugHunterSolRes,
-    type SubmitBugHunterSolutionReq,
+    type SubmitBugHunterSolutionReq, type SubmitCodeGolfSolRes, type SubmitCodeGolfSolutionReq,
 } from '@funcode/shared';
 
 
@@ -14,7 +14,6 @@ export async function getGameProgress(gameMode: PracticeGameMode) {
         credentials: 'include',
     })
     const practiceProgress: GetPracticeProgressRes = await res.json();
-    console.log(practiceProgress);
     return practiceProgress;
 
 }
@@ -34,6 +33,21 @@ export async function submitBugHunterSolution(levelId: string, payload: SubmitBu
     const solutionResult: SubmitBugHunterSolRes = await res.json()
     return solutionResult
 
+}
+
+export async function submitCodeGolfSolution(levelId: string, payload: SubmitCodeGolfSolutionReq) {
+    const res = await fetch(API_URLS.SUBMIT_CODE_GOLF_SOL(levelId), {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+    })
+
+    const solutionResult: SubmitCodeGolfSolRes = await res.json();
+    console.log(solutionResult)
+    return solutionResult
 }
 
 

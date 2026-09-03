@@ -1,1 +1,2 @@
-export * from './submitBugHunterLevel.req.js';
+export * from './submitBugHunterSolution.req.js';
+export * from './submitCodeGolfSolution.req.js';
