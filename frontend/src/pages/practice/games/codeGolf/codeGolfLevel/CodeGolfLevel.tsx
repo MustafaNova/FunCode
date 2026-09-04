@@ -12,8 +12,10 @@ export function CodeGolfLevel() {
     const [levelContent, setLevelContent] = useState<CodeGolfLevelRes | null>(null);
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
+    const [submitError, setSubmitError] = useState(false);
     const modalTitle = 'Leave?';
     const modalText = 'Your progress will be lost';
+    const errorDisplayDuration = 3000;
     const editorOptions = {
         automaticLayout: true,
         minimap: {
@@ -47,7 +49,19 @@ export function CodeGolfLevel() {
 
     async function submitSolution() {
         if (!levelId) return;
-        await submitCodeGolfSolution(levelId, { code });
+        const res = await submitCodeGolfSolution(levelId, { code });
+
+        if (!res.success) {
+            setSubmitError(true);
+
+            setTimeout(() => {
+                setSubmitError(false);
+            }, errorDisplayDuration)
+
+            return;
+        }
+
+        navigate('success')
     }
 
 
@@ -99,6 +113,8 @@ export function CodeGolfLevel() {
                     <span className={`${s.characterCount} ${characterCount <= levelContent.maxCharacters ? s.green : s.red}`}>
                         {characterCount} characters
                     </span>
+                    {submitError && <span className={s.failedMsg}>Your solution is incorrect</span>}
+
 
                     <button
                         type="button"

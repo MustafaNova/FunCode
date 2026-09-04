@@ -34,6 +34,8 @@ import { BugHunterLevel } from './pages/practice/games/bugHunter/bugHunterLevel/
 import { BugHunterSuccessScreen } from './pages/practice/games/bugHunter/bugHunterSuccessScreen/bugHunterSuccessScreen.tsx';
 import { CodeGolf } from './pages/practice/games/codeGolf/CodeGolf.tsx';
 import { CodeGolfLevel } from './pages/practice/games/codeGolf/codeGolfLevel/CodeGolfLevel.tsx';
+import { CodeGolfSuccessScreen } from './pages/practice/games/codeGolf/codeGolfSuccessScreen/codeGolfSuccessScreen.tsx';
+import { SpecialModesPage } from './pages/arena1v1/specialModes/specialModesPage.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -49,6 +51,7 @@ createRoot(document.getElementById('root')!).render(
                   <Route index element={<School/>}></Route>
                   <Route path='arena' element={<Arena/>}></Route>
                   <Route path='arena/1v1' element={<Arena1v1/>}></Route>
+                  <Route path='arena/1v1/special-modes' element={<SpecialModesPage />}></Route>
                   <Route path='clan' element={<Clan />}>
                       <Route index element={<ClanIndexRedirect />}></Route>
 
@@ -68,6 +71,7 @@ createRoot(document.getElementById('root')!).render(
               </Route>
               <Route path='practice/code-golf' element={<CodeGolf />}></Route>
               <Route path='practice/code-golf/:levelId' element={<CodeGolfLevel />}/>
+              <Route path='practice/code-golf/:levelId/success' element={<CodeGolfSuccessScreen />}/>
               <Route path='practice/bug-hunter' element={<BugHunter />}></Route>
               <Route path='practice/bug-hunter/:levelId' element={<BugHunterLevel />}></Route>
               <Route path='practice/bug-hunter/:levelId/success' element={<BugHunterSuccessScreen />}></Route>

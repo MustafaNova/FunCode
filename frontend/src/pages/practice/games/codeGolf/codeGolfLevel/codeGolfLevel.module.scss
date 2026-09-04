@@ -252,3 +252,18 @@
   font-weight: 700;
   color: black;
 }
+
+
+.failedMsg {
+  display: block;
+  padding: 10px 14px;
+
+  background: rgba(255, 70, 70, 0.12);
+  border: 1px solid rgba(255, 70, 70, 0.4);
+  border-radius: 8px;
+
+  color: #ff5c5c;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+}

@@ -4,7 +4,12 @@ import { leaveUnranked1v1, matchmakingUnranked1v1 } from '../../services/matchma
 import { useNavigate } from 'react-router-dom';
 import { SOCKET_EVENTS } from '@funcode/shared';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBug, faCodeBranch, faLock, faShieldHalved, faUserNinja } from '@fortawesome/free-solid-svg-icons';
+import {
+    faLock,
+    faShieldHalved, faTrophy,
+    faUserNinja,
+    faWandMagicSparkles
+} from '@fortawesome/free-solid-svg-icons';
 import { SearchingScreen } from './searchingScreen.tsx';
 import { getSocket } from '../../services/socket/gameSocket.ts';
 
@@ -66,24 +71,24 @@ export function Arena1v1() {
                         <FontAwesomeIcon className={s.modeAction} icon={faUserNinja} />
                     </button>
 
-                    <button className={s.modeCard} disabled>
+                    <button className={`${s.modeCard} ${s.modeCardActive}`} onClick={() => navigate('special-modes')}>
                         <span className={s.modeIcon}>
-                            <FontAwesomeIcon icon={faBug} />
+                            <FontAwesomeIcon icon={faWandMagicSparkles} />
                         </span>
                         <span className={s.modeContent}>
-                            <strong>Bug Hunt</strong>
-                            <span>Debug race</span>
+                            <strong>Special Modes</strong>
+                            <span>Compete in unique coding challenges</span>
                         </span>
                         <FontAwesomeIcon className={s.modeAction} icon={faLock} />
                     </button>
 
                     <button className={s.modeCard} disabled>
                         <span className={s.modeIcon}>
-                            <FontAwesomeIcon icon={faCodeBranch} />
+                            <FontAwesomeIcon icon={faTrophy} />
                         </span>
                         <span className={s.modeContent}>
-                            <strong>Random Language</strong>
-                            <span>Surprise stack challenge</span>
+                            <strong>Ranked</strong>
+                            <span>Climb the ranks and prove your skills</span>
                         </span>
                         <FontAwesomeIcon className={s.modeAction} icon={faLock} />
                     </button>
