@@ -3,23 +3,30 @@ import {
     OnGatewayDisconnect,
     OnGatewayInit,
     SubscribeMessage,
-    WebSocketGateway,
+    WebSocketGateway, WsException,
 } from '@nestjs/websockets';
-import type { SubmitReq } from '@funcode/shared';
+import { type JoinMatchmakingReq, type LeaveMatchmakingReq, SOCKET_EVENTS, type SubmitReq } from '@funcode/shared';
 import { Server, Socket } from 'socket.io';
 import type {
-    CreateNewRoom1v1Event,
-    LoseEvent,
-    NotifyRoomEvent,
+    GameSocket,
+    Payload,
     RoomSocket,
-    WinEvent,
 } from './interfaces';
-import { UseFilters, UseGuards } from '@nestjs/common';
-import { OnEvent } from '@nestjs/event-emitter';
-import { BattleEvent } from '../../domain/enums/battle.events';
+import { Inject, UseFilters, UseGuards } from '@nestjs/common';
 import { RoomGuard } from './guards/room.guard';
-import { GameService } from './game.service';
 import { WsExceptionFilter } from '../../../common/ws.exception.filter';
+import { type JoinMatchMakingPort } from '../../application/ports/inbound/join-matchmaking.port';
+import {
+    BATTLE_MANAGER_PORT,
+    JOIN_MATCHMAKING_PORT,
+    LEAVE_MATCHMAKING_PORT
+} from '../../infrastructure/uc-wiring/tokens';
+import { type LeaveMatchmakingPort } from '../../application/ports/inbound/leave-matchmaking.port';
+import { SubmitCmd } from '../../application/use-cases/battle-manager/dtos/submit.cmd';
+import type { BattleManagerPort } from '../../application/ports/inbound/battle.manager.port';
+import { ReadyPlayerCmd } from '../../application/use-cases/battle-manager/dtos/ready.player.cmd';
+import { GameGatewayRegistry } from '../../infrastructure/GameGatewayRegistry/gameGatewayRegistry';
+import { verify } from 'jsonwebtoken';
 
 @UseFilters(new WsExceptionFilter())
 @WebSocketGateway({
@@ -32,67 +39,89 @@ import { WsExceptionFilter } from '../../../common/ws.exception.filter';
 export class GameGateway
     implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit
 {
-    constructor(private readonly gs: GameService) {}
+    constructor(
+        @Inject(JOIN_MATCHMAKING_PORT)
+        private readonly joinMatchmakingUC: JoinMatchMakingPort,
+        @Inject(LEAVE_MATCHMAKING_PORT)
+        private readonly leaveMatchmakingUC: LeaveMatchmakingPort,
+        @Inject(BATTLE_MANAGER_PORT)
+        private readonly battleManager: BattleManagerPort,
+        private readonly gameGatewayRegistry: GameGatewayRegistry,
+    ) {}
 
     afterInit(server: Server): any {
-        this.gs.setServer(server);
+        this.gameGatewayRegistry.setServer(server);
     }
 
     handleConnection(client: Socket): any {
-        this.gs.registerNewPlayer(client, client.handshake.auth.token);
+        const token = client.handshake.auth.token;
+        if (!token) {
+            this.disconnectUnauthorized(client);
+            return;
+        }
+        try {
+            const payload = verify(token, process.env['JWT_SECRET']!) as Payload;
+            client.data.user = payload; // eslint-disable-line
+            this.gameGatewayRegistry.addPlayer(payload.userId, client as GameSocket);
+        } catch {
+            this.disconnectUnauthorized(client);
+        }
     }
 
     handleDisconnect(client: Socket): any {
-        console.log('handleDisconnect');
-        this.gs.unRegisterPlayer(client.id);
-    }
-
-    @OnEvent(BattleEvent.CREATE_1V1)
-    async createNewRoom1v1({
-        roomId,
-        userId1,
-        userId2,
-    }: CreateNewRoom1v1Event) {
-        await this.gs.createNewRoom1v1(roomId, userId1, userId2);
-    }
-
-    @OnEvent(BattleEvent.ROOM_NOTIFICATION)
-    notifyRoom({ roomId, event, msg }: NotifyRoomEvent) {
-        this.gs.sendRoom(roomId, event, msg);
-    }
-
-    @OnEvent(BattleEvent.CLOSE_ROOM)
-    async closeRoom(roomId: string) {
-        await this.gs.closeRoom(roomId);
-    }
-
-    @OnEvent(BattleEvent.WIN_NOTIFICATION)
-    notifyWin({ userId, payload }: WinEvent) {
-        this.gs.notifyWin(userId, payload);
-    }
-
-    @OnEvent(BattleEvent.LOSE_NOTIFICATION)
-    notifyLose({ userId, payload }: LoseEvent) {
-        this.gs.notifyLose(userId, payload);
+        this.gameGatewayRegistry.removePlayer(client.id);
     }
 
     @UseGuards(RoomGuard)
-    @SubscribeMessage('PLAYER_READY')
+    @SubscribeMessage(SOCKET_EVENTS.PLAYER_READY)
     handlePlayerReady(client: RoomSocket) {
-        const userId = client.data.user.userId;
-        const roomId = client.data.room;
-        this.gs.playerReady(userId, roomId, client.data.roomSize);
+        this.battleManager.handleReadyPlayer(
+            ReadyPlayerCmd.create(
+                client.data.user.userId,
+                client.data.room,
+                client.data.roomSize
+            ),
+        );
     }
 
     @UseGuards(RoomGuard)
-    @SubscribeMessage('SUBMIT_SOLUTION')
+    @SubscribeMessage(SOCKET_EVENTS.SUBMIT_SOLUTION)
     async handleSolutionSubmit(client: RoomSocket, payload: SubmitReq) {
-        await this.gs.solutionSubmit(
-            client.data.user.userId,
-            client.data.room,
-            client.data.user.username,
-            payload.taskId,
-            payload.solution,
-        );
+        try {
+            await this.battleManager.handleSolutionSubmit(
+                SubmitCmd.create(
+                    client.data.user.userId,
+                    client.data.room,
+                    client.data.user.username,
+                    payload.taskId,
+                    payload.solution,
+                ),
+            );
+        } catch (err) {
+            throw new WsException((err as Error).message);
+        }
+    }
+
+    @SubscribeMessage(SOCKET_EVENTS.JOIN_MATCHMAKING)
+    async joinMatchmaking(client: GameSocket, payload: JoinMatchmakingReq) {
+        await this.joinMatchmakingUC.join({
+            userId: client.data.user.userId,
+            username: client.data.user.username,
+            gameModeId: payload.gameModeId
+        })
+    }
+
+    @SubscribeMessage(SOCKET_EVENTS.LEAVE_MATCHMAKING)
+    async leaveMatchmaking(client: GameSocket, payload: LeaveMatchmakingReq) {
+        await this.leaveMatchmakingUC.leave({
+            userId: client.data.user.userId,
+            username: client.data.user.username,
+            gameModeId: payload.gameModeId
+        })
+    }
+
+    private disconnectUnauthorized(client: Socket) {
+        client.emit('unauthorized', { msg: 'no valid token' });
+        client.disconnect();
     }
 }

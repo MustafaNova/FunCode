@@ -5,14 +5,14 @@ import {
     type SubmitResponse,
     type TaskDto,
     type WinRes,
-    SOCKET_EVENTS, type ErrorResponse,
+    SOCKET_EVENTS, type ErrorResponse, type JoinMatchmakingReq, type LeaveMatchmakingReq,
 } from '@funcode/shared';
-import { me } from '../auth.ts';
+import { me } from '../http/auth.ts';
 
 let gameSocket: Socket | null = null;
 const SOCKET_URL = `${import.meta.env.VITE_SERVER_URL}/game`;
 
-export async function getSocket(): Promise<Socket> {
+export async function getGameSocket(): Promise<Socket> {
     if (!gameSocket) {
         const meRes = await me();
         gameSocket = io(SOCKET_URL, {
@@ -23,6 +23,20 @@ export async function getSocket(): Promise<Socket> {
     }
     return gameSocket;
 }
+
+
+export async function joinMatchmaking(handleMatchFound: () => void, payload: JoinMatchmakingReq) {
+    const socket = await getGameSocket();
+    socket.off(SOCKET_EVENTS.MATCH_FOUND);
+    socket.once(SOCKET_EVENTS.MATCH_FOUND, handleMatchFound);
+    socket.emit(SOCKET_EVENTS.JOIN_MATCHMAKING, payload);
+}
+
+export async function leaveMatchmaking(payload: LeaveMatchmakingReq) {
+    const socket = await getGameSocket();
+    socket.emit(SOCKET_EVENTS.LEAVE_MATCHMAKING, payload);
+}
+
 
 export async function socketDisconnect() {
     gameSocket?.disconnect();

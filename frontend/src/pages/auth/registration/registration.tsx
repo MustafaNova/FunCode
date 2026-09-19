@@ -1,7 +1,7 @@
 import s from './registration.module.scss';
 import { Link } from 'react-router-dom';
 import { type FormEvent, type KeyboardEvent, useState } from 'react';
-import { registerUser } from '../../../services/auth.ts';
+import { registerUser } from '../../../services/http/auth.ts';
 import { useTypingCode } from '../useTypingCode.ts';
 
 const registrationCodeSnippets = [

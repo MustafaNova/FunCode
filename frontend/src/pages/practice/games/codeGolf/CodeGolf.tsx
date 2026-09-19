@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import type { GetPracticeProgressRes } from '@funcode/shared';
 import s from './codeGolf.module.scss';
 import { LevelSelection } from '../../components/LevelSelection/LevelSelection.tsx';
-import { getGameProgress } from '../../../../services/practice.ts';
+import { getGameProgress } from '../../../../services/http/practice.ts';
 
 
 export function CodeGolf() {

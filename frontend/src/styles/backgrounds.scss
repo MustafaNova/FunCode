@@ -1,0 +1,14 @@
+.galaxyGridBackground {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: clamp(16px, 4vw, 34px);
+  box-sizing: border-box;
+  color: var(--text);
+  background:
+          linear-gradient(135deg, rgba(255, 79, 135, 0.16), transparent 28%),
+          radial-gradient(circle at 82% 18%, rgba(54, 228, 255, 0.22), transparent 32%),
+          var(--galaxy-background);
+  overflow: hidden;
+  position: relative;
+}

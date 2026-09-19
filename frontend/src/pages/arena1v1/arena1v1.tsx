@@ -1,8 +1,6 @@
 import s from './arena1v1.module.scss'
 import { useState } from 'react';
-import { leaveUnranked1v1, matchmakingUnranked1v1 } from '../../services/matchmaking.ts';
 import { useNavigate } from 'react-router-dom';
-import { SOCKET_EVENTS } from '@funcode/shared';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faLock,
@@ -11,7 +9,7 @@ import {
     faWandMagicSparkles
 } from '@fortawesome/free-solid-svg-icons';
 import { SearchingScreen } from './searchingScreen.tsx';
-import { getSocket } from '../../services/socket/gameSocket.ts';
+import { joinMatchmaking, leaveMatchmaking } from '../../services/socket/gameSocket.ts';
 
 export function Arena1v1() {
     const [searching, setSearching] = useState(false);
@@ -19,17 +17,14 @@ export function Arena1v1() {
 
     const startUnranked1v1 = async () => {
         setSearching(true)
-        const socket = await getSocket()
-        socket.off(SOCKET_EVENTS.MATCH_FOUND)
-        socket.once(SOCKET_EVENTS.MATCH_FOUND, () => {
+        await joinMatchmaking(() => {
             navigate('/match/ready');
             setSearching(false);
-        });
-        await matchmakingUnranked1v1();
+        }, { gameModeId: 'unranked-1v1' })
 
     }
     const cancelUnranked1v1 = async () => {
-        await leaveUnranked1v1()
+        await leaveMatchmaking({ gameModeId: 'unranked-1v1'});
         setSearching(false)
     }
 
@@ -38,7 +33,7 @@ export function Arena1v1() {
     }
 
     return (
-        <main className={s.screen}>
+        <main className="galaxyGridBackground">
             <section className={s.panel}>
                 <div className={s.terminal}>
                     <div className={s.terminalHeader}>
@@ -79,7 +74,7 @@ export function Arena1v1() {
                             <strong>Special Modes</strong>
                             <span>Compete in unique coding challenges</span>
                         </span>
-                        <FontAwesomeIcon className={s.modeAction} icon={faLock} />
+                        <FontAwesomeIcon className={s.modeAction} icon={faUserNinja} />
                     </button>
 
                     <button className={s.modeCard} disabled>
@@ -94,7 +89,7 @@ export function Arena1v1() {
                     </button>
                 </div>
             </section>
-            <button onClick={() => navigate(-1)}>Go back</button>
+            <button onClick={() => navigate('/home/arena')}>Go back</button>
         </main>
     )
 }

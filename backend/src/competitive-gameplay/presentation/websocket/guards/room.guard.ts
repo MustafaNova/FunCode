@@ -1,11 +1,11 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { GameSocket } from '../interfaces';
-import { GameService } from '../game.service';
 import { WsException } from '@nestjs/websockets';
+import { GameGatewayRegistry } from '../../../infrastructure/GameGatewayRegistry/gameGatewayRegistry';
 
 @Injectable()
 export class RoomGuard implements CanActivate {
-    constructor(private readonly gs: GameService) {}
+    constructor(private readonly gameGatewayRegistry: GameGatewayRegistry) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const client = context.switchToWs().getClient<GameSocket>();
@@ -14,11 +14,11 @@ export class RoomGuard implements CanActivate {
             throw new WsException('joined no room');
         }
 
-        const room = await this.gs.getRoom(roomId);
-        if (room == 0) {
+        const room = await this.gameGatewayRegistry.getServer().in(roomId).fetchSockets();
+        if (room.length == 0) {
             throw new WsException('Room does not exist');
         }
-        client.data.roomSize = room;
+        client.data.roomSize = room.length;
         return true;
     }
 }

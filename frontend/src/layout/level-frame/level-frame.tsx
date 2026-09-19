@@ -12,7 +12,7 @@ import { TaskFrame } from "./task-frame/task-frame.tsx";
 import { useEffect, useState } from "react";
 import type { LevelTabs } from './types.ts';
 import { useNavigate, useParams } from "react-router-dom";
-import { getLevel } from "../../services/learning.progression.ts";
+import { getLevel } from "../../services/http/learning.progression.ts";
 import { Course, type LevelModelDto } from "@funcode/shared";
 import { LevelLoading } from "./level-loading/level-loading.tsx";
 import { steps } from './steps.ts';

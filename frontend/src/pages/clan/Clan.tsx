@@ -2,7 +2,7 @@ import s from './clan.module.scss';
 import { Outlet, useNavigate } from 'react-router-dom';
 import type { ClanOutletContext } from './clanOutletContext.type.ts';
 import { useEffect, useState } from 'react';
-import { getMyClan } from '../../services/clans.ts';
+import { getMyClan } from '../../services/http/clans.ts';
 import type { GetMyClanRes } from '@funcode/shared';
 
 export function Clan() {

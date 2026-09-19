@@ -12,7 +12,7 @@ export function SearchingScreen({ cancel }: CancelSearch) {
         return hints[Math.floor(Math.random() * hints.length)]
     })
     return (
-        <main className={s.screen}>
+        <main className="galaxyGridBackground">
             <section className={`${s.panel} ${s.searchPanel}`}>
                 <div className={s.searchIcon} aria-hidden="true">
                     <FontAwesomeIcon icon={faMagnifyingGlass} />

@@ -16,7 +16,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
                 (req) => req?.cookies?.token,
                 ExtractJwt.fromAuthHeaderAsBearerToken(),
             ]),
-            secretOrKey: 'test',
+            secretOrKey: process.env['JWT_SECRET']!,
             passReqToCallback: true,
         });
     }

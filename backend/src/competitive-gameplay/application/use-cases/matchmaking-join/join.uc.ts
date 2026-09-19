@@ -11,8 +11,7 @@ export class JoinUC implements JoinMatchMakingPort {
         const queueEntry = QueueEntry.create(joinCmd.userId, joinCmd.username);
         await this.matchmakingQueuePort.enqueue(
             queueEntry,
-            joinCmd.matchType,
-            joinCmd.playerCount,
+            joinCmd.gameModeId
         );
         return JoinRes.ok();
     }

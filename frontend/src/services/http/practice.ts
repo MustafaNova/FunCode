@@ -1,4 +1,4 @@
-import { API_URLS } from '../constants/urls.ts';
+import { API_URLS } from '../../constants/urls.ts';
 import {
     type GetPracticeProgressRes,
     type PracticeGameMode,

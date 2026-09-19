@@ -6,5 +6,4 @@ export interface BattleManagerPort {
     on1v1Created(battle: Battle1vs1): Promise<void>;
     handleReadyPlayer(readyPlayer: ReadyPlayerCmd): void;
     handleSolutionSubmit(submit: SubmitCmd): Promise<void>;
-    registerNewPlayer(userId: string): void;
 }

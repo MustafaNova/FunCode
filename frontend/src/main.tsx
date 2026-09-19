@@ -1,7 +1,8 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import './index.scss'
+import './styles/index.scss'
+import './styles/backgrounds.scss';
 import App from './App.tsx'
 import { School } from "./pages/school/school.tsx";
 import { Arena } from "./pages/arena/arena.tsx";

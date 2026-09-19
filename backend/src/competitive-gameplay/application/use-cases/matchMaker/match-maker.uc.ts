@@ -4,8 +4,7 @@ import type { MatchmakingQueuePort } from '../../ports/outbound/matchmaking-queu
 import { Battle1vs1 } from '../../../domain/entities/battle1vs1';
 import type { MatchPort } from '../../ports/outbound/match.port';
 import type { IdGeneratorPort } from '../../ports/outbound/id.generator.port';
-import { MatchType } from '../../../domain/enums/matchtype';
-import { PlayerCount } from '../../../domain/enums/playercount';
+import { ArenaGameModeId } from '@funcode/shared';
 
 export class MatchMakerUC implements MatchMakerPort {
     constructor(
@@ -16,19 +15,13 @@ export class MatchMakerUC implements MatchMakerPort {
     ) {}
 
     async match1v1Unranked() {
-        const type = MatchType.UNRANKED;
-        const playerNum = PlayerCount.ONE;
-        const playerCount = await this.matchMaking.getEntryCount(
-            type,
-            playerNum,
-        );
-        if (playerCount < 2) return;
-        const twoPlayers = await this.matchMaking.popTwoPlayers(
-            type,
-            playerNum,
-        );
-        const p1 = twoPlayers[0];
-        const p2 = twoPlayers[1];
+        const players =
+            await this.matchMaking.tryPopTwoPlayers('unranked-1v1');
+
+        if (!players) return;
+
+        const [p1, p2] = players;
+
 
         const roomId = this.idGenerator.generate();
         const battle = Battle1vs1.create(

@@ -1,4 +1,4 @@
-import { API_URLS } from '../constants/urls.ts';
+import { API_URLS } from '../../constants/urls.ts';
 import type {
     GetActiveScreenRes,
     GetLevelReq,
@@ -6,7 +6,7 @@ import type {
     ValidateLevelTaskReq,
     ValidateLevelTaskRes
 } from '@funcode/shared';
-import { useActiveScreen } from '../store/activeScreenStore.ts';
+import { useActiveScreen } from '../../store/activeScreenStore.ts';
 
 export async function getActiveScreen() {
     const response = await fetch(API_URLS.ACTIVE_SCREEN, {

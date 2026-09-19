@@ -16,7 +16,6 @@ import { RoomId, UserId } from '../../../domain/types/players';
 import { toTaskDto } from './mappers/task.mapper';
 
 export class BattleManagerUC implements BattleManagerPort {
-    connectedPlayers = new Set<UserId>();
     roomToPlayers = new Map<RoomId, PlayerInfo[]>();
     private readyPlayers = new Map<RoomId, Set<UserId>>();
 
@@ -107,10 +106,6 @@ export class BattleManagerUC implements BattleManagerPort {
                 payload,
             );
         }
-    }
-
-    registerNewPlayer(userId: string) {
-        this.connectedPlayers.add(userId);
     }
 
     private getLoserId(winnerId: UserId, players: PlayerInfo[]) {

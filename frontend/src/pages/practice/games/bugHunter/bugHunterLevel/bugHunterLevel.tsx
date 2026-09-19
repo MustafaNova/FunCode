@@ -3,7 +3,7 @@ import { Editor } from '@monaco-editor/react';
 import s from '../bugHunter.module.scss';
 import { BUG_HUNTER_LEVELS_BY_ID } from '../bugHunterLevels.ts';
 import { useEffect, useState } from 'react';
-import { getPracticeLevel, submitBugHunterSolution } from '../../../../../services/practice.ts';
+import { getPracticeLevel, submitBugHunterSolution } from '../../../../../services/http/practice.ts';
 import type { BugHunterLevelRes } from '@funcode/shared';
 import { ConfirmModal } from '../../../../../components/ConfirmModal/ConfirmModal.tsx';
 

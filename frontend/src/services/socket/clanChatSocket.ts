@@ -1,12 +1,12 @@
 import { io, type Socket } from 'socket.io-client';
-import { me } from '../auth.ts';
+import { me } from '../http/auth.ts';
 import { CLAN_SOCKET_EVENTS, type ClanMsg, type JoinClanChatReq, type SendClanMsgReq } from '@funcode/shared';
 
 
 let chatSocket: Socket | null = null;
 const SOCKET_URL = `${import.meta.env.VITE_SERVER_URL}/chat`;
 
-export async function getSocket(): Promise<Socket> {
+export async function getChatSocket(): Promise<Socket> {
     if (!chatSocket) {
         const meRes = await me();
         chatSocket = io(SOCKET_URL, {

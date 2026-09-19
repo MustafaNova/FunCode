@@ -1,20 +1,17 @@
-import { MatchType } from '../../../domain/enums/matchtype';
-import { PlayerCount } from '../../../domain/enums/playercount';
+import { ArenaGameModeId } from '@funcode/shared';
 
 export class LeaveCmd {
     private constructor(
         public readonly userId: string,
         public readonly username: string,
-        public readonly matchType: MatchType,
-        public readonly playerCount: PlayerCount,
+        public readonly gameModeId: ArenaGameModeId
     ) {}
 
     static create(
         userId: string,
         username: string,
-        matchType: MatchType,
-        playerCount: PlayerCount,
+        gameModeId: ArenaGameModeId
     ) {
-        return new LeaveCmd(userId, username, matchType, playerCount);
+        return new LeaveCmd(userId, username, gameModeId);
     }
 }

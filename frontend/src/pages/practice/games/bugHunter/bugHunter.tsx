@@ -2,7 +2,7 @@ import { BUG_HUNTER_LEVELS } from './bugHunterLevels.ts';
 import s from './bugHunter.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getGameProgress } from '../../../../services/practice.ts';
+import { getGameProgress } from '../../../../services/http/practice.ts';
 import type { GetPracticeProgressRes } from '@funcode/shared';
 import { LevelSelection } from '../../components/LevelSelection/LevelSelection.tsx';
 

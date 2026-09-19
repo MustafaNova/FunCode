@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { me } from '../services/auth.ts';
+import { me } from '../services/http/auth.ts';
 import { AuthContext } from './authContext.ts';
 import type { AuthUser } from './types.ts';
 

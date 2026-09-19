@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import s from './codeGolfLevel.module.scss';
 import { ConfirmModal } from '../../../../../components/ConfirmModal/ConfirmModal.tsx';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getPracticeLevel, submitCodeGolfSolution } from '../../../../../services/practice.ts';
+import { getPracticeLevel, submitCodeGolfSolution } from '../../../../../services/http/practice.ts';
 import type { CodeGolfLevelRes } from '@funcode/shared';
 
 export function CodeGolfLevel() {

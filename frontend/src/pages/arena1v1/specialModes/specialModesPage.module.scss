@@ -1,0 +1,169 @@
+.panel {
+  width: min(820px, 100%);
+  display: grid;
+  gap: 28px;
+  padding: clamp(22px, 4vw, 36px);
+  box-sizing: border-box;
+  border: 1px solid rgba(192, 239, 255, 0.18);
+  border-radius: 18px;
+  background: rgba(13, 17, 31, 0.9);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+}
+
+.panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+          linear-gradient(
+                          90deg,
+                          transparent 0 48%,
+                          rgba(54, 228, 255, 0.14) 50%,
+                          transparent 52%
+          ),
+          linear-gradient(
+                          0deg,
+                          transparent 0 48%,
+                          rgba(255, 79, 135, 0.1) 50%,
+                          transparent 52%
+          );
+  background-size: 84px 84px;
+  opacity: 0.28;
+}
+
+.hero,
+.modeGrid {
+  position: relative;
+  z-index: 1;
+}
+
+.hero {
+  display: grid;
+  gap: 8px;
+}
+
+.kicker {
+  margin: 0;
+  color: #36e4ff;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(2.2rem, 6vw, 4.2rem);
+  line-height: 0.95;
+}
+
+.hero p:last-child {
+  margin: 0;
+  max-width: 56ch;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.modeGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.modeCard {
+  min-height: 210px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-content: space-between;
+  gap: 18px;
+  padding: 20px;
+  box-sizing: border-box;
+
+  border: 1px solid rgba(54, 228, 255, 0.28);
+  border-radius: 10px;
+
+  background:
+          linear-gradient(
+                          135deg,
+                          rgba(54, 228, 255, 0.13),
+                          rgba(139, 255, 156, 0.08)
+          );
+
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+
+  transition:
+          transform 160ms ease,
+          border-color 160ms ease,
+          box-shadow 160ms ease;
+}
+
+.modeCard:hover {
+  transform: translateY(-3px);
+  border-color: rgba(139, 255, 156, 0.55);
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.32);
+}
+
+.modeIcon {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+
+  border: 1px solid rgba(54, 228, 255, 0.28);
+  border-radius: 10px;
+
+  background: rgba(3, 8, 16, 0.65);
+  color: #2dd4bf;
+
+  font-size: 1.25rem;
+
+  filter:
+          drop-shadow(0 0 14px rgba(45, 212, 191, 0.28));
+}
+
+.modeContent {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 8px;
+}
+
+.modeContent strong {
+  font-size: clamp(1.35rem, 3vw, 1.8rem);
+  line-height: 1;
+}
+
+.modeContent span {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.modeAction {
+  align-self: center;
+  justify-self: end;
+  color: #ffd166;
+  font-size: 1rem;
+}
+
+@media (max-width: 700px) {
+  .modeGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .modeCard {
+    min-height: 170px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modeCard {
+    transition: none;
+  }
+}

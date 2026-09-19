@@ -2,9 +2,9 @@ import s from './chat.module.scss'
 import { useEffect, useRef, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import type { ClanOutletContext } from '../../clanOutletContext.type.ts';
-import { getClanMessages, leaveClan } from '../../../../services/clans.ts';
+import { getClanMessages, leaveClan } from '../../../../services/http/clans.ts';
 import {
-    getSocket,
+    getChatSocket,
     joinClanChatRoom, onNewMsg, sendClanMsg,
     socketDisconnect
 } from '../../../../services/socket/clanChatSocket.ts';
@@ -77,7 +77,7 @@ export function Chat() {
         let offNewMsg: (() => void) | undefined;
 
         async function joinClanChat() {
-            await getSocket()
+            await getChatSocket()
             if (!isActive) return;
 
             joinClanChatRoom(myClan?.clanId);

@@ -1,5 +1,5 @@
-import { API_URLS } from '../constants/urls.ts';
-import type { LoginReq, LoginUserRes, RegisterReq } from '../types/auth.ts';
+import { API_URLS } from '../../constants/urls.ts';
+import type { LoginReq, LoginUserRes, RegisterReq } from '../../types/auth.ts';
 import type { LoginResponse, MeRes } from '@funcode/shared';
 
 export async function registerUser(data: RegisterReq) {

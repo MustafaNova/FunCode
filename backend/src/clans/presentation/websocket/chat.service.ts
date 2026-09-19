@@ -30,7 +30,7 @@ export class ChatService {
             return;
         }
         try {
-            client.data.user = verify(token, 'test') as JwtPayload;
+            client.data.user = verify(token, process.env['JWT_SECRET']!) as JwtPayload;
             console.log('token verified correctly');
         } catch {
             client.disconnect();

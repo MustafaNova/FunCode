@@ -1,8 +1,8 @@
 import s from './login.module.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import { type FormEvent, type KeyboardEvent, useState } from 'react';
-import { loginUser } from '../../../services/auth.ts';
-import { getActiveScreen } from '../../../services/learning.progression.ts';
+import { loginUser } from '../../../services/http/auth.ts';
+import { getActiveScreen } from '../../../services/http/learning.progression.ts';
 import { useTypingCode } from '../useTypingCode.ts';
 import { loginCodeSnippets, terminalCrashCode } from './loginTerminalContent.ts';
 

@@ -3,8 +3,7 @@ import Redis from 'ioredis';
 import { Inject } from '@nestjs/common';
 import { QueueEntry } from '../../domain/entities/queueEntry';
 import { REDIS_CLIENT } from './tokens';
-import { MatchType } from '../../domain/enums/matchtype';
-import { PlayerCount } from '../../domain/enums/playercount';
+import { ArenaGameModeId } from '@funcode/shared';
 
 interface PlayerEntry {
     userId: string;
@@ -16,43 +15,77 @@ export class RedisMatchmakingQueueAdapter implements MatchmakingQueuePort {
         private readonly redis: Redis,
     ) {}
 
-    private key_1vs1_unranked = 'queue:matchmaking:1vs1:unranked';
-    private key_1vs1_ranked = 'queue:matchmaking:1vs1:ranked';
-    private key_2vs2_unranked = 'queue:matchmaking:2vs2:unranked';
-    private key_2vs2_ranked = 'queue:matchmaking:2vs2:ranked';
-
     async enqueue(
         queueEntry: QueueEntry,
-        type: MatchType,
-        players: PlayerCount,
+        gameModeId: ArenaGameModeId
     ): Promise<void> {
         const time = Date.now();
         const value = this.toPlayerEntryValue(queueEntry);
-        const key = this.getQueueKey(type, players);
+        const key = this.getMatchmakingQueueKey(gameModeId);
         await this.redis.zadd(key, time, value);
     }
 
-    async remove(queueEntry: QueueEntry, type: MatchType, players: PlayerCount): Promise<void> {
+    async remove(queueEntry: QueueEntry, gameModeId: ArenaGameModeId): Promise<void> {
         const value = this.toPlayerEntryValue(queueEntry);
-        const key = this.getQueueKey(type, players);
+        const key = this.getMatchmakingQueueKey(gameModeId)
         await this.redis.zrem(key, value);
     }
 
-    async getEntryCount(
-        type: MatchType,
-        players: PlayerCount,
-    ): Promise<number> {
-        const key = this.getQueueKey(type, players);
+    async getEntryCount(gameModeId: ArenaGameModeId): Promise<number> {
+        const key = this.getMatchmakingQueueKey(gameModeId);
         return this.redis.zcard(key);
     }
 
-    async popTwoPlayers(
-        type: MatchType,
-        players: PlayerCount,
-    ): Promise<QueueEntry[]> {
-        const key = this.getQueueKey(type, players);
+    async popTwoPlayers(gameModeId: ArenaGameModeId): Promise<QueueEntry[]> {
+        const key = this.getMatchmakingQueueKey(gameModeId);
         const unparsedRes = await this.redis.zpopmin(key, 2);
         return this.parseQueueEntry(unparsedRes);
+    }
+
+    async tryPopTwoPlayers(gameModeId: ArenaGameModeId): Promise<[QueueEntry, QueueEntry] | null> {
+        const key = this.getMatchmakingQueueKey(gameModeId);
+
+        const script = `
+            local players = redis.call('ZRANGE', KEYS[1], 0, 1)
+
+            if #players < 2 then
+                return {}
+            end
+
+            redis.call('ZREM', KEYS[1], players[1], players[2])
+
+            return players
+        `;
+
+        const result = await this.redis.eval(
+            script,
+            1,
+            key,
+        ) as string[];
+
+        if (result.length < 2) {
+            return null;
+        }
+
+        return this.parseQueueEntries(result);
+    }
+
+    private parseQueueEntries(
+        entries: string[],
+    ): [QueueEntry, QueueEntry] {
+        const playerOne = JSON.parse(entries[0]) as PlayerEntry;
+        const playerTwo = JSON.parse(entries[1]) as PlayerEntry;
+
+        return [
+            QueueEntry.create(
+                playerOne.userId,
+                playerOne.username,
+            ),
+            QueueEntry.create(
+                playerTwo.userId,
+                playerTwo.username,
+            ),
+        ];
     }
 
     private parseQueueEntry(entry: string[]): QueueEntry[] {
@@ -69,15 +102,8 @@ export class RedisMatchmakingQueueAdapter implements MatchmakingQueuePort {
         return [entryOne, entryTwo];
     }
 
-    private getQueueKey(type: MatchType, players: PlayerCount) {
-        switch (players) {
-            case PlayerCount.ONE:
-                if (type == MatchType.UNRANKED) return this.key_1vs1_unranked;
-                else return this.key_1vs1_ranked;
-            case PlayerCount.TWO:
-                if (type == MatchType.UNRANKED) return this.key_2vs2_unranked;
-                else return this.key_2vs2_ranked;
-        }
+    private getMatchmakingQueueKey(gameModeId: ArenaGameModeId) {
+        return `queue:matchmaking:${gameModeId}`;
     }
 
     private toPlayerEntryValue(queueEntry: QueueEntry) {

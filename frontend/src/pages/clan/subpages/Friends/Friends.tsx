@@ -6,7 +6,7 @@ import {
     getFriends,
     getIncomingFriendRequests,
     sendFriendReq
-} from '../../../../services/friends.ts';
+} from '../../../../services/http/friends.ts';
 import type { ErrorResponse, GetFriendsRes, IncomingFriendRequestRes } from '@funcode/shared';
 import { timeAgo } from '../../../../utils/timeAgo.ts';
 import { getErrorMessage } from '../../../../utils/error.messages.ts';

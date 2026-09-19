@@ -1,6 +1,6 @@
 import s from './clans.module.scss';
 import { useState, type UIEvent } from 'react';
-import { joinClan, searchClans } from '../../../../services/clans.ts';
+import { joinClan, searchClans } from '../../../../services/http/clans.ts';
 import type { ClanDto, SearchClansResDto } from '@funcode/shared';
 import { useOutletContext } from 'react-router-dom';
 import type { ClanOutletContext } from '../../clanOutletContext.type.ts';

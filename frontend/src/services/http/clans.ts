@@ -6,7 +6,7 @@ import type {
     GetMyClanRes,
     SearchClansResDto
 } from '@funcode/shared';
-import { API_URLS } from '../constants/urls.ts';
+import { API_URLS } from '../../constants/urls.ts';
 
 export async function createClan(req: CreateClanReq) {
     const res = await fetch(API_URLS.CREATE_CLAN, {
