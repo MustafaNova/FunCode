@@ -5,7 +5,7 @@ import {
     type SubmitResponse,
     type TaskDto,
     type WinRes,
-    SOCKET_EVENTS, type ErrorResponse, type JoinMatchmakingReq, type LeaveMatchmakingReq,
+    SOCKET_EVENTS, type JoinMatchmakingReq, type LeaveMatchmakingReq,
 } from '@funcode/shared';
 import { me } from '../http/auth.ts';
 
