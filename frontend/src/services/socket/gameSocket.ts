@@ -60,7 +60,7 @@ export function onWrongSubmit(callback: (response: SubmitResponse) => void) {
     }
 }
 
-export function onError(callback: (response: ErrorResponse) => void) {
+export function onError(callback: (response: SubmitResponse) => void) {
     gameSocket?.on(SOCKET_EVENTS.ERROR, callback);
     return () => {
         gameSocket?.off(SOCKET_EVENTS.ERROR, callback);
