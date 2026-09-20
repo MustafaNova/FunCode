@@ -1,9 +1,9 @@
-import s from './win.module.scss';
-import { useBackToHome } from '../../../utils/hooks.ts';
+import s from './matchUnranked1v1Win.module.scss';
+import { useBackToHome } from '../../../../../utils/hooks.ts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faTrophy } from '@fortawesome/free-solid-svg-icons';
 
-export function MatchWin() {
+export function MatchUnranked1v1Win() {
     const winMsg = 'Victory compiled successfully!'
     const backToHome = useBackToHome();
     return (

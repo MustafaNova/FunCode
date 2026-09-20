@@ -42,17 +42,18 @@ export class RedisMatchmakingQueueAdapter implements MatchmakingQueuePort {
         return this.parseQueueEntry(unparsedRes);
     }
 
-    async tryPopTwoPlayers(gameModeId: ArenaGameModeId): Promise<[QueueEntry, QueueEntry] | null> {
+    async tryPopPlayers(gameModeId: ArenaGameModeId, count: number): Promise<QueueEntry[] | null> {
         const key = this.getMatchmakingQueueKey(gameModeId);
 
         const script = `
-            local players = redis.call('ZRANGE', KEYS[1], 0, 1)
+            local count = tonumber(ARGV[1])
+            local players = redis.call('ZRANGE', KEYS[1], 0, count - 1)
 
-            if #players < 2 then
+            if #players < count then
                 return {}
             end
 
-            redis.call('ZREM', KEYS[1], players[1], players[2])
+            redis.call('ZREM', KEYS[1], unpack(players))
 
             return players
         `;
@@ -61,9 +62,10 @@ export class RedisMatchmakingQueueAdapter implements MatchmakingQueuePort {
             script,
             1,
             key,
+            count
         ) as string[];
 
-        if (result.length < 2) {
+        if (result.length < count) {
             return null;
         }
 
@@ -72,20 +74,16 @@ export class RedisMatchmakingQueueAdapter implements MatchmakingQueuePort {
 
     private parseQueueEntries(
         entries: string[],
-    ): [QueueEntry, QueueEntry] {
-        const playerOne = JSON.parse(entries[0]) as PlayerEntry;
-        const playerTwo = JSON.parse(entries[1]) as PlayerEntry;
-
-        return [
-            QueueEntry.create(
-                playerOne.userId,
-                playerOne.username,
-            ),
-            QueueEntry.create(
-                playerTwo.userId,
-                playerTwo.username,
-            ),
-        ];
+    ): QueueEntry[] {
+        const res: QueueEntry[] = [];
+        for (const entry of entries) {
+            const player = JSON.parse(entry) as PlayerEntry;
+            res.push(QueueEntry.create(
+                player.userId,
+                player.username
+            ));
+        }
+        return res;
     }
 
     private parseQueueEntry(entry: string[]): QueueEntry[] {

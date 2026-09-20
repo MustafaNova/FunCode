@@ -40,7 +40,6 @@ export class BattleManagerUC implements BattleManagerPort {
         const msg = { match: `${p1.username} vs ${p2.username}` };
         this.playerGateway.notifyRoom(roomId, SOCKET_EVENTS.MATCH_FOUND, msg);
 
-        return Promise.resolve();
     }
 
     handleReadyPlayer(readyPlayer: ReadyPlayerCmd) {

@@ -5,7 +5,6 @@ import { PlayerGatewayModule } from './playerGateway/player.gateway.module';
 import { IdGeneratorModule } from './idGenerator/idGenerator.module';
 import { UCServicesModule } from './uc-wiring/uc.services.module';
 import { UserCodeExecutionModule } from './userCodeExecution/usercode.execution.module';
-import { MatchModule } from './match/match.module';
 
 @Module({
     imports: [
@@ -15,7 +14,6 @@ import { MatchModule } from './match/match.module';
         IdGeneratorModule,
         UCServicesModule,
         UserCodeExecutionModule,
-        MatchModule,
     ],
     exports: [
         RedisModule,
@@ -24,7 +22,6 @@ import { MatchModule } from './match/match.module';
         IdGeneratorModule,
         UCServicesModule,
         UserCodeExecutionModule,
-        MatchModule,
     ],
 })
 export class InfrastructureModule {}

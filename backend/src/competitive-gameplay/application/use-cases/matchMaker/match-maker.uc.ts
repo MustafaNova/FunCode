@@ -2,26 +2,41 @@ import { MatchMakerPort } from '../../ports/inbound/match-maker.port';
 import type { BattleRepositoryPort } from '../../ports/outbound/battleRepository.port';
 import type { MatchmakingQueuePort } from '../../ports/outbound/matchmaking-queue.port';
 import { Battle1vs1 } from '../../../domain/entities/battle1vs1';
-import type { MatchPort } from '../../ports/outbound/match.port';
 import type { IdGeneratorPort } from '../../ports/outbound/id.generator.port';
+import { REQUIRED_PLAYERS } from '../../../domain/constants/arenaGameMode.constants';
 import { ArenaGameModeId } from '@funcode/shared';
+import { QueueEntry } from '../../../domain/entities/queueEntry';
+import { BattleManagerPort } from '../../ports/inbound/battle.manager.port';
 
 export class MatchMakerUC implements MatchMakerPort {
     constructor(
         private readonly battleRepo: BattleRepositoryPort,
         private readonly matchMaking: MatchmakingQueuePort,
-        private readonly match: MatchPort,
         private readonly idGenerator: IdGeneratorPort,
+        private readonly battleManager: BattleManagerPort
     ) {}
 
-    async match1v1Unranked() {
+    async tryMatch(gameModeId: ArenaGameModeId) {
+        const requiredPlayers = REQUIRED_PLAYERS[gameModeId];
         const players =
-            await this.matchMaking.tryPopTwoPlayers('unranked-1v1');
+            await this.matchMaking.tryPopPlayers(gameModeId, requiredPlayers);
 
         if (!players) return;
 
-        const [p1, p2] = players;
+        switch (gameModeId) {
+            case 'unranked-1v1':
+                return this.create1v1(players);
 
+            case 'bug-hunter-1v1':
+                return this.create1v1(players);
+
+            case 'code-golf-1v1':
+                return this.create1v1(players);
+        }
+    }
+
+    private async create1v1(players: QueueEntry[]) {
+        const [p1, p2] = players;
 
         const roomId = this.idGenerator.generate();
         const battle = Battle1vs1.create(
@@ -31,6 +46,6 @@ export class MatchMakerUC implements MatchMakerPort {
         );
 
         await this.battleRepo.save1vs1(battle);
-        this.match.matchFound1v1(battle);
+        await this.battleManager.on1v1Created(battle);
     }
 }

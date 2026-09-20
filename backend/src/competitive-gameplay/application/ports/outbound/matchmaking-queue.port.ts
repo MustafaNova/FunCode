@@ -14,5 +14,5 @@ export interface MatchmakingQueuePort {
     ): Promise<void>;
     getEntryCount(gameModeId: ArenaGameModeId): Promise<number>;
     popTwoPlayers(gameModeId: ArenaGameModeId): Promise<QueueEntry[]>;
-    tryPopTwoPlayers(gameModeId: ArenaGameModeId): Promise<[QueueEntry, QueueEntry] | null>
+    tryPopPlayers(gameModeId: ArenaGameModeId, count: number): Promise<QueueEntry[] | null>
 }

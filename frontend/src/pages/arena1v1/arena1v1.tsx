@@ -14,13 +14,19 @@ import { joinMatchmaking, leaveMatchmaking } from '../../services/socket/gameSoc
 export function Arena1v1() {
     const [searching, setSearching] = useState(false);
     const navigate = useNavigate();
-
     const startUnranked1v1 = async () => {
-        setSearching(true)
-        await joinMatchmaking(() => {
-            navigate('/match/ready');
+        setSearching(true);
+        try {
+            await joinMatchmaking(() => {
+                navigate('/match/ready', {
+                    state: {
+                        readyPath: '/match/unranked-1v1'
+                    }
+                });
+            }, { gameModeId: 'unranked-1v1' })
+        } catch {
             setSearching(false);
-        }, { gameModeId: 'unranked-1v1' })
+        }
 
     }
     const cancelUnranked1v1 = async () => {

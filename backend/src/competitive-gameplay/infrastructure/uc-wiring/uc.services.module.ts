@@ -6,13 +6,11 @@ import { RedisModule } from '../redis/redis.module';
 import { JoinService } from './join.service';
 import {
     BATTLE_MANAGER_PORT,
-    JOIN_MATCHMAKING_PORT, LEAVE_MATCHMAKING_PORT,
+    JOIN_MATCHMAKING_PORT, LEAVE_MATCHMAKING_PORT, MATCH_MAKER_PORT,
     VALIDATOR_PORT,
 } from './tokens';
 import { ValidatorService } from './validator.service';
-import { BattleManagerService } from './battle-manager/battle.manager.service';
-import { MatchModule } from '../match/match.module';
-import { MatchFound1v1Listener } from './battle-manager/match.found1v1.listener';
+import { BattleManagerService } from './battle.manager.service';
 import { UserCodeExecutionModule } from '../userCodeExecution/usercode.execution.module';
 import { PlayerGatewayModule } from '../playerGateway/player.gateway.module';
 import { LeaveService } from './leave.service';
@@ -22,13 +20,11 @@ import { LeaveService } from './leave.service';
         DatabaseModule,
         IdGeneratorModule,
         RedisModule,
-        MatchModule,
         UserCodeExecutionModule,
         PlayerGatewayModule,
     ],
     providers: [
-        MatchMakerService,
-        MatchFound1v1Listener,
+        { provide: MATCH_MAKER_PORT, useClass: MatchMakerService },
         { provide: JOIN_MATCHMAKING_PORT, useClass: JoinService },
         { provide: LEAVE_MATCHMAKING_PORT, useClass: LeaveService },
         { provide: VALIDATOR_PORT, useClass: ValidatorService },

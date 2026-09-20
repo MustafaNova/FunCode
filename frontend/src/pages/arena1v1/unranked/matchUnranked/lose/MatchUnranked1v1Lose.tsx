@@ -1,9 +1,9 @@
-import s from './lose.module.scss';
-import { useBackToHome } from '../../../utils/hooks.ts';
+import s from './matchUnranked1v1Lose.module.scss';
+import { useBackToHome } from '../../../../../utils/hooks.ts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 
-export function MatchLose() {
+export function MatchUnranked1v1Lose() {
     const loseMsg = 'Opponent deployed their solution first!';
     return (
         <main className={s.readyScreen}>

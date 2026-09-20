@@ -1,3 +1,5 @@
+import { ArenaGameModeId } from '@funcode/shared';
+
 export interface MatchMakerPort {
-    match1v1Unranked(): Promise<void>;
+    tryMatch(gameModeId: ArenaGameModeId): Promise<void>;
 }

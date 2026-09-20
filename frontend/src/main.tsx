@@ -10,10 +10,10 @@ import { Arena1v1 } from './pages/arena1v1/arena1v1.tsx';
 import { Login } from './pages/auth/login/login.tsx';
 import { Registration } from './pages/auth/registration/registration.tsx';
 import { ReadyScreen } from './pages/ready/readyScreen.tsx';
-import { Match } from './pages/match/match.tsx';
+import { MatchUnranked1v1 } from './pages/arena1v1/unranked/matchUnranked/MatchUnranked1v1.tsx';
 
-import { MatchWin } from './pages/match/MatchWin/MatchWin.tsx';
-import { MatchLose } from './pages/match/MatchLose/MatchLose.tsx';
+import { MatchUnranked1v1Win } from './pages/arena1v1/unranked/matchUnranked/win/MatchUnranked1v1Win.tsx';
+import { MatchUnranked1v1Lose } from './pages/arena1v1/unranked/matchUnranked/lose/MatchUnranked1v1Lose.tsx';
 import { LevelFrame } from './layout/level-frame/level-frame.tsx';
 import { LevelLoseScreen } from './pages/LevelLoseScreen/LevelLoseScreen.tsx';
 import { LevelWinScreen } from './pages/LevelWinScreen/LevelWinScreen.tsx';
@@ -37,6 +37,7 @@ import { CodeGolf } from './pages/practice/games/codeGolf/CodeGolf.tsx';
 import { CodeGolfLevel } from './pages/practice/games/codeGolf/codeGolfLevel/CodeGolfLevel.tsx';
 import { CodeGolfSuccessScreen } from './pages/practice/games/codeGolf/codeGolfSuccessScreen/codeGolfSuccessScreen.tsx';
 import { SpecialModesPage } from './pages/arena1v1/specialModes/specialModesPage.tsx';
+import { BugHunterMatch } from './pages/arena1v1/specialModes/bugHunter/BugHunterMatch.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -44,10 +45,11 @@ createRoot(document.getElementById('root')!).render(
           <Routes>
               <Route path='/' element={<Login/>} />
               <Route path='/register' element={<Registration/>}></Route>
-              <Route path='/match' element={<Match/>}></Route>
+              <Route path='/match/unranked-1v1' element={<MatchUnranked1v1/>}></Route>
+              <Route path='/match/bug-hunter-1v1' element={<BugHunterMatch />}/>
               <Route path='/match/ready' element={<ReadyScreen/>}></Route>
-              <Route path='/match/win' element={<MatchWin/>}></Route>
-              <Route path='/match/lose' element={<MatchLose/>}></Route>
+              <Route path='/match/unranked-1v1/win' element={<MatchUnranked1v1Win/>}></Route>
+              <Route path='/match/unranked-1v1/lose' element={<MatchUnranked1v1Lose/>}></Route>
               <Route path='home' element={<AuthProvider children={<App/>} /> }>
                   <Route index element={<School/>}></Route>
                   <Route path='arena' element={<Arena/>}></Route>

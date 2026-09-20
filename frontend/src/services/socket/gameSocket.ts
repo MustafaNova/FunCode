@@ -37,12 +37,6 @@ export async function leaveMatchmaking(payload: LeaveMatchmakingReq) {
     socket.emit(SOCKET_EVENTS.LEAVE_MATCHMAKING, payload);
 }
 
-
-export async function socketDisconnect() {
-    gameSocket?.disconnect();
-    gameSocket = null;
-}
-
 export function sendPlayerReady() {
     gameSocket?.emit(SOCKET_EVENTS.PLAYER_READY);
 }

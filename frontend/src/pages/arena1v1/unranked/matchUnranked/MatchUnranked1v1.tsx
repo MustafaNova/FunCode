@@ -1,14 +1,14 @@
-import s from './match.module.scss'
-import { useMatchStore } from '../../store/matchStore.ts';
+import s from './matchUnranked1v1.module.scss'
+import { useMatchStore } from '../../../../store/matchStore.ts';
 import { Editor } from '@monaco-editor/react';
 import { useEffect, useState } from 'react';
-import { onError, onLose, onWin, onWrongSubmit, sendCode } from '../../services/socket/gameSocket.ts';
+import { onError, onLose, onWin, onWrongSubmit, sendCode } from '../../../../services/socket/gameSocket.ts';
 import type { SubmitReq, SubmitResponse } from '@funcode/shared';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBolt, faCode, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 
-export function Match() {
+export function MatchUnranked1v1() {
     const navigate = useNavigate();
     const matchTask = useMatchStore((s) => s.matchTask);
     const [code, setCode] = useState('');

@@ -6,9 +6,42 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import s from './specialModesPage.module.scss';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import type { ArenaGameModeId } from '@funcode/shared';
+import { joinMatchmaking, leaveMatchmaking } from '../../../services/socket/gameSocket.ts';
+import { SearchingScreen } from '../searchingScreen.tsx';
 
 export function SpecialModesPage() {
     const navigate = useNavigate();
+    const [searchingGameMode, setSearchingGameMode] = useState<ArenaGameModeId | null>(null);
+    async function startMatchMaking(
+        gameModeId: ArenaGameModeId,
+        readyPath: string
+    ){
+        setSearchingGameMode(gameModeId);
+        try {
+            await joinMatchmaking(() => {
+                navigate('/match/ready', {
+                    state: { readyPath }
+                });
+            }, { gameModeId })
+        } catch {
+            setSearchingGameMode(null);
+        }
+    }
+    async function cancelMatchMaking(){
+        if (!searchingGameMode) return;
+        try {
+            await leaveMatchmaking({ gameModeId: searchingGameMode });
+        } finally {
+            setSearchingGameMode(null);
+        }
+
+    }
+
+    if (searchingGameMode) {
+        return <SearchingScreen cancel={cancelMatchMaking} />
+    }
 
     return (
         <main className="galaxyGridBackground">
@@ -24,7 +57,7 @@ export function SpecialModesPage() {
                     </p>
                 </div>
                 <div className={s.modeGrid}>
-                    <button className={s.modeCard}>
+                    <button className={s.modeCard} onClick={() => startMatchMaking('bug-hunter-1v1', '/match/bug-hunter-1v1')}>
                         <span className={s.modeIcon}>
                             <FontAwesomeIcon icon={faBug} />
                         </span>
@@ -42,7 +75,7 @@ export function SpecialModesPage() {
                             icon={faChevronRight}
                         />
                     </button>
-                    <button className={s.modeCard}>
+                    <button className={s.modeCard} onClick={() => startMatchMaking('code-golf-1v1', '/match/code-golf-1v1')}>
                         <span className={s.modeIcon}>
                             <FontAwesomeIcon icon={faCode} />
                         </span>
