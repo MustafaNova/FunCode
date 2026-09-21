@@ -1,4 +1,4 @@
-import { TaskTest } from '../../../domain/entities/task';
+import { TaskTest } from '../../../domain/entities/taskTest';
 
 export interface UserCodeExecutionPort {
     run<I extends unknown[], O>(

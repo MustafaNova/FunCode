@@ -2,7 +2,6 @@ import s from './ready.module.scss'
 import { onBattleStarted, sendPlayerReady } from '../../services/socket/gameSocket.ts';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useMatchStore } from '../../store/matchStore.ts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBolt, faPlay, faTerminal } from '@fortawesome/free-solid-svg-icons';
 import { TerminalHeader } from './terminalHeader.tsx';
@@ -12,16 +11,16 @@ export function ReadyScreen() {
     const navigate = useNavigate();
     const location = useLocation();
     const readyPath = location.state.readyPath;
-    const setMatchTask = useMatchStore((s) => s.setMatchTask);
     const starterCode= '// Warm-up zone'
     const [code, setCode] = useState(starterCode);
 
     useEffect(() =>{
         return onBattleStarted((data) => {
-            setMatchTask(data.task);
-            navigate(readyPath)
+            navigate(readyPath, {
+                state: data.task
+            })
         });
-    }, [navigate, readyPath, setMatchTask])
+    }, [navigate, readyPath])
 
 
     return (

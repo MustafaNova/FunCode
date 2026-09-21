@@ -3,9 +3,8 @@ import {
     type LoseRes,
     type SubmitReq,
     type SubmitResponse,
-    type TaskDto,
     type WinRes,
-    SOCKET_EVENTS, type JoinMatchmakingReq, type LeaveMatchmakingReq,
+    SOCKET_EVENTS, type JoinMatchmakingReq, type LeaveMatchmakingReq, type ArenaTask,
 } from '@funcode/shared';
 import { me } from '../http/auth.ts';
 
@@ -41,7 +40,7 @@ export function sendPlayerReady() {
     gameSocket?.emit(SOCKET_EVENTS.PLAYER_READY);
 }
 
-export function onBattleStarted(callback: (data: { task: TaskDto }) => void) {
+export function onBattleStarted(callback: (data: { task: ArenaTask }) => void) {
     gameSocket?.on(SOCKET_EVENTS.BATTLE_STARTED, callback);
 
     return () => {

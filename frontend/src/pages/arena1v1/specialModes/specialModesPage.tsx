@@ -57,7 +57,7 @@ export function SpecialModesPage() {
                     </p>
                 </div>
                 <div className={s.modeGrid}>
-                    <button className={s.modeCard} onClick={() => startMatchMaking('bug-hunter-1v1', '/match/bug-hunter-1v1')}>
+                    <button className={s.modeCard} onClick={() => startMatchMaking('bug-hunter-unranked-1v1', '/match/bug-hunter-unranked-1v1')}>
                         <span className={s.modeIcon}>
                             <FontAwesomeIcon icon={faBug} />
                         </span>
@@ -75,7 +75,7 @@ export function SpecialModesPage() {
                             icon={faChevronRight}
                         />
                     </button>
-                    <button className={s.modeCard} onClick={() => startMatchMaking('code-golf-1v1', '/match/code-golf-1v1')}>
+                    <button className={s.modeCard} onClick={() => startMatchMaking('code-golf-unranked-1v1', '/match/code-golf-unranked-1v1')}>
                         <span className={s.modeIcon}>
                             <FontAwesomeIcon icon={faCode} />
                         </span>

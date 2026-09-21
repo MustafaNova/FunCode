@@ -1,25 +1,32 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { type ArenaGameModeId } from '@funcode/shared';
 
 @Entity('battle1vs1')
 export class Battle1vs1Entity {
-    @PrimaryColumn({ type: 'varchar' })
+    @PrimaryColumn({ type: 'uuid' })
     roomId: string;
 
-    @Column({ type: 'varchar' })
+    @Column({ type: 'uuid' })
     playerId1: string;
 
-    @Column({ type: 'varchar' })
+    @Column()
     playerUsername1: string;
 
-    @Column({ type: 'varchar' })
+    @Column({ type: 'uuid' })
     playerId2: string;
 
-    @Column({ type: 'varchar' })
+    @Column()
     playerUsername2: string;
 
-    @Column({ type: 'varchar', nullable: true, default: null })
+    @Column()
+    gameModeId: ArenaGameModeId;
+
+    @Column({ type: 'uuid', nullable: true, default: null })
     winnerId: string | null;
 
-    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    @Column({
+        type: 'timestamp',
+        default: () => 'CURRENT_TIMESTAMP',
+    })
     createdAt: Date;
 }

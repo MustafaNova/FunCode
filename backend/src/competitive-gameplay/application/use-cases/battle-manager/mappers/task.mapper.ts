@@ -1,7 +1,6 @@
-import { TaskDto } from '@funcode/shared';
-import { Task } from '../../../../domain/entities/task';
+import { ClassicTask, TaskDto } from '@funcode/shared';
 
-export function toTaskDto(task: Task): TaskDto {
+export function toTaskDto(task: ClassicTask): TaskDto {
     return {
         id: task.id,
         name: task.name,

@@ -74,8 +74,8 @@ export class GameGateway
 
     @UseGuards(RoomGuard)
     @SubscribeMessage(SOCKET_EVENTS.PLAYER_READY)
-    handlePlayerReady(client: RoomSocket) {
-        this.battleManager.handleReadyPlayer(
+    async handlePlayerReady(client: RoomSocket) {
+        await this.battleManager.handleReadyPlayer(
             ReadyPlayerCmd.create(
                 client.data.user.userId,
                 client.data.room,

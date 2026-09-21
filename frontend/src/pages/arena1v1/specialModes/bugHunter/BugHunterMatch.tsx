@@ -7,6 +7,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import s from './bugHunterMatch.module.scss';
+import { useLocation } from 'react-router-dom';
+import type { BugHunterTask } from '@funcode/shared';
 
 export function BugHunterMatch() {
     const [code, setCode] = useState(`function calculateTotal(items) {
@@ -18,6 +20,8 @@ export function BugHunterMatch() {
 
     return total;
 }`);
+    const location = useLocation();
+    const task: BugHunterTask = location.state
 
     function handleSubmit() {
         console.log(code);
@@ -33,10 +37,10 @@ export function BugHunterMatch() {
                             Bug Hunter · 1v1
                         </span>
 
-                        <h1>Find the hidden bug</h1>
+                        <h1>{task.name}</h1>
 
                         <p>
-                            Fix the broken code before your opponent.
+                            {task.description}
                         </p>
                     </div>
 
@@ -62,7 +66,7 @@ export function BugHunterMatch() {
                         height="520px"
                         language="typescript"
                         theme="vs-dark"
-                        value={code}
+                        value={task.code}
                         onChange={(value) => setCode(value ?? '')}
                         options={{
                             minimap: { enabled: false },

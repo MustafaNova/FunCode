@@ -1,4 +1,4 @@
 export type ArenaGameModeId =
-    | 'unranked-1v1'
-    | 'bug-hunter-1v1'
-    | 'code-golf-1v1';
+    | 'classic-unranked-1v1'
+    | 'bug-hunter-unranked-1v1'
+    | 'code-golf-unranked-1v1';

@@ -1,7 +1,8 @@
-import { Task, TaskTest } from '../entities/task';
+import { TaskTest } from '../entities/taskTest';
+import { ClassicTask } from '@funcode/shared';
 
 type TaskEntry<I extends unknown[], O> = {
-    task: Task;
+    task: ClassicTask;
     tests: TaskTest<I, O>[];
 };
 

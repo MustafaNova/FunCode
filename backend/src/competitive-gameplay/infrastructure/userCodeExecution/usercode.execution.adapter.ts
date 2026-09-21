@@ -1,7 +1,7 @@
 import { UserCodeExecutionPort } from '../../application/ports/outbound/usercode.execution.port';
 import vm from 'vm';
 import { Injectable } from '@nestjs/common';
-import { TaskTest } from '../../domain/entities/task';
+import { TaskTest } from '../../domain/entities/taskTest';
 
 interface Sandbox {
     args: unknown[];

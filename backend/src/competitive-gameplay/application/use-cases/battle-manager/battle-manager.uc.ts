@@ -1,5 +1,5 @@
 import { BattleManagerPort } from '../../ports/inbound/battle.manager.port';
-import { Battle1vs1, PlayerInfo } from '../../../domain/entities/battle1vs1';
+import { Battle1v1, PlayerInfo } from '../../../domain/entities/battle1v1';
 import type { PlayerGatewayPort } from '../../ports/outbound/player.gateway.port';
 import { ReadyPlayerCmd } from './dtos/ready.player.cmd';
 import { SubmitCmd } from './dtos/submit.cmd';
@@ -10,10 +10,9 @@ import {
     SOCKET_EVENTS,
 } from '@funcode/shared';
 import type { BattleRepositoryPort } from '../../ports/outbound/battleRepository.port';
-import type { ChallengeRepositoryPort } from '../../ports/outbound/challenge.repository.port';
 import type { ValidatorPort } from '../../ports/inbound/validator.port';
 import { RoomId, UserId } from '../../../domain/types/players';
-import { toTaskDto } from './mappers/task.mapper';
+import { ArenaTaskProviderPort } from '../../ports/outbound/arena.task.provider.port';
 
 export class BattleManagerUC implements BattleManagerPort {
     roomToPlayers = new Map<RoomId, PlayerInfo[]>();
@@ -21,12 +20,12 @@ export class BattleManagerUC implements BattleManagerPort {
 
     constructor(
         private readonly playerGateway: PlayerGatewayPort,
-        private readonly challengeRepo: ChallengeRepositoryPort,
         private readonly validator: ValidatorPort,
         private readonly battleRepo: BattleRepositoryPort,
+        private readonly arenaTaskProvider: ArenaTaskProviderPort
     ) {}
 
-    async on1v1Created(battle: Battle1vs1): Promise<void> {
+    async on1v1Created(battle: Battle1v1): Promise<void> {
         const roomId = battle.roomId!;
         const p1 = battle.player1;
         const p2 = battle.player2;
@@ -42,7 +41,7 @@ export class BattleManagerUC implements BattleManagerPort {
 
     }
 
-    handleReadyPlayer(readyPlayer: ReadyPlayerCmd) {
+    async handleReadyPlayer(readyPlayer: ReadyPlayerCmd) {
         const { userId, roomId, roomSize } = readyPlayer;
         if (!this.readyPlayers.has(roomId)) {
             this.readyPlayers.set(roomId, new Set<string>());
@@ -51,15 +50,25 @@ export class BattleManagerUC implements BattleManagerPort {
         const readyRoom = this.readyPlayers.get(roomId)!;
         readyRoom.add(userId);
 
-        if (roomSize == readyRoom.size) {
-            this.readyPlayers.delete(roomId);
-            const task = toTaskDto(this.challengeRepo.getRandomTask());
-            this.playerGateway.notifyRoom(
-                roomId,
-                SOCKET_EVENTS.BATTLE_STARTED,
-                { task },
-            );
+        if (roomSize !== readyRoom.size) return;
+
+        this.readyPlayers.delete(roomId);
+        const battle = await this.battleRepo.getByRoomId(roomId);
+        if (!battle) {
+            throw new Error('Battle not found');
         }
+
+        const task =
+            this.arenaTaskProvider.getRandomTask(
+                battle.gameModeId
+            );
+
+
+        this.playerGateway.notifyRoom(
+            roomId,
+            SOCKET_EVENTS.BATTLE_STARTED,
+            { task },
+        );
     }
 
     async handleSolutionSubmit(submit: SubmitCmd) {

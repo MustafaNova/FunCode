@@ -20,17 +20,17 @@ export function Arena1v1() {
             await joinMatchmaking(() => {
                 navigate('/match/ready', {
                     state: {
-                        readyPath: '/match/unranked-1v1'
+                        readyPath: '/match/classic-unranked-1v1'
                     }
                 });
-            }, { gameModeId: 'unranked-1v1' })
+            }, { gameModeId: 'classic-unranked-1v1' })
         } catch {
             setSearching(false);
         }
 
     }
     const cancelUnranked1v1 = async () => {
-        await leaveMatchmaking({ gameModeId: 'unranked-1v1'});
+        await leaveMatchmaking({ gameModeId: 'classic-unranked-1v1' });
         setSearching(false)
     }
 

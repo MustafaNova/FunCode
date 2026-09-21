@@ -1,6 +1,4 @@
 import { QueueEntry } from '../../../domain/entities/queueEntry';
-import { MatchType } from '../../../domain/enums/matchtype';
-import { PlayerCount } from '../../../domain/enums/playercount';
 import { ArenaGameModeId } from '@funcode/shared';
 
 export interface MatchmakingQueuePort {

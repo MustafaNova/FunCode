@@ -45,11 +45,11 @@ createRoot(document.getElementById('root')!).render(
           <Routes>
               <Route path='/' element={<Login/>} />
               <Route path='/register' element={<Registration/>}></Route>
-              <Route path='/match/unranked-1v1' element={<MatchUnranked1v1/>}></Route>
-              <Route path='/match/bug-hunter-1v1' element={<BugHunterMatch />}/>
+              <Route path='/match/classic-unranked-1v1' element={<MatchUnranked1v1/>}></Route>
+              <Route path='/match/bug-hunter-unranked-1v1' element={<BugHunterMatch />}/>
               <Route path='/match/ready' element={<ReadyScreen/>}></Route>
-              <Route path='/match/unranked-1v1/win' element={<MatchUnranked1v1Win/>}></Route>
-              <Route path='/match/unranked-1v1/lose' element={<MatchUnranked1v1Lose/>}></Route>
+              <Route path='/match/classic-unranked-1v1/win' element={<MatchUnranked1v1Win/>}></Route>
+              <Route path='/match/classic-unranked-1v1/lose' element={<MatchUnranked1v1Lose/>}></Route>
               <Route path='home' element={<AuthProvider children={<App/>} /> }>
                   <Route index element={<School/>}></Route>
                   <Route path='arena' element={<Arena/>}></Route>
