@@ -16,13 +16,11 @@ export class BattleManagerService extends BattleManagerUC {
     constructor(
         @Inject(PLAYER_GATEWAY_PORT)
         playerGateway: PlayerGatewayPort,
-        @Inject(VALIDATOR_PORT)
-        validator: ValidatorPort,
         @Inject(BATTLE_REPOSITORY_PORT)
         battleRepo: BattleRepositoryPort,
         @Inject(ARENA_TASK_PROVIDER_PORT)
         arenaTaskProvider: ArenaTaskProviderPort
     ) {
-        super(playerGateway, validator, battleRepo, arenaTaskProvider);
+        super(playerGateway, battleRepo, arenaTaskProvider);
     }
 }

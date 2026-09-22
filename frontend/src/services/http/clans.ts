@@ -2,7 +2,7 @@ import type {
     ClanMsg,
     CreateClanReq,
     CreateClanRes,
-    ErrorResponse,
+    HttpErrorResponse,
     GetMyClanRes,
     SearchClansResDto
 } from '@funcode/shared';
@@ -19,7 +19,7 @@ export async function createClan(req: CreateClanReq) {
     })
 
     if (!res.ok) {
-        const err: ErrorResponse = await res.json()
+        const err: HttpErrorResponse = await res.json()
         throw new Error(err.message)
     }
 
@@ -63,7 +63,7 @@ export async function joinClan(clanId: string) {
         credentials: 'include'
     })
     if (!res.ok) {
-        const errorRes: ErrorResponse = await res.json();
+        const errorRes: HttpErrorResponse = await res.json();
         throw new Error(errorRes.message);
     }
 }

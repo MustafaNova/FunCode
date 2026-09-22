@@ -3,9 +3,9 @@ import {
     OnGatewayDisconnect,
     OnGatewayInit,
     SubscribeMessage,
-    WebSocketGateway, WsException,
+    WebSocketGateway,
 } from '@nestjs/websockets';
-import { type JoinMatchmakingReq, type LeaveMatchmakingReq, SOCKET_EVENTS, type SubmitReq } from '@funcode/shared';
+import { type JoinMatchmakingPayload, type LeaveMatchmakingPayload, SOCKET_EVENTS, type SubmitPayload } from '@funcode/shared';
 import { Server, Socket } from 'socket.io';
 import type {
     GameSocket,
@@ -19,7 +19,7 @@ import { type JoinMatchMakingPort } from '../../application/ports/inbound/join-m
 import {
     BATTLE_MANAGER_PORT,
     JOIN_MATCHMAKING_PORT,
-    LEAVE_MATCHMAKING_PORT
+    LEAVE_MATCHMAKING_PORT, SUBMIT_ARENA_SOLUTION_PORT
 } from '../../infrastructure/uc-wiring/tokens';
 import { type LeaveMatchmakingPort } from '../../application/ports/inbound/leave-matchmaking.port';
 import { SubmitCmd } from '../../application/use-cases/battle-manager/dtos/submit.cmd';
@@ -27,8 +27,9 @@ import type { BattleManagerPort } from '../../application/ports/inbound/battle.m
 import { ReadyPlayerCmd } from '../../application/use-cases/battle-manager/dtos/ready.player.cmd';
 import { GameGatewayRegistry } from '../../infrastructure/GameGatewayRegistry/gameGatewayRegistry';
 import { verify } from 'jsonwebtoken';
+import { type SubmitArenaSolutionPort } from '../../application/ports/inbound/submitArenaSolution.port';
 
-@UseFilters(new WsExceptionFilter())
+@UseFilters(WsExceptionFilter)
 @WebSocketGateway({
     namespace: '/game',
     cors: {
@@ -46,6 +47,8 @@ export class GameGateway
         private readonly leaveMatchmakingUC: LeaveMatchmakingPort,
         @Inject(BATTLE_MANAGER_PORT)
         private readonly battleManager: BattleManagerPort,
+        @Inject(SUBMIT_ARENA_SOLUTION_PORT)
+        private readonly submitArenaSolutionUC: SubmitArenaSolutionPort,
         private readonly gameGatewayRegistry: GameGatewayRegistry,
     ) {}
 
@@ -86,24 +89,20 @@ export class GameGateway
 
     @UseGuards(RoomGuard)
     @SubscribeMessage(SOCKET_EVENTS.SUBMIT_SOLUTION)
-    async handleSolutionSubmit(client: RoomSocket, payload: SubmitReq) {
-        try {
-            await this.battleManager.handleSolutionSubmit(
-                SubmitCmd.create(
-                    client.data.user.userId,
-                    client.data.room,
-                    client.data.user.username,
-                    payload.taskId,
-                    payload.solution,
-                ),
-            );
-        } catch (err) {
-            throw new WsException((err as Error).message);
-        }
+    async handleSolutionSubmit(client: RoomSocket, payload: SubmitPayload) {
+        await this.submitArenaSolutionUC.submit(
+            SubmitCmd.create(
+                client.data.user.userId,
+                client.data.room,
+                client.data.user.username,
+                payload.taskId,
+                payload.solution,
+            ),
+        );
     }
 
     @SubscribeMessage(SOCKET_EVENTS.JOIN_MATCHMAKING)
-    async joinMatchmaking(client: GameSocket, payload: JoinMatchmakingReq) {
+    async joinMatchmaking(client: GameSocket, payload: JoinMatchmakingPayload) {
         await this.joinMatchmakingUC.join({
             userId: client.data.user.userId,
             username: client.data.user.username,
@@ -112,7 +111,7 @@ export class GameGateway
     }
 
     @SubscribeMessage(SOCKET_EVENTS.LEAVE_MATCHMAKING)
-    async leaveMatchmaking(client: GameSocket, payload: LeaveMatchmakingReq) {
+    async leaveMatchmaking(client: GameSocket, payload: LeaveMatchmakingPayload) {
         await this.leaveMatchmakingUC.leave({
             userId: client.data.user.userId,
             username: client.data.user.username,

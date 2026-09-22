@@ -6,7 +6,7 @@ import { RedisModule } from '../redis/redis.module';
 import { JoinService } from './join.service';
 import {
     BATTLE_MANAGER_PORT,
-    JOIN_MATCHMAKING_PORT, LEAVE_MATCHMAKING_PORT, MATCH_MAKER_PORT,
+    JOIN_MATCHMAKING_PORT, LEAVE_MATCHMAKING_PORT, MATCH_MAKER_PORT, SUBMIT_ARENA_SOLUTION_PORT,
     VALIDATOR_PORT,
 } from './tokens';
 import { ValidatorService } from './validator.service';
@@ -14,6 +14,7 @@ import { BattleManagerService } from './battle.manager.service';
 import { UserCodeExecutionModule } from '../userCodeExecution/usercode.execution.module';
 import { PlayerGatewayModule } from '../playerGateway/player.gateway.module';
 import { LeaveService } from './leave.service';
+import { SubmitArenaSolutionService } from './submitArenaSolution.service';
 
 @Module({
     imports: [
@@ -29,7 +30,14 @@ import { LeaveService } from './leave.service';
         { provide: LEAVE_MATCHMAKING_PORT, useClass: LeaveService },
         { provide: VALIDATOR_PORT, useClass: ValidatorService },
         { provide: BATTLE_MANAGER_PORT, useClass: BattleManagerService },
+        { provide: SUBMIT_ARENA_SOLUTION_PORT, useClass: SubmitArenaSolutionService }
     ],
-    exports: [JOIN_MATCHMAKING_PORT, VALIDATOR_PORT, BATTLE_MANAGER_PORT, LEAVE_MATCHMAKING_PORT],
+    exports: [
+        JOIN_MATCHMAKING_PORT,
+        VALIDATOR_PORT,
+        BATTLE_MANAGER_PORT,
+        LEAVE_MATCHMAKING_PORT,
+        SUBMIT_ARENA_SOLUTION_PORT
+    ],
 })
 export class UCServicesModule {}

@@ -29,8 +29,8 @@ export class ValidatorUC implements ValidatorPort {
                 testObj.functionName,
                 testObj.tests,
             );
-        } catch (err) {
-            throw new UserCodeError((err as Error).message);
+        } catch {
+            throw new UserCodeError();
         }
     }
 }

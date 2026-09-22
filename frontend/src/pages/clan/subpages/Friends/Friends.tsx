@@ -7,7 +7,7 @@ import {
     getIncomingFriendRequests,
     sendFriendReq
 } from '../../../../services/http/friends.ts';
-import type { ErrorResponse, GetFriendsRes, IncomingFriendRequestRes } from '@funcode/shared';
+import type { HttpErrorResponse, GetFriendsRes, IncomingFriendRequestRes } from '@funcode/shared';
 import { timeAgo } from '../../../../utils/timeAgo.ts';
 import { getErrorMessage } from '../../../../utils/error.messages.ts';
 
@@ -29,7 +29,7 @@ export function Friends() {
             setInviteCodeInput('');
             setInviteCodeError('');
         } catch (err) {
-            const error = err as ErrorResponse;
+            const error = err as HttpErrorResponse;
             const errorMsg = getErrorMessage(error.code);
             setInviteCodeError(errorMsg);
         }

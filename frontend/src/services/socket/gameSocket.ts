@@ -1,10 +1,10 @@
 import { io, type Socket } from 'socket.io-client';
 import {
     type LoseRes,
-    type SubmitReq,
+    type SubmitPayload,
     type SubmitResponse,
     type WinRes,
-    SOCKET_EVENTS, type JoinMatchmakingReq, type LeaveMatchmakingReq, type ArenaTask,
+    SOCKET_EVENTS, type JoinMatchmakingPayload, type LeaveMatchmakingPayload, type ArenaTask, type BattleAbortedPayload,
 } from '@funcode/shared';
 import { me } from '../http/auth.ts';
 
@@ -24,14 +24,14 @@ export async function getGameSocket(): Promise<Socket> {
 }
 
 
-export async function joinMatchmaking(handleMatchFound: () => void, payload: JoinMatchmakingReq) {
+export async function joinMatchmaking(handleMatchFound: () => void, payload: JoinMatchmakingPayload) {
     const socket = await getGameSocket();
     socket.off(SOCKET_EVENTS.MATCH_FOUND);
     socket.once(SOCKET_EVENTS.MATCH_FOUND, handleMatchFound);
     socket.emit(SOCKET_EVENTS.JOIN_MATCHMAKING, payload);
 }
 
-export async function leaveMatchmaking(payload: LeaveMatchmakingReq) {
+export async function leaveMatchmaking(payload: LeaveMatchmakingPayload) {
     const socket = await getGameSocket();
     socket.emit(SOCKET_EVENTS.LEAVE_MATCHMAKING, payload);
 }
@@ -48,7 +48,15 @@ export function onBattleStarted(callback: (data: { task: ArenaTask }) => void) {
     }
 }
 
-export function sendCode(submitReq: SubmitReq) {
+export function onBattleAborted(callback: (payload: BattleAbortedPayload) => void) {
+    gameSocket?.on(SOCKET_EVENTS.BATTLE_ABORTED, callback);
+
+    return () => {
+        gameSocket?.off(SOCKET_EVENTS.BATTLE_ABORTED, callback);
+    }
+}
+
+export function sendCode(submitReq: SubmitPayload) {
     gameSocket?.emit(SOCKET_EVENTS.SUBMIT_SOLUTION, submitReq);
 }
 

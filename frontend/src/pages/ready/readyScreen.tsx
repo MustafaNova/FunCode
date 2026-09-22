@@ -1,5 +1,5 @@
 import s from './ready.module.scss'
-import { onBattleStarted, sendPlayerReady } from '../../services/socket/gameSocket.ts';
+import { onBattleAborted, onBattleStarted, sendPlayerReady } from '../../services/socket/gameSocket.ts';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,12 +14,25 @@ export function ReadyScreen() {
     const starterCode= '// Warm-up zone'
     const [code, setCode] = useState(starterCode);
 
-    useEffect(() =>{
-        return onBattleStarted((data) => {
+    useEffect(() => {
+        const offBattleStarted = onBattleStarted((data) => {
             navigate(readyPath, {
                 state: data.task
             })
         });
+        const offBattleAborted = onBattleAborted((payload) => {
+            console.log('ABORTED MATCH');
+            navigate('/home/arena', {
+                replace: true,
+                state: { errorCode: payload.code }
+            })
+        })
+
+        return () => {
+            offBattleStarted();
+            offBattleAborted();
+        }
+
     }, [navigate, readyPath])
 
 

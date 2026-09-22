@@ -1,13 +1,20 @@
 import s from './arena.module.scss'
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBolt, faCode, faLock, faTerminal, faUserGroup } from '@fortawesome/free-solid-svg-icons';
 
 export function Arena() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const hasBattleAborted = location.state?.errorCode;
 
     return (
         <main className={s.screen}>
+            {hasBattleAborted && (
+                <div className={s.errorBanner}>
+                    The battle could not be started. Please try again.
+                </div>
+            )}
             <section className={s.panel}>
                 <div className={s.terminal}>
                     <div className={s.terminalHeader}>

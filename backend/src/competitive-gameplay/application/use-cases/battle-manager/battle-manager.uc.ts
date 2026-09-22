@@ -1,26 +1,20 @@
 import { BattleManagerPort } from '../../ports/inbound/battle.manager.port';
-import { Battle1v1, PlayerInfo } from '../../../domain/entities/battle1v1';
+import { Battle1v1 } from '../../../domain/entities/battle1v1';
 import type { PlayerGatewayPort } from '../../ports/outbound/player.gateway.port';
 import { ReadyPlayerCmd } from './dtos/ready.player.cmd';
-import { SubmitCmd } from './dtos/submit.cmd';
 import {
-    LoseRes,
-    SubmitResponse,
-    WinRes,
-    SOCKET_EVENTS,
+    SOCKET_EVENTS, ERROR_CODES, BattleAbortedPayload,
 } from '@funcode/shared';
 import type { BattleRepositoryPort } from '../../ports/outbound/battleRepository.port';
-import type { ValidatorPort } from '../../ports/inbound/validator.port';
 import { RoomId, UserId } from '../../../domain/types/players';
 import { ArenaTaskProviderPort } from '../../ports/outbound/arena.task.provider.port';
 
+
 export class BattleManagerUC implements BattleManagerPort {
-    roomToPlayers = new Map<RoomId, PlayerInfo[]>();
     private readyPlayers = new Map<RoomId, Set<UserId>>();
 
     constructor(
         private readonly playerGateway: PlayerGatewayPort,
-        private readonly validator: ValidatorPort,
         private readonly battleRepo: BattleRepositoryPort,
         private readonly arenaTaskProvider: ArenaTaskProviderPort
     ) {}
@@ -29,7 +23,6 @@ export class BattleManagerUC implements BattleManagerPort {
         const roomId = battle.roomId!;
         const p1 = battle.player1;
         const p2 = battle.player2;
-        this.roomToPlayers.set(roomId, [p1, p2]);
         await this.playerGateway.joinPlayersToRoom1v1(
             roomId,
             p1.userId,
@@ -49,13 +42,17 @@ export class BattleManagerUC implements BattleManagerPort {
 
         const readyRoom = this.readyPlayers.get(roomId)!;
         readyRoom.add(userId);
-
         if (roomSize !== readyRoom.size) return;
 
         this.readyPlayers.delete(roomId);
         const battle = await this.battleRepo.getByRoomId(roomId);
         if (!battle) {
-            throw new Error('Battle not found');
+            this.playerGateway.notifyRoom(
+                roomId,
+                SOCKET_EVENTS.BATTLE_ABORTED,
+                { code: ERROR_CODES.BATTLE_NOT_FOUND } as BattleAbortedPayload
+            )
+            return;
         }
 
         const task =
@@ -71,56 +68,4 @@ export class BattleManagerUC implements BattleManagerPort {
         );
     }
 
-    async handleSolutionSubmit(submit: SubmitCmd) {
-        const res = this.validator.checkSubmit(submit.taskId, submit.solution);
-        await this.notifySubmitRes(res, submit);
-    }
-
-    private async notifySubmitRes(res: boolean, submit: SubmitCmd) {
-        if (res) {
-            const winnerId = submit.userId;
-            const winPayload: WinRes = {
-                playerName: submit.playerName,
-                solution: submit.solution,
-            };
-            this.playerGateway.notifyPlayerWin(winnerId, winPayload);
-
-            const loserPlayer = this.getLoserId(
-                winnerId,
-                this.roomToPlayers.get(submit.roomId)!,
-            );
-            const losePayload: LoseRes = {
-                playerName: loserPlayer!.username,
-                solution: submit.solution,
-            };
-
-            this.playerGateway.notifyPlayerLose(
-                loserPlayer!.userId,
-                losePayload,
-            );
-
-            this.roomToPlayers.delete(submit.roomId);
-            await this.playerGateway.closeRoom(submit.roomId);
-            await this.battleRepo.setWinner(submit.roomId, submit.userId);
-        } else {
-            const payload: SubmitResponse = {
-                type: 'wrong',
-                playerName: submit.playerName,
-            };
-
-            this.playerGateway.notifyRoom(
-                submit.roomId,
-                SOCKET_EVENTS.WRONG_SUBMIT,
-                payload,
-            );
-        }
-    }
-
-    private getLoserId(winnerId: UserId, players: PlayerInfo[]) {
-        for (const player of players) {
-            if (player.userId != winnerId) {
-                return player;
-            }
-        }
-    }
 }

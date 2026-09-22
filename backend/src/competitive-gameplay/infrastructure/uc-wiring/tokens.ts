@@ -3,3 +3,4 @@ export const LEAVE_MATCHMAKING_PORT = 'LEAVE_MATCHMAKING_PORT' as const;
 export const BATTLE_MANAGER_PORT = 'BATTLE_MANAGER_PORT' as const;
 export const VALIDATOR_PORT = 'VALIDATOR_PORT' as const;
 export const MATCH_MAKER_PORT = 'MATCH_MAKER_PORT' as const;
+export const SUBMIT_ARENA_SOLUTION_PORT = 'SUBMIT_ARENA_SOLUTION_PORT' as const;

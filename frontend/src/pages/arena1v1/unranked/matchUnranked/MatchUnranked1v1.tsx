@@ -2,7 +2,7 @@ import s from './matchUnranked1v1.module.scss'
 import { Editor } from '@monaco-editor/react';
 import { useEffect, useState } from 'react';
 import { onError, onLose, onWin, onWrongSubmit, sendCode } from '../../../../services/socket/gameSocket.ts';
-import type { ClassicTask, SubmitReq, SubmitResponse } from '@funcode/shared';
+import type { ClassicTask, SubmitPayload, SubmitResponse } from '@funcode/shared';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBolt, faCode, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
@@ -20,7 +20,7 @@ export function MatchUnranked1v1() {
         })
 
         const offError = onError((res) => {
-            setSubmitResponse(res);
+            console.log(res);
         })
 
         const offWin = onWin(() => {
@@ -41,7 +41,7 @@ export function MatchUnranked1v1() {
 
     function submitCode() {
         if (code.trim() === '' || task.id == null) return;
-        const submitReq: SubmitReq = {
+        const submitReq: SubmitPayload = {
             taskId: task.id,
             solution: code
         }

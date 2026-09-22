@@ -1,6 +1,6 @@
 import { ArenaGameModeId } from '../types/index.js';
 
 
-export interface LeaveMatchmakingReq {
+export interface LeaveMatchmakingPayload {
     gameModeId: ArenaGameModeId
 }

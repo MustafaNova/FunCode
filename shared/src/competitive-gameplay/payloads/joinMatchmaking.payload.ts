@@ -1,5 +1,5 @@
 import { ArenaGameModeId } from '../types/index.js';
 
-export interface JoinMatchmakingReq {
+export interface JoinMatchmakingPayload {
     gameModeId: ArenaGameModeId
 }

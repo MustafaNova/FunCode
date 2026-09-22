@@ -3,7 +3,7 @@ import {
     Catch,
     ExceptionFilter,
 } from '@nestjs/common';
-import { ERROR_CODES, ErrorResponse } from '@funcode/shared';
+import { ERROR_CODES, HttpErrorResponse } from '@funcode/shared';
 import { AppError } from './app.error';
 import { ERROR_CODE_TO_HTTP_STATUS } from './errorCodeHttpStatusMapping';
 
@@ -29,6 +29,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
             statusCode: status,
             code,
             message,
-        } satisfies ErrorResponse);
+        } satisfies HttpErrorResponse);
     }
 }
