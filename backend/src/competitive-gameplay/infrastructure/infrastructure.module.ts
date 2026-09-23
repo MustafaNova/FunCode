@@ -4,7 +4,7 @@ import { DatabaseModule } from './database/database.module';
 import { PlayerGatewayModule } from './playerGateway/player.gateway.module';
 import { IdGeneratorModule } from './idGenerator/idGenerator.module';
 import { UCServicesModule } from './uc-wiring/uc.services.module';
-import { UserCodeExecutionModule } from './userCodeExecution/usercode.execution.module';
+import { CodeExecutionModule } from './codeExecution/code.execution.module';
 
 @Module({
     imports: [
@@ -13,7 +13,7 @@ import { UserCodeExecutionModule } from './userCodeExecution/usercode.execution.
         PlayerGatewayModule,
         IdGeneratorModule,
         UCServicesModule,
-        UserCodeExecutionModule,
+        CodeExecutionModule
     ],
     exports: [
         RedisModule,
@@ -21,7 +21,7 @@ import { UserCodeExecutionModule } from './userCodeExecution/usercode.execution.
         PlayerGatewayModule,
         IdGeneratorModule,
         UCServicesModule,
-        UserCodeExecutionModule,
+        CodeExecutionModule
     ],
 })
 export class InfrastructureModule {}

@@ -1,17 +1,17 @@
-import { ValidatorUC } from '../../application/use-cases/validator/validator.uc';
+import { ClassicValidatorUC } from '../../application/use-cases/classicValidator/classic.validator.uc';
 import { Inject, Injectable } from '@nestjs/common';
 import type { ClassicTaskRepositoryPort } from '../../application/ports/outbound/classic.task.repository.port';
-import type { UserCodeExecutionPort } from '../../application/ports/outbound/usercode.execution.port';
 import { CLASSIC_TASK_REPOSITORY_PORT } from '../database/tokens';
-import { USERCODE_EXECUTION_PORT } from '../userCodeExecution/tokens';
+import { type CodeExecutionPort } from '../../application/ports/outbound/code.execution.port';
+import { CODE_EXECUTION_PORT } from '../codeExecution/tokens';
 
 @Injectable()
-export class ValidatorService extends ValidatorUC {
+export class ClassicValidatorService extends ClassicValidatorUC {
     constructor(
         @Inject(CLASSIC_TASK_REPOSITORY_PORT)
         classicTaskRepo: ClassicTaskRepositoryPort,
-        @Inject(USERCODE_EXECUTION_PORT)
-        codeExecutor: UserCodeExecutionPort,
+        @Inject(CODE_EXECUTION_PORT)
+        codeExecutor: CodeExecutionPort,
     ) {
         super(classicTaskRepo, codeExecutor);
     }

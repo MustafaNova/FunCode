@@ -1,25 +1,48 @@
 import { SubmitArenaSolutionPort } from '../../ports/inbound/submitArenaSolution.port';
 import { SubmitCmd } from '../battle-manager/dtos/submit.cmd';
 import { LoseRes, SOCKET_EVENTS, SubmitResponse, WinRes } from '@funcode/shared';
-import { BattleNotFoundError } from '../battle-manager/errors/battleNotFound.error';
+import { BattleNotFoundError } from './errors/battleNotFound.error';
 import type { PlayerGatewayPort } from '../../ports/outbound/player.gateway.port';
-import type { ValidatorPort } from '../../ports/inbound/validator.port';
+import type { ClassicValidatorPort } from '../../ports/inbound/classicValidator.port';
 import type { BattleRepositoryPort } from '../../ports/outbound/battleRepository.port';
+import { Battle1v1 } from '../../../domain/entities/battle1v1';
 
 
 export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
     constructor(
         private readonly playerGateway: PlayerGatewayPort,
-        private readonly validator: ValidatorPort,
+        private readonly classicValidator: ClassicValidatorPort,
         private readonly battleRepo: BattleRepositoryPort,
     ) {}
 
     async submit(submit: SubmitCmd): Promise<void> {
-        const res = this.validator.checkSubmit(submit.taskId, submit.solution);
-        await this.notifySubmitRes(res, submit);
+        const battle = await this.battleRepo.getByRoomId(submit.roomId);
+        if (!battle) {
+            throw new BattleNotFoundError();
+        }
+
+        switch (battle.gameModeId) {
+            case 'classic-unranked-1v1':
+                await this.handleClassicSubmit(submit, battle);
+                break;
+
+            case 'bug-hunter-unranked-1v1':
+                await this.handleBugHunterSubmit(submit, battle);
+                break;
+        }
     }
 
-    private async notifySubmitRes(res: boolean, submit: SubmitCmd) {
+
+    private async handleBugHunterSubmit(submit: SubmitCmd, battle: Battle1v1) {
+
+    }
+
+    private async handleClassicSubmit(submit: SubmitCmd, battle: Battle1v1) {
+        const res = await this.classicValidator.validate(submit.taskId, submit.solution);
+        await this.handleClassicSubmitResult(res, submit, battle);
+    }
+
+    private async handleClassicSubmitResult(res: boolean, submit: SubmitCmd, battle: Battle1v1) {
         if (res) {
             const winnerId = submit.userId;
             const winPayload: WinRes = {
@@ -27,15 +50,6 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
                 solution: submit.solution,
             };
             this.playerGateway.notifyPlayerWin(winnerId, winPayload);
-
-            const battle =
-                await this.battleRepo.getByRoomId(
-                    submit.roomId,
-                );
-
-            if (!battle) {
-                throw new BattleNotFoundError();
-            }
 
             const loserPlayer =
                 battle.player1.userId === winnerId
