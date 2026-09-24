@@ -2,29 +2,58 @@ import Editor from '@monaco-editor/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faBug,
-    faClock,
+    faClock, faTriangleExclamation,
     faUser,
 } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import s from './bugHunterMatch.module.scss';
-import { useLocation } from 'react-router-dom';
-import type { BugHunterTask } from '@funcode/shared';
+import { useLocation, useNavigate } from 'react-router-dom';
+import type { BugHunterTask, SubmitResponse } from '@funcode/shared';
+import { onError, onLose, onWin, onWrongSubmit, sendCode } from '../../../../services/socket/gameSocket.ts';
 
 export function BugHunterMatch() {
-    const [code, setCode] = useState(`function calculateTotal(items) {
-    let total = 0;
-
-    for (let i = 0; i <= items.length; i++) {
-        total += items[i].price;
-    }
-
-    return total;
-}`);
+    const navigate = useNavigate();
+    const [submitResponse, setSubmitResponse] = useState<SubmitResponse | null>(null);
     const location = useLocation();
     const task: BugHunterTask = location.state
+    const [code, setCode] = useState(task.code);
+
+    useEffect(() => {
+        let timeoutId: ReturnType<typeof setTimeout>;
+
+        const offWrong = onWrongSubmit((res) => {
+            setSubmitResponse(res);
+
+            clearTimeout(timeoutId);
+
+            timeoutId = setTimeout(() => {
+                setSubmitResponse(null);
+            }, 2000);
+        })
+
+        const offError = onError((res) => {
+            console.log(res);
+        })
+
+        const offWin = onWin(() => {
+            navigate('/match/win');
+        })
+
+        const offLose = onLose(() => {
+            navigate('/match/lose');
+        })
+
+        return () => {
+            clearTimeout(timeoutId);
+            offWrong();
+            offWin();
+            offLose();
+            offError();
+        }
+    }, [navigate])
 
     function handleSubmit() {
-        console.log(code);
+        sendCode({ taskId: task.id, code})
     }
 
     return (
@@ -44,12 +73,18 @@ export function BugHunterMatch() {
                         </p>
                     </div>
 
+                    {submitResponse && (
+                        <span className={s.feedbackMessage}>
+                                <FontAwesomeIcon icon={faTriangleExclamation} />
+                            {submitResponse.playerName} had a failed submit
+                            </span>
+                    )}
+
                     <div className={s.matchInfo}>
                         <span>
                             <FontAwesomeIcon icon={faUser} />
                             Opponent
                         </span>
-
                         <span>
                             <FontAwesomeIcon icon={faClock} />
                             01:42
@@ -59,14 +94,13 @@ export function BugHunterMatch() {
                 <div className={s.editorSection}>
                     <div className={s.editorHeader}>
                         <span>solution.ts</span>
-                        <span>1 hidden bug</span>
                     </div>
 
                     <Editor
                         height="520px"
                         language="typescript"
                         theme="vs-dark"
-                        value={task.code}
+                        value={code}
                         onChange={(value) => setCode(value ?? '')}
                         options={{
                             minimap: { enabled: false },
@@ -81,6 +115,7 @@ export function BugHunterMatch() {
                     <span>
                         Fix the bug and submit your solution.
                     </span>
+
 
                     <button
                         className={s.submitButton}

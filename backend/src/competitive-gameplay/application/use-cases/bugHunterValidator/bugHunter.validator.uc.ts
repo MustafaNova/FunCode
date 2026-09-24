@@ -1,5 +1,5 @@
 import { BugHunterValidatorPort } from '../../ports/inbound/bugHunterValidator.port';
-import { BugHunterTaskRepositoryPort } from '../../ports/outbound/bugHunter.task.repository.port';
+import { BugHunterTaskRepositoryPort } from '../../ports/outbound/task-repositories/bugHunter.task.repository.port';
 import { TaskIdError } from '../classicValidator/errors/task.id.err';
 import { CodeExecutionPort } from '../../ports/outbound/code.execution.port';
 

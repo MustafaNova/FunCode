@@ -1,13 +1,13 @@
-import s from './matchUnranked1v1.module.scss'
+import s from './classicMatch.module.scss'
 import { Editor } from '@monaco-editor/react';
 import { useEffect, useState } from 'react';
-import { onError, onLose, onWin, onWrongSubmit, sendCode } from '../../../../services/socket/gameSocket.ts';
-import type { ClassicTask, SubmitPayload, SubmitResponse } from '@funcode/shared';
+import { onError, onLose, onWin, onWrongSubmit, sendCode } from '../../../services/socket/gameSocket.ts';
+import type { ClassicTask, SubmitResponse } from '@funcode/shared';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBolt, faCode, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 
-export function MatchUnranked1v1() {
+export function ClassicMatch() {
     const navigate = useNavigate();
     const [code, setCode] = useState('');
     const [submitResponse, setSubmitResponse] = useState<SubmitResponse | null>(null);
@@ -24,11 +24,11 @@ export function MatchUnranked1v1() {
         })
 
         const offWin = onWin(() => {
-            navigate('win');
+            navigate('/match/win');
         })
 
         const offLose = onLose(() => {
-            navigate('lose');
+            navigate('/match/lose');
         })
 
         return () => {
@@ -40,12 +40,8 @@ export function MatchUnranked1v1() {
     }, [navigate])
 
     function submitCode() {
-        if (code.trim() === '' || task.id == null) return;
-        const submitReq: SubmitPayload = {
-            taskId: task.id,
-            solution: code
-        }
-        sendCode(submitReq);
+        if (task.id == null) return;
+        sendCode({ taskId: task.id, code });
     }
 
     return (
@@ -92,17 +88,10 @@ export function MatchUnranked1v1() {
                     </div>
 
                     <div className={s.feedbackArea}>
-                        {submitResponse?.type == 'wrong' && (
+                        {submitResponse && (
                             <span className={s.feedbackMessage}>
                                 <FontAwesomeIcon icon={faTriangleExclamation} />
                                 {submitResponse.playerName} had a failed submit
-                            </span>
-                        )}
-
-                        {submitResponse?.type == 'error' && (
-                            <span className={s.feedbackMessage}>
-                                <FontAwesomeIcon icon={faTriangleExclamation} />
-                                {submitResponse.message}
                             </span>
                         )}
                     </div>

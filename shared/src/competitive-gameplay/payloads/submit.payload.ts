@@ -1,4 +1,4 @@
 export interface SubmitPayload {
     taskId: string;
-    solution: string;
+    code: string;
 }

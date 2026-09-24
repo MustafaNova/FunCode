@@ -1,0 +1,203 @@
+.container {
+  min-height: 100vh;
+  padding: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.matchPanel {
+  width: min(1100px, 100%);
+  background: rgba(12, 15, 28, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 28px 30px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+  h1 {
+    margin: 10px 0 8px;
+    color: #fff;
+    font-size: 1.8rem;
+  }
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffd166;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.description {
+  max-width: 650px;
+  margin: 0;
+  color: #aeb5ca;
+  line-height: 1.6;
+}
+
+.limitCard {
+  min-width: 150px;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border: 1px solid rgba(255, 209, 102, 0.22);
+  border-radius: 14px;
+  background: rgba(255, 209, 102, 0.07);
+  color: #ffd166;
+
+  > svg {
+    font-size: 1.2rem;
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  span {
+    color: #9fa7bd;
+    font-size: 0.72rem;
+  }
+
+  strong {
+    font-size: 1.25rem;
+  }
+}
+
+.editorSection {
+  margin: 24px 30px 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 14px;
+}
+
+.editorHeader {
+  height: 46px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #151827;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  color: #b9c0d2;
+  font-size: 0.82rem;
+
+  > span:first-child {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.counter {
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(255, 209, 102, 0.1);
+  color: #ffd166;
+  font-weight: 800;
+  transition: 0.2s ease;
+}
+
+.counterOverLimit {
+  background: rgba(255, 79, 135, 0.12);
+  color: #ff769f;
+}
+
+.footer {
+  padding: 22px 30px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+}
+
+.footerLabel {
+  color: #777f96;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.footer strong {
+  color: #fff;
+  font-size: 1rem;
+}
+
+.remaining {
+  color: #8f97ad;
+  font-size: 0.78rem;
+}
+
+.overLimitText {
+  color: #ff769f !important;
+}
+
+.submitButton {
+  min-width: 170px;
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 10px;
+  background: #ffd166;
+  color: #151515;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+          transform 0.15s ease,
+          opacity 0.15s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+}
+
+@media (max-width: 700px) {
+  .container {
+    padding: 16px;
+  }
+
+  .header {
+    flex-direction: column;
+  }
+
+  .limitCard {
+    align-self: flex-start;
+  }
+
+  .editorSection {
+    margin-inline: 16px;
+  }
+
+  .footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .submitButton {
+    width: 100%;
+  }
+}

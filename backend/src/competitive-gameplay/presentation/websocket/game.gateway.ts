@@ -90,14 +90,14 @@ export class GameGateway
     @UseGuards(RoomGuard)
     @SubscribeMessage(SOCKET_EVENTS.SUBMIT_SOLUTION)
     async handleSolutionSubmit(client: RoomSocket, payload: SubmitPayload) {
-        console.log('GATEWAY');
+        console.log('SUBMIT SOLUTION:', payload.code);
         await this.submitArenaSolutionUC.submit(
             SubmitCmd.create(
                 client.data.user.userId,
                 client.data.room,
                 client.data.user.username,
                 payload.taskId,
-                payload.solution,
+                payload.code,
             ),
         );
     }

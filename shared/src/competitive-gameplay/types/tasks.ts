@@ -5,6 +5,7 @@ export type ClassicTask = {
     name: string;
     functionName: string;
     difficulty: Difficulty;
+    language: 'javascript';
     description: string;
     examples: string[];
     constraints: string;
@@ -19,4 +20,13 @@ export type BugHunterTask = {
     code: string,
 }
 
-export type ArenaTask = ClassicTask | BugHunterTask
+export type CodeGolfTask = {
+    id: string,
+    name: string
+    description: string,
+    language: 'javascript',
+    code: string,
+    characterLimit: number
+}
+
+export type ArenaTask = ClassicTask | BugHunterTask | CodeGolfTask

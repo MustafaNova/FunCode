@@ -1,8 +1,6 @@
 import { TaskIdError } from './errors/task.id.err';
-import { SolutionError } from './errors/solution.err';
 import { ClassicValidatorPort } from '../../ports/inbound/classicValidator.port';
-import type { ClassicTaskRepositoryPort } from '../../ports/outbound/classic.task.repository.port';
-import { tasksMap } from '../../../domain/types/tasksMap';
+import type { ClassicTaskRepositoryPort } from '../../ports/outbound/task-repositories/classic.task.repository.port';
 import { CodeExecutionPort } from '../../ports/outbound/code.execution.port';
 
 export class ClassicValidatorUC implements ClassicValidatorPort {
@@ -11,19 +9,17 @@ export class ClassicValidatorUC implements ClassicValidatorPort {
         private readonly codeExecutor: CodeExecutionPort
     ) {}
     async validate(taskId: string, code: string) {
-        if (!this.classicTaskRepo.exists(taskId)) {
+        const taskData = this.classicTaskRepo.getById(taskId);
+
+        if (!taskData) {
             throw new TaskIdError();
         }
-        if (!code) {
-            throw new SolutionError();
-        }
 
-        const tests = this.classicTaskRepo.getTests(taskId as keyof tasksMap);
         const result = await this.codeExecutor.execute(
             code,
-            tests.functionName,
-            tests.tests,
-            'javascript'
+            taskData.task.functionName,
+            taskData.tests,
+            taskData.task.language
         );
         return result.tests.every(test => test.passed);
 

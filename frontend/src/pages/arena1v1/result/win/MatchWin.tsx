@@ -1,10 +1,11 @@
-import s from './matchUnranked1v1Lose.module.scss';
-import { useBackToHome } from '../../../../../utils/hooks.ts';
+import s from './matchWin.module.scss';
+import { useBackToHome } from '../../../../utils/hooks.ts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { faHouse, faTrophy } from '@fortawesome/free-solid-svg-icons';
 
-export function MatchUnranked1v1Lose() {
-    const loseMsg = 'Opponent deployed their solution first!';
+export function MatchWin() {
+    const winMsg = 'Victory compiled successfully!'
+    const backToHome = useBackToHome();
     return (
         <main className={s.readyScreen}>
             <section className={s.resultPanel}>
@@ -12,19 +13,22 @@ export function MatchUnranked1v1Lose() {
                     <span />
                     <span />
                     <span />
+                    <span />
+                    <span />
+                    <span />
                 </div>
 
                 <div className={s.resultIcon}>
-                    <FontAwesomeIcon icon={faTriangleExclamation} />
+                    <FontAwesomeIcon icon={faTrophy} />
                 </div>
 
                 <div className={s.resultContent}>
                     <p className={s.kicker}>Match complete</p>
-                    <h1>Defeat</h1>
-                    <p>{loseMsg}</p>
+                    <h1>Victory</h1>
+                    <p>{winMsg}</p>
                 </div>
 
-                <button className={s.leaveButton} onClick={useBackToHome()}>
+                <button className={s.leaveButton} onClick={backToHome}>
                     <FontAwesomeIcon icon={faHouse} />
                     Leave
                 </button>

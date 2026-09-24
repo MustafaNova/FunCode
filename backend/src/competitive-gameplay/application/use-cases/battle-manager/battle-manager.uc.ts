@@ -47,10 +47,10 @@ export class BattleManagerUC implements BattleManagerPort {
         this.readyPlayers.delete(roomId);
         const battle = await this.battleRepo.getByRoomId(roomId);
         if (!battle) {
-            this.playerGateway.notifyRoom(
+            this.playerGateway.notifyRoom<BattleAbortedPayload>(
                 roomId,
                 SOCKET_EVENTS.BATTLE_ABORTED,
-                { code: ERROR_CODES.BATTLE_NOT_FOUND } as BattleAbortedPayload
+                { code: ERROR_CODES.BATTLE_NOT_FOUND }
             )
             return;
         }

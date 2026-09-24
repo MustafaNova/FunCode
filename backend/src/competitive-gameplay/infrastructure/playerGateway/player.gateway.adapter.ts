@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PlayerGatewayPort } from '../../application/ports/outbound/player.gateway.port';
-import { LoseRes, WinRes } from '@funcode/shared';
+import { LoseRes, SOCKET_EVENTS, WinRes } from '@funcode/shared';
 import { GameGatewayRegistry } from '../GameGatewayRegistry/gameGatewayRegistry';
 
 @Injectable()
@@ -29,20 +29,14 @@ export class PlayerGatewayAdapter implements PlayerGatewayPort {
         }
     }
 
-    notifyRoom(roomId: string, event: string, msg: unknown): void {
-        this.gameGateWayRegistry.getServer().to(roomId).emit(event, msg);
+    notifyRoom<T>(roomId: string, event: string, payload: T): void {
+        this.gameGateWayRegistry.getServer().to(roomId).emit(event, payload);
     }
 
-    notifyPlayerWin(userId: string, payload: WinRes) {
+    notifyPlayer<T>(userId: string, event: SOCKET_EVENTS, payload?: T) {
         const client = this.gameGateWayRegistry.getPlayer(userId);
         if (!client) return;
-        client.emit('WIN', payload);
-    }
-
-    notifyPlayerLose(userId: string, payload: LoseRes) {
-        const client = this.gameGateWayRegistry.getPlayer(userId);
-        if (!client) return;
-        client.emit('LOSE', payload);
+        client.emit(event, payload);
     }
 
 }

@@ -1,18 +1,19 @@
-import { ClassicTaskRepositoryPort } from '../../../application/ports/outbound/classic.task.repository.port';
+import { ClassicTaskRepositoryPort } from '../../../application/ports/outbound/task-repositories/classic.task.repository.port';
 import { Injectable } from '@nestjs/common';
-import { tasksMap } from '../../../domain/types/tasksMap';
-import { TaskTestsWithName } from '../../../domain/types/taskTestsWithName';
+import { ClassicTaskMap } from '../../../domain/types/taskMaps/classicTaskMap';
 import { Difficulty } from '@funcode/shared';
+import { getRandomItem } from '../../../../common/utils/getRandomItem';
 
 @Injectable()
 export class ClassicTaskRepositoryAdapter implements ClassicTaskRepositoryPort {
-    private tasks: tasksMap = {
+    private readonly tasks: ClassicTaskMap = {
         '123456789': {
             task: {
                 id: '123456789',
                 name: 'Add Digits',
                 functionName: 'addDigits',
                 difficulty: Difficulty.EASY,
+                language: 'javascript',
                 description:
                     'Given an integer num, repeatedly add all its digits until the result has only one digit, and return it.',
                 examples: [
@@ -39,24 +40,13 @@ export class ClassicTaskRepositoryAdapter implements ClassicTaskRepositoryPort {
             ],
         },
     };
-    private taskKeys: (keyof tasksMap)[] = Object.keys(
-        this.tasks,
-    ) as (keyof tasksMap)[];
 
-    exists(taskId: string): boolean {
-        return taskId in this.tasks;
+    getById(taskId: string) {
+        return this.tasks[taskId] ?? null;
     }
 
     getRandomTask() {
-        const randomKey =
-            this.taskKeys[Math.floor(Math.random() * this.taskKeys.length)];
-        return this.tasks[randomKey].task;
+        return getRandomItem(Object.values(this.tasks)).task;
     }
 
-    getTests<K extends keyof tasksMap>(taskId: K): TaskTestsWithName<K> {
-        return {
-            functionName: this.tasks[taskId].task.functionName,
-            tests: [...this.tasks[taskId].tests],
-        };
-    }
 }

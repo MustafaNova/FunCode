@@ -1,4 +1,4 @@
-import { LoseRes, WinRes } from '@funcode/shared';
+import { SOCKET_EVENTS } from '@funcode/shared';
 
 export interface PlayerGatewayPort {
     joinPlayersToRoom1v1(
@@ -7,7 +7,6 @@ export interface PlayerGatewayPort {
         userId2: string,
     ): Promise<void>;
     closeRoom(roomId: string): Promise<void>;
-    notifyRoom(roomId: string, notif: string, msg: unknown): void;
-    notifyPlayerWin(userId: string, payload: WinRes): void;
-    notifyPlayerLose(userId: string, payload: LoseRes): void;
+    notifyRoom<T>(roomId: string, event: SOCKET_EVENTS, payload: T): void;
+    notifyPlayer<T>(userId: string, event: SOCKET_EVENTS, payload?: T): void;
 }

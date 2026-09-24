@@ -1,5 +1,5 @@
-import { TaskTest } from '../entities/taskTest';
-import { BugHunterTask } from './bugHunterTask';
+import { TaskTest } from '../../entities/taskTest';
+import { BugHunterTask } from '../bugHunterTask';
 
 export type BugHunterTaskEntry = { task: BugHunterTask, tests: TaskTest[] };
 

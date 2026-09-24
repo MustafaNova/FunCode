@@ -10,10 +10,10 @@ import { Arena1v1 } from './pages/arena1v1/arena1v1.tsx';
 import { Login } from './pages/auth/login/login.tsx';
 import { Registration } from './pages/auth/registration/registration.tsx';
 import { ReadyScreen } from './pages/ready/readyScreen.tsx';
-import { MatchUnranked1v1 } from './pages/arena1v1/unranked/matchUnranked/MatchUnranked1v1.tsx';
+import { ClassicMatch } from './pages/arena1v1/classic/ClassicMatch.tsx';
 
-import { MatchUnranked1v1Win } from './pages/arena1v1/unranked/matchUnranked/win/MatchUnranked1v1Win.tsx';
-import { MatchUnranked1v1Lose } from './pages/arena1v1/unranked/matchUnranked/lose/MatchUnranked1v1Lose.tsx';
+import { MatchWin } from './pages/arena1v1/result/win/MatchWin.tsx';
+import { MatchLose } from './pages/arena1v1/result/lose/MatchLose.tsx';
 import { LevelFrame } from './layout/level-frame/level-frame.tsx';
 import { LevelLoseScreen } from './pages/LevelLoseScreen/LevelLoseScreen.tsx';
 import { LevelWinScreen } from './pages/LevelWinScreen/LevelWinScreen.tsx';
@@ -38,6 +38,7 @@ import { CodeGolfLevel } from './pages/practice/games/codeGolf/codeGolfLevel/Cod
 import { CodeGolfSuccessScreen } from './pages/practice/games/codeGolf/codeGolfSuccessScreen/codeGolfSuccessScreen.tsx';
 import { SpecialModesPage } from './pages/arena1v1/specialModes/specialModesPage.tsx';
 import { BugHunterMatch } from './pages/arena1v1/specialModes/bugHunter/BugHunterMatch.tsx';
+import { CodeGolfMatch } from './pages/arena1v1/specialModes/codeGolf/codeGolfMatch.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -45,11 +46,12 @@ createRoot(document.getElementById('root')!).render(
           <Routes>
               <Route path='/' element={<Login/>} />
               <Route path='/register' element={<Registration/>}></Route>
-              <Route path='/match/classic-unranked-1v1' element={<MatchUnranked1v1/>}></Route>
+              <Route path='/match/classic-unranked-1v1' element={<ClassicMatch/>}></Route>
               <Route path='/match/bug-hunter-unranked-1v1' element={<BugHunterMatch />}/>
+              <Route path='/match/code-golf-unranked-1v1' element={<CodeGolfMatch />}/>
               <Route path='/match/ready' element={<ReadyScreen/>}></Route>
-              <Route path='/match/classic-unranked-1v1/win' element={<MatchUnranked1v1Win/>}></Route>
-              <Route path='/match/classic-unranked-1v1/lose' element={<MatchUnranked1v1Lose/>}></Route>
+              <Route path='/match/win' element={<MatchWin/>}></Route>
+              <Route path='/match/lose' element={<MatchLose/>}></Route>
               <Route path='home' element={<AuthProvider children={<App/>} /> }>
                   <Route index element={<School/>}></Route>
                   <Route path='arena' element={<Arena/>}></Route>
