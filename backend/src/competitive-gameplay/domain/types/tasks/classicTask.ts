@@ -1,10 +1,9 @@
-import { Difficulty } from '../enums/index.js';
 
-export interface TaskDto {
+export type ClassicTask = {
     id: string;
     name: string;
     functionName: string;
-    difficulty: Difficulty;
+    language: 'javascript';
     description: string;
     examples: string[];
     constraints: string;

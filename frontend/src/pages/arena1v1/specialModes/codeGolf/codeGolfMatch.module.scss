@@ -201,3 +201,25 @@
     width: 100%;
   }
 }
+
+
+.feedbackMessage {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  padding: 7px 10px;
+  border: 1px solid rgba(255, 79, 135, 0.36);
+  border-radius: 999px;
+  background: rgba(255, 79, 135, 0.12);
+  color: #ffd6df;
+  font-size: 0.83rem;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+  height: 50%;
+}
+
+.feedbackMessage svg {
+  flex: 0 0 auto;
+  color: #ffd166;
+}

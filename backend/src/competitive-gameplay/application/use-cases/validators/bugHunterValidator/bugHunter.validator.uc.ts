@@ -1,7 +1,7 @@
-import { BugHunterValidatorPort } from '../../ports/inbound/bugHunterValidator.port';
-import { BugHunterTaskRepositoryPort } from '../../ports/outbound/task-repositories/bugHunter.task.repository.port';
+import { BugHunterValidatorPort } from '../../../ports/inbound/validators/bugHunterValidator.port';
+import { BugHunterTaskRepositoryPort } from '../../../ports/outbound/task-repositories/bugHunter.task.repository.port';
 import { TaskIdError } from '../classicValidator/errors/task.id.err';
-import { CodeExecutionPort } from '../../ports/outbound/code.execution.port';
+import { CodeExecutionPort } from '../../../ports/outbound/code.execution.port';
 
 
 export class BugHunterValidatorUC implements BugHunterValidatorPort {
@@ -23,6 +23,10 @@ export class BugHunterValidatorUC implements BugHunterValidatorPort {
             taskData.tests,
             taskData.task.language
         );
+
+        if (result.executionFailed) {
+            return false;
+        }
 
         return result.tests.every(test => test.passed);
     }

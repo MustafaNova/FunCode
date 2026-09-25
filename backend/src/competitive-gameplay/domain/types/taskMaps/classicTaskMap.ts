@@ -1,5 +1,5 @@
 import { TaskTest } from '../../entities/taskTest';
-import { ClassicTask } from '@funcode/shared';
+import { ClassicTask } from '../tasks/classicTask';
 
 export type ClassicTaskEntry<I extends unknown[] = unknown[], O = unknown> = {
     task: ClassicTask;

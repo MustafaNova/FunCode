@@ -1,10 +1,10 @@
 import {
     CodeGolfTaskRepositoryPort
 } from '../../../application/ports/outbound/task-repositories/codeGolf.task.repository.port';
-import { CodeGolfTask } from '@funcode/shared';
 import { Injectable } from '@nestjs/common';
 import { CodeGolfTaskEntry, CodeGolfTaskMap } from '../../../domain/types/taskMaps/codeGolfTaskMap';
 import { getRandomItem } from '../../../../common/utils/getRandomItem';
+import { CodeGolfTask } from '../../../domain/types/tasks/codeGolfTask';
 
 @Injectable()
 export class CodeGolfTaskRepositoryAdapter implements CodeGolfTaskRepositoryPort {
@@ -14,6 +14,7 @@ export class CodeGolfTaskRepositoryAdapter implements CodeGolfTaskRepositoryPort
             task: {
                 id: 'code-golf-001',
                 name: 'Palindrome',
+                functionName: 'isPalindrome',
                 description: 'Shorten the code so it stays within the character limit while still passing all tests',
                 language: 'javascript',
                 code: `

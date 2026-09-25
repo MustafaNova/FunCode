@@ -2,6 +2,7 @@ import { BugHunterTaskRepositoryPort } from '../../../application/ports/outbound
 import { Injectable } from '@nestjs/common';
 import { BugHunterTaskMap } from '../../../domain/types/taskMaps/bugHunterTaskMap';
 import { getRandomItem } from '../../../../common/utils/getRandomItem';
+import { BugHunterTask } from '../../../domain/types/tasks/bugHunterTask';
 
 @Injectable()
 export class BugHunterTaskRepositoryAdapter implements BugHunterTaskRepositoryPort {
@@ -39,7 +40,7 @@ function addDigits(num) {
         return this.tasks[taskId] ?? null;
     }
 
-    getRandomTask() {
+    getRandomTask(): BugHunterTask {
         return getRandomItem(Object.values(this.tasks)).task;
     }
 

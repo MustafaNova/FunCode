@@ -1,7 +1,7 @@
 import { TaskIdError } from './errors/task.id.err';
-import { ClassicValidatorPort } from '../../ports/inbound/classicValidator.port';
-import type { ClassicTaskRepositoryPort } from '../../ports/outbound/task-repositories/classic.task.repository.port';
-import { CodeExecutionPort } from '../../ports/outbound/code.execution.port';
+import { ClassicValidatorPort } from '../../../ports/inbound/validators/classicValidator.port';
+import type { ClassicTaskRepositoryPort } from '../../../ports/outbound/task-repositories/classic.task.repository.port';
+import { CodeExecutionPort } from '../../../ports/outbound/code.execution.port';
 
 export class ClassicValidatorUC implements ClassicValidatorPort {
     constructor(
@@ -21,6 +21,11 @@ export class ClassicValidatorUC implements ClassicValidatorPort {
             taskData.tests,
             taskData.task.language
         );
+
+        if (result.executionFailed) {
+            return false;
+        }
+
         return result.tests.every(test => test.passed);
 
     }

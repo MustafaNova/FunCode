@@ -1,5 +1,5 @@
-import { CodeGolfTask } from '@funcode/shared';
 import { TaskTest } from '../../entities/taskTest';
+import { CodeGolfTask } from '../tasks/codeGolfTask';
 
 
 export type CodeGolfTaskEntry = {

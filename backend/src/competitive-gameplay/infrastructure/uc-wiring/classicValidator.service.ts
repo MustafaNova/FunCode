@@ -1,4 +1,4 @@
-import { ClassicValidatorUC } from '../../application/use-cases/classicValidator/classic.validator.uc';
+import { ClassicValidatorUC } from '../../application/use-cases/validators/classicValidator/classic.validator.uc';
 import { Inject, Injectable } from '@nestjs/common';
 import type { ClassicTaskRepositoryPort } from '../../application/ports/outbound/task-repositories/classic.task.repository.port';
 import { CLASSIC_TASK_REPOSITORY_PORT } from '../database/tokens';

@@ -3,4 +3,5 @@ export interface CodeExecutionResult {
         index: number;
         passed: boolean;
     }[];
+    executionFailed: boolean,
 }

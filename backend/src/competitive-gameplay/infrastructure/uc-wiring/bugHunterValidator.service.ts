@@ -1,4 +1,4 @@
-import { BugHunterValidatorUC } from '../../application/use-cases/bugHunterValidator/bugHunter.validator.uc';
+import { BugHunterValidatorUC } from '../../application/use-cases/validators/bugHunterValidator/bugHunter.validator.uc';
 import { Inject, Injectable } from '@nestjs/common';
 import { type BugHunterTaskRepositoryPort } from '../../application/ports/outbound/task-repositories/bugHunter.task.repository.port';
 import { type CodeExecutionPort } from '../../application/ports/outbound/code.execution.port';

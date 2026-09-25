@@ -3,24 +3,51 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faCode,
     faFlagCheckered,
-    faKeyboard,
+    faKeyboard, faTriangleExclamation,
 } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import s from './codeGolfMatch.module.scss';
-import { useLocation } from 'react-router-dom';
-import type { CodeGolfTask } from '@funcode/shared';
+import { useLocation, useNavigate } from 'react-router-dom';
+import type { CodeGolfTaskDto, SubmitResponse } from '@funcode/shared';
+import { onError, onLose, onWin, onWrongSubmit, sendCode } from '../../../../services/socket/gameSocket.ts';
 
 export function CodeGolfMatch() {
     const location = useLocation();
-    const task: CodeGolfTask = location.state;
+    const navigate = useNavigate();
+    const task: CodeGolfTaskDto = location.state;
     const [code, setCode] = useState(task.code);
-
+    const [submitResponse, setSubmitResponse] = useState<SubmitResponse | null>(null);
     const characterCount = code.length;
     const isOverLimit = characterCount > task.characterLimit;
 
+    useEffect(() => {
+        const offWrong = onWrongSubmit((res) => {
+            setSubmitResponse(res);
+        })
+
+        const offError = onError((res) => {
+            console.log(res);
+        })
+
+        const offWin = onWin(() => {
+            navigate('/match/win');
+        })
+
+        const offLose = onLose(() => {
+            navigate('/match/lose');
+        })
+
+        return () => {
+            offWrong();
+            offWin();
+            offLose();
+            offError();
+        }
+    }, [navigate])
+
     function handleSubmit() {
         if (isOverLimit) return;
-        console.log(code);
+        sendCode({ taskId: task.id, code })
     }
 
     return (
@@ -36,9 +63,15 @@ export function CodeGolfMatch() {
                         <p className={s.description}>{task.description}</p>
                     </div>
 
+                    {submitResponse && (
+                        <span className={s.feedbackMessage}>
+                                <FontAwesomeIcon icon={faTriangleExclamation} />
+                            {submitResponse.playerName} had a failed submit
+                            </span>
+                    )}
+
                     <div className={s.limitCard}>
                         <FontAwesomeIcon icon={faKeyboard} />
-
                         <div>
                             <span>Character limit</span>
                             <strong>{task.characterLimit}</strong>

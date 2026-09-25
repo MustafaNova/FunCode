@@ -4,7 +4,7 @@ import {
     ARENA_TASK_PROVIDER_PORT,
     BATTLE_REPOSITORY_PORT,
     BUG_HUNTER_TASK_REPOSITORY_PORT,
-    CLASSIC_TASK_REPOSITORY_PORT, CODE_GOLF_REPOSITORY_PORT
+    CLASSIC_TASK_REPOSITORY_PORT, CODE_GOLF_TASK_REPOSITORY_PORT
 } from './tokens';
 import { BattleRepositoryAdapter } from './battle/battle.repository.adapter';
 import { Battle1vs1Entity } from './battle/typeorm/battle1vs1.entity';
@@ -29,7 +29,7 @@ import { CodeGolfTaskRepositoryAdapter } from './tasks/codeGolf.task.repository.
             useClass: BugHunterTaskRepositoryAdapter
         },
         {
-            provide: CODE_GOLF_REPOSITORY_PORT,
+            provide: CODE_GOLF_TASK_REPOSITORY_PORT,
             useClass: CodeGolfTaskRepositoryAdapter,
         },
         {
@@ -42,7 +42,7 @@ import { CodeGolfTaskRepositoryAdapter } from './tasks/codeGolf.task.repository.
         BATTLE_REPOSITORY_PORT,
         CLASSIC_TASK_REPOSITORY_PORT,
         BUG_HUNTER_TASK_REPOSITORY_PORT,
-        CODE_GOLF_REPOSITORY_PORT
+        CODE_GOLF_TASK_REPOSITORY_PORT
     ],
 })
 export class DatabaseModule {}

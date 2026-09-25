@@ -2,7 +2,7 @@ import s from './classicMatch.module.scss'
 import { Editor } from '@monaco-editor/react';
 import { useEffect, useState } from 'react';
 import { onError, onLose, onWin, onWrongSubmit, sendCode } from '../../../services/socket/gameSocket.ts';
-import type { ClassicTask, SubmitResponse } from '@funcode/shared';
+import type { ClassicTaskDto, SubmitResponse } from '@funcode/shared';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBolt, faCode, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
@@ -12,7 +12,8 @@ export function ClassicMatch() {
     const [code, setCode] = useState('');
     const [submitResponse, setSubmitResponse] = useState<SubmitResponse | null>(null);
     const location = useLocation();
-    const task: ClassicTask = location.state;
+    const task: ClassicTaskDto = location.state;
+    console.log(task);
 
     useEffect(() => {
         const offWrong = onWrongSubmit((res) => {
@@ -51,7 +52,6 @@ export function ClassicMatch() {
                     <div className={s.taskHeader}>
                         <p className={s.kicker}>Live duel</p>
                         <h2 className={s.taskTitle}>{task.name}</h2>
-                        <span className={s.difficultyBadge}>{task.difficulty}</span>
                     </div>
 
                     <div className={s.taskContent}>

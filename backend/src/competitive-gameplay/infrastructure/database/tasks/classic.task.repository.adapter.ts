@@ -1,8 +1,8 @@
 import { ClassicTaskRepositoryPort } from '../../../application/ports/outbound/task-repositories/classic.task.repository.port';
 import { Injectable } from '@nestjs/common';
 import { ClassicTaskMap } from '../../../domain/types/taskMaps/classicTaskMap';
-import { Difficulty } from '@funcode/shared';
 import { getRandomItem } from '../../../../common/utils/getRandomItem';
+import { ClassicTask } from '../../../domain/types/tasks/classicTask';
 
 @Injectable()
 export class ClassicTaskRepositoryAdapter implements ClassicTaskRepositoryPort {
@@ -12,7 +12,6 @@ export class ClassicTaskRepositoryAdapter implements ClassicTaskRepositoryPort {
                 id: '123456789',
                 name: 'Add Digits',
                 functionName: 'addDigits',
-                difficulty: Difficulty.EASY,
                 language: 'javascript',
                 description:
                     'Given an integer num, repeatedly add all its digits until the result has only one digit, and return it.',
@@ -45,7 +44,7 @@ export class ClassicTaskRepositoryAdapter implements ClassicTaskRepositoryPort {
         return this.tasks[taskId] ?? null;
     }
 
-    getRandomTask() {
+    getRandomTask(): ClassicTask {
         return getRandomItem(Object.values(this.tasks)).task;
     }
 

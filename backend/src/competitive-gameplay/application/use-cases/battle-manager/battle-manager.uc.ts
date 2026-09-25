@@ -56,7 +56,7 @@ export class BattleManagerUC implements BattleManagerPort {
         }
 
         const task =
-            this.arenaTaskProvider.getRandomTask(
+            this.arenaTaskProvider.getRandomTaskDto(
                 battle.gameModeId
             );
 

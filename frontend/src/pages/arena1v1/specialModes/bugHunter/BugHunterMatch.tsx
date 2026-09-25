@@ -8,14 +8,14 @@ import {
 import { useEffect, useState } from 'react';
 import s from './bugHunterMatch.module.scss';
 import { useLocation, useNavigate } from 'react-router-dom';
-import type { BugHunterTask, SubmitResponse } from '@funcode/shared';
+import type { BugHunterTaskDto, SubmitResponse } from '@funcode/shared';
 import { onError, onLose, onWin, onWrongSubmit, sendCode } from '../../../../services/socket/gameSocket.ts';
 
 export function BugHunterMatch() {
     const navigate = useNavigate();
     const [submitResponse, setSubmitResponse] = useState<SubmitResponse | null>(null);
     const location = useLocation();
-    const task: BugHunterTask = location.state
+    const task: BugHunterTaskDto = location.state
     const [code, setCode] = useState(task.code);
 
     useEffect(() => {

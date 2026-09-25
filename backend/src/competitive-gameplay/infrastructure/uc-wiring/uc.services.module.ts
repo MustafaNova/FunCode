@@ -7,7 +7,7 @@ import { JoinService } from './join.service';
 import {
     BATTLE_MANAGER_PORT,
     JOIN_MATCHMAKING_PORT, LEAVE_MATCHMAKING_PORT, MATCH_MAKER_PORT, SUBMIT_ARENA_SOLUTION_PORT,
-    CLASSIC_VALIDATOR_PORT, BUG_HUNTER_VALIDATOR_PORT,
+    CLASSIC_VALIDATOR_PORT, BUG_HUNTER_VALIDATOR_PORT, CODE_GOLF_VALIDATOR_PORT,
 } from './tokens';
 import { ClassicValidatorService } from './classicValidator.service';
 import { BattleManagerService } from './battle.manager.service';
@@ -16,6 +16,7 @@ import { LeaveService } from './leave.service';
 import { SubmitArenaSolutionService } from './submitArenaSolution.service';
 import { CodeExecutionModule } from '../codeExecution/code.execution.module';
 import { BugHunterValidatorService } from './bugHunterValidator.service';
+import { CodeGolfValidatorService } from './codeGolfValidator.service';
 
 @Module({
     imports: [
@@ -32,7 +33,8 @@ import { BugHunterValidatorService } from './bugHunterValidator.service';
         { provide: CLASSIC_VALIDATOR_PORT, useClass: ClassicValidatorService },
         { provide: BATTLE_MANAGER_PORT, useClass: BattleManagerService },
         { provide: SUBMIT_ARENA_SOLUTION_PORT, useClass: SubmitArenaSolutionService },
-        { provide: BUG_HUNTER_VALIDATOR_PORT, useClass: BugHunterValidatorService }
+        { provide: BUG_HUNTER_VALIDATOR_PORT, useClass: BugHunterValidatorService },
+        { provide: CODE_GOLF_VALIDATOR_PORT, useClass: CodeGolfValidatorService },
     ],
     exports: [
         JOIN_MATCHMAKING_PORT,
@@ -40,7 +42,8 @@ import { BugHunterValidatorService } from './bugHunterValidator.service';
         BATTLE_MANAGER_PORT,
         LEAVE_MATCHMAKING_PORT,
         SUBMIT_ARENA_SOLUTION_PORT,
-        BUG_HUNTER_VALIDATOR_PORT
+        BUG_HUNTER_VALIDATOR_PORT,
+        CODE_GOLF_VALIDATOR_PORT
     ],
 })
 export class UCServicesModule {}

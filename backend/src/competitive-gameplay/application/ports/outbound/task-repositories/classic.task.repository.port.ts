@@ -1,5 +1,5 @@
 import { ClassicTaskEntry } from '../../../../domain/types/taskMaps/classicTaskMap';
-import { ClassicTask } from '@funcode/shared';
+import { ClassicTask } from '../../../../domain/types/tasks/classicTask';
 
 export interface ClassicTaskRepositoryPort {
     getRandomTask(): ClassicTask;

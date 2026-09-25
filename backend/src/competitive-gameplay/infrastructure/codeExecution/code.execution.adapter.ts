@@ -43,8 +43,16 @@ export class CodeExecutionAdapter implements CodeExecutionPort {
             const execution =
                 await sandbox.runCode(testCode, { language });
 
+            if (execution.error) {
+                return {
+                    tests: [],
+                    executionFailed: true
+                }
+            }
+
             const result =
                 execution.results[0].text;
+
 
             if (!result) {
                 throw new Error('Code execution failed');
@@ -52,6 +60,7 @@ export class CodeExecutionAdapter implements CodeExecutionPort {
 
             return {
                 tests: JSON.parse(result),
+                executionFailed: false,
             };
         } finally {
             await sandbox.kill();
