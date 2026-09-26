@@ -8,6 +8,8 @@ import {
     BATTLE_REPOSITORY_PORT,
 } from '../database/tokens';
 import { type ArenaTaskProviderPort } from '../../application/ports/outbound/arena.task.provider.port';
+import { CODE_GOLF_MATCH_STATE_PORT } from '../CodeGolfMatchState/token';
+import { type CodeGolfMatchStatePort } from '../../application/ports/outbound/codeGolfMatchState.port';
 
 @Injectable()
 export class BattleManagerService extends BattleManagerUC {
@@ -17,8 +19,10 @@ export class BattleManagerService extends BattleManagerUC {
         @Inject(BATTLE_REPOSITORY_PORT)
         battleRepo: BattleRepositoryPort,
         @Inject(ARENA_TASK_PROVIDER_PORT)
-        arenaTaskProvider: ArenaTaskProviderPort
+        arenaTaskProvider: ArenaTaskProviderPort,
+        @Inject(CODE_GOLF_MATCH_STATE_PORT)
+        codeGolfMatchState: CodeGolfMatchStatePort
     ) {
-        super(playerGateway, battleRepo, arenaTaskProvider);
+        super(playerGateway, battleRepo, arenaTaskProvider, codeGolfMatchState);
     }
 }

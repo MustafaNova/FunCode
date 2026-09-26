@@ -1,5 +1,5 @@
 import { ArenaTaskProviderPort } from '../../../application/ports/outbound/arena.task.provider.port';
-import { ArenaGameModeId, ArenaTaskDto } from '@funcode/shared';
+import { ArenaGameModeId, ArenaTaskDto, BugHunterTaskDto, ClassicTaskDto, CodeGolfTaskDto } from '@funcode/shared';
 import { Inject, Injectable } from '@nestjs/common';
 import { type BugHunterTaskRepositoryPort } from '../../../application/ports/outbound/task-repositories/bugHunter.task.repository.port';
 import { type ClassicTaskRepositoryPort } from '../../../application/ports/outbound/task-repositories/classic.task.repository.port';
@@ -7,6 +7,7 @@ import { BUG_HUNTER_TASK_REPOSITORY_PORT, CLASSIC_TASK_REPOSITORY_PORT, CODE_GOL
 import {
     type CodeGolfTaskRepositoryPort
 } from '../../../application/ports/outbound/task-repositories/codeGolf.task.repository.port';
+import { ArenaTaskDtoMap } from '../../../domain/types/arenaTaskDto.map';
 
 @Injectable()
 export class ArenaTaskProviderAdapter implements ArenaTaskProviderPort {
@@ -18,6 +19,18 @@ export class ArenaTaskProviderAdapter implements ArenaTaskProviderPort {
         @Inject(CODE_GOLF_TASK_REPOSITORY_PORT)
         private readonly codeGolfTaskRepo: CodeGolfTaskRepositoryPort
     ) {}
+
+    getRandomTaskDto(
+        gameModeId: 'classic-unranked-1v1',
+    ): ClassicTaskDto;
+
+    getRandomTaskDto(
+        gameModeId: 'bug-hunter-unranked-1v1',
+    ): BugHunterTaskDto;
+
+    getRandomTaskDto(
+        gameModeId: 'code-golf-unranked-1v1',
+    ): CodeGolfTaskDto;
 
     getRandomTaskDto(gameModeId: ArenaGameModeId): ArenaTaskDto {
         switch (gameModeId) {

@@ -7,7 +7,7 @@ import { TaskIdError } from '../classicValidator/errors/task.id.err';
 export class CodeGolfValidatorUC implements CodeGolfValidatorPort {
     constructor(
         private readonly codeGolfTaskRepo: CodeGolfTaskRepositoryPort,
-        private readonly codeExecutor: CodeExecutionPort
+        private readonly codeExecutor: CodeExecutionPort,
     ) {}
 
 
@@ -16,10 +16,6 @@ export class CodeGolfValidatorUC implements CodeGolfValidatorPort {
 
         if (!taskData) {
             throw new TaskIdError();
-        }
-        console.log('CODE LENGTH: ', code.length);
-        if (code.length > taskData.task.characterLimit) {
-            return false;
         }
 
         const result = await this.codeExecutor.execute(

@@ -1,6 +1,6 @@
 import { SubmitArenaSolutionPort } from '../../ports/inbound/submitArenaSolution.port';
 import { SubmitCmd } from '../battle-manager/dtos/submit.cmd';
-import { SOCKET_EVENTS, SubmitResponse } from '@funcode/shared';
+import { CodeGolfSubmitRes, SOCKET_EVENTS, SubmitResponse } from '@funcode/shared';
 import { BattleNotFoundError } from './errors/battleNotFound.error';
 import type { PlayerGatewayPort } from '../../ports/outbound/player.gateway.port';
 import type { ClassicValidatorPort } from '../../ports/inbound/validators/classicValidator.port';
@@ -8,6 +8,7 @@ import type { BattleRepositoryPort } from '../../ports/outbound/battleRepository
 import { Battle1v1 } from '../../../domain/entities/battle1v1';
 import { BugHunterValidatorPort } from '../../ports/inbound/validators/bugHunterValidator.port';
 import { CodeGolfValidatorPort } from '../../ports/inbound/validators/codeGolfValidator.port';
+import { CodeGolfMatchStatePort } from '../../ports/outbound/codeGolfMatchState.port';
 
 
 export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
@@ -17,6 +18,7 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
         private readonly bugHunterValidator: BugHunterValidatorPort,
         private readonly codeGolfValidator: CodeGolfValidatorPort,
         private readonly battleRepo: BattleRepositoryPort,
+        private readonly codeGolfMatchState: CodeGolfMatchStatePort,
     ) {}
 
     async submit(submit: SubmitCmd): Promise<void> {
@@ -41,39 +43,38 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
     }
 
     private async handleCodeGolfSubmit(submit: SubmitCmd, battle: Battle1v1) {
-        console.log('handleCodeGolfSubmit');
+        const bestScore = this.codeGolfMatchState.getBestScore(submit.roomId, submit.userId);
+        if (bestScore === null || submit.solution.length >= bestScore) {
+            return;
+        }
+
         const isValid = await this.codeGolfValidator.validate(submit.taskId, submit.solution);
+
+        if (isValid) {
+            this.codeGolfMatchState.updateBestScore(
+                submit.roomId,
+                submit.userId,
+                submit.solution.length
+            )
+        }
+
         await this.handleCodeGolfSubmitResult(isValid, submit, battle);
 
     }
 
     private async handleCodeGolfSubmitResult(isValid: boolean, submit: SubmitCmd, battle: Battle1v1) {
-        if (!isValid) {
-            this.playerGateway.notifyRoom<SubmitResponse>(
-                submit.roomId,
-                SOCKET_EVENTS.WRONG_SUBMIT,
-                { playerName: submit.playerName },
-            );
-            return;
+        const payload: CodeGolfSubmitRes = {
+            valid: isValid,
         }
 
         this.playerGateway.notifyPlayer(
             submit.userId,
-            SOCKET_EVENTS.WIN
-        );
+            SOCKET_EVENTS.CODE_GOLF_SUBMIT_RESULT,
+            payload
+        )
 
-        const loserId =
-            battle.player1.userId === submit.userId
-                ? battle.player2.userId
-                : battle.player1.userId;
-
-        this.playerGateway.notifyPlayer(
-            loserId,
-            SOCKET_EVENTS.LOSE,
-        );
-
-        await this.playerGateway.closeRoom(submit.roomId);
-        await this.battleRepo.setWinner(submit.roomId, submit.userId);
+        // await this.playerGateway.closeRoom(submit.roomId);
+        // await this.battleRepo.setWinner(submit.roomId, submit.userId);
     }
 
     private async handleBugHunterSubmit(submit: SubmitCmd, battle: Battle1v1) {

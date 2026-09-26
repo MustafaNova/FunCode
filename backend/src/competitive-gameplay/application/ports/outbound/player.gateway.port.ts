@@ -7,6 +7,6 @@ export interface PlayerGatewayPort {
         userId2: string,
     ): Promise<void>;
     closeRoom(roomId: string): Promise<void>;
-    notifyRoom<T>(roomId: string, event: SOCKET_EVENTS, payload: T): void;
+    notifyRoom<T>(roomId: string, event: SOCKET_EVENTS, payload?: T): void;
     notifyPlayer<T>(userId: string, event: SOCKET_EVENTS, payload?: T): void;
 }

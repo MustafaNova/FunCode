@@ -9,7 +9,14 @@ import { useEffect, useState } from 'react';
 import s from './codeGolfMatch.module.scss';
 import { useLocation, useNavigate } from 'react-router-dom';
 import type { CodeGolfTaskDto, SubmitResponse } from '@funcode/shared';
-import { onError, onLose, onWin, onWrongSubmit, sendCode } from '../../../../services/socket/gameSocket.ts';
+import {
+    onCodeGolfSubmitRes,
+    onError,
+    onLose,
+    onWin,
+    onWrongSubmit,
+    sendCode
+} from '../../../../services/socket/gameSocket.ts';
 
 export function CodeGolfMatch() {
     const location = useLocation();
@@ -17,8 +24,9 @@ export function CodeGolfMatch() {
     const task: CodeGolfTaskDto = location.state;
     const [code, setCode] = useState(task.code);
     const [submitResponse, setSubmitResponse] = useState<SubmitResponse | null>(null);
+    const [bestScore, setBestScore] = useState(task.code.length);
     const characterCount = code.length;
-    const isOverLimit = characterCount > task.characterLimit;
+    const canBeatBestScore = characterCount < bestScore;
 
     useEffect(() => {
         const offWrong = onWrongSubmit((res) => {
@@ -37,16 +45,27 @@ export function CodeGolfMatch() {
             navigate('/match/lose');
         })
 
+        const offSubmitRes = onCodeGolfSubmitRes((data) => {
+            console.log(data.valid)
+            if (data.valid) {
+                setBestScore(code.length);
+            } else {
+                console.log('wrong')
+            }
+
+        })
+
         return () => {
             offWrong();
             offWin();
             offLose();
             offError();
+            offSubmitRes();
         }
     }, [navigate])
 
     function handleSubmit() {
-        if (isOverLimit) return;
+        if (!canBeatBestScore) return;
         sendCode({ taskId: task.id, code })
     }
 
@@ -73,8 +92,8 @@ export function CodeGolfMatch() {
                     <div className={s.limitCard}>
                         <FontAwesomeIcon icon={faKeyboard} />
                         <div>
-                            <span>Character limit</span>
-                            <strong>{task.characterLimit}</strong>
+                            <span>Best Score</span>
+                            <strong>{bestScore}</strong>
                         </div>
                     </div>
                 </header>
@@ -88,10 +107,10 @@ export function CodeGolfMatch() {
 
                         <span
                             className={`${s.counter} ${
-                                isOverLimit ? s.counterOverLimit : ''
+                                !canBeatBestScore ? s.counterOverLimit : ''
                             }`}
                         >
-                            {characterCount} / {task.characterLimit}
+                            {characterCount} / {bestScore}
                         </span>
                     </div>
 
@@ -119,22 +138,16 @@ export function CodeGolfMatch() {
 
                         <strong
                             className={
-                                isOverLimit ? s.overLimitText : undefined
+                                !canBeatBestScore ? s.overLimitText : undefined
                             }
                         >
                             {characterCount} characters
                         </strong>
-
-                        <span className={s.remaining}>
-                            {isOverLimit
-                                ? `${characterCount - task.characterLimit} characters over the limit`
-                                : `${task.characterLimit - characterCount} characters remaining`}
-                        </span>
                     </div>
 
                     <button
                         className={s.submitButton}
-                        disabled={isOverLimit}
+                        disabled={!canBeatBestScore}
                         onClick={handleSubmit}
                     >
                         Submit Solution

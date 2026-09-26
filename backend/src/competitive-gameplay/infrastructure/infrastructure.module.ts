@@ -5,6 +5,7 @@ import { PlayerGatewayModule } from './playerGateway/player.gateway.module';
 import { IdGeneratorModule } from './idGenerator/idGenerator.module';
 import { UCServicesModule } from './uc-wiring/uc.services.module';
 import { CodeExecutionModule } from './codeExecution/code.execution.module';
+import { CodeGolfMatchStateModule } from './CodeGolfMatchState/codeGolfMatchState.module';
 
 @Module({
     imports: [
@@ -13,7 +14,8 @@ import { CodeExecutionModule } from './codeExecution/code.execution.module';
         PlayerGatewayModule,
         IdGeneratorModule,
         UCServicesModule,
-        CodeExecutionModule
+        CodeExecutionModule,
+        CodeGolfMatchStateModule
     ],
     exports: [
         RedisModule,
@@ -21,7 +23,8 @@ import { CodeExecutionModule } from './codeExecution/code.execution.module';
         PlayerGatewayModule,
         IdGeneratorModule,
         UCServicesModule,
-        CodeExecutionModule
+        CodeExecutionModule,
+        CodeGolfMatchStateModule
     ],
 })
 export class InfrastructureModule {}

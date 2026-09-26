@@ -10,4 +10,6 @@ export enum SOCKET_EVENTS {
     WIN = 'WIN',
     LOSE = 'LOSE',
     ERROR = 'ERROR',
+    CODE_GOLF_SUBMIT_RESULT = 'CODE_GOLF_SUBMIT_RESULT',
+
 }

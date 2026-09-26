@@ -17,6 +17,7 @@ import { SubmitArenaSolutionService } from './submitArenaSolution.service';
 import { CodeExecutionModule } from '../codeExecution/code.execution.module';
 import { BugHunterValidatorService } from './bugHunterValidator.service';
 import { CodeGolfValidatorService } from './codeGolfValidator.service';
+import { CodeGolfMatchStateModule } from '../CodeGolfMatchState/codeGolfMatchState.module';
 
 @Module({
     imports: [
@@ -24,7 +25,8 @@ import { CodeGolfValidatorService } from './codeGolfValidator.service';
         IdGeneratorModule,
         RedisModule,
         PlayerGatewayModule,
-        CodeExecutionModule
+        CodeExecutionModule,
+        CodeGolfMatchStateModule,
     ],
     providers: [
         { provide: MATCH_MAKER_PORT, useClass: MatchMakerService },

@@ -5,6 +5,7 @@ import {
     type SubmitResponse,
     type WinRes,
     SOCKET_EVENTS, type JoinMatchmakingPayload, type LeaveMatchmakingPayload, type ArenaTask, type BattleAbortedPayload,
+    type CodeGolfSubmitRes,
 } from '@funcode/shared';
 import { me } from '../http/auth.ts';
 
@@ -86,4 +87,18 @@ export function onLose(callback: (response: LoseRes) => void) {
     return () => {
         gameSocket?.off(SOCKET_EVENTS.LOSE, callback);
     }
+}
+
+export function onCodeGolfSubmitRes(callback: (response: CodeGolfSubmitRes) => void) {
+    gameSocket?.on(
+        SOCKET_EVENTS.CODE_GOLF_SUBMIT_RESULT,
+        callback,
+    );
+
+    return () => {
+        gameSocket?.off(
+            SOCKET_EVENTS.CODE_GOLF_SUBMIT_RESULT,
+            callback,
+        );
+    };
 }

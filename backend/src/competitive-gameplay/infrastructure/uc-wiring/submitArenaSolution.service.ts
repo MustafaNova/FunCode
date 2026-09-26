@@ -8,6 +8,8 @@ import { BATTLE_REPOSITORY_PORT } from '../database/tokens';
 import type { BattleRepositoryPort } from '../../application/ports/outbound/battleRepository.port';
 import { type BugHunterValidatorPort } from '../../application/ports/inbound/validators/bugHunterValidator.port';
 import { type CodeGolfValidatorPort } from '../../application/ports/inbound/validators/codeGolfValidator.port';
+import { CODE_GOLF_MATCH_STATE_PORT } from '../CodeGolfMatchState/token';
+import { type CodeGolfMatchStatePort } from '../../application/ports/outbound/codeGolfMatchState.port';
 
 @Injectable()
 export class SubmitArenaSolutionService extends SubmitArenaSolutionUC {
@@ -22,7 +24,9 @@ export class SubmitArenaSolutionService extends SubmitArenaSolutionUC {
         codeGolfValidator: CodeGolfValidatorPort,
         @Inject(BATTLE_REPOSITORY_PORT)
         battleRepo: BattleRepositoryPort,
+        @Inject(CODE_GOLF_MATCH_STATE_PORT)
+        codeGolfMatchState: CodeGolfMatchStatePort,
     ) {
-        super(playerGateway, classicValidator, bugHunterValidator, codeGolfValidator, battleRepo);
+        super(playerGateway, classicValidator, bugHunterValidator, codeGolfValidator, battleRepo, codeGolfMatchState);
     }
 }

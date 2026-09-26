@@ -1,5 +1,15 @@
-import { ArenaGameModeId, ArenaTaskDto } from '@funcode/shared';
+import { BugHunterTaskDto, ClassicTaskDto, CodeGolfTaskDto } from '@funcode/shared';
 
 export interface ArenaTaskProviderPort {
-    getRandomTaskDto(gameModeId: ArenaGameModeId): ArenaTaskDto;
+    getRandomTaskDto(
+        gameModeId: 'classic-unranked-1v1',
+    ): ClassicTaskDto;
+
+    getRandomTaskDto(
+        gameModeId: 'bug-hunter-unranked-1v1',
+    ): BugHunterTaskDto;
+
+    getRandomTaskDto(
+        gameModeId: 'code-golf-unranked-1v1',
+    ): CodeGolfTaskDto;
 }

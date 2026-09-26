@@ -13,7 +13,7 @@ export class CodeGolfValidatorService extends CodeGolfValidatorUC {
         @Inject(CODE_GOLF_TASK_REPOSITORY_PORT)
         codeGolfTaskRepo: CodeGolfTaskRepositoryPort,
         @Inject(CODE_EXECUTION_PORT)
-        codeExecutor: CodeExecutionPort
+        codeExecutor: CodeExecutionPort,
     ) {
         super(codeGolfTaskRepo, codeExecutor);
     }
