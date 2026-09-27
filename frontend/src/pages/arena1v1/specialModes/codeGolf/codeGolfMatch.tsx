@@ -3,75 +3,136 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faCode,
     faFlagCheckered,
-    faKeyboard, faTriangleExclamation,
+    faKeyboard,
 } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import s from './codeGolfMatch.module.scss';
 import { useLocation, useNavigate } from 'react-router-dom';
-import type { CodeGolfTaskDto, SubmitResponse } from '@funcode/shared';
+import type { CodeGolfTaskDto } from '@funcode/shared';
 import {
-    onCodeGolfSubmitRes,
+    onCodeGolfScoreUpdated,
     onError,
     onLose,
     onWin,
     onWrongSubmit,
     sendCode
 } from '../../../../services/socket/gameSocket.ts';
+import { useAuth } from '../../../../context/authContext.ts';
 
 export function CodeGolfMatch() {
+    const user = useAuth();
+    const userId = user.user?.userId;
     const location = useLocation();
     const navigate = useNavigate();
     const task: CodeGolfTaskDto = location.state;
     const [code, setCode] = useState(task.code);
-    const [submitResponse, setSubmitResponse] = useState<SubmitResponse | null>(null);
-    const [bestScore, setBestScore] = useState(task.code.length);
+    const [submitStatus, setSubmitStatus] = useState<'valid' | 'invalid' | null>(null);
+    const [myBestScore, setMyBestScore] = useState(task.code.length);
+    const [opponentBestScore, setOpponentBestScore] = useState(task.code.length);
     const characterCount = code.length;
-    const canBeatBestScore = characterCount < bestScore;
+    const canBeatBestScore = characterCount < myBestScore;
+    const SUBMIT_FEEDBACK_DURATION_MS = 500;
 
     useEffect(() => {
-        const offWrong = onWrongSubmit((res) => {
-            setSubmitResponse(res);
-        })
+        let submitTimeout: ReturnType<typeof setTimeout>;
+
+        const offWrong = onWrongSubmit(() => {
+            clearTimeout(submitTimeout);
+            setSubmitStatus('invalid');
+            submitTimeout = setTimeout(() => {
+                setSubmitStatus(null);
+            }, SUBMIT_FEEDBACK_DURATION_MS);
+        });
 
         const offError = onError((res) => {
             console.log(res);
-        })
+        });
 
         const offWin = onWin(() => {
             navigate('/match/win');
-        })
+        });
 
         const offLose = onLose(() => {
             navigate('/match/lose');
-        })
+        });
 
-        const offSubmitRes = onCodeGolfSubmitRes((data) => {
-            console.log(data.valid)
-            if (data.valid) {
-                setBestScore(code.length);
-            } else {
-                console.log('wrong')
+        const offCodeGolfScoreUpdate = onCodeGolfScoreUpdated((payload) => {
+            if (payload.userId !== userId) {
+                setOpponentBestScore(payload.bestScore);
+                return;
             }
 
-        })
+            setMyBestScore(payload.bestScore);
+            clearTimeout(submitTimeout);
+            setSubmitStatus('valid');
+            submitTimeout = setTimeout(() => {
+                setSubmitStatus(null);
+            }, SUBMIT_FEEDBACK_DURATION_MS);
+
+        });
 
         return () => {
             offWrong();
             offWin();
             offLose();
             offError();
-            offSubmitRes();
+            offCodeGolfScoreUpdate();
+            clearTimeout(submitTimeout);
         }
-    }, [navigate])
+    }, [navigate]);
 
     function handleSubmit() {
         if (!canBeatBestScore) return;
         sendCode({ taskId: task.id, code })
     }
 
+    function getScoreShare(
+        score: number,
+        opponentScore: number,
+    ): number {
+        const myStrength = 1 / score;
+        const opponentStrength = 1 / opponentScore;
+
+        return (
+            myStrength /
+            (myStrength + opponentStrength)
+        ) * 100;
+    }
+
     return (
         <main className={`${s.container} galaxyGridBackground`}>
             <section className={s.matchPanel}>
+                <div className={s.scoreBattle}>
+                    <div className={s.scoreTrack}>
+                        <div
+                            className={`${s.playerBar} ${s.myBar}`}
+                            style={{
+                                width: `${getScoreShare(
+                                    myBestScore,
+                                    opponentBestScore,
+                                )}%`,
+                            }}
+                        >
+            <span>
+                You · {myBestScore}
+            </span>
+                        </div>
+
+                        <div
+                            className={`${s.playerBar} ${s.opponentBar}`}
+                            style={{
+                                width: `${getScoreShare(
+                                    opponentBestScore,
+                                    myBestScore,
+                                )}%`,
+                            }}
+                        >
+            <span>
+                {opponentBestScore} · Opponent
+            </span>
+                        </div>
+                    </div>
+                </div>
                 <header className={s.header}>
                     <div>
                         <span className={s.kicker}>
@@ -81,24 +142,12 @@ export function CodeGolfMatch() {
                         <h1>{task.name}</h1>
                         <p className={s.description}>{task.description}</p>
                     </div>
-
-                    {submitResponse && (
-                        <span className={s.feedbackMessage}>
-                                <FontAwesomeIcon icon={faTriangleExclamation} />
-                            {submitResponse.playerName} had a failed submit
-                            </span>
-                    )}
-
-                    <div className={s.limitCard}>
-                        <FontAwesomeIcon icon={faKeyboard} />
-                        <div>
-                            <span>Best Score</span>
-                            <strong>{bestScore}</strong>
-                        </div>
-                    </div>
                 </header>
 
-                <div className={s.editorSection}>
+                <div className={
+                    `${s.editorSection}
+                    ${submitStatus === 'invalid' ? s.invalidEditor : ''}
+                    ${submitStatus === 'valid' ? s.validEditor : ''}`}>
                     <div className={s.editorHeader}>
                         <span>
                             <FontAwesomeIcon icon={faCode} />
@@ -110,7 +159,7 @@ export function CodeGolfMatch() {
                                 !canBeatBestScore ? s.counterOverLimit : ''
                             }`}
                         >
-                            {characterCount} / {bestScore}
+                            {characterCount} / {myBestScore}
                         </span>
                     </div>
 

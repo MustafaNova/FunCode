@@ -7,7 +7,6 @@ import { BUG_HUNTER_TASK_REPOSITORY_PORT, CLASSIC_TASK_REPOSITORY_PORT, CODE_GOL
 import {
     type CodeGolfTaskRepositoryPort
 } from '../../../application/ports/outbound/task-repositories/codeGolf.task.repository.port';
-import { ArenaTaskDtoMap } from '../../../domain/types/arenaTaskDto.map';
 
 @Injectable()
 export class ArenaTaskProviderAdapter implements ArenaTaskProviderPort {
@@ -63,7 +62,7 @@ export class ArenaTaskProviderAdapter implements ArenaTaskProviderPort {
                     description: codeGolfTask.description,
                     language: codeGolfTask.language,
                     code: codeGolfTask.code,
-                    characterLimit: codeGolfTask.characterLimit,
+                    instantWinLimit: codeGolfTask.instantWinLimit,
                 };
         }
     }

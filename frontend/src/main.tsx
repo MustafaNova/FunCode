@@ -46,45 +46,47 @@ createRoot(document.getElementById('root')!).render(
           <Routes>
               <Route path='/' element={<Login/>} />
               <Route path='/register' element={<Registration/>}></Route>
-              <Route path='/match/classic-unranked-1v1' element={<ClassicMatch/>}></Route>
-              <Route path='/match/bug-hunter-unranked-1v1' element={<BugHunterMatch />}/>
-              <Route path='/match/code-golf-unranked-1v1' element={<CodeGolfMatch />}/>
-              <Route path='/match/ready' element={<ReadyScreen/>}></Route>
-              <Route path='/match/win' element={<MatchWin/>}></Route>
-              <Route path='/match/lose' element={<MatchLose/>}></Route>
-              <Route path='home' element={<AuthProvider children={<App/>} /> }>
-                  <Route index element={<School/>}></Route>
-                  <Route path='arena' element={<Arena/>}></Route>
-                  <Route path='arena/1v1' element={<Arena1v1/>}></Route>
-                  <Route path='arena/1v1/special-modes' element={<SpecialModesPage />}></Route>
-                  <Route path='clan' element={<Clan />}>
-                      <Route index element={<ClanIndexRedirect />}></Route>
+              <Route element={<AuthProvider />}>
+                  <Route path='/match/classic-unranked-1v1' element={<ClassicMatch/>}></Route>
+                  <Route path='/match/bug-hunter-unranked-1v1' element={<BugHunterMatch />}/>
+                  <Route path='/match/code-golf-unranked-1v1' element={<CodeGolfMatch />}/>
+                  <Route path='/match/ready' element={<ReadyScreen/>}></Route>
+                  <Route path='/match/win' element={<MatchWin/>}></Route>
+                  <Route path='/match/lose' element={<MatchLose/>}></Route>
+                  <Route path='home' element={<App/>}>
+                      <Route index element={<School/>}></Route>
+                      <Route path='arena' element={<Arena/>}></Route>
+                      <Route path='arena/1v1' element={<Arena1v1/>}></Route>
+                      <Route path='arena/1v1/special-modes' element={<SpecialModesPage />}></Route>
+                      <Route path='clan' element={<Clan />}>
+                          <Route index element={<ClanIndexRedirect />}></Route>
 
-                      <Route element={<NoClanMemberGuard />}>
-                          <Route path='clans' element={<Clans />}></Route>
-                          <Route path='create' element={<Create />}></Route>
+                          <Route element={<NoClanMemberGuard />}>
+                              <Route path='clans' element={<Clans />}></Route>
+                              <Route path='create' element={<Create />}></Route>
+                          </Route>
+
+                          <Route element={<ClanMemberGuard />}>
+                              <Route path='chat' element={<Chat />}></Route>
+                              <Route path='war' element={<War />}></Route>
+                          </Route>
+
+                          <Route path='friends' element={<Friends />}></Route>
                       </Route>
-
-                      <Route element={<ClanMemberGuard />}>
-                          <Route path='chat' element={<Chat />}></Route>
-                          <Route path='war' element={<War />}></Route>
-                      </Route>
-
-                      <Route path='friends' element={<Friends />}></Route>
+                      <Route path='practice' element={<Practice />}></Route>
                   </Route>
-                  <Route path='practice' element={<Practice />}></Route>
+                  <Route path='practice/code-golf' element={<CodeGolf />}></Route>
+                  <Route path='practice/code-golf/:levelId' element={<CodeGolfLevel />}/>
+                  <Route path='practice/code-golf/:levelId/success' element={<CodeGolfSuccessScreen />}/>
+                  <Route path='practice/bug-hunter' element={<BugHunter />}></Route>
+                  <Route path='practice/bug-hunter/:levelId' element={<BugHunterLevel />}></Route>
+                  <Route path='practice/bug-hunter/:levelId/success' element={<BugHunterSuccessScreen />}></Route>
+                  <Route path='onboarding' element={<Onboarding/>}></Route>
+                  <Route path='onboarding/courses' element={<CourseSelection/>}></Route>
+                  <Route path="/level/:course/:module/:level" element={<LevelFrame/>}/>
+                  <Route path="/levelLose" element={<LevelLoseScreen/>}></Route>
+                  <Route path="/levelWin" element={<LevelWinScreen/>}></Route>
               </Route>
-              <Route path='practice/code-golf' element={<CodeGolf />}></Route>
-              <Route path='practice/code-golf/:levelId' element={<CodeGolfLevel />}/>
-              <Route path='practice/code-golf/:levelId/success' element={<CodeGolfSuccessScreen />}/>
-              <Route path='practice/bug-hunter' element={<BugHunter />}></Route>
-              <Route path='practice/bug-hunter/:levelId' element={<BugHunterLevel />}></Route>
-              <Route path='practice/bug-hunter/:levelId/success' element={<BugHunterSuccessScreen />}></Route>
-              <Route path='onboarding' element={<Onboarding/>}></Route>
-              <Route path='onboarding/courses' element={<CourseSelection/>}></Route>
-              <Route path="/level/:course/:module/:level" element={<LevelFrame/>}/>
-              <Route path="/levelLose" element={<LevelLoseScreen/>}></Route>
-              <Route path="/levelWin" element={<LevelWinScreen/>}></Route>
 
               <Route path="*" element={<NotFound />}></Route>
           </Routes>

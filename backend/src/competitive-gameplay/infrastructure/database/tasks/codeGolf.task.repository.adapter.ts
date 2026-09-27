@@ -30,7 +30,7 @@ function isPalindrome(text) {
     }
 }
         `.trim(),
-                characterLimit: 80,
+                instantWinLimit: 140,
             },
             tests: [
                 { input: ['racecar'], expectedOutput: true },

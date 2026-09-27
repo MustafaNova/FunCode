@@ -25,11 +25,7 @@ export class MatchMakerUC implements MatchMakerPort {
 
         switch (gameModeId) {
             case 'classic-unranked-1v1':
-                return this.create1v1(players, gameModeId);
-
             case 'bug-hunter-unranked-1v1':
-                return this.create1v1(players, gameModeId);
-
             case 'code-golf-unranked-1v1':
                 return this.create1v1(players, gameModeId);
         }

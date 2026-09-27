@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { me } from '../services/http/auth.ts';
 import { AuthContext } from './authContext.ts';
 import type { AuthUser } from './types.ts';
+import { Outlet } from 'react-router-dom';
 
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+export function AuthProvider() {
     const [user, setUser] = useState<AuthUser | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -24,7 +25,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     return (
         <AuthContext.Provider value={{ user, loading }}>
-            {children}
+            <Outlet />
         </AuthContext.Provider>
     );
 }

@@ -1,6 +1,6 @@
 import { SubmitArenaSolutionPort } from '../../ports/inbound/submitArenaSolution.port';
 import { SubmitCmd } from '../battle-manager/dtos/submit.cmd';
-import { CodeGolfSubmitRes, SOCKET_EVENTS, SubmitResponse } from '@funcode/shared';
+import { CodeGolfScoreUpdatedPayload, SOCKET_EVENTS, SubmitResponse } from '@funcode/shared';
 import { BattleNotFoundError } from './errors/battleNotFound.error';
 import type { PlayerGatewayPort } from '../../ports/outbound/player.gateway.port';
 import type { ClassicValidatorPort } from '../../ports/inbound/validators/classicValidator.port';
@@ -50,28 +50,32 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
 
         const isValid = await this.codeGolfValidator.validate(submit.taskId, submit.solution);
 
-        if (isValid) {
-            this.codeGolfMatchState.updateBestScore(
-                submit.roomId,
-                submit.userId,
-                submit.solution.length
-            )
-        }
-
         await this.handleCodeGolfSubmitResult(isValid, submit, battle);
 
     }
 
     private async handleCodeGolfSubmitResult(isValid: boolean, submit: SubmitCmd, battle: Battle1v1) {
-        const payload: CodeGolfSubmitRes = {
-            valid: isValid,
+        if (isValid) {
+
+            this.codeGolfMatchState.updateBestScore(
+                submit.roomId,
+                submit.userId,
+                submit.solution.length
+            )
+
+            this.playerGateway.notifyRoom<CodeGolfScoreUpdatedPayload>(
+                submit.roomId,
+                SOCKET_EVENTS.CODE_GOLF_SCORE_UPDATED,
+                { userId: submit.userId, bestScore: submit.solution.length }
+            )
+
+            return;
         }
 
         this.playerGateway.notifyPlayer(
             submit.userId,
-            SOCKET_EVENTS.CODE_GOLF_SUBMIT_RESULT,
-            payload
-        )
+            SOCKET_EVENTS.WRONG_SUBMIT
+        );
 
         // await this.playerGateway.closeRoom(submit.roomId);
         // await this.battleRepo.setWinner(submit.roomId, submit.userId);

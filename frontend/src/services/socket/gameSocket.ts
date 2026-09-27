@@ -4,8 +4,13 @@ import {
     type SubmitPayload,
     type SubmitResponse,
     type WinRes,
-    SOCKET_EVENTS, type JoinMatchmakingPayload, type LeaveMatchmakingPayload, type ArenaTask, type BattleAbortedPayload,
+    SOCKET_EVENTS,
+    type JoinMatchmakingPayload,
+    type LeaveMatchmakingPayload,
+    type ArenaTaskDto,
+    type BattleAbortedPayload,
     type CodeGolfSubmitRes,
+    type CodeGolfScoreUpdatedPayload,
 } from '@funcode/shared';
 import { me } from '../http/auth.ts';
 
@@ -41,7 +46,7 @@ export function sendPlayerReady() {
     gameSocket?.emit(SOCKET_EVENTS.PLAYER_READY);
 }
 
-export function onBattleStarted(callback: (data: { task: ArenaTask }) => void) {
+export function onBattleStarted(callback: (data: { task: ArenaTaskDto }) => void) {
     gameSocket?.on(SOCKET_EVENTS.BATTLE_STARTED, callback);
 
     return () => {
@@ -89,16 +94,9 @@ export function onLose(callback: (response: LoseRes) => void) {
     }
 }
 
-export function onCodeGolfSubmitRes(callback: (response: CodeGolfSubmitRes) => void) {
-    gameSocket?.on(
-        SOCKET_EVENTS.CODE_GOLF_SUBMIT_RESULT,
-        callback,
-    );
-
+export function onCodeGolfScoreUpdated(callback: (payload: CodeGolfScoreUpdatedPayload) => void) {
+    gameSocket?.on(SOCKET_EVENTS.CODE_GOLF_SCORE_UPDATED, callback);
     return () => {
-        gameSocket?.off(
-            SOCKET_EVENTS.CODE_GOLF_SUBMIT_RESULT,
-            callback,
-        );
-    };
+        gameSocket?.off(SOCKET_EVENTS.CODE_GOLF_SCORE_UPDATED, callback);
+    }
 }

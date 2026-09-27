@@ -5,5 +5,5 @@ export type CodeGolfTaskDto = {
     description: string,
     language: 'javascript',
     code: string,
-    characterLimit: number
+    instantWinLimit: number
 }
