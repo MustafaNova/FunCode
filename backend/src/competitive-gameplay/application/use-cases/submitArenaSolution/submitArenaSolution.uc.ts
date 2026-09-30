@@ -1,6 +1,12 @@
 import { SubmitArenaSolutionPort } from '../../ports/inbound/submitArenaSolution.port';
 import { SubmitCmd } from '../battle-manager/dtos/submit.cmd';
-import { CodeGolfScoreUpdatedPayload, SOCKET_EVENTS, SubmitResponse } from '@funcode/shared';
+import {
+    BattleAbortedPayload,
+    CodeGolfScoreUpdatedPayload,
+    ERROR_CODES,
+    SOCKET_EVENTS,
+    SubmitResponse
+} from '@funcode/shared';
 import { BattleNotFoundError } from './errors/battleNotFound.error';
 import type { PlayerGatewayPort } from '../../ports/outbound/player.gateway.port';
 import type { ClassicValidatorPort } from '../../ports/inbound/validators/classicValidator.port';
@@ -44,46 +50,85 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
 
     private async handleCodeGolfSubmit(submit: SubmitCmd, battle: Battle1v1) {
         const bestScore = this.codeGolfMatchState.getBestScore(submit.roomId, submit.userId);
-        if (bestScore === null || submit.solution.length >= bestScore) {
+        const endsAt = this.codeGolfMatchState.getEndsAt(submit.roomId);
+        if (bestScore === null ||
+            endsAt === null ||
+            submit.solution.length >= bestScore ||
+            Date.now() >= endsAt
+        ) {
             return;
         }
 
-        const isValid = await this.codeGolfValidator.validate(submit.taskId, submit.solution);
+        const instantWinLimit = this.codeGolfMatchState.getInstantWinLimit(submit.roomId);
+        const taskId = this.codeGolfMatchState.getTaskId(submit.roomId);
+        if (instantWinLimit === null || taskId === null) {
+            this.playerGateway.notifyRoom<BattleAbortedPayload>(
+                submit.roomId,
+                SOCKET_EVENTS.BATTLE_ABORTED,
+                { code: ERROR_CODES.CODE_GOLF_MATCH_STATE_INVALID }
+            )
+            await this.playerGateway.closeRoom(battle.roomId);
+            this.codeGolfMatchState.delete(submit.roomId);
+            return;
+        }
 
-        await this.handleCodeGolfSubmitResult(isValid, submit, battle);
+        const isValid = await this.codeGolfValidator.validate(taskId, submit.solution);
+        await this.handleCodeGolfSubmitResult(isValid, submit, battle, instantWinLimit);
 
     }
 
-    private async handleCodeGolfSubmitResult(isValid: boolean, submit: SubmitCmd, battle: Battle1v1) {
-        if (isValid) {
-
-            this.codeGolfMatchState.updateBestScore(
-                submit.roomId,
+    private async handleCodeGolfSubmitResult(isValid: boolean, submit: SubmitCmd, battle: Battle1v1, instantWinLimit: number) {
+        if (!isValid) {
+            this.playerGateway.notifyPlayer(
                 submit.userId,
-                submit.solution.length
-            )
-
-            this.playerGateway.notifyRoom<CodeGolfScoreUpdatedPayload>(
-                submit.roomId,
-                SOCKET_EVENTS.CODE_GOLF_SCORE_UPDATED,
-                { userId: submit.userId, bestScore: submit.solution.length }
-            )
-
+                SOCKET_EVENTS.WRONG_SUBMIT
+            );
             return;
         }
 
-        this.playerGateway.notifyPlayer(
-            submit.userId,
-            SOCKET_EVENTS.WRONG_SUBMIT
-        );
+        const score = submit.solution.length;
 
-        // await this.playerGateway.closeRoom(submit.roomId);
-        // await this.battleRepo.setWinner(submit.roomId, submit.userId);
+        this.codeGolfMatchState.updateBestScore(
+            submit.roomId,
+            submit.userId,
+            score,
+        )
+
+        if (score <= instantWinLimit) {
+            await this.handleCodeGolfInstantWin(submit, battle);
+            return;
+        }
+
+        this.playerGateway.notifyRoom<CodeGolfScoreUpdatedPayload>(
+            submit.roomId,
+            SOCKET_EVENTS.CODE_GOLF_SCORE_UPDATED,
+            { userId: submit.userId, bestScore: score }
+        )
+
     }
 
     private async handleBugHunterSubmit(submit: SubmitCmd, battle: Battle1v1) {
         const isValid = await this.bugHunterValidator.validate(submit.taskId, submit.solution);
         await this.handleBugHunterSubmitResult(isValid, submit, battle);
+    }
+
+    private async handleCodeGolfInstantWin(submit: SubmitCmd, battle: Battle1v1){
+        const winnerId = submit.userId;
+        const loserId = submit.userId === battle.player1.userId ? battle.player2.userId : battle.player1.userId;
+
+        this.playerGateway.notifyPlayer(
+            winnerId,
+            SOCKET_EVENTS.WIN,
+        );
+
+        this.playerGateway.notifyPlayer(
+            loserId,
+            SOCKET_EVENTS.LOSE,
+        );
+
+        await this.battleRepo.setWinner(battle.roomId, winnerId);
+        await this.playerGateway.closeRoom(battle.roomId);
+        this.codeGolfMatchState.delete(submit.roomId);
     }
 
     private async handleBugHunterSubmitResult(isValid: boolean, submit: SubmitCmd, battle: Battle1v1) {

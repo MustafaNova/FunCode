@@ -1,9 +1,10 @@
 import s from './matchLose.module.scss';
-import { useBackToHome } from '../../../../utils/hooks.ts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
 export function MatchLose() {
+    const navigate = useNavigate();
     const loseMsg = 'Opponent deployed their solution first!';
     return (
         <main className={s.readyScreen}>
@@ -24,7 +25,7 @@ export function MatchLose() {
                     <p>{loseMsg}</p>
                 </div>
 
-                <button className={s.leaveButton} onClick={useBackToHome()}>
+                <button className={s.leaveButton} onClick={() => navigate('/home')}>
                     <FontAwesomeIcon icon={faHouse} />
                     Leave
                 </button>

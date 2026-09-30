@@ -331,3 +331,216 @@
           inset 4px 0 8px rgba(170, 130, 255, 0.5),
           0 0 18px rgba(100, 70, 255, 0.4);
 }
+
+.timer {
+  width: fit-content;
+  margin: 20px auto 28px;
+  padding: 8px 18px;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  background: #171a21;
+  border: 1px solid #2d3340;
+  border-radius: 10px;
+
+  box-shadow: 0 0 18px rgba(255, 255, 255, 0.04);
+}
+
+.timerLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #8b93a1;
+}
+
+.timerValue {
+  min-width: 54px;
+
+  font-family: monospace;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-align: center;
+
+  color: #f8fafc;
+}
+
+.timerDanger {
+  border-color: #f43f5e;
+
+  .timerValue {
+    color: #fb7185;
+  }
+}
+
+.editorStats {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.instantWinTarget {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 5px 9px;
+
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+
+  color: #a1a1aa;
+  background: #20232b;
+
+  border: 1px solid #343946;
+  border-radius: 6px;
+
+  transition:
+          color 200ms ease,
+          border-color 200ms ease,
+          box-shadow 200ms ease;
+}
+
+.instantWinReached {
+  color: #fbbf24;
+  border-color: #f59e0b;
+
+  box-shadow:
+          0 0 8px rgba(245, 158, 11, 0.25),
+          0 0 18px rgba(245, 158, 11, 0.12);
+}
+
+.counter {
+  min-width: 76px;
+  text-align: center;
+}
+
+.editorSection {
+  position: relative;
+  border: 1px solid #2d3340;
+  border-radius: 12px;
+  transition:
+          border-color 300ms ease,
+          box-shadow 300ms ease;
+}
+
+.instantWinEditor {
+  border-color: #ff6b00;
+
+  box-shadow:
+          0 0 8px rgba(255, 107, 0, 0.8),
+          0 0 20px rgba(255, 69, 0, 0.5),
+          0 0 40px rgba(255, 30, 0, 0.25);
+
+  animation: firePulse 1.4s ease-in-out infinite;
+}
+
+.instantWinEditor .editorHeader {
+  border-bottom-color: rgba(255, 107, 0, 0.6);
+}
+
+.fireGlow {
+  position: absolute;
+  inset: -4px;
+  z-index: -1;
+
+  border-radius: 16px;
+
+  background:
+          radial-gradient(
+                          ellipse at bottom,
+                          rgba(255, 200, 0, 0.45),
+                          rgba(255, 80, 0, 0.25) 35%,
+                          transparent 70%
+          );
+
+  filter: blur(12px);
+  pointer-events: none;
+
+  animation: fireGlow 1s ease-in-out infinite alternate;
+}
+
+@keyframes firePulse {
+  0%,
+  100% {
+    box-shadow:
+            0 0 8px rgba(255, 107, 0, 0.7),
+            0 0 20px rgba(255, 69, 0, 0.4),
+            0 0 35px rgba(255, 30, 0, 0.2);
+  }
+
+  50% {
+    box-shadow:
+            0 0 12px rgba(255, 180, 0, 0.9),
+            0 0 28px rgba(255, 80, 0, 0.65),
+            0 0 55px rgba(255, 30, 0, 0.35);
+  }
+}
+
+@keyframes fireGlow {
+  from {
+    opacity: 0.55;
+    transform: scale(0.995);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1.01);
+  }
+}
+
+.instantWinBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  margin-left: auto;
+  margin-right: 12px;
+
+  color: #ff8a00;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+
+  text-shadow: 0 0 10px rgba(255, 106, 0, 0.6);
+}
+
+.instantWinButton {
+  border-color: #ff6b00;
+  background: linear-gradient(
+                  135deg,
+                  #ff3d00,
+                  #ff8a00
+  );
+
+  box-shadow:
+          0 0 10px rgba(255, 107, 0, 0.7),
+          0 0 25px rgba(255, 69, 0, 0.4);
+
+  animation: instantWinButtonPulse 1.2s ease-in-out infinite;
+}
+
+.instantWinButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+
+  box-shadow:
+          0 0 15px rgba(255, 170, 0, 0.9),
+          0 0 35px rgba(255, 69, 0, 0.6);
+}
+
+@keyframes instantWinButtonPulse {
+  0%,
+  100% {
+    box-shadow:
+            0 0 8px rgba(255, 107, 0, 0.6),
+            0 0 20px rgba(255, 69, 0, 0.3);
+  }
+
+  50% {
+    box-shadow:
+            0 0 14px rgba(255, 170, 0, 0.9),
+            0 0 32px rgba(255, 69, 0, 0.55);
+  }
+}

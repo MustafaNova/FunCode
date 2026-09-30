@@ -2,18 +2,18 @@ import s from './classicMatch.module.scss'
 import { Editor } from '@monaco-editor/react';
 import { useEffect, useState } from 'react';
 import { onError, onLose, onWin, onWrongSubmit, sendCode } from '../../../services/socket/gameSocket.ts';
-import type { ClassicTaskDto, SubmitResponse } from '@funcode/shared';
+import type { ClassicBattleStartedPayload, SubmitResponse } from '@funcode/shared';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBolt, faCode, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { ROUTES } from '../../../constants/routes.ts';
 
 export function ClassicMatch() {
     const navigate = useNavigate();
     const [code, setCode] = useState('');
     const [submitResponse, setSubmitResponse] = useState<SubmitResponse | null>(null);
     const location = useLocation();
-    const task: ClassicTaskDto = location.state;
-    console.log(task);
+    const { task } = location.state as ClassicBattleStartedPayload;
 
     useEffect(() => {
         const offWrong = onWrongSubmit((res) => {
@@ -25,11 +25,11 @@ export function ClassicMatch() {
         })
 
         const offWin = onWin(() => {
-            navigate('/match/win');
+            navigate(ROUTES.MATCH_WIN);
         })
 
         const offLose = onLose(() => {
-            navigate('/match/lose');
+            navigate(ROUTES.MATCH_WIN);
         })
 
         return () => {

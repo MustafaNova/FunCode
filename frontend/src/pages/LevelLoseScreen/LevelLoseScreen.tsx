@@ -1,9 +1,11 @@
 import s from './levelLose.module.scss'
-import { useBackToHome } from '../../utils/hooks.ts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../constants/routes.ts';
 
 export function LevelLoseScreen() {
+    const navigate = useNavigate();
     return (
         <main className={s.screen}>
             <section className={s.resultPanel}>
@@ -20,10 +22,10 @@ export function LevelLoseScreen() {
                 <div className={s.resultContent}>
                     <p className={s.kicker}>Level failed</p>
                     <h1>Failed</h1>
-                    <p>Try the challenge again from the hub.</p>
+                    <p>Try the challenge again from the hub</p>
                 </div>
 
-                <button className={s.actionButton} onClick={useBackToHome()}>
+                <button className={s.actionButton} onClick={() => navigate(ROUTES.HOME)}>
                     <FontAwesomeIcon icon={faHouse} />
                     Go back
                 </button>

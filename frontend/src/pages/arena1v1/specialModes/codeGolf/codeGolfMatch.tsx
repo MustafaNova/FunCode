@@ -1,16 +1,17 @@
 import Editor from '@monaco-editor/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    faCode,
+    faBolt,
+    faCode, faFire,
     faFlagCheckered,
-    faKeyboard,
 } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import s from './codeGolfMatch.module.scss';
 import { useLocation, useNavigate } from 'react-router-dom';
-import type { CodeGolfTaskDto } from '@funcode/shared';
+import type { CodeGolfBattleStartedPayload } from '@funcode/shared';
 import {
-    onCodeGolfScoreUpdated,
+    onBattleAborted,
+    onCodeGolfScoreUpdated, onDraw,
     onError,
     onLose,
     onWin,
@@ -18,19 +19,26 @@ import {
     sendCode
 } from '../../../../services/socket/gameSocket.ts';
 import { useAuth } from '../../../../context/authContext.ts';
+import { ROUTES } from '../../../../constants/routes.ts';
 
 export function CodeGolfMatch() {
     const user = useAuth();
     const userId = user.user?.userId;
     const location = useLocation();
     const navigate = useNavigate();
-    const task: CodeGolfTaskDto = location.state;
+    const { task, endsAt } = location.state as CodeGolfBattleStartedPayload;
     const [code, setCode] = useState(task.code);
     const [submitStatus, setSubmitStatus] = useState<'valid' | 'invalid' | null>(null);
     const [myBestScore, setMyBestScore] = useState(task.code.length);
     const [opponentBestScore, setOpponentBestScore] = useState(task.code.length);
+    const [remainingSeconds, setRemainingSeconds] = useState(
+        () => Math.max(0, Math.ceil((endsAt - Date.now()) / 1000))
+    );
+    const minutes = Math.floor(remainingSeconds / 60);
+    const seconds = remainingSeconds % 60;
     const characterCount = code.length;
     const canBeatBestScore = characterCount < myBestScore;
+    const isInstantWinZone = characterCount <= task.instantWinLimit;
     const SUBMIT_FEEDBACK_DURATION_MS = 500;
 
     useEffect(() => {
@@ -49,12 +57,23 @@ export function CodeGolfMatch() {
         });
 
         const offWin = onWin(() => {
-            navigate('/match/win');
+            navigate(ROUTES.MATCH_WIN);
         });
 
         const offLose = onLose(() => {
-            navigate('/match/lose');
+            navigate(ROUTES.MATCH_LOSE);
         });
+
+        const offDraw = onDraw(() => {
+            navigate(ROUTES.MATCH_DRAW);
+        })
+
+        const offAborted = onBattleAborted((payload) => {
+            navigate('/home/arena', {
+                replace: true,
+                state: { errorCode: payload.code }
+            })
+        })
 
         const offCodeGolfScoreUpdate = onCodeGolfScoreUpdated((payload) => {
             if (payload.userId !== userId) {
@@ -71,13 +90,20 @@ export function CodeGolfMatch() {
 
         });
 
+        const interval = setInterval(() => {
+            setRemainingSeconds(Math.max(0, Math.ceil((endsAt - Date.now()) / 1000)));
+        }, 1000);
+
         return () => {
             offWrong();
             offWin();
             offLose();
+            offDraw();
             offError();
+            offAborted();
             offCodeGolfScoreUpdate();
             clearTimeout(submitTimeout);
+            clearInterval(interval);
         }
     }, [navigate]);
 
@@ -104,34 +130,29 @@ export function CodeGolfMatch() {
             <section className={s.matchPanel}>
                 <div className={s.scoreBattle}>
                     <div className={s.scoreTrack}>
-                        <div
-                            className={`${s.playerBar} ${s.myBar}`}
-                            style={{
+                        <div className={`${s.playerBar} ${s.myBar}`} style={{
                                 width: `${getScoreShare(
                                     myBestScore,
                                     opponentBestScore,
                                 )}%`,
-                            }}
-                        >
-            <span>
-                You · {myBestScore}
-            </span>
+                            }}>
+                            <span> You · {myBestScore} </span>
                         </div>
-
-                        <div
-                            className={`${s.playerBar} ${s.opponentBar}`}
-                            style={{
+                        <div className={`${s.playerBar} ${s.opponentBar}`} style={{
                                 width: `${getScoreShare(
                                     opponentBestScore,
                                     myBestScore,
                                 )}%`,
-                            }}
-                        >
-            <span>
-                {opponentBestScore} · Opponent
-            </span>
+                            }}>
+                            <span> {opponentBestScore} · Opponent </span>
                         </div>
                     </div>
+                </div>
+                <div className={`${s.timer} ${remainingSeconds <= 60 ? s.timerDanger : ''}`}>
+                    <span className={s.timerLabel}>TIME LEFT</span>
+                    <span className={s.timerValue}>
+                        {minutes}:{seconds.toString().padStart(2, '0')}
+                    </span>
                 </div>
                 <header className={s.header}>
                     <div>
@@ -147,20 +168,30 @@ export function CodeGolfMatch() {
                 <div className={
                     `${s.editorSection}
                     ${submitStatus === 'invalid' ? s.invalidEditor : ''}
-                    ${submitStatus === 'valid' ? s.validEditor : ''}`}>
+                    ${submitStatus === 'valid' ? s.validEditor : ''}
+                    ${(isInstantWinZone && submitStatus !== 'invalid') ? s.instantWinEditor : ''}`}
+                >
+
+                    {isInstantWinZone && (
+                        <div className={s.fireGlow} aria-hidden="true" />
+                    )}
+
                     <div className={s.editorHeader}>
                         <span>
                             <FontAwesomeIcon icon={faCode} />
                             solution.js
                         </span>
 
-                        <span
-                            className={`${s.counter} ${
-                                !canBeatBestScore ? s.counterOverLimit : ''
-                            }`}
-                        >
-                            {characterCount} / {myBestScore}
-                        </span>
+                        <div className={s.editorStats}>
+                            <span className={`${s.instantWinTarget} ${isInstantWinZone ? s.instantWinReached : ''}`}>
+                                <FontAwesomeIcon icon={faBolt} />
+                                Instant Win ≤ {task.instantWinLimit}
+                            </span>
+
+                            <span className={`${s.counter} ${!canBeatBestScore ? s.counterOverLimit : ''}`}>
+                                {characterCount} / {myBestScore}
+                            </span>
+                        </div>
                     </div>
 
                     <Editor
@@ -195,11 +226,21 @@ export function CodeGolfMatch() {
                     </div>
 
                     <button
-                        className={s.submitButton}
+                        className={`
+                            ${s.submitButton}
+                            ${isInstantWinZone ? s.instantWinButton : ''}
+                        `}
                         disabled={!canBeatBestScore}
                         onClick={handleSubmit}
                     >
-                        Submit Solution
+                        {isInstantWinZone ? (
+                            <>
+                                <FontAwesomeIcon icon={faFire} />
+                                Instant Win
+                            </>
+                        ) : (
+                            'Submit solution'
+                        )}
                     </button>
                 </div>
             </section>

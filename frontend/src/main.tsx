@@ -39,6 +39,7 @@ import { CodeGolfSuccessScreen } from './pages/practice/games/codeGolf/codeGolfS
 import { SpecialModesPage } from './pages/arena1v1/specialModes/specialModesPage.tsx';
 import { BugHunterMatch } from './pages/arena1v1/specialModes/bugHunter/BugHunterMatch.tsx';
 import { CodeGolfMatch } from './pages/arena1v1/specialModes/codeGolf/codeGolfMatch.tsx';
+import { MatchDraw } from './pages/arena1v1/result/draw/MatchDraw.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -47,12 +48,13 @@ createRoot(document.getElementById('root')!).render(
               <Route path='/' element={<Login/>} />
               <Route path='/register' element={<Registration/>}></Route>
               <Route element={<AuthProvider />}>
-                  <Route path='/match/classic-unranked-1v1' element={<ClassicMatch/>}></Route>
+                  <Route path='/match/classic-unranked-1v1' element={<ClassicMatch/>} />
                   <Route path='/match/bug-hunter-unranked-1v1' element={<BugHunterMatch />}/>
                   <Route path='/match/code-golf-unranked-1v1' element={<CodeGolfMatch />}/>
-                  <Route path='/match/ready' element={<ReadyScreen/>}></Route>
-                  <Route path='/match/win' element={<MatchWin/>}></Route>
-                  <Route path='/match/lose' element={<MatchLose/>}></Route>
+                  <Route path='/match/ready' element={<ReadyScreen/>} />
+                  <Route path='/match/win' element={<MatchWin/>} />
+                  <Route path='/match/lose' element={<MatchLose/>} />
+                  <Route path='/match/draw' element={<MatchDraw/>}/>
                   <Route path='home' element={<App/>}>
                       <Route index element={<School/>}></Route>
                       <Route path='arena' element={<Arena/>}></Route>

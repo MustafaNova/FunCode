@@ -8,14 +8,15 @@ import {
 import { useEffect, useState } from 'react';
 import s from './bugHunterMatch.module.scss';
 import { useLocation, useNavigate } from 'react-router-dom';
-import type { BugHunterTaskDto, SubmitResponse } from '@funcode/shared';
+import type { BugHunterBattleStartedPayload, SubmitResponse } from '@funcode/shared';
 import { onError, onLose, onWin, onWrongSubmit, sendCode } from '../../../../services/socket/gameSocket.ts';
+import { ROUTES } from '../../../../constants/routes.ts';
 
 export function BugHunterMatch() {
     const navigate = useNavigate();
     const [submitResponse, setSubmitResponse] = useState<SubmitResponse | null>(null);
     const location = useLocation();
-    const task: BugHunterTaskDto = location.state
+    const { task } = location.state as BugHunterBattleStartedPayload;
     const [code, setCode] = useState(task.code);
 
     useEffect(() => {
@@ -36,11 +37,11 @@ export function BugHunterMatch() {
         })
 
         const offWin = onWin(() => {
-            navigate('/match/win');
+            navigate(ROUTES.MATCH_WIN);
         })
 
         const offLose = onLose(() => {
-            navigate('/match/lose');
+            navigate(ROUTES.MATCH_LOSE);
         })
 
         return () => {

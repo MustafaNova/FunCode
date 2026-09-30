@@ -1,39 +1,46 @@
-import s from './matchWin.module.scss';
+import s from './matchDraw.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse, faTrophy } from '@fortawesome/free-solid-svg-icons';
+import {
+    faHouse,
+    faScaleBalanced,
+} from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../../../constants/routes.ts';
 
-export function MatchWin() {
+export function MatchDraw() {
     const navigate = useNavigate();
-    const winMsg = 'Victory compiled successfully!'
+    const drawMsg = 'Both players finished with the same score.';
+
     return (
-        <main className={s.readyScreen}>
+        <main className={s.drawScreen}>
             <section className={s.resultPanel}>
-                <div className={s.effectLayer} aria-hidden="true">
-                    <span />
-                    <span />
-                    <span />
+                <div
+                    className={s.effectLayer}
+                    aria-hidden="true"
+                >
                     <span />
                     <span />
                     <span />
                 </div>
 
                 <div className={s.resultIcon}>
-                    <FontAwesomeIcon icon={faTrophy} />
+                    <FontAwesomeIcon icon={faScaleBalanced} />
                 </div>
 
                 <div className={s.resultContent}>
                     <p className={s.kicker}>Match complete</p>
-                    <h1>Victory</h1>
-                    <p>{winMsg}</p>
+                    <h1>Draw</h1>
+                    <p>{drawMsg}</p>
                 </div>
 
-                <button className={s.leaveButton} onClick={() => navigate(ROUTES.HOME)}>
+                <button
+                    className={s.leaveButton}
+                    onClick={() => navigate(ROUTES.HOME)}
+                >
                     <FontAwesomeIcon icon={faHouse} />
                     Leave
                 </button>
             </section>
         </main>
-    )
+    );
 }

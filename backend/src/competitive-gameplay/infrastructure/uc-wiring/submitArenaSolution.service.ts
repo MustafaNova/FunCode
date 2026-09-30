@@ -27,6 +27,13 @@ export class SubmitArenaSolutionService extends SubmitArenaSolutionUC {
         @Inject(CODE_GOLF_MATCH_STATE_PORT)
         codeGolfMatchState: CodeGolfMatchStatePort,
     ) {
-        super(playerGateway, classicValidator, bugHunterValidator, codeGolfValidator, battleRepo, codeGolfMatchState);
+        super(
+            playerGateway,
+            classicValidator,
+            bugHunterValidator,
+            codeGolfValidator,
+            battleRepo,
+            codeGolfMatchState,
+        );
     }
 }

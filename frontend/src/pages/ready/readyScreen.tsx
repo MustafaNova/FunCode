@@ -17,7 +17,7 @@ export function ReadyScreen() {
     useEffect(() => {
         const offBattleStarted = onBattleStarted((data) => {
             navigate(readyPath, {
-                state: data.task
+                state: data
             })
         });
         const offBattleAborted = onBattleAborted((payload) => {

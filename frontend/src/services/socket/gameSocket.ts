@@ -7,10 +7,8 @@ import {
     SOCKET_EVENTS,
     type JoinMatchmakingPayload,
     type LeaveMatchmakingPayload,
-    type ArenaTaskDto,
     type BattleAbortedPayload,
-    type CodeGolfSubmitRes,
-    type CodeGolfScoreUpdatedPayload,
+    type CodeGolfScoreUpdatedPayload, type BattleStartedPayload,
 } from '@funcode/shared';
 import { me } from '../http/auth.ts';
 
@@ -46,7 +44,7 @@ export function sendPlayerReady() {
     gameSocket?.emit(SOCKET_EVENTS.PLAYER_READY);
 }
 
-export function onBattleStarted(callback: (data: { task: ArenaTaskDto }) => void) {
+export function onBattleStarted(callback: (data: BattleStartedPayload) => void) {
     gameSocket?.on(SOCKET_EVENTS.BATTLE_STARTED, callback);
 
     return () => {
@@ -84,6 +82,13 @@ export function onWin(callback: (response: WinRes) => void) {
     gameSocket?.on(SOCKET_EVENTS.WIN, callback)
     return () => {
         gameSocket?.off(SOCKET_EVENTS.WIN, callback);
+    }
+}
+
+export function onDraw(callback: () => void) {
+    gameSocket?.on(SOCKET_EVENTS.DRAW, callback)
+    return () => {
+        gameSocket?.off(SOCKET_EVENTS.DRAW, callback);
     }
 }
 
