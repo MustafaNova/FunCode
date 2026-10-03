@@ -54,7 +54,7 @@ export function BugHunterMatch() {
     }, [navigate])
 
     function handleSubmit() {
-        sendCode({ taskId: task.id, code})
+        sendCode({ code })
     }
 
     return (

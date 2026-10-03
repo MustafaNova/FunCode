@@ -40,6 +40,8 @@ import { SpecialModesPage } from './pages/arena1v1/specialModes/specialModesPage
 import { BugHunterMatch } from './pages/arena1v1/specialModes/bugHunter/BugHunterMatch.tsx';
 import { CodeGolfMatch } from './pages/arena1v1/specialModes/codeGolf/codeGolfMatch.tsx';
 import { MatchDraw } from './pages/arena1v1/result/draw/MatchDraw.tsx';
+import { CodeGolfInstantWin } from './pages/arena1v1/result/codeGolfInstantWin/codeGolf.instant.win.tsx';
+import { CodeGolfInstantLose } from './pages/arena1v1/result/codeGolfInstantLose/codeGolf.instant.lose.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -54,6 +56,8 @@ createRoot(document.getElementById('root')!).render(
                   <Route path='/match/ready' element={<ReadyScreen/>} />
                   <Route path='/match/win' element={<MatchWin/>} />
                   <Route path='/match/lose' element={<MatchLose/>} />
+                  <Route path='/match/code-golf/instant-win' element={<CodeGolfInstantWin />} />
+                  <Route path='/match/code-golf/instant-lose' element={<CodeGolfInstantLose />} />
                   <Route path='/match/draw' element={<MatchDraw/>}/>
                   <Route path='home' element={<App/>}>
                       <Route index element={<School/>}></Route>

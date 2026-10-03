@@ -8,7 +8,7 @@ import {
     type JoinMatchmakingPayload,
     type LeaveMatchmakingPayload,
     type BattleAbortedPayload,
-    type CodeGolfScoreUpdatedPayload, type BattleStartedPayload,
+    type CodeGolfScoreUpdatedPayload, type BattleStartedPayload, type CodeGolfWinPayload, type CodeGolfLosePayload,
 } from '@funcode/shared';
 import { me } from '../http/auth.ts';
 
@@ -79,11 +79,26 @@ export function onError(callback: (response: SubmitResponse) => void) {
 }
 
 export function onWin(callback: (response: WinRes) => void) {
-    gameSocket?.on(SOCKET_EVENTS.WIN, callback)
+    gameSocket?.on(SOCKET_EVENTS.WIN, callback);
     return () => {
         gameSocket?.off(SOCKET_EVENTS.WIN, callback);
     }
 }
+
+export function onCodeGolfWin(callback: (response: CodeGolfWinPayload) => void) {
+    gameSocket?.on(SOCKET_EVENTS.CODE_GOLF_WIN, callback);
+    return () => {
+        gameSocket?.off(SOCKET_EVENTS.CODE_GOLF_WIN, callback);
+    }
+}
+
+export function onCodeGolfLose(callback: (response: CodeGolfLosePayload) => void) {
+    gameSocket?.on(SOCKET_EVENTS.CODE_GOLF_LOSE, callback);
+    return () => {
+        gameSocket?.off(SOCKET_EVENTS.CODE_GOLF_LOSE, callback);
+    }
+}
+
 
 export function onDraw(callback: () => void) {
     gameSocket?.on(SOCKET_EVENTS.DRAW, callback)

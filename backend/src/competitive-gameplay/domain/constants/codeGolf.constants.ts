@@ -1,1 +1,2 @@
-export const CODE_GOLF_DURATION_MS = 1 * 20 * 1000;
+export const CODE_GOLF_MATCH_DURATION_MS = 1 * 20 * 1000;
+export const CODE_GOLF_PREPARATION_DURATION_MS = 20 * 1000

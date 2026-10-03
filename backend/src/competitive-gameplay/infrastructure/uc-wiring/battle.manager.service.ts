@@ -8,8 +8,12 @@ import {
     BATTLE_REPOSITORY_PORT,
 } from '../database/tokens';
 import { type ArenaTaskProviderPort } from '../../application/ports/outbound/arena.task.provider.port';
-import { CODE_GOLF_MATCH_STATE_PORT } from '../CodeGolfMatchState/token';
-import { type CodeGolfMatchStatePort } from '../../application/ports/outbound/codeGolfMatchState.port';
+import { CODE_GOLF_MATCH_STATE_PORT } from '../matchStates/CodeGolfMatchState/token';
+import { type CodeGolfMatchStatePort } from '../../application/ports/outbound/matchStates/codeGolf.match.state.port';
+import { type BugHunterMatchStatePort } from '../../application/ports/outbound/matchStates/bugHunter.match.state.port';
+import { type ClassicMatchStatePort } from '../../application/ports/outbound/matchStates/classic.match.state.port';
+import { BUG_HUNTER_MATCH_STATE_PORT } from '../matchStates/BugHunterMatchState/token';
+import { CLASSIC_MATCH_STATE_PORT } from '../matchStates/ClassicMatchState/token';
 
 @Injectable()
 export class BattleManagerService extends BattleManagerUC {
@@ -21,8 +25,19 @@ export class BattleManagerService extends BattleManagerUC {
         @Inject(ARENA_TASK_PROVIDER_PORT)
         arenaTaskProvider: ArenaTaskProviderPort,
         @Inject(CODE_GOLF_MATCH_STATE_PORT)
-        codeGolfMatchState: CodeGolfMatchStatePort
+        codeGolfMatchState: CodeGolfMatchStatePort,
+        @Inject(BUG_HUNTER_MATCH_STATE_PORT)
+        bugHunterMatchState: BugHunterMatchStatePort,
+        @Inject(CLASSIC_MATCH_STATE_PORT)
+        classicMatchState: ClassicMatchStatePort
     ) {
-        super(playerGateway, battleRepo, arenaTaskProvider, codeGolfMatchState);
+        super(
+            playerGateway,
+            battleRepo,
+            arenaTaskProvider,
+            codeGolfMatchState,
+            bugHunterMatchState,
+            classicMatchState
+        );
     }
 }

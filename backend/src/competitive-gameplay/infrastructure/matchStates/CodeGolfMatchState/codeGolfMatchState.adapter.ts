@@ -1,6 +1,6 @@
-import { CodeGolfMatchStatePort } from '../../application/ports/outbound/codeGolfMatchState.port';
+import { CodeGolfMatchStatePort } from '../../../application/ports/outbound/matchStates/codeGolf.match.state.port';
 import { Injectable } from '@nestjs/common';
-import { CodeGolfMatchState } from '../../domain/types/codeGolfMatchState';
+import { CodeGolfMatchState } from '../../../domain/types/matchStates/codeGolf.match.state';
 
 @Injectable()
 export class CodeGolfMatchStateAdapter implements CodeGolfMatchStatePort {
@@ -11,11 +11,8 @@ export class CodeGolfMatchStateAdapter implements CodeGolfMatchStatePort {
         this.states.set(roomId, state);
     }
 
-    getBestScore(roomId: string, userId: string): number | null {
-        const state = this.states.get(roomId);
-        if (!state) return null;
-
-        return state.playerScores.get(userId) ?? null
+    get(roomId: string): CodeGolfMatchState | null {
+        return this.states.get(roomId) ?? null;
     }
 
     updateBestScore(roomId: string, userId: string, score: number): void {
@@ -33,22 +30,6 @@ export class CodeGolfMatchStateAdapter implements CodeGolfMatchStatePort {
     delete(roomId: string): void {
         this.clearTimer(roomId);
         this.states.delete(roomId);
-    }
-
-    getEndsAt(roomId: string): number | null {
-        return this.states.get(roomId)?.endsAt ?? null;
-    }
-
-    getScores(roomId: string): Map<string, number> | null {
-        return this.states.get(roomId)?.playerScores ?? null;
-    }
-
-    getInstantWinLimit(roomId: string): number | null {
-        return this.states.get(roomId)?.instantWinLimit ?? null;
-    }
-
-    getTaskId(roomId: string): string | null {
-        return this.states.get(roomId)?.taskId ?? null;
     }
 
     setTimer(roomId: string, timer: ReturnType<typeof setTimeout>) {

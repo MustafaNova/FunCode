@@ -1,0 +1,156 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+
+  background:
+          radial-gradient(
+                          circle at center,
+                          rgba(255, 107, 0, 0.12),
+                          transparent 45%
+          ),
+          #0f1117;
+}
+
+.card {
+  width: 100%;
+  max-width: 520px;
+  padding: 48px 40px;
+  text-align: center;
+
+  background: #171a21;
+  border: 1px solid rgba(255, 138, 0, 0.4);
+  border-radius: 20px;
+
+  box-shadow:
+          0 0 35px rgba(255, 107, 0, 0.12);
+
+  h1 {
+    margin: 10px 0 14px;
+    font-size: 2.4rem;
+    color: #f9fafb;
+  }
+}
+
+.iconWrapper {
+  width: 82px;
+  height: 82px;
+  margin: 0 auto 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: rgba(255, 107, 0, 0.1);
+  border: 1px solid rgba(255, 138, 0, 0.45);
+
+  box-shadow:
+          0 0 15px rgba(255, 107, 0, 0.35),
+          0 0 35px rgba(255, 69, 0, 0.18);
+
+  animation: firePulse 1.4s ease-in-out infinite;
+}
+
+.icon {
+  font-size: 2.3rem;
+  color: #ff8a00;
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #ff8a00;
+}
+
+.description {
+  max-width: 400px;
+  margin: 0 auto 32px;
+
+  color: #9ca3af;
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.primaryButton,
+.secondaryButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 11px 18px;
+  border-radius: 9px;
+
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+          transform 150ms ease,
+          background 150ms ease;
+}
+
+.primaryButton {
+  border: none;
+  color: white;
+
+  background: linear-gradient(
+                  135deg,
+                  #ff3d00,
+                  #ff8a00
+  );
+
+  box-shadow:
+          0 0 15px rgba(255, 107, 0, 0.25);
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+}
+
+.secondaryButton {
+  border: 1px solid #343a46;
+  background: transparent;
+  color: #d1d5db;
+
+  &:hover {
+    background: #222630;
+    transform: translateY(-1px);
+  }
+}
+
+@keyframes firePulse {
+  0%,
+  100% {
+    box-shadow:
+            0 0 15px rgba(255, 107, 0, 0.3),
+            0 0 30px rgba(255, 69, 0, 0.15);
+  }
+
+  50% {
+    box-shadow:
+            0 0 25px rgba(255, 138, 0, 0.55),
+            0 0 50px rgba(255, 69, 0, 0.3);
+  }
+}
+
+@media (max-width: 560px) {
+  .card {
+    padding: 36px 24px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+}

@@ -5,7 +5,9 @@ import { PlayerGatewayModule } from './playerGateway/player.gateway.module';
 import { IdGeneratorModule } from './idGenerator/idGenerator.module';
 import { UCServicesModule } from './uc-wiring/uc.services.module';
 import { CodeExecutionModule } from './codeExecution/code.execution.module';
-import { CodeGolfMatchStateModule } from './CodeGolfMatchState/codeGolfMatchState.module';
+import { CodeGolfMatchStateModule } from './matchStates/CodeGolfMatchState/codeGolfMatchState.module';
+import { BugHunterMatchStateModule } from './matchStates/BugHunterMatchState/bugHunterMatchState.module';
+import { ClassicMatchStateModule } from './matchStates/ClassicMatchState/classicMatchState.module';
 
 @Module({
     imports: [
@@ -15,7 +17,9 @@ import { CodeGolfMatchStateModule } from './CodeGolfMatchState/codeGolfMatchStat
         IdGeneratorModule,
         UCServicesModule,
         CodeExecutionModule,
-        CodeGolfMatchStateModule
+        CodeGolfMatchStateModule,
+        BugHunterMatchStateModule,
+        ClassicMatchStateModule
     ],
     exports: [
         RedisModule,
@@ -24,7 +28,9 @@ import { CodeGolfMatchStateModule } from './CodeGolfMatchState/codeGolfMatchStat
         IdGeneratorModule,
         UCServicesModule,
         CodeExecutionModule,
-        CodeGolfMatchStateModule
+        CodeGolfMatchStateModule,
+        BugHunterMatchStateModule,
+        ClassicMatchStateModule
     ],
 })
 export class InfrastructureModule {}

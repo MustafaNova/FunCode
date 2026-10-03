@@ -8,8 +8,12 @@ import { BATTLE_REPOSITORY_PORT } from '../database/tokens';
 import type { BattleRepositoryPort } from '../../application/ports/outbound/battleRepository.port';
 import { type BugHunterValidatorPort } from '../../application/ports/inbound/validators/bugHunterValidator.port';
 import { type CodeGolfValidatorPort } from '../../application/ports/inbound/validators/codeGolfValidator.port';
-import { CODE_GOLF_MATCH_STATE_PORT } from '../CodeGolfMatchState/token';
-import { type CodeGolfMatchStatePort } from '../../application/ports/outbound/codeGolfMatchState.port';
+import { CODE_GOLF_MATCH_STATE_PORT } from '../matchStates/CodeGolfMatchState/token';
+import { type CodeGolfMatchStatePort } from '../../application/ports/outbound/matchStates/codeGolf.match.state.port';
+import { type BugHunterMatchStatePort } from '../../application/ports/outbound/matchStates/bugHunter.match.state.port';
+import { type ClassicMatchStatePort } from '../../application/ports/outbound/matchStates/classic.match.state.port';
+import { BUG_HUNTER_MATCH_STATE_PORT } from '../matchStates/BugHunterMatchState/token';
+import { CLASSIC_MATCH_STATE_PORT } from '../matchStates/ClassicMatchState/token';
 
 @Injectable()
 export class SubmitArenaSolutionService extends SubmitArenaSolutionUC {
@@ -26,6 +30,10 @@ export class SubmitArenaSolutionService extends SubmitArenaSolutionUC {
         battleRepo: BattleRepositoryPort,
         @Inject(CODE_GOLF_MATCH_STATE_PORT)
         codeGolfMatchState: CodeGolfMatchStatePort,
+        @Inject(BUG_HUNTER_MATCH_STATE_PORT)
+        bugHunterMatchState: BugHunterMatchStatePort,
+        @Inject(CLASSIC_MATCH_STATE_PORT)
+        classicMatchState: ClassicMatchStatePort,
     ) {
         super(
             playerGateway,
@@ -34,6 +42,8 @@ export class SubmitArenaSolutionService extends SubmitArenaSolutionUC {
             codeGolfValidator,
             battleRepo,
             codeGolfMatchState,
+            bugHunterMatchState,
+            classicMatchState
         );
     }
 }

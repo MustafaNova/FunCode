@@ -1,0 +1,1 @@
+export const CLASSIC_MATCH_STATE_PORT = 'CLASSIC_MATCH_STATE_PORT' as const;

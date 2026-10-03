@@ -3,6 +3,7 @@
 export type CodeGolfMatchState = {
     taskId: string,
     playerScores: Map<string, number>,
-    endsAt: number,
+    preparationEndsAt: number,
+    matchEndsAt: number,
     instantWinLimit: number,
 }

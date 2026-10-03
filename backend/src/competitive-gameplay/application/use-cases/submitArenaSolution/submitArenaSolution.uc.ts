@@ -1,8 +1,8 @@
 import { SubmitArenaSolutionPort } from '../../ports/inbound/submitArenaSolution.port';
 import { SubmitCmd } from '../battle-manager/dtos/submit.cmd';
 import {
-    BattleAbortedPayload,
-    CodeGolfScoreUpdatedPayload,
+    BattleAbortedPayload, CodeGolfLosePayload,
+    CodeGolfScoreUpdatedPayload, CodeGolfWinPayload,
     ERROR_CODES,
     SOCKET_EVENTS,
     SubmitResponse
@@ -14,7 +14,9 @@ import type { BattleRepositoryPort } from '../../ports/outbound/battleRepository
 import { Battle1v1 } from '../../../domain/entities/battle1v1';
 import { BugHunterValidatorPort } from '../../ports/inbound/validators/bugHunterValidator.port';
 import { CodeGolfValidatorPort } from '../../ports/inbound/validators/codeGolfValidator.port';
-import { CodeGolfMatchStatePort } from '../../ports/outbound/codeGolfMatchState.port';
+import { CodeGolfMatchStatePort } from '../../ports/outbound/matchStates/codeGolf.match.state.port';
+import { BugHunterMatchStatePort } from '../../ports/outbound/matchStates/bugHunter.match.state.port';
+import { ClassicMatchStatePort } from '../../ports/outbound/matchStates/classic.match.state.port';
 
 
 export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
@@ -25,6 +27,8 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
         private readonly codeGolfValidator: CodeGolfValidatorPort,
         private readonly battleRepo: BattleRepositoryPort,
         private readonly codeGolfMatchState: CodeGolfMatchStatePort,
+        private readonly bugHunterMatchState: BugHunterMatchStatePort,
+        private readonly classicMatchState: ClassicMatchStatePort,
     ) {}
 
     async submit(submit: SubmitCmd): Promise<void> {
@@ -49,31 +53,31 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
     }
 
     private async handleCodeGolfSubmit(submit: SubmitCmd, battle: Battle1v1) {
-        const bestScore = this.codeGolfMatchState.getBestScore(submit.roomId, submit.userId);
-        const endsAt = this.codeGolfMatchState.getEndsAt(submit.roomId);
-        if (bestScore === null ||
-            endsAt === null ||
-            submit.solution.length >= bestScore ||
-            Date.now() >= endsAt
-        ) {
-            return;
-        }
+        const state = this.codeGolfMatchState.get(submit.roomId);
 
-        const instantWinLimit = this.codeGolfMatchState.getInstantWinLimit(submit.roomId);
-        const taskId = this.codeGolfMatchState.getTaskId(submit.roomId);
-        if (instantWinLimit === null || taskId === null) {
-            this.playerGateway.notifyRoom<BattleAbortedPayload>(
-                submit.roomId,
-                SOCKET_EVENTS.BATTLE_ABORTED,
-                { code: ERROR_CODES.CODE_GOLF_MATCH_STATE_INVALID }
-            )
-            await this.playerGateway.closeRoom(battle.roomId);
+        if (state === null) {
+            await this.abortMatch(submit.roomId);
             this.codeGolfMatchState.delete(submit.roomId);
             return;
         }
 
-        const isValid = await this.codeGolfValidator.validate(taskId, submit.solution);
-        await this.handleCodeGolfSubmitResult(isValid, submit, battle, instantWinLimit);
+        const bestScore = state.playerScores.get(submit.userId);
+
+        if (bestScore === undefined) {
+            await this.abortMatch(submit.roomId);
+            this.codeGolfMatchState.delete(submit.roomId);
+            return;
+        }
+
+        if (submit.solution.length >= bestScore ||
+            Date.now() >= state.matchEndsAt ||
+            Date.now() < state.preparationEndsAt
+        ) {
+            return;
+        }
+
+        const isValid = await this.codeGolfValidator.validate(state.taskId, submit.solution);
+        await this.handleCodeGolfSubmitResult(isValid, submit, battle, state.instantWinLimit);
 
     }
 
@@ -95,7 +99,7 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
         )
 
         if (score <= instantWinLimit) {
-            await this.handleCodeGolfInstantWin(submit, battle);
+            await this.finishCodeGolfWithInstantWin(submit, battle);
             return;
         }
 
@@ -108,22 +112,31 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
     }
 
     private async handleBugHunterSubmit(submit: SubmitCmd, battle: Battle1v1) {
-        const isValid = await this.bugHunterValidator.validate(submit.taskId, submit.solution);
+        const state = this.bugHunterMatchState.get(submit.roomId);
+        if (state === null) {
+            await this.abortMatch(submit.roomId);
+            this.bugHunterMatchState.delete(submit.roomId);
+            return;
+        }
+
+        const isValid = await this.bugHunterValidator.validate(state.taskId, submit.solution);
         await this.handleBugHunterSubmitResult(isValid, submit, battle);
     }
 
-    private async handleCodeGolfInstantWin(submit: SubmitCmd, battle: Battle1v1){
+    private async finishCodeGolfWithInstantWin(submit: SubmitCmd, battle: Battle1v1){
         const winnerId = submit.userId;
         const loserId = submit.userId === battle.player1.userId ? battle.player2.userId : battle.player1.userId;
 
-        this.playerGateway.notifyPlayer(
+        this.playerGateway.notifyPlayer<CodeGolfWinPayload>(
             winnerId,
-            SOCKET_EVENTS.WIN,
+            SOCKET_EVENTS.CODE_GOLF_WIN,
+            { reason: 'instant-win' }
         );
 
-        this.playerGateway.notifyPlayer(
+        this.playerGateway.notifyPlayer<CodeGolfLosePayload>(
             loserId,
-            SOCKET_EVENTS.LOSE,
+            SOCKET_EVENTS.CODE_GOLF_LOSE,
+            { reason: 'instant-lose' }
         );
 
         await this.battleRepo.setWinner(battle.roomId, winnerId);
@@ -161,7 +174,15 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
     }
 
     private async handleClassicSubmit(submit: SubmitCmd, battle: Battle1v1) {
-        const isValid = await this.classicValidator.validate(submit.taskId, submit.solution);
+        const state = this.classicMatchState.get(submit.roomId);
+
+        if (state === null) {
+            await this.abortMatch(submit.roomId);
+            this.classicMatchState.delete(submit.roomId);
+            return;
+        }
+
+        const isValid = await this.classicValidator.validate(state.taskId, submit.solution);
         await this.handleClassicSubmitResult(isValid, submit, battle);
     }
 
@@ -192,5 +213,14 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
 
         await this.playerGateway.closeRoom(submit.roomId);
         await this.battleRepo.setWinner(submit.roomId, submit.userId);
+    }
+
+    private async abortMatch(roomId: string) {
+        this.playerGateway.notifyRoom<BattleAbortedPayload>(
+            roomId,
+            SOCKET_EVENTS.BATTLE_ABORTED,
+            { code: ERROR_CODES.MATCH_STATE_INVALID }
+        );
+        await this.playerGateway.closeRoom(roomId);
     }
 }

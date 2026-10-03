@@ -10,7 +10,8 @@ export type BugHunterBattleStartedPayload = {
 
 export type CodeGolfBattleStartedPayload = {
     task: CodeGolfTaskDto;
-    endsAt: number;
+    preparationEndsAt: number,
+    matchEndsAt: number;
 };
 
 

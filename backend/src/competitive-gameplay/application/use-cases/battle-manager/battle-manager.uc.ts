@@ -6,15 +6,20 @@ import {
     BattleAbortedPayload,
     BugHunterBattleStartedPayload,
     ClassicBattleStartedPayload,
-    CodeGolfBattleStartedPayload,
+    CodeGolfBattleStartedPayload, CodeGolfLosePayload, CodeGolfWinPayload,
     ERROR_CODES, ErrorCode,
     SOCKET_EVENTS,
 } from '@funcode/shared';
 import type { BattleRepositoryPort } from '../../ports/outbound/battleRepository.port';
 import { RoomId, UserId } from '../../../domain/types/players';
 import { ArenaTaskProviderPort } from '../../ports/outbound/arena.task.provider.port';
-import { CodeGolfMatchStatePort } from '../../ports/outbound/codeGolfMatchState.port';
-import { CODE_GOLF_DURATION_MS } from '../../../domain/constants/codeGolf.constants';
+import { CodeGolfMatchStatePort } from '../../ports/outbound/matchStates/codeGolf.match.state.port';
+import {
+    CODE_GOLF_MATCH_DURATION_MS,
+    CODE_GOLF_PREPARATION_DURATION_MS
+} from '../../../domain/constants/codeGolf.constants';
+import { BugHunterMatchStatePort } from '../../ports/outbound/matchStates/bugHunter.match.state.port';
+import { ClassicMatchStatePort } from '../../ports/outbound/matchStates/classic.match.state.port';
 
 
 export class BattleManagerUC implements BattleManagerPort {
@@ -25,6 +30,8 @@ export class BattleManagerUC implements BattleManagerPort {
         private readonly battleRepo: BattleRepositoryPort,
         private readonly arenaTaskProvider: ArenaTaskProviderPort,
         private readonly codeGolfMatchState: CodeGolfMatchStatePort,
+        private readonly bugHunterMatchState: BugHunterMatchStatePort,
+        private readonly classicMatchState: ClassicMatchStatePort
     ) {}
 
     async on1v1Created(battle: Battle1v1): Promise<void> {
@@ -61,6 +68,7 @@ export class BattleManagerUC implements BattleManagerPort {
                 SOCKET_EVENTS.BATTLE_ABORTED,
                 { code: ERROR_CODES.BATTLE_NOT_FOUND }
             )
+            await this.playerGateway.closeRoom(roomId);
             return;
         }
 
@@ -95,6 +103,10 @@ export class BattleManagerUC implements BattleManagerPort {
             SOCKET_EVENTS.BATTLE_STARTED,
             { task },
         );
+
+        this.classicMatchState.create(battle.roomId, {
+            taskId: task.id,
+        })
     }
 
     private startCodeGolfBattle(battle: Battle1v1) {
@@ -103,12 +115,13 @@ export class BattleManagerUC implements BattleManagerPort {
                'code-golf-unranked-1v1'
             );
 
-        const endsAt = Date.now() + CODE_GOLF_DURATION_MS;
+        const preparationEndsAt = Date.now() + CODE_GOLF_PREPARATION_DURATION_MS;
+        const matchEndsAt = preparationEndsAt + CODE_GOLF_MATCH_DURATION_MS;
 
         this.playerGateway.notifyRoom<CodeGolfBattleStartedPayload>(
             battle.roomId,
             SOCKET_EVENTS.BATTLE_STARTED,
-            { task, endsAt },
+            { task, preparationEndsAt, matchEndsAt },
         );
 
         this.codeGolfMatchState.create(battle.roomId, {
@@ -117,22 +130,39 @@ export class BattleManagerUC implements BattleManagerPort {
                 [battle.player1.userId, task.code.length],
                 [battle.player2.userId, task.code.length],
             ]),
-            endsAt,
+            preparationEndsAt,
+            matchEndsAt,
             instantWinLimit: task.instantWinLimit
         })
 
         const timer= setTimeout(() => {
             void this.finishCodeGolfBattle(battle);
-        }, Math.max(0, endsAt - Date.now()));
+        }, Math.max(0, matchEndsAt - Date.now()));
 
         this.codeGolfMatchState.setTimer(battle.roomId, timer);
+    }
 
+    private startBugHunterBattle(battle: Battle1v1) {
+        const task =
+            this.arenaTaskProvider.getRandomTaskDto(
+                'bug-hunter-unranked-1v1'
+            );
+
+        this.playerGateway.notifyRoom<BugHunterBattleStartedPayload>(
+            battle.roomId,
+            SOCKET_EVENTS.BATTLE_STARTED,
+            { task },
+        );
+
+        this.bugHunterMatchState.create(battle.roomId, {
+            taskId: task.id
+        })
     }
 
     private async finishCodeGolfBattle(battle: Battle1v1) {
-        const scores = this.codeGolfMatchState.getScores(battle.roomId);
+        const state = this.codeGolfMatchState.get(battle.roomId);
 
-        if (!scores) {
+        if (!state) {
             await this.abortCodeGolfBattle(
                 battle.roomId,
                 ERROR_CODES.CODE_GOLF_MATCH_STATE_INVALID
@@ -140,10 +170,11 @@ export class BattleManagerUC implements BattleManagerPort {
             return;
         }
 
+        const { playerScores } = state;
         const userId1= battle.player1.userId;
         const userId2= battle.player2.userId;
-        const player1Score = scores.get(userId1);
-        const player2Score = scores.get(userId2);
+        const player1Score = playerScores.get(userId1);
+        const player2Score = playerScores.get(userId2);
 
         if (player1Score === undefined || player2Score === undefined) {
             await this.abortCodeGolfBattle(
@@ -167,14 +198,16 @@ export class BattleManagerUC implements BattleManagerPort {
             const loserId =
                 player1Score < player2Score ? userId2 : userId1;
 
-            this.playerGateway.notifyPlayer(
+            this.playerGateway.notifyPlayer<CodeGolfWinPayload>(
                 winnerId,
-                SOCKET_EVENTS.WIN
+                SOCKET_EVENTS.CODE_GOLF_WIN,
+                { reason: 'normal' }
             );
 
-            this.playerGateway.notifyPlayer(
+            this.playerGateway.notifyPlayer<CodeGolfLosePayload>(
                 loserId,
-                SOCKET_EVENTS.LOSE
+                SOCKET_EVENTS.CODE_GOLF_LOSE,
+                { reason: 'normal' }
             );
         }
 
@@ -196,17 +229,6 @@ export class BattleManagerUC implements BattleManagerPort {
         this.codeGolfMatchState.delete(roomId);
     }
 
-    private startBugHunterBattle(battle: Battle1v1) {
-        const task =
-            this.arenaTaskProvider.getRandomTaskDto(
-                'bug-hunter-unranked-1v1'
-            );
 
-        this.playerGateway.notifyRoom<BugHunterBattleStartedPayload>(
-            battle.roomId,
-            SOCKET_EVENTS.BATTLE_STARTED,
-            { task },
-        );
-    }
 
 }

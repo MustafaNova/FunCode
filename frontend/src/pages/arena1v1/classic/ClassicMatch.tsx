@@ -29,7 +29,7 @@ export function ClassicMatch() {
         })
 
         const offLose = onLose(() => {
-            navigate(ROUTES.MATCH_WIN);
+            navigate(ROUTES.MATCH_LOSE);
         })
 
         return () => {
@@ -41,8 +41,7 @@ export function ClassicMatch() {
     }, [navigate])
 
     function submitCode() {
-        if (task.id == null) return;
-        sendCode({ taskId: task.id, code });
+        sendCode({ code });
     }
 
     return (

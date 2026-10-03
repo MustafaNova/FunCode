@@ -10,11 +10,9 @@ import s from './codeGolfMatch.module.scss';
 import { useLocation, useNavigate } from 'react-router-dom';
 import type { CodeGolfBattleStartedPayload } from '@funcode/shared';
 import {
-    onBattleAborted,
-    onCodeGolfScoreUpdated, onDraw,
+    onBattleAborted, onCodeGolfLose,
+    onCodeGolfScoreUpdated, onCodeGolfWin, onDraw,
     onError,
-    onLose,
-    onWin,
     onWrongSubmit,
     sendCode
 } from '../../../../services/socket/gameSocket.ts';
@@ -26,13 +24,17 @@ export function CodeGolfMatch() {
     const userId = user.user?.userId;
     const location = useLocation();
     const navigate = useNavigate();
-    const { task, endsAt } = location.state as CodeGolfBattleStartedPayload;
+    const { task, matchEndsAt, preparationEndsAt } = location.state as CodeGolfBattleStartedPayload;
     const [code, setCode] = useState(task.code);
     const [submitStatus, setSubmitStatus] = useState<'valid' | 'invalid' | null>(null);
     const [myBestScore, setMyBestScore] = useState(task.code.length);
     const [opponentBestScore, setOpponentBestScore] = useState(task.code.length);
     const [remainingSeconds, setRemainingSeconds] = useState(
-        () => Math.max(0, Math.ceil((endsAt - Date.now()) / 1000))
+        () => Math.max(0, Math.ceil((matchEndsAt - Date.now()) / 1000))
+    );
+    const [isPreparation, setIsPreparation] = useState(() => Date.now() < preparationEndsAt);
+    const [preparationSeconds, setPreparationSeconds] = useState(
+        () => Math.max(0, Math.ceil((preparationEndsAt - Date.now()) / 1000))
     );
     const minutes = Math.floor(remainingSeconds / 60);
     const seconds = remainingSeconds % 60;
@@ -56,12 +58,20 @@ export function CodeGolfMatch() {
             console.log(res);
         });
 
-        const offWin = onWin(() => {
-            navigate(ROUTES.MATCH_WIN);
+        const offWin = onCodeGolfWin((payload) => {
+            if (payload.reason == 'normal') {
+                navigate(ROUTES.MATCH_WIN);
+            } else {
+                navigate(ROUTES.CODE_GOLF_INSTANT_WIN);
+            }
         });
 
-        const offLose = onLose(() => {
-            navigate(ROUTES.MATCH_LOSE);
+        const offLose = onCodeGolfLose((payload) => {
+            if (payload.reason == 'normal') {
+                navigate(ROUTES.MATCH_LOSE);
+            } else {
+                navigate(ROUTES.CODE_GOLF_INSTANT_LOSE);
+            }
         });
 
         const offDraw = onDraw(() => {
@@ -91,7 +101,7 @@ export function CodeGolfMatch() {
         });
 
         const interval = setInterval(() => {
-            setRemainingSeconds(Math.max(0, Math.ceil((endsAt - Date.now()) / 1000)));
+            setRemainingSeconds(Math.max(0, Math.ceil((matchEndsAt - Date.now()) / 1000)));
         }, 1000);
 
         return () => {
@@ -107,9 +117,29 @@ export function CodeGolfMatch() {
         }
     }, [navigate]);
 
+    useEffect(() => {
+        if (!isPreparation) return;
+
+        const interval = setInterval(() => {
+            const remaining = Math.max(
+                0,
+                Math.ceil((preparationEndsAt - Date.now()) / 1000)
+            );
+
+            setPreparationSeconds(remaining);
+
+            if (remaining === 0) {
+                setIsPreparation(false);
+                clearInterval(interval);
+            }
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, []);
+
     function handleSubmit() {
-        if (!canBeatBestScore) return;
-        sendCode({ taskId: task.id, code })
+        if (isPreparation || !canBeatBestScore) return;
+        sendCode({ code })
     }
 
     function getScoreShare(
@@ -148,12 +178,28 @@ export function CodeGolfMatch() {
                         </div>
                     </div>
                 </div>
-                <div className={`${s.timer} ${remainingSeconds <= 60 ? s.timerDanger : ''}`}>
-                    <span className={s.timerLabel}>TIME LEFT</span>
-                    <span className={s.timerValue}>
-                        {minutes}:{seconds.toString().padStart(2, '0')}
-                    </span>
-                </div>
+                {isPreparation ? (
+                    <div className={s.preparation}>
+                        <span className={s.preparationLabel}>
+                            PREPARATION
+                        </span>
+
+                        <span className={s.preparationTimer}>
+                            {preparationSeconds}
+                        </span>
+
+                        <span className={s.preparationHint}>
+                            Read the task and prepare your strategy
+                        </span>
+                    </div>
+                ) : (
+                    <div className={`${s.timer} ${remainingSeconds <= 60 ? s.timerDanger : ''}`}>
+                        <span className={s.timerLabel}>TIME LEFT</span>
+                        <span className={s.timerValue}>
+                            {minutes}:{seconds.toString().padStart(2, '0')}
+                        </span>
+                    </div>
+                    )}
                 <header className={s.header}>
                     <div>
                         <span className={s.kicker}>
@@ -201,6 +247,7 @@ export function CodeGolfMatch() {
                         value={code}
                         onChange={(value) => setCode(value ?? '')}
                         options={{
+                            readOnly: isPreparation,
                             minimap: { enabled: false },
                             fontSize: 14,
                             padding: { top: 16 },
@@ -230,7 +277,7 @@ export function CodeGolfMatch() {
                             ${s.submitButton}
                             ${isInstantWinZone ? s.instantWinButton : ''}
                         `}
-                        disabled={!canBeatBestScore}
+                        disabled={!canBeatBestScore || isPreparation}
                         onClick={handleSubmit}
                     >
                         {isInstantWinZone ? (
