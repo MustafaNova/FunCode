@@ -582,3 +582,135 @@
   font-size: 0.75rem;
   color: #9ca3af;
 }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 32px;
+}
+
+.opponentEditor {
+  width: 300px;
+  min-height: 150px;
+
+  background: #12151b;
+  border: 1px solid #2b303b;
+  border-radius: 10px;
+
+  overflow: hidden;
+}
+
+.opponentEditorHeader {
+  display: flex;
+  justify-content: space-between;
+
+  padding: 8px 10px;
+
+  font-size: 0.75rem;
+  border-bottom: 1px solid #2b303b;
+}
+
+.fakeCode {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  padding: 10px;
+
+  span {
+    height: 5px;
+    border-radius: 3px;
+    background: #343a46;
+
+    &:nth-child(1) { width: 70%; }
+    &:nth-child(2) { width: 45%; }
+    &:nth-child(3) { width: 80%; }
+    &:nth-child(4) { width: 55%; }
+  }
+}
+
+.opponentStats {
+  display: flex;
+  justify-content: space-between;
+
+  padding: 8px 10px;
+
+  font-size: 0.7rem;
+  border-top: 1px solid #2b303b;
+}
+
+.opponentTyping span {
+  animation: opponentTyping 0.4s ease-in-out infinite alternate;
+
+  &:nth-child(2) { animation-delay: 0.1s; }
+  &:nth-child(3) { animation-delay: 0.2s; }
+  &:nth-child(4) { animation-delay: 0.1s; }
+  &:nth-child(5) { animation-delay: 0.25s; }
+  &:nth-child(6) { animation-delay: 0.15s; }
+}
+
+@keyframes opponentTyping {
+  from {
+    opacity: 0.4;
+    transform: scaleX(0.85);
+    transform-origin: left;
+  }
+
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+.opponentInstantWin {
+  border-color: #f97316;
+  box-shadow:
+          0 0 12px rgba(249, 115, 22, 0.35),
+          0 0 28px rgba(239, 68, 68, 0.15);
+
+  animation: opponentDanger 1s ease-in-out infinite alternate;
+}
+
+.opponentInstantWin .opponentStatus {
+  color: #fb923c;
+}
+
+@keyframes opponentDanger {
+  from {
+    box-shadow:
+            0 0 8px rgba(249, 115, 22, 0.25);
+  }
+
+  to {
+    box-shadow:
+            0 0 20px rgba(249, 115, 22, 0.55);
+  }
+}
+
+.submittingEditor {
+  position: relative;
+  border-color: transparent;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    z-index: 0;
+
+    background: conic-gradient(
+                    transparent 0deg,
+                    #3b82f6 90deg,
+                    transparent 180deg
+    );
+
+    animation: submittingBorder 1s linear infinite;
+  }
+}
+
+@keyframes submittingBorder {
+  to {
+    transform: rotate(360deg);
+  }
+}

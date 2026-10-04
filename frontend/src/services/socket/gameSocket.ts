@@ -11,6 +11,9 @@ import {
     type CodeGolfScoreUpdatedPayload, type BattleStartedPayload, type CodeGolfWinPayload, type CodeGolfLosePayload,
 } from '@funcode/shared';
 import { me } from '../http/auth.ts';
+import type {
+    CodeGolfActivityPayload
+} from '@funcode/shared/dist/competitive-gameplay/payloads/codeGolf.activity.payload.ts';
 
 let gameSocket: Socket | null = null;
 const SOCKET_URL = `${import.meta.env.VITE_SERVER_URL}/game`;
@@ -62,6 +65,17 @@ export function onBattleAborted(callback: (payload: BattleAbortedPayload) => voi
 
 export function sendCode(submitReq: SubmitPayload) {
     gameSocket?.emit(SOCKET_EVENTS.SUBMIT_SOLUTION, submitReq);
+}
+
+export function sendCodeGolfActivity(payload: CodeGolfActivityPayload) {
+    gameSocket?.emit(SOCKET_EVENTS.CODE_GOLF_ACTIVITY, payload);
+}
+
+export function onCodeGolfOpponentActivity(callback: (payload: CodeGolfActivityPayload) => void) {
+    gameSocket?.on(SOCKET_EVENTS.CODE_GOLF_OPPONENT_ACTIVITY, callback);
+    return () => {
+        gameSocket?.off(SOCKET_EVENTS.CODE_GOLF_OPPONENT_ACTIVITY, callback);
+    }
 }
 
 export function onWrongSubmit(callback: (response: SubmitResponse) => void) {

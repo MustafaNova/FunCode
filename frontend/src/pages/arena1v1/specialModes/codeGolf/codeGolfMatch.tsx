@@ -5,16 +5,16 @@ import {
     faCode, faFire,
     faFlagCheckered,
 } from '@fortawesome/free-solid-svg-icons';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import s from './codeGolfMatch.module.scss';
 import { useLocation, useNavigate } from 'react-router-dom';
 import type { CodeGolfBattleStartedPayload } from '@funcode/shared';
 import {
-    onBattleAborted, onCodeGolfLose,
+    onBattleAborted, onCodeGolfLose, onCodeGolfOpponentActivity,
     onCodeGolfScoreUpdated, onCodeGolfWin, onDraw,
     onError,
     onWrongSubmit,
-    sendCode
+    sendCode, sendCodeGolfActivity
 } from '../../../../services/socket/gameSocket.ts';
 import { useAuth } from '../../../../context/authContext.ts';
 import { ROUTES } from '../../../../constants/routes.ts';
@@ -29,6 +29,7 @@ export function CodeGolfMatch() {
     const [submitStatus, setSubmitStatus] = useState<'valid' | 'invalid' | null>(null);
     const [myBestScore, setMyBestScore] = useState(task.code.length);
     const [opponentBestScore, setOpponentBestScore] = useState(task.code.length);
+    const [opponentCharacterCount, setOpponentCharacterCount] = useState(task.code.length);
     const [remainingSeconds, setRemainingSeconds] = useState(
         () => Math.max(0, Math.ceil((matchEndsAt - Date.now()) / 1000))
     );
@@ -36,25 +37,35 @@ export function CodeGolfMatch() {
     const [preparationSeconds, setPreparationSeconds] = useState(
         () => Math.max(0, Math.ceil((preparationEndsAt - Date.now()) / 1000))
     );
+    const [isOpponentTyping, setIsOpponentTyping] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const opponentTypingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const lastActivitySentAt = useRef(0);
+    const activityTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
     const minutes = Math.floor(remainingSeconds / 60);
     const seconds = remainingSeconds % 60;
     const characterCount = code.length;
     const canBeatBestScore = characterCount < myBestScore;
     const isInstantWinZone = characterCount <= task.instantWinLimit;
+    const isOpponentInstantWinZone = opponentCharacterCount <= task.instantWinLimit;
     const SUBMIT_FEEDBACK_DURATION_MS = 500;
+    const OPPONENT_TYPING_DURATION_MS = 500;
 
     useEffect(() => {
         let submitTimeout: ReturnType<typeof setTimeout>;
 
         const offWrong = onWrongSubmit(() => {
-            clearTimeout(submitTimeout);
+            setIsSubmitting(false);
             setSubmitStatus('invalid');
+
+            clearTimeout(submitTimeout);
             submitTimeout = setTimeout(() => {
                 setSubmitStatus(null);
             }, SUBMIT_FEEDBACK_DURATION_MS);
         });
 
         const offError = onError((res) => {
+            setIsSubmitting(false);
             console.log(res);
         });
 
@@ -86,6 +97,8 @@ export function CodeGolfMatch() {
         })
 
         const offCodeGolfScoreUpdate = onCodeGolfScoreUpdated((payload) => {
+            setIsSubmitting(false);
+
             if (payload.userId !== userId) {
                 setOpponentBestScore(payload.bestScore);
                 return;
@@ -100,6 +113,19 @@ export function CodeGolfMatch() {
 
         });
 
+        const offOpponentActivity = onCodeGolfOpponentActivity((payload) => {
+                setOpponentCharacterCount(payload.characterCount);
+                setIsOpponentTyping(true);
+
+                if (opponentTypingTimeout.current) {
+                    clearTimeout(opponentTypingTimeout.current);
+                }
+
+                opponentTypingTimeout.current = setTimeout(() => {
+                    setIsOpponentTyping(false);
+                }, OPPONENT_TYPING_DURATION_MS)
+            });
+
         const interval = setInterval(() => {
             setRemainingSeconds(Math.max(0, Math.ceil((matchEndsAt - Date.now()) / 1000)));
         }, 1000);
@@ -112,6 +138,7 @@ export function CodeGolfMatch() {
             offError();
             offAborted();
             offCodeGolfScoreUpdate();
+            offOpponentActivity();
             clearTimeout(submitTimeout);
             clearInterval(interval);
         }
@@ -139,7 +166,34 @@ export function CodeGolfMatch() {
 
     function handleSubmit() {
         if (isPreparation || !canBeatBestScore) return;
+
+        setIsSubmitting(true);
         sendCode({ code })
+    }
+
+    function handleOnChange(value: string | undefined) {
+        const newCode = value ?? '';
+        setCode(newCode);
+
+        const now = Date.now();
+        if ((now - lastActivitySentAt.current) >= 250) {
+            lastActivitySentAt.current = now;
+
+            sendCodeGolfActivity({
+                characterCount: newCode.length
+            });
+        }
+
+        if (activityTimeout.current) {
+            clearTimeout(activityTimeout.current);
+        }
+
+        activityTimeout.current = setTimeout(() => {
+            sendCodeGolfActivity({
+                characterCount: newCode.length
+            });
+        }, 250);
+
     }
 
     function getScoreShare(
@@ -209,13 +263,55 @@ export function CodeGolfMatch() {
                         <h1>{task.name}</h1>
                         <p className={s.description}>{task.description}</p>
                     </div>
+                    {!isPreparation && (
+                        <div className={`
+                                ${s.opponentEditor}
+                                ${isOpponentInstantWinZone ? s.opponentInstantWin : ''}`}>
+                            <div className={s.opponentEditorHeader}>
+                                <span>
+                                    <FontAwesomeIcon icon={faCode} />
+                                    Opponent
+                                </span>
+                                <span className={s.opponentStatus}>
+                                    {isOpponentInstantWinZone ? (
+                                        <>
+                                            <FontAwesomeIcon icon={faFire} />
+                                            INSTANT WIN ZONE
+                                        </>
+                                    ) : (
+                                        'CODING...'
+                                    )}
+                                </span>
+                            </div>
+                            <div className={`${s.fakeCode} ${isOpponentTyping ? s.opponentTyping : ''}`}>
+                                <span />
+                                <span />
+                                <span />
+                                <span />
+                                <span />
+                                <span />
+                            </div>
+                            <div className={s.opponentStats}>
+                                <div>
+                                    <span>Current: </span>
+                                    <strong>{opponentCharacterCount}</strong>
+                                </div>
+
+                                <div>
+                                    <span>Best: </span>
+                                    <strong>{opponentBestScore}</strong>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </header>
 
                 <div className={
                     `${s.editorSection}
-                    ${submitStatus === 'invalid' ? s.invalidEditor : ''}
-                    ${submitStatus === 'valid' ? s.validEditor : ''}
-                    ${(isInstantWinZone && submitStatus !== 'invalid') ? s.instantWinEditor : ''}`}
+                     ${isSubmitting ? s.submittingEditor : ''}
+                     ${submitStatus === 'invalid' ? s.invalidEditor : ''}
+                     ${submitStatus === 'valid' ? s.validEditor : ''}
+                     ${(isInstantWinZone && submitStatus !== 'invalid') ? s.instantWinEditor : ''}`}
                 >
 
                     {isInstantWinZone && (
@@ -223,20 +319,20 @@ export function CodeGolfMatch() {
                     )}
 
                     <div className={s.editorHeader}>
-                        <span>
-                            <FontAwesomeIcon icon={faCode} />
-                            solution.js
-                        </span>
+                    <span>
+                        <FontAwesomeIcon icon={faCode} />
+                        solution.js
+                    </span>
 
                         <div className={s.editorStats}>
-                            <span className={`${s.instantWinTarget} ${isInstantWinZone ? s.instantWinReached : ''}`}>
-                                <FontAwesomeIcon icon={faBolt} />
-                                Instant Win ≤ {task.instantWinLimit}
-                            </span>
+                        <span className={`${s.instantWinTarget} ${isInstantWinZone ? s.instantWinReached : ''}`}>
+                            <FontAwesomeIcon icon={faBolt} />
+                            Instant Win ≤ {task.instantWinLimit}
+                        </span>
 
                             <span className={`${s.counter} ${!canBeatBestScore ? s.counterOverLimit : ''}`}>
-                                {characterCount} / {myBestScore}
-                            </span>
+                            {characterCount} / {myBestScore}
+                        </span>
                         </div>
                     </div>
 
@@ -245,7 +341,7 @@ export function CodeGolfMatch() {
                         language={task.language}
                         theme="vs-dark"
                         value={code}
-                        onChange={(value) => setCode(value ?? '')}
+                        onChange={handleOnChange}
                         options={{
                             readOnly: isPreparation,
                             minimap: { enabled: false },
@@ -256,6 +352,7 @@ export function CodeGolfMatch() {
                         }}
                     />
                 </div>
+
 
                 <div className={s.footer}>
                     <div>
@@ -277,7 +374,7 @@ export function CodeGolfMatch() {
                             ${s.submitButton}
                             ${isInstantWinZone ? s.instantWinButton : ''}
                         `}
-                        disabled={!canBeatBestScore || isPreparation}
+                        disabled={!canBeatBestScore || isPreparation || isSubmitting}
                         onClick={handleSubmit}
                     >
                         {isInstantWinZone ? (

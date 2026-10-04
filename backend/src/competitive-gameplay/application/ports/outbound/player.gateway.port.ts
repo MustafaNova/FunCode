@@ -9,4 +9,10 @@ export interface PlayerGatewayPort {
     closeRoom(roomId: string): Promise<void>;
     notifyRoom<T>(roomId: string, event: SOCKET_EVENTS, payload?: T): void;
     notifyPlayer<T>(userId: string, event: SOCKET_EVENTS, payload?: T): void;
+    notifyRoomExceptPlayer<T>(
+        userId: string,
+        roomId: string,
+        event: SOCKET_EVENTS,
+        payload?: T
+    ): void;
 }

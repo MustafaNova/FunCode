@@ -17,7 +17,7 @@ import { RoomGuard } from './guards/room.guard';
 import { WsExceptionFilter } from '../../../common/ws.exception.filter';
 import { type JoinMatchMakingPort } from '../../application/ports/inbound/join-matchmaking.port';
 import {
-    BATTLE_MANAGER_PORT,
+    BATTLE_MANAGER_PORT, CODE_GOLF_ACTIVITY_PORT,
     JOIN_MATCHMAKING_PORT,
     LEAVE_MATCHMAKING_PORT, SUBMIT_ARENA_SOLUTION_PORT
 } from '../../infrastructure/uc-wiring/tokens';
@@ -28,6 +28,8 @@ import { ReadyPlayerCmd } from '../../application/use-cases/battle-manager/dtos/
 import { GameGatewayRegistry } from '../../infrastructure/GameGatewayRegistry/gameGatewayRegistry';
 import { verify } from 'jsonwebtoken';
 import { type SubmitArenaSolutionPort } from '../../application/ports/inbound/submitArenaSolution.port';
+import { type CodeGolfActivityPayload } from '@funcode/shared/dist/competitive-gameplay/payloads/codeGolf.activity.payload';
+import { type CodeGolfActivityPort } from '../../application/ports/inbound/codeGolf.activity.port';
 
 @UseFilters(WsExceptionFilter)
 @WebSocketGateway({
@@ -49,6 +51,8 @@ export class GameGateway
         private readonly battleManager: BattleManagerPort,
         @Inject(SUBMIT_ARENA_SOLUTION_PORT)
         private readonly submitArenaSolutionUC: SubmitArenaSolutionPort,
+        @Inject(CODE_GOLF_ACTIVITY_PORT)
+        private readonly codeGolfActivityUC: CodeGolfActivityPort,
         private readonly gameGatewayRegistry: GameGatewayRegistry,
     ) {}
 
@@ -116,6 +120,19 @@ export class GameGateway
             username: client.data.user.username,
             gameModeId: payload.gameModeId
         })
+    }
+
+    @UseGuards(RoomGuard)
+    @SubscribeMessage(SOCKET_EVENTS.CODE_GOLF_ACTIVITY)
+    handleCodeGolfActivity(
+        client: RoomSocket,
+        payload: CodeGolfActivityPayload,
+    ) {
+        this.codeGolfActivityUC.handle(
+            client.data.user.userId,
+            client.data.room,
+            payload
+        )
     }
 
     private disconnectUnauthorized(client: Socket) {

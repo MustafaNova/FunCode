@@ -39,4 +39,10 @@ export class PlayerGatewayAdapter implements PlayerGatewayPort {
         client.emit(event, payload);
     }
 
+    notifyRoomExceptPlayer<T>(userId: string, roomId: string, event: SOCKET_EVENTS, payload?: T) {
+        const client = this.gameGateWayRegistry.getPlayer(userId);
+        if (!client) return;
+        client.to(roomId).emit(event, payload)
+    }
+
 }
