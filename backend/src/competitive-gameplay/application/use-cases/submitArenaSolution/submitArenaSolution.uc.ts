@@ -1,8 +1,10 @@
 import { SubmitArenaSolutionPort } from '../../ports/inbound/submitArenaSolution.port';
 import { SubmitCmd } from '../battle-manager/dtos/submit.cmd';
 import {
-    BattleAbortedPayload, CodeGolfLosePayload,
-    CodeGolfScoreUpdatedPayload, CodeGolfWinPayload,
+    BattleAbortedPayload,
+    CodeGolfLosePayload,
+    CodeGolfScoreUpdatedPayload,
+    CodeGolfWinPayload, CodeGolfWrongSubmitPayload,
     ERROR_CODES,
     SOCKET_EVENTS,
     SubmitResponse
@@ -76,6 +78,12 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
             return;
         }
 
+        this.playerGateway.notifyRoomExceptPlayer(
+            submit.userId,
+            submit.roomId,
+            SOCKET_EVENTS.CODE_GOLF_OPPONENT_SUBMITTED
+        )
+
         const isValid = await this.codeGolfValidator.validate(state.taskId, submit.solution);
         await this.handleCodeGolfSubmitResult(isValid, submit, battle, state.instantWinLimit);
 
@@ -83,10 +91,11 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
 
     private async handleCodeGolfSubmitResult(isValid: boolean, submit: SubmitCmd, battle: Battle1v1, instantWinLimit: number) {
         if (!isValid) {
-            this.playerGateway.notifyPlayer(
-                submit.userId,
-                SOCKET_EVENTS.WRONG_SUBMIT
-            );
+            this.playerGateway.notifyRoom<CodeGolfWrongSubmitPayload>(
+                submit.roomId,
+                SOCKET_EVENTS.CODE_GOLF_WRONG_SUBMIT,
+                { userId: submit.userId }
+            )
             return;
         }
 

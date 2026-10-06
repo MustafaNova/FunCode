@@ -11,10 +11,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import type { CodeGolfBattleStartedPayload } from '@funcode/shared';
 import {
     onBattleAborted, onCodeGolfLose, onCodeGolfOpponentActivity,
-    onCodeGolfScoreUpdated, onCodeGolfWin, onDraw,
+    onCodeGolfBestScoreUpdated, onCodeGolfWin, onDraw,
     onError,
-    onWrongSubmit,
-    sendCode, sendCodeGolfActivity
+    sendCode, sendCodeGolfActivity, onOpponentIsSubmitting, onCodeGolfWrongSubmit
 } from '../../../../services/socket/gameSocket.ts';
 import { useAuth } from '../../../../context/authContext.ts';
 import { ROUTES } from '../../../../constants/routes.ts';
@@ -26,7 +25,12 @@ export function CodeGolfMatch() {
     const navigate = useNavigate();
     const { task, matchEndsAt, preparationEndsAt } = location.state as CodeGolfBattleStartedPayload;
     const [code, setCode] = useState(task.code);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState<'valid' | 'invalid' | null>(null);
+    const submitTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const [isOpponentSubmitting, setIsOpponentSubmitting] = useState(false);
+    const [opponentSubmitStatus, setOpponentSubmitStatus] = useState<'valid' | 'invalid' | null>(null);
+    const opponentSubmitTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [myBestScore, setMyBestScore] = useState(task.code.length);
     const [opponentBestScore, setOpponentBestScore] = useState(task.code.length);
     const [opponentCharacterCount, setOpponentCharacterCount] = useState(task.code.length);
@@ -38,7 +42,6 @@ export function CodeGolfMatch() {
         () => Math.max(0, Math.ceil((preparationEndsAt - Date.now()) / 1000))
     );
     const [isOpponentTyping, setIsOpponentTyping] = useState(false);
-    const [isSubmitting, setIsSubmitting] = useState(false);
     const opponentTypingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
     const lastActivitySentAt = useRef(0);
     const activityTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -52,14 +55,30 @@ export function CodeGolfMatch() {
     const OPPONENT_TYPING_DURATION_MS = 500;
 
     useEffect(() => {
-        let submitTimeout: ReturnType<typeof setTimeout>;
 
-        const offWrong = onWrongSubmit(() => {
+        const offCodeGolfWrongSubmit = onCodeGolfWrongSubmit((payload) => {
+            if (payload.userId != userId) {
+                setIsOpponentSubmitting(false);
+                setOpponentSubmitStatus('invalid');
+
+                if (opponentSubmitTimeout.current) {
+                    clearTimeout(opponentSubmitTimeout.current);
+                }
+
+                opponentSubmitTimeout.current = setTimeout(() => {
+                    setOpponentSubmitStatus(null);
+                }, SUBMIT_FEEDBACK_DURATION_MS)
+                return;
+            }
+
             setIsSubmitting(false);
             setSubmitStatus('invalid');
 
-            clearTimeout(submitTimeout);
-            submitTimeout = setTimeout(() => {
+            if (submitTimeout.current) {
+                clearTimeout(submitTimeout.current);
+            }
+
+            submitTimeout.current = setTimeout(() => {
                 setSubmitStatus(null);
             }, SUBMIT_FEEDBACK_DURATION_MS);
         });
@@ -96,18 +115,31 @@ export function CodeGolfMatch() {
             })
         })
 
-        const offCodeGolfScoreUpdate = onCodeGolfScoreUpdated((payload) => {
-            setIsSubmitting(false);
-
+        const offCodeGolfBestScoreUpdate = onCodeGolfBestScoreUpdated((payload) => {
             if (payload.userId !== userId) {
+                setIsOpponentSubmitting(false);
                 setOpponentBestScore(payload.bestScore);
+                setOpponentSubmitStatus('valid');
+
+                if (opponentSubmitTimeout.current) {
+                    clearTimeout(opponentSubmitTimeout.current);
+                }
+
+                opponentSubmitTimeout.current = setTimeout(() => {
+                    setOpponentSubmitStatus(null);
+                }, SUBMIT_FEEDBACK_DURATION_MS)
                 return;
             }
 
+            setIsSubmitting(false);
             setMyBestScore(payload.bestScore);
-            clearTimeout(submitTimeout);
             setSubmitStatus('valid');
-            submitTimeout = setTimeout(() => {
+
+            if (submitTimeout.current) {
+                clearTimeout(submitTimeout.current);
+            }
+
+            submitTimeout.current = setTimeout(() => {
                 setSubmitStatus(null);
             }, SUBMIT_FEEDBACK_DURATION_MS);
 
@@ -126,21 +158,31 @@ export function CodeGolfMatch() {
                 }, OPPONENT_TYPING_DURATION_MS)
             });
 
+        const offOpponentIsSubmitting = onOpponentIsSubmitting(() => {
+            setIsOpponentSubmitting(true);
+        });
+
         const interval = setInterval(() => {
             setRemainingSeconds(Math.max(0, Math.ceil((matchEndsAt - Date.now()) / 1000)));
         }, 1000);
 
         return () => {
-            offWrong();
+            offCodeGolfWrongSubmit();
             offWin();
             offLose();
             offDraw();
             offError();
             offAborted();
-            offCodeGolfScoreUpdate();
+            offCodeGolfBestScoreUpdate();
             offOpponentActivity();
-            clearTimeout(submitTimeout);
+            offOpponentIsSubmitting();
             clearInterval(interval);
+            if (submitTimeout.current) {
+                clearTimeout(submitTimeout.current);
+            }
+            if (opponentTypingTimeout.current) {
+                clearTimeout(opponentTypingTimeout.current);
+            }
         }
     }, [navigate]);
 
@@ -266,14 +308,21 @@ export function CodeGolfMatch() {
                     {!isPreparation && (
                         <div className={`
                                 ${s.opponentEditor}
-                                ${isOpponentInstantWinZone ? s.opponentInstantWin : ''}`}>
+                                ${isOpponentInstantWinZone ? s.opponentInstantWin : ''}
+                                ${isOpponentSubmitting ? s.opponentSubmitting : ''}`}>
                             <div className={s.opponentEditorHeader}>
                                 <span>
                                     <FontAwesomeIcon icon={faCode} />
                                     Opponent
                                 </span>
                                 <span className={s.opponentStatus}>
-                                    {isOpponentInstantWinZone ? (
+                                    {opponentSubmitStatus === 'invalid' ? (
+                                        'FAILED'
+                                    ) : opponentSubmitStatus === 'valid' ? (
+                                        'NEW BEST'
+                                    ) : isOpponentSubmitting ? (
+                                        'TESTING...'
+                                    ) : isOpponentInstantWinZone ? (
                                         <>
                                             <FontAwesomeIcon icon={faFire} />
                                             INSTANT WIN ZONE
@@ -283,7 +332,11 @@ export function CodeGolfMatch() {
                                     )}
                                 </span>
                             </div>
-                            <div className={`${s.fakeCode} ${isOpponentTyping ? s.opponentTyping : ''}`}>
+                            <div className={
+                                    `${s.fakeCode} 
+                                     ${isOpponentTyping ? s.opponentTyping : ''}
+                                     ${opponentSubmitStatus === 'invalid' ? s.opponentInvalid : ''}
+                                     ${opponentSubmitStatus === 'valid' ? s.opponentValid : ''}`}>
                                 <span />
                                 <span />
                                 <span />
@@ -360,11 +413,7 @@ export function CodeGolfMatch() {
                             Current solution
                         </span>
 
-                        <strong
-                            className={
-                                !canBeatBestScore ? s.overLimitText : undefined
-                            }
-                        >
+                        <strong className={!canBeatBestScore ? s.overLimitText : undefined}>
                             {characterCount} characters
                         </strong>
                     </div>

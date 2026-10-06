@@ -9,6 +9,7 @@ import {
     type LeaveMatchmakingPayload,
     type BattleAbortedPayload,
     type CodeGolfScoreUpdatedPayload, type BattleStartedPayload, type CodeGolfWinPayload, type CodeGolfLosePayload,
+    type CodeGolfWrongSubmitPayload,
 } from '@funcode/shared';
 import { me } from '../http/auth.ts';
 import type {
@@ -85,6 +86,13 @@ export function onWrongSubmit(callback: (response: SubmitResponse) => void) {
     }
 }
 
+export function onCodeGolfWrongSubmit(callback: (response: CodeGolfWrongSubmitPayload) => void) {
+    gameSocket?.on(SOCKET_EVENTS.CODE_GOLF_WRONG_SUBMIT, callback);
+    return () => {
+        gameSocket?.off(SOCKET_EVENTS.CODE_GOLF_WRONG_SUBMIT, callback);
+    }
+}
+
 export function onError(callback: (response: SubmitResponse) => void) {
     gameSocket?.on(SOCKET_EVENTS.ERROR, callback);
     return () => {
@@ -128,9 +136,16 @@ export function onLose(callback: (response: LoseRes) => void) {
     }
 }
 
-export function onCodeGolfScoreUpdated(callback: (payload: CodeGolfScoreUpdatedPayload) => void) {
+export function onCodeGolfBestScoreUpdated(callback: (payload: CodeGolfScoreUpdatedPayload) => void) {
     gameSocket?.on(SOCKET_EVENTS.CODE_GOLF_SCORE_UPDATED, callback);
     return () => {
         gameSocket?.off(SOCKET_EVENTS.CODE_GOLF_SCORE_UPDATED, callback);
+    }
+}
+
+export function onOpponentIsSubmitting(callback: () => void) {
+    gameSocket?.on(SOCKET_EVENTS.CODE_GOLF_OPPONENT_SUBMITTED, callback);
+    return () => {
+        gameSocket?.off(SOCKET_EVENTS.CODE_GOLF_OPPONENT_SUBMITTED, callback);
     }
 }
