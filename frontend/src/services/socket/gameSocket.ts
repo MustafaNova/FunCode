@@ -9,7 +9,7 @@ import {
     type LeaveMatchmakingPayload,
     type BattleAbortedPayload,
     type CodeGolfScoreUpdatedPayload, type BattleStartedPayload, type CodeGolfWinPayload, type CodeGolfLosePayload,
-    type CodeGolfWrongSubmitPayload,
+    type CodeGolfWrongSubmitPayload, type MatchMessagePayload,
 } from '@funcode/shared';
 import { me } from '../http/auth.ts';
 import type {
@@ -147,5 +147,16 @@ export function onOpponentIsSubmitting(callback: () => void) {
     gameSocket?.on(SOCKET_EVENTS.CODE_GOLF_OPPONENT_SUBMITTED, callback);
     return () => {
         gameSocket?.off(SOCKET_EVENTS.CODE_GOLF_OPPONENT_SUBMITTED, callback);
+    }
+}
+
+export function sendMatchMessage(payload: MatchMessagePayload) {
+    gameSocket?.emit(SOCKET_EVENTS.MATCH_MESSAGE, payload);
+}
+
+export function onOpponentMatchMessage(callback: (payload: MatchMessagePayload) => void) {
+    gameSocket?.on(SOCKET_EVENTS.OPPONENT_MATCH_MESSAGE, callback);
+    return () => {
+        gameSocket?.off(SOCKET_EVENTS.OPPONENT_MATCH_MESSAGE, callback);
     }
 }

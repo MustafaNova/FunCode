@@ -1,0 +1,54 @@
+.messages {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  width: 100%;
+}
+
+.player {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  min-width: 0;
+}
+
+.opponent {
+  align-items: flex-end;
+}
+
+.playerName {
+  font-size: 11px;
+  font-weight: 700;
+  color: #8b93a7;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.message {
+  max-width: 220px;
+  padding: 7px 11px;
+
+  background: #20242d;
+  border: 1px solid #343a46;
+  border-radius: 10px;
+
+  color: #f3f4f6;
+  font-size: 13px;
+  font-weight: 500;
+
+  animation: messageIn 0.2s ease-out;
+}
+
+@keyframes messageIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

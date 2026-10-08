@@ -13,8 +13,7 @@
 
 .messageMenu {
   position: absolute;
-  bottom: calc(100% + 8px);
-  right: 0;
+  top: calc(100% + 16px);
 
   display: flex;
   flex-direction: column;
@@ -26,6 +25,7 @@
   background: #171a21;
   border: 1px solid #343a46;
   border-radius: 10px;
+  z-index: 10;
 }
 
 .messageButton {

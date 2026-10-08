@@ -8,15 +8,17 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import s from './codeGolfMatch.module.scss';
 import { useLocation, useNavigate } from 'react-router-dom';
-import type { CodeGolfBattleStartedPayload } from '@funcode/shared';
+import type { CodeGolfBattleStartedPayload, QuickMessage } from '@funcode/shared';
 import {
     onBattleAborted, onCodeGolfLose, onCodeGolfOpponentActivity,
     onCodeGolfBestScoreUpdated, onCodeGolfWin, onDraw,
     onError,
-    sendCode, sendCodeGolfActivity, onOpponentIsSubmitting, onCodeGolfWrongSubmit
+    sendCode, sendCodeGolfActivity, onOpponentIsSubmitting, onCodeGolfWrongSubmit, sendMatchMessage,
+    onOpponentMatchMessage
 } from '../../../../services/socket/gameSocket.ts';
 import { useAuth } from '../../../../context/authContext.ts';
 import { ROUTES } from '../../../../constants/routes.ts';
+import { MatchQuickChat } from '../../../../components/MatchQuickChat/matchQuickChat.tsx';
 
 export function CodeGolfMatch() {
     const user = useAuth();
@@ -41,6 +43,10 @@ export function CodeGolfMatch() {
     const [preparationSeconds, setPreparationSeconds] = useState(
         () => Math.max(0, Math.ceil((preparationEndsAt - Date.now()) / 1000))
     );
+    const [myMessage, setMyMessage] = useState<QuickMessage | null>(null);
+    const myMessageTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const [opponentMessage, setOpponentMessage] = useState<QuickMessage | null>(null);
+    const opponentMessageTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [isOpponentTyping, setIsOpponentTyping] = useState(false);
     const opponentTypingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
     const lastActivitySentAt = useRef(0);
@@ -53,6 +59,7 @@ export function CodeGolfMatch() {
     const isOpponentInstantWinZone = opponentCharacterCount <= task.instantWinLimit;
     const SUBMIT_FEEDBACK_DURATION_MS = 500;
     const OPPONENT_TYPING_DURATION_MS = 500;
+    const MESSAGE_DURATION_MS = 3000;
 
     useEffect(() => {
 
@@ -162,6 +169,17 @@ export function CodeGolfMatch() {
             setIsOpponentSubmitting(true);
         });
 
+        const offOpponentMatchMessage = onOpponentMatchMessage((payload) => {
+            setOpponentMessage(payload.message);
+
+            if (opponentMessageTimeout.current) {
+                clearTimeout(opponentMessageTimeout.current);
+            }
+            opponentMessageTimeout.current = setTimeout(() => {
+                setOpponentMessage(null);
+            }, MESSAGE_DURATION_MS);
+        });
+
         const interval = setInterval(() => {
             setRemainingSeconds(Math.max(0, Math.ceil((matchEndsAt - Date.now()) / 1000)));
         }, 1000);
@@ -176,6 +194,7 @@ export function CodeGolfMatch() {
             offCodeGolfBestScoreUpdate();
             offOpponentActivity();
             offOpponentIsSubmitting();
+            offOpponentMatchMessage();
             clearInterval(interval);
             if (submitTimeout.current) {
                 clearTimeout(submitTimeout.current);
@@ -251,6 +270,18 @@ export function CodeGolfMatch() {
         ) * 100;
     }
 
+    function handleSendMessage(message: QuickMessage) {
+        sendMatchMessage({ message });
+        setMyMessage(message);
+
+        if (myMessageTimeout.current) {
+            clearTimeout(myMessageTimeout.current);
+        }
+        myMessageTimeout.current = setTimeout(() => {
+            setMyMessage(null);
+        }, MESSAGE_DURATION_MS);
+    }
+
     return (
         <main className={`${s.container} galaxyGridBackground`}>
             <section className={s.matchPanel}>
@@ -271,6 +302,22 @@ export function CodeGolfMatch() {
                                 )}%`,
                             }}>
                             <span> {opponentBestScore} · Opponent </span>
+                        </div>
+                    </div>
+                    <div className={s.scoreMessages}>
+                        <div>
+                            {myMessage && (
+                                <div className={s.myMessage}>
+                                    {myMessage}
+                                </div>
+                            )}
+                        </div>
+                        <div>
+                            {opponentMessage && (
+                                <div className={s.opponentMessage}>
+                                    {opponentMessage}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -378,14 +425,14 @@ export function CodeGolfMatch() {
                     </span>
 
                         <div className={s.editorStats}>
-                        <span className={`${s.instantWinTarget} ${isInstantWinZone ? s.instantWinReached : ''}`}>
-                            <FontAwesomeIcon icon={faBolt} />
-                            Instant Win ≤ {task.instantWinLimit}
-                        </span>
-
+                            <MatchQuickChat onSend={handleSendMessage} />
+                            <span className={`${s.instantWinTarget} ${isInstantWinZone ? s.instantWinReached : ''}`}>
+                                <FontAwesomeIcon icon={faBolt} />
+                                Instant Win ≤ {task.instantWinLimit}
+                            </span>
                             <span className={`${s.counter} ${!canBeatBestScore ? s.counterOverLimit : ''}`}>
-                            {characterCount} / {myBestScore}
-                        </span>
+                                {characterCount} / {myBestScore}
+                            </span>
                         </div>
                     </div>
 

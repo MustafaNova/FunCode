@@ -7,3 +7,4 @@ export * from './battleStarted.payload.js';
 export * from './codeGolf.win.payload.js';
 export * from './codeGolf.lose.payload.js';
 export * from './codeGolf.wrong.submit.payload.js';
+export * from './match.message.payload.js';
