@@ -8,6 +8,7 @@ import {
     BATTLE_MANAGER_PORT,
     JOIN_MATCHMAKING_PORT, LEAVE_MATCHMAKING_PORT, MATCH_MAKER_PORT, SUBMIT_ARENA_SOLUTION_PORT,
     CLASSIC_VALIDATOR_PORT, BUG_HUNTER_VALIDATOR_PORT, CODE_GOLF_VALIDATOR_PORT, CODE_GOLF_ACTIVITY_PORT,
+    SEND_MATCH_MESSAGE_PORT,
 } from './tokens';
 import { ClassicValidatorService } from './classicValidator.service';
 import { BattleManagerService } from './battle.manager.service';
@@ -21,6 +22,7 @@ import { CodeGolfMatchStateModule } from '../matchStates/CodeGolfMatchState/code
 import { BugHunterMatchStateModule } from '../matchStates/BugHunterMatchState/bugHunterMatchState.module';
 import { ClassicMatchStateModule } from '../matchStates/ClassicMatchState/classicMatchState.module';
 import { CodeGolfActivityService } from './codeGolf.activity.service';
+import { SendMatchMessageService } from './sendMatch.message.service';
 
 @Module({
     imports: [
@@ -43,6 +45,7 @@ import { CodeGolfActivityService } from './codeGolf.activity.service';
         { provide: BUG_HUNTER_VALIDATOR_PORT, useClass: BugHunterValidatorService },
         { provide: CODE_GOLF_VALIDATOR_PORT, useClass: CodeGolfValidatorService },
         { provide: CODE_GOLF_ACTIVITY_PORT, useClass: CodeGolfActivityService },
+        { provide: SEND_MATCH_MESSAGE_PORT, useClass: SendMatchMessageService },
     ],
     exports: [
         JOIN_MATCHMAKING_PORT,
@@ -52,7 +55,8 @@ import { CodeGolfActivityService } from './codeGolf.activity.service';
         SUBMIT_ARENA_SOLUTION_PORT,
         BUG_HUNTER_VALIDATOR_PORT,
         CODE_GOLF_VALIDATOR_PORT,
-        CODE_GOLF_ACTIVITY_PORT
+        CODE_GOLF_ACTIVITY_PORT,
+        SEND_MATCH_MESSAGE_PORT
     ],
 })
 export class UCServicesModule {}

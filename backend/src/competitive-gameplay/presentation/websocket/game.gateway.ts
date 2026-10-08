@@ -5,7 +5,13 @@ import {
     SubscribeMessage,
     WebSocketGateway,
 } from '@nestjs/websockets';
-import { type JoinMatchmakingPayload, type LeaveMatchmakingPayload, SOCKET_EVENTS, type SubmitPayload } from '@funcode/shared';
+import {
+    type JoinMatchmakingPayload,
+    type LeaveMatchmakingPayload,
+    type MatchMessagePayload,
+    SOCKET_EVENTS,
+    type SubmitPayload
+} from '@funcode/shared';
 import { Server, Socket } from 'socket.io';
 import type {
     GameSocket,
@@ -19,7 +25,7 @@ import { type JoinMatchMakingPort } from '../../application/ports/inbound/join-m
 import {
     BATTLE_MANAGER_PORT, CODE_GOLF_ACTIVITY_PORT,
     JOIN_MATCHMAKING_PORT,
-    LEAVE_MATCHMAKING_PORT, SUBMIT_ARENA_SOLUTION_PORT
+    LEAVE_MATCHMAKING_PORT, SEND_MATCH_MESSAGE_PORT, SUBMIT_ARENA_SOLUTION_PORT
 } from '../../infrastructure/uc-wiring/tokens';
 import { type LeaveMatchmakingPort } from '../../application/ports/inbound/leave-matchmaking.port';
 import { SubmitCmd } from '../../application/use-cases/battle-manager/dtos/submit.cmd';
@@ -30,6 +36,7 @@ import { verify } from 'jsonwebtoken';
 import { type SubmitArenaSolutionPort } from '../../application/ports/inbound/submitArenaSolution.port';
 import { type CodeGolfActivityPayload } from '@funcode/shared/dist/competitive-gameplay/payloads/codeGolf.activity.payload';
 import { type CodeGolfActivityPort } from '../../application/ports/inbound/codeGolf.activity.port';
+import { type SendMatchMessagePort } from '../../application/ports/inbound/sendMatch.message.port';
 
 @UseFilters(WsExceptionFilter)
 @WebSocketGateway({
@@ -53,6 +60,8 @@ export class GameGateway
         private readonly submitArenaSolutionUC: SubmitArenaSolutionPort,
         @Inject(CODE_GOLF_ACTIVITY_PORT)
         private readonly codeGolfActivityUC: CodeGolfActivityPort,
+        @Inject(SEND_MATCH_MESSAGE_PORT)
+        private readonly sendMatchMessageUC: SendMatchMessagePort,
         private readonly gameGatewayRegistry: GameGatewayRegistry,
     ) {}
 
@@ -132,6 +141,19 @@ export class GameGateway
             client.data.user.userId,
             client.data.room,
             payload
+        )
+    }
+
+    @UseGuards(RoomGuard)
+    @SubscribeMessage(SOCKET_EVENTS.MATCH_MESSAGE)
+    handleMatchMessage(
+        client: RoomSocket,
+        payload: MatchMessagePayload,
+    ) {
+        this.sendMatchMessageUC.execute(
+            client.data.user.userId,
+            client.data.room,
+            payload,
         )
     }
 
