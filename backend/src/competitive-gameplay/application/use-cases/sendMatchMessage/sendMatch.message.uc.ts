@@ -1,6 +1,7 @@
 import { SendMatchMessagePort } from '../../ports/inbound/sendMatch.message.port';
-import { MatchMessagePayload, SOCKET_EVENTS } from '@funcode/shared';
+import { isQuickMessage, MatchMessagePayload, SOCKET_EVENTS } from '@funcode/shared';
 import { PlayerGatewayPort } from '../../ports/outbound/player.gateway.port';
+import { InvalidMessageError } from './invalid.message.error';
 
 
 export class SendMatchMessageUC implements SendMatchMessagePort {
@@ -9,6 +10,10 @@ export class SendMatchMessageUC implements SendMatchMessagePort {
     ) {}
 
     execute(userId: string, roomId: string, payload: MatchMessagePayload) {
+        if (!isQuickMessage(payload.message)) {
+            throw new InvalidMessageError();
+        }
+
         this.playerGateway.notifyRoomExceptPlayer(
             userId,
             roomId,

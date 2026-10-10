@@ -4,14 +4,14 @@ import {
     faCode,
     faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
-import s from './specialModesPage.module.scss';
+import s from './unrankedPage.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import type { ArenaGameModeId } from '@funcode/shared';
 import { joinMatchmaking, leaveMatchmaking } from '../../../services/socket/gameSocket.ts';
 import { SearchingScreen } from '../searchingScreen.tsx';
 
-export function SpecialModesPage() {
+export function UnrankedPage() {
     const navigate = useNavigate();
     const [searchingGameMode, setSearchingGameMode] = useState<ArenaGameModeId | null>(null);
     async function startMatchMaking(
@@ -47,16 +47,33 @@ export function SpecialModesPage() {
         <main className="galaxyGridBackground">
             <section className={s.panel}>
                 <div className={s.hero}>
-                    <p className={s.kicker}>Special Modes</p>
+                    <p className={s.kicker}>Unranked</p>
 
                     <h1>Choose your challenge</h1>
 
                     <p>
-                        Compete in unique coding modes with different rules
-                        and objectives.
+                        Compete in unique coding modes
                     </p>
                 </div>
                 <div className={s.modeGrid}>
+                    <button className={s.modeCard} onClick={() => startMatchMaking('classic-unranked-1v1', '/match/classic-unranked-1v1')}>
+
+                        <span className={s.modeIcon}>
+                            <FontAwesomeIcon icon={faCode} />
+                        </span>
+
+                        <span className={s.modeContent}>
+                            <strong>Classic</strong>
+                            <span>
+                                Solve coding challenges faster than your opponent.
+                            </span>
+                        </span>
+
+                        <FontAwesomeIcon
+                            className={s.modeAction}
+                            icon={faChevronRight}
+                        />
+                    </button>
                     <button className={s.modeCard} onClick={() => startMatchMaking('bug-hunter-unranked-1v1', '/match/bug-hunter-unranked-1v1')}>
                         <span className={s.modeIcon}>
                             <FontAwesomeIcon icon={faBug} />

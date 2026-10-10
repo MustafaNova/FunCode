@@ -1,12 +1,15 @@
 import s from './login.module.scss';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { type FormEvent, type KeyboardEvent, useState } from 'react';
 import { loginUser } from '../../../services/http/auth.ts';
 import { getActiveScreen } from '../../../services/http/learning.progression.ts';
 import { useTypingCode } from '../useTypingCode.ts';
 import { loginCodeSnippets, terminalCrashCode } from './loginTerminalContent.ts';
+import { BackendNotice } from '../../../components/BackendNotice/backendNotice.tsx';
 
 export function Login() {
+    const location = useLocation();
+    const registrationSuccess = location.state?.registrationSuccess === true;
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -41,6 +44,7 @@ export function Login() {
 
     return (
         <form className={`${s.container} ${isLeaving ? s.pageExit : ''}`} onSubmit={(e) => handleSubmit(e)}>
+            <BackendNotice />
             <div className={s.arenaPanel}>
                 <div className={s.statusRow}>
                     <span>Compile</span>
@@ -62,6 +66,11 @@ export function Login() {
             </div>
 
             <div className={s.authCard}>
+                {registrationSuccess && (
+                    <p className={s.successMessage}>
+                        Registration successful! Please log in
+                    </p>
+                )}
                 <div className={s.header}>
                     <span className={s.kicker}>Enter the arena</span>
                     <h1>Login</h1>

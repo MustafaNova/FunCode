@@ -1,32 +1,33 @@
 import s from './registration.module.scss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { type FormEvent, type KeyboardEvent, useState } from 'react';
 import { registerUser } from '../../../services/http/auth.ts';
 import { useTypingCode } from '../useTypingCode.ts';
-
-const registrationCodeSnippets = [
-    `function registerFighter() {
-  profile.create(coderTag);
-  unlockArena();
-}`,
-    `const loadout = {
-  class: "frontend-duelist",
-  power: "clean-code"
-};`,
-];
-
-const terminalCrashCode = `SYSTEM PANIC: profile write collision
-> rogue keystroke detected
-> registration terminal crashed
-> reboot required...`;
+import { BackendNotice } from '../../../components/BackendNotice/backendNotice.tsx';
 
 export function Registration() {
+    const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordRepeat, setPasswordRepeat] = useState('');
     const [isTerminalCrashed, setIsTerminalCrashed] = useState(false);
+    const registrationCodeSnippets = [
+        `function registerFighter() {
+  profile.create(coderTag);
+  unlockArena();
+}`,
+        `const loadout = {
+  class: "frontend-duelist",
+  power: "clean-code"
+};`,
+    ];
+    const terminalCrashCode = `SYSTEM PANIC: profile write collision
+> rogue keystroke detected
+> registration terminal crashed
+> reboot required...`;
     const animatedCode = useTypingCode(registrationCodeSnippets);
+
 
     const handleTerminalInput = (e: KeyboardEvent<HTMLDivElement>) => {
         if (e.key === 'Tab') return;
@@ -39,25 +40,35 @@ export function Registration() {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (password != passwordRepeat) {
-            alert('Password and PasswordRepeat dont match!')
+            alert('Both Passwords doesnt match')
             return
         }
-        const request = {
-            username,
-            email,
-            password,
-            passwordRepeat,
-        }
-        await registerUser(request)
 
-        setUsername('')
-        setEmail('')
-        setPassword('')
-        setPasswordRepeat('')
+        try {
+            await registerUser({
+                username,
+                email,
+                password,
+                passwordRepeat,
+            });
+
+            navigate('/', {
+                replace: true,
+                state: {
+                    registrationSuccess: true
+                },
+            });
+
+        } catch {
+            alert('Registration failed!');
+        }
+
+
     }
 
     return (
         <form className={s.container} onSubmit={(e) => handleSubmit(e)}>
+            <BackendNotice />
             <div className={s.arenaPanel}>
                 <div className={s.statusRow}>
                     <span>New challenger</span>

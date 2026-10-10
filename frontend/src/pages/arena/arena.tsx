@@ -59,11 +59,6 @@ export function Arena() {
                         <FontAwesomeIcon className={s.modeAction} icon={faLock} />
                     </button>
                 </div>
-
-                <div className={s.statusBar}>
-                    <FontAwesomeIcon icon={faTerminal} />
-                    <span>matchmaking service online</span>
-                </div>
             </section>
         </main>
     )

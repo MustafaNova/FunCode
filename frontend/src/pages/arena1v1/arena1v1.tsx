@@ -1,42 +1,15 @@
 import s from './arena1v1.module.scss'
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+    faGamepad,
     faLock,
-    faShieldHalved, faTrophy,
+    faTrophy,
     faUserNinja,
-    faWandMagicSparkles
 } from '@fortawesome/free-solid-svg-icons';
-import { SearchingScreen } from './searchingScreen.tsx';
-import { joinMatchmaking, leaveMatchmaking } from '../../services/socket/gameSocket.ts';
 
 export function Arena1v1() {
-    const [searching, setSearching] = useState(false);
     const navigate = useNavigate();
-    const startUnranked1v1 = async () => {
-        setSearching(true);
-        try {
-            await joinMatchmaking(() => {
-                navigate('/match/ready', {
-                    state: {
-                        readyPath: '/match/classic-unranked-1v1'
-                    }
-                });
-            }, { gameModeId: 'classic-unranked-1v1' })
-        } catch {
-            setSearching(false);
-        }
-
-    }
-    const cancelUnranked1v1 = async () => {
-        await leaveMatchmaking({ gameModeId: 'classic-unranked-1v1' });
-        setSearching(false)
-    }
-
-    if (searching) {
-        return <SearchingScreen cancel={cancelUnranked1v1} />
-    }
 
     return (
         <main className="galaxyGridBackground">
@@ -61,28 +34,16 @@ export function Arena1v1() {
                 </div>
 
                 <div className={s.modeGrid}>
-                    <button className={`${s.modeCard} ${s.modeCardActive}`} onClick={startUnranked1v1}>
+                    <button className={`${s.modeCard} ${s.modeCardActive}`} onClick={() => navigate('unranked')}>
                         <span className={s.modeIcon}>
-                            <FontAwesomeIcon icon={faShieldHalved} />
+                            <FontAwesomeIcon icon={faGamepad} />
                         </span>
                         <span className={s.modeContent}>
                             <strong>Unranked</strong>
-                            <span>Practice duel without rank pressure</span>
+                            <span>Compete against other players without affecting your rank</span>
                         </span>
                         <FontAwesomeIcon className={s.modeAction} icon={faUserNinja} />
                     </button>
-
-                    <button className={`${s.modeCard} ${s.modeCardActive}`} onClick={() => navigate('special-modes')}>
-                        <span className={s.modeIcon}>
-                            <FontAwesomeIcon icon={faWandMagicSparkles} />
-                        </span>
-                        <span className={s.modeContent}>
-                            <strong>Special Modes</strong>
-                            <span>Compete in unique coding challenges</span>
-                        </span>
-                        <FontAwesomeIcon className={s.modeAction} icon={faUserNinja} />
-                    </button>
-
                     <button className={s.modeCard} disabled>
                         <span className={s.modeIcon}>
                             <FontAwesomeIcon icon={faTrophy} />

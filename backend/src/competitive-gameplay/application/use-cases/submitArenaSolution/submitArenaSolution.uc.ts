@@ -120,19 +120,10 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
 
     }
 
-    private async handleBugHunterSubmit(submit: SubmitCmd, battle: Battle1v1) {
-        const state = this.bugHunterMatchState.get(submit.roomId);
-        if (state === null) {
-            await this.abortMatch(submit.roomId);
-            this.bugHunterMatchState.delete(submit.roomId);
-            return;
-        }
-
-        const isValid = await this.bugHunterValidator.validate(state.taskId, submit.solution);
-        await this.handleBugHunterSubmitResult(isValid, submit, battle);
-    }
-
     private async finishCodeGolfWithInstantWin(submit: SubmitCmd, battle: Battle1v1){
+        const finished = await this.battleRepo.finishIfActive(submit.roomId);
+        if (!finished) return;
+
         const winnerId = submit.userId;
         const loserId = submit.userId === battle.player1.userId ? battle.player2.userId : battle.player1.userId;
 
@@ -153,6 +144,18 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
         this.codeGolfMatchState.delete(submit.roomId);
     }
 
+    private async handleBugHunterSubmit(submit: SubmitCmd, battle: Battle1v1) {
+        const state = this.bugHunterMatchState.get(submit.roomId);
+        if (state === null) {
+            await this.abortMatch(submit.roomId);
+            this.bugHunterMatchState.delete(submit.roomId);
+            return;
+        }
+
+        const isValid = await this.bugHunterValidator.validate(state.taskId, submit.solution);
+        await this.handleBugHunterSubmitResult(isValid, submit, battle);
+    }
+
     private async handleBugHunterSubmitResult(isValid: boolean, submit: SubmitCmd, battle: Battle1v1) {
         if (!isValid) {
             this.playerGateway.notifyRoom<SubmitResponse>(
@@ -162,6 +165,9 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
             );
             return;
         }
+
+        const finished = await this.battleRepo.finishIfActive(submit.roomId);
+        if (!finished) return;
 
         this.playerGateway.notifyPlayer(
             submit.userId,
@@ -180,6 +186,7 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
 
         await this.playerGateway.closeRoom(submit.roomId);
         await this.battleRepo.setWinner(submit.roomId, submit.userId);
+        this.bugHunterMatchState.delete(submit.roomId);
     }
 
     private async handleClassicSubmit(submit: SubmitCmd, battle: Battle1v1) {
@@ -205,6 +212,9 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
             return;
         }
 
+        const finished = await this.battleRepo.finishIfActive(submit.roomId);
+        if (!finished) return;
+
         this.playerGateway.notifyPlayer(
             submit.userId,
             SOCKET_EVENTS.WIN
@@ -222,6 +232,7 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
 
         await this.playerGateway.closeRoom(submit.roomId);
         await this.battleRepo.setWinner(submit.roomId, submit.userId);
+        this.classicMatchState.delete(submit.roomId);
     }
 
     private async abortMatch(roomId: string) {

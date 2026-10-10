@@ -1,9 +1,7 @@
 import Editor from '@monaco-editor/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    faBug,
-    faClock, faTriangleExclamation,
-    faUser,
+    faTriangleExclamation,
 } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import s from './bugHunterMatch.module.scss';
@@ -11,9 +9,14 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import type { BugHunterBattleStartedPayload, SubmitResponse } from '@funcode/shared';
 import { onError, onLose, onWin, onWrongSubmit, sendCode } from '../../../../services/socket/gameSocket.ts';
 import { ROUTES } from '../../../../constants/routes.ts';
+import { MatchQuickChat } from '../../../../components/MatchQuickChat/matchQuickChat.tsx';
+import { useMatchMessages } from '../../../../hooks/useMatchMessages.ts';
+import { MatchMessages } from '../../../../components/MatchMessages/matchMessages.tsx';
+import { SurrenderButton } from '../../../../components/SurrenderButton/surrenderButton.tsx';
 
 export function BugHunterMatch() {
     const navigate = useNavigate();
+    const { myMessage, opponentMessage, handleSendMessage } = useMatchMessages();
     const [submitResponse, setSubmitResponse] = useState<SubmitResponse | null>(null);
     const location = useLocation();
     const { task } = location.state as BugHunterBattleStartedPayload;
@@ -60,12 +63,9 @@ export function BugHunterMatch() {
     return (
         <main className={`${s.container} galaxyGridBackground`}>
             <section className={s.matchPanel}>
+                <MatchMessages myMessage={myMessage} opponentMessage={opponentMessage} />
                 <header className={s.header}>
                     <div>
-                        <span className={s.kicker}>
-                            <FontAwesomeIcon icon={faBug} />
-                            Bug Hunter · 1v1
-                        </span>
 
                         <h1>{task.name}</h1>
 
@@ -81,20 +81,16 @@ export function BugHunterMatch() {
                             </span>
                     )}
 
-                    <div className={s.matchInfo}>
-                        <span>
-                            <FontAwesomeIcon icon={faUser} />
-                            Opponent
-                        </span>
-                        <span>
-                            <FontAwesomeIcon icon={faClock} />
-                            01:42
-                        </span>
-                    </div>
                 </header>
                 <div className={s.editorSection}>
                     <div className={s.editorHeader}>
-                        <span>solution.ts</span>
+                        <MatchQuickChat onSend={handleSendMessage} />
+                        <div className={s.editorActions}>
+                            <SurrenderButton />
+                            <button className={s.submitButton} onClick={handleSubmit}>
+                                Submit Fix
+                            </button>
+                        </div>
                     </div>
 
                     <Editor
@@ -111,19 +107,6 @@ export function BugHunterMatch() {
                             automaticLayout: true,
                         }}
                     />
-                </div>
-                <div className={s.actions}>
-                    <span>
-                        Fix the bug and submit your solution.
-                    </span>
-
-
-                    <button
-                        className={s.submitButton}
-                        onClick={handleSubmit}
-                    >
-                        Submit Fix
-                    </button>
                 </div>
             </section>
         </main>

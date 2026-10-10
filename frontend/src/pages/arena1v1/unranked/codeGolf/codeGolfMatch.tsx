@@ -8,20 +8,22 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import s from './codeGolfMatch.module.scss';
 import { useLocation, useNavigate } from 'react-router-dom';
-import type { CodeGolfBattleStartedPayload, QuickMessage } from '@funcode/shared';
+import type { CodeGolfBattleStartedPayload } from '@funcode/shared';
 import {
     onBattleAborted, onCodeGolfLose, onCodeGolfOpponentActivity,
     onCodeGolfBestScoreUpdated, onCodeGolfWin, onDraw,
     onError,
-    sendCode, sendCodeGolfActivity, onOpponentIsSubmitting, onCodeGolfWrongSubmit, sendMatchMessage,
-    onOpponentMatchMessage
+    sendCode, sendCodeGolfActivity, onOpponentIsSubmitting, onCodeGolfWrongSubmit
 } from '../../../../services/socket/gameSocket.ts';
 import { useAuth } from '../../../../context/authContext.ts';
 import { ROUTES } from '../../../../constants/routes.ts';
 import { MatchQuickChat } from '../../../../components/MatchQuickChat/matchQuickChat.tsx';
+import { useMatchMessages } from '../../../../hooks/useMatchMessages.ts';
+import { SurrenderButton } from '../../../../components/SurrenderButton/surrenderButton.tsx';
 
 export function CodeGolfMatch() {
     const user = useAuth();
+    const { myMessage, opponentMessage, handleSendMessage } = useMatchMessages();
     const userId = user.user?.userId;
     const location = useLocation();
     const navigate = useNavigate();
@@ -43,10 +45,6 @@ export function CodeGolfMatch() {
     const [preparationSeconds, setPreparationSeconds] = useState(
         () => Math.max(0, Math.ceil((preparationEndsAt - Date.now()) / 1000))
     );
-    const [myMessage, setMyMessage] = useState<QuickMessage | null>(null);
-    const myMessageTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const [opponentMessage, setOpponentMessage] = useState<QuickMessage | null>(null);
-    const opponentMessageTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [isOpponentTyping, setIsOpponentTyping] = useState(false);
     const opponentTypingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
     const lastActivitySentAt = useRef(0);
@@ -59,7 +57,6 @@ export function CodeGolfMatch() {
     const isOpponentInstantWinZone = opponentCharacterCount <= task.instantWinLimit;
     const SUBMIT_FEEDBACK_DURATION_MS = 500;
     const OPPONENT_TYPING_DURATION_MS = 500;
-    const MESSAGE_DURATION_MS = 3000;
 
     useEffect(() => {
 
@@ -169,17 +166,6 @@ export function CodeGolfMatch() {
             setIsOpponentSubmitting(true);
         });
 
-        const offOpponentMatchMessage = onOpponentMatchMessage((payload) => {
-            setOpponentMessage(payload.message);
-
-            if (opponentMessageTimeout.current) {
-                clearTimeout(opponentMessageTimeout.current);
-            }
-            opponentMessageTimeout.current = setTimeout(() => {
-                setOpponentMessage(null);
-            }, MESSAGE_DURATION_MS);
-        });
-
         const interval = setInterval(() => {
             setRemainingSeconds(Math.max(0, Math.ceil((matchEndsAt - Date.now()) / 1000)));
         }, 1000);
@@ -194,7 +180,6 @@ export function CodeGolfMatch() {
             offCodeGolfBestScoreUpdate();
             offOpponentActivity();
             offOpponentIsSubmitting();
-            offOpponentMatchMessage();
             clearInterval(interval);
             if (submitTimeout.current) {
                 clearTimeout(submitTimeout.current);
@@ -268,18 +253,6 @@ export function CodeGolfMatch() {
             myStrength /
             (myStrength + opponentStrength)
         ) * 100;
-    }
-
-    function handleSendMessage(message: QuickMessage) {
-        sendMatchMessage({ message });
-        setMyMessage(message);
-
-        if (myMessageTimeout.current) {
-            clearTimeout(myMessageTimeout.current);
-        }
-        myMessageTimeout.current = setTimeout(() => {
-            setMyMessage(null);
-        }, MESSAGE_DURATION_MS);
     }
 
     return (
@@ -419,13 +392,9 @@ export function CodeGolfMatch() {
                     )}
 
                     <div className={s.editorHeader}>
-                    <span>
-                        <FontAwesomeIcon icon={faCode} />
-                        solution.js
-                    </span>
+                        <MatchQuickChat onSend={handleSendMessage} />
 
                         <div className={s.editorStats}>
-                            <MatchQuickChat onSend={handleSendMessage} />
                             <span className={`${s.instantWinTarget} ${isInstantWinZone ? s.instantWinReached : ''}`}>
                                 <FontAwesomeIcon icon={faBolt} />
                                 Instant Win ≤ {task.instantWinLimit}
@@ -465,23 +434,27 @@ export function CodeGolfMatch() {
                         </strong>
                     </div>
 
-                    <button
-                        className={`
+                    <div className={s.editorActions}>
+                        <SurrenderButton />
+
+                        <button
+                            className={`
                             ${s.submitButton}
                             ${isInstantWinZone ? s.instantWinButton : ''}
                         `}
-                        disabled={!canBeatBestScore || isPreparation || isSubmitting}
-                        onClick={handleSubmit}
-                    >
-                        {isInstantWinZone ? (
-                            <>
-                                <FontAwesomeIcon icon={faFire} />
-                                Instant Win
-                            </>
-                        ) : (
-                            'Submit solution'
-                        )}
-                    </button>
+                            disabled={!canBeatBestScore || isPreparation || isSubmitting}
+                            onClick={handleSubmit}
+                        >
+                            {isInstantWinZone ? (
+                                <>
+                                    <FontAwesomeIcon icon={faFire} />
+                                    Instant Win
+                                </>
+                            ) : (
+                                'Submit solution'
+                            )}
+                        </button>
+                    </div>
                 </div>
             </section>
         </main>

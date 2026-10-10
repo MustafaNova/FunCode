@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
 import { type ArenaGameModeId } from '@funcode/shared';
+import { BattleStatus } from '../../../../domain/enums/battle.status';
 
 @Entity('battle1vs1')
 export class Battle1vs1Entity {
@@ -23,6 +24,12 @@ export class Battle1vs1Entity {
 
     @Column({ type: 'uuid', nullable: true, default: null })
     winnerId: string | null;
+
+    @Column({
+        type: 'varchar',
+        default: BattleStatus.ACTIVE,
+    })
+    status: BattleStatus;
 
     @Column({
         type: 'timestamp',

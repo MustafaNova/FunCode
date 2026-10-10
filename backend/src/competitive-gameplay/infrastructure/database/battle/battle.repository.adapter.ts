@@ -4,6 +4,7 @@ import { Battle1v1 } from '../../../domain/entities/battle1v1';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Battle1vs1Entity } from './typeorm/battle1vs1.entity';
+import { BattleStatus } from '../../../domain/enums/battle.status';
 
 @Injectable()
 export class BattleRepositoryAdapter implements BattleRepositoryPort {
@@ -43,5 +44,21 @@ export class BattleRepositoryAdapter implements BattleRepositoryPort {
 
     async setWinner(roomId: string, winnerId: string): Promise<void> {
         await this.battleRepo.update({ roomId }, { winnerId });
+    }
+
+    async finishIfActive(roomId: string): Promise<boolean> {
+        const result = await this.battleRepo
+            .createQueryBuilder()
+            .update()
+            .set({
+                status: BattleStatus.FINISHED,
+            })
+            .where('roomId = :roomId', { roomId })
+            .andWhere('status = :status', {
+                status: BattleStatus.ACTIVE,
+            })
+            .execute();
+
+        return result.affected === 1;
     }
 }

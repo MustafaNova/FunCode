@@ -10,7 +10,7 @@ import { Arena1v1 } from './pages/arena1v1/arena1v1.tsx';
 import { Login } from './pages/auth/login/login.tsx';
 import { Registration } from './pages/auth/registration/registration.tsx';
 import { ReadyScreen } from './pages/ready/readyScreen.tsx';
-import { ClassicMatch } from './pages/arena1v1/classic/ClassicMatch.tsx';
+import { ClassicMatch } from './pages/arena1v1/unranked/classic/ClassicMatch.tsx';
 
 import { MatchWin } from './pages/arena1v1/result/win/MatchWin.tsx';
 import { MatchLose } from './pages/arena1v1/result/lose/MatchLose.tsx';
@@ -36,9 +36,9 @@ import { BugHunterSuccessScreen } from './pages/practice/games/bugHunter/bugHunt
 import { CodeGolf } from './pages/practice/games/codeGolf/CodeGolf.tsx';
 import { CodeGolfLevel } from './pages/practice/games/codeGolf/codeGolfLevel/CodeGolfLevel.tsx';
 import { CodeGolfSuccessScreen } from './pages/practice/games/codeGolf/codeGolfSuccessScreen/codeGolfSuccessScreen.tsx';
-import { SpecialModesPage } from './pages/arena1v1/specialModes/specialModesPage.tsx';
-import { BugHunterMatch } from './pages/arena1v1/specialModes/bugHunter/BugHunterMatch.tsx';
-import { CodeGolfMatch } from './pages/arena1v1/specialModes/codeGolf/codeGolfMatch.tsx';
+import { UnrankedPage } from './pages/arena1v1/unranked/unrankedPage.tsx';
+import { BugHunterMatch } from './pages/arena1v1/unranked/bugHunter/BugHunterMatch.tsx';
+import { CodeGolfMatch } from './pages/arena1v1/unranked/codeGolf/codeGolfMatch.tsx';
 import { MatchDraw } from './pages/arena1v1/result/draw/MatchDraw.tsx';
 import { CodeGolfInstantWin } from './pages/arena1v1/result/codeGolfInstantWin/codeGolf.instant.win.tsx';
 import { CodeGolfInstantLose } from './pages/arena1v1/result/codeGolfInstantLose/codeGolf.instant.lose.tsx';
@@ -63,7 +63,7 @@ createRoot(document.getElementById('root')!).render(
                       <Route index element={<School/>}></Route>
                       <Route path='arena' element={<Arena/>}></Route>
                       <Route path='arena/1v1' element={<Arena1v1/>}></Route>
-                      <Route path='arena/1v1/special-modes' element={<SpecialModesPage />}></Route>
+                      <Route path='arena/1v1/unranked' element={<UnrankedPage />}></Route>
                       <Route path='clan' element={<Clan />}>
                           <Route index element={<ClanIndexRedirect />}></Route>
 
