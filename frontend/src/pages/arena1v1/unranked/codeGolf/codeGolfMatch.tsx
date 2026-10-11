@@ -10,10 +10,10 @@ import s from './codeGolfMatch.module.scss';
 import { useLocation, useNavigate } from 'react-router-dom';
 import type { CodeGolfBattleStartedPayload } from '@funcode/shared';
 import {
-    onBattleAborted, onCodeGolfLose, onCodeGolfOpponentActivity,
-    onCodeGolfBestScoreUpdated, onCodeGolfWin, onDraw,
+    onBattleAborted, onCodeGolfOpponentActivity,
+    onCodeGolfBestScoreUpdated, onDraw,
     onError,
-    sendCode, sendCodeGolfActivity, onOpponentIsSubmitting, onCodeGolfWrongSubmit
+    sendCode, sendCodeGolfActivity, onOpponentIsSubmitting, onCodeGolfWrongSubmit, onWin, onLose
 } from '../../../../services/socket/gameSocket.ts';
 import { useAuth } from '../../../../context/authContext.ts';
 import { ROUTES } from '../../../../constants/routes.ts';
@@ -92,19 +92,27 @@ export function CodeGolfMatch() {
             console.log(res);
         });
 
-        const offWin = onCodeGolfWin((payload) => {
+        const offWin = onWin((payload) => {
             if (payload.reason == 'normal') {
                 navigate(ROUTES.MATCH_WIN);
-            } else {
+
+            } else if (payload.reason == 'instant') {
                 navigate(ROUTES.CODE_GOLF_INSTANT_WIN);
+
+            } else if (payload.reason == 'surrender') {
+                navigate(ROUTES.SURRENDER_WIN);
             }
         });
 
-        const offLose = onCodeGolfLose((payload) => {
+        const offLose = onLose((payload) => {
             if (payload.reason == 'normal') {
                 navigate(ROUTES.MATCH_LOSE);
-            } else {
+
+            } else if (payload.reason == 'instant') {
                 navigate(ROUTES.CODE_GOLF_INSTANT_LOSE);
+
+            } else if (payload.reason == 'surrender') {
+                navigate(ROUTES.SURRENDER_LOSE);
             }
         });
 

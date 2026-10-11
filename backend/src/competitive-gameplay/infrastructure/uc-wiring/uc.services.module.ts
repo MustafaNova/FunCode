@@ -8,7 +8,7 @@ import {
     BATTLE_MANAGER_PORT,
     JOIN_MATCHMAKING_PORT, LEAVE_MATCHMAKING_PORT, MATCH_MAKER_PORT, SUBMIT_ARENA_SOLUTION_PORT,
     CLASSIC_VALIDATOR_PORT, BUG_HUNTER_VALIDATOR_PORT, CODE_GOLF_VALIDATOR_PORT, CODE_GOLF_ACTIVITY_PORT,
-    SEND_MATCH_MESSAGE_PORT,
+    SEND_MATCH_MESSAGE_PORT, SURRENDER_MATCH_PORT,
 } from './tokens';
 import { ClassicValidatorService } from './classicValidator.service';
 import { BattleManagerService } from './battle.manager.service';
@@ -23,6 +23,8 @@ import { BugHunterMatchStateModule } from '../matchStates/BugHunterMatchState/bu
 import { ClassicMatchStateModule } from '../matchStates/ClassicMatchState/classicMatchState.module';
 import { CodeGolfActivityService } from './codeGolf.activity.service';
 import { SendMatchMessageService } from './sendMatch.message.service';
+import { MatchCleanupModule } from '../matchCleanup/match.cleanup.module';
+import { SurrenderMatchService } from './surrenderMatch.service';
 
 @Module({
     imports: [
@@ -33,7 +35,8 @@ import { SendMatchMessageService } from './sendMatch.message.service';
         CodeExecutionModule,
         CodeGolfMatchStateModule,
         BugHunterMatchStateModule,
-        ClassicMatchStateModule
+        ClassicMatchStateModule,
+        MatchCleanupModule
     ],
     providers: [
         { provide: MATCH_MAKER_PORT, useClass: MatchMakerService },
@@ -46,6 +49,7 @@ import { SendMatchMessageService } from './sendMatch.message.service';
         { provide: CODE_GOLF_VALIDATOR_PORT, useClass: CodeGolfValidatorService },
         { provide: CODE_GOLF_ACTIVITY_PORT, useClass: CodeGolfActivityService },
         { provide: SEND_MATCH_MESSAGE_PORT, useClass: SendMatchMessageService },
+        { provide: SURRENDER_MATCH_PORT, useClass: SurrenderMatchService },
     ],
     exports: [
         JOIN_MATCHMAKING_PORT,
@@ -56,7 +60,8 @@ import { SendMatchMessageService } from './sendMatch.message.service';
         BUG_HUNTER_VALIDATOR_PORT,
         CODE_GOLF_VALIDATOR_PORT,
         CODE_GOLF_ACTIVITY_PORT,
-        SEND_MATCH_MESSAGE_PORT
+        SEND_MATCH_MESSAGE_PORT,
+        SURRENDER_MATCH_PORT
     ],
 })
 export class UCServicesModule {}

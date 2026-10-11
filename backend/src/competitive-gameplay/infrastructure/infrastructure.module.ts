@@ -8,6 +8,7 @@ import { CodeExecutionModule } from './codeExecution/code.execution.module';
 import { CodeGolfMatchStateModule } from './matchStates/CodeGolfMatchState/codeGolfMatchState.module';
 import { BugHunterMatchStateModule } from './matchStates/BugHunterMatchState/bugHunterMatchState.module';
 import { ClassicMatchStateModule } from './matchStates/ClassicMatchState/classicMatchState.module';
+import { MatchCleanupModule } from './matchCleanup/match.cleanup.module';
 
 @Module({
     imports: [
@@ -19,7 +20,8 @@ import { ClassicMatchStateModule } from './matchStates/ClassicMatchState/classic
         CodeExecutionModule,
         CodeGolfMatchStateModule,
         BugHunterMatchStateModule,
-        ClassicMatchStateModule
+        ClassicMatchStateModule,
+        MatchCleanupModule
     ],
     exports: [
         RedisModule,
@@ -30,7 +32,8 @@ import { ClassicMatchStateModule } from './matchStates/ClassicMatchState/classic
         CodeExecutionModule,
         CodeGolfMatchStateModule,
         BugHunterMatchStateModule,
-        ClassicMatchStateModule
+        ClassicMatchStateModule,
+        MatchCleanupModule
     ],
 })
 export class InfrastructureModule {}

@@ -1,15 +1,13 @@
 import { io, type Socket } from 'socket.io-client';
 import {
-    type LoseRes,
     type SubmitPayload,
     type SubmitResponse,
-    type WinRes,
     SOCKET_EVENTS,
     type JoinMatchmakingPayload,
     type LeaveMatchmakingPayload,
     type BattleAbortedPayload,
-    type CodeGolfScoreUpdatedPayload, type BattleStartedPayload, type CodeGolfWinPayload, type CodeGolfLosePayload,
-    type CodeGolfWrongSubmitPayload, type MatchMessagePayload,
+    type CodeGolfScoreUpdatedPayload, type BattleStartedPayload,
+    type CodeGolfWrongSubmitPayload, type MatchMessagePayload, type MatchResultPayload,
 } from '@funcode/shared';
 import { me } from '../http/auth.ts';
 import type {
@@ -100,24 +98,10 @@ export function onError(callback: (response: SubmitResponse) => void) {
     }
 }
 
-export function onWin(callback: (response: WinRes) => void) {
+export function onWin(callback: (payload: MatchResultPayload) => void) {
     gameSocket?.on(SOCKET_EVENTS.WIN, callback);
     return () => {
         gameSocket?.off(SOCKET_EVENTS.WIN, callback);
-    }
-}
-
-export function onCodeGolfWin(callback: (response: CodeGolfWinPayload) => void) {
-    gameSocket?.on(SOCKET_EVENTS.CODE_GOLF_WIN, callback);
-    return () => {
-        gameSocket?.off(SOCKET_EVENTS.CODE_GOLF_WIN, callback);
-    }
-}
-
-export function onCodeGolfLose(callback: (response: CodeGolfLosePayload) => void) {
-    gameSocket?.on(SOCKET_EVENTS.CODE_GOLF_LOSE, callback);
-    return () => {
-        gameSocket?.off(SOCKET_EVENTS.CODE_GOLF_LOSE, callback);
     }
 }
 
@@ -129,7 +113,7 @@ export function onDraw(callback: () => void) {
     }
 }
 
-export function onLose(callback: (response: LoseRes) => void) {
+export function onLose(callback: (payload: MatchResultPayload) => void) {
     gameSocket?.on(SOCKET_EVENTS.LOSE, callback)
     return () => {
         gameSocket?.off(SOCKET_EVENTS.LOSE, callback);
@@ -159,4 +143,8 @@ export function onOpponentMatchMessage(callback: (payload: MatchMessagePayload) 
     return () => {
         gameSocket?.off(SOCKET_EVENTS.OPPONENT_MATCH_MESSAGE, callback);
     }
+}
+
+export function surrenderMatch() {
+    gameSocket?.emit(SOCKET_EVENTS.SURRENDER_MATCH);
 }

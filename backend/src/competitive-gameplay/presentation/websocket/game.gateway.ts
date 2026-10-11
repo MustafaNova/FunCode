@@ -25,7 +25,7 @@ import { type JoinMatchMakingPort } from '../../application/ports/inbound/join-m
 import {
     BATTLE_MANAGER_PORT, CODE_GOLF_ACTIVITY_PORT,
     JOIN_MATCHMAKING_PORT,
-    LEAVE_MATCHMAKING_PORT, SEND_MATCH_MESSAGE_PORT, SUBMIT_ARENA_SOLUTION_PORT
+    LEAVE_MATCHMAKING_PORT, SEND_MATCH_MESSAGE_PORT, SUBMIT_ARENA_SOLUTION_PORT, SURRENDER_MATCH_PORT
 } from '../../infrastructure/uc-wiring/tokens';
 import { type LeaveMatchmakingPort } from '../../application/ports/inbound/leave-matchmaking.port';
 import { SubmitCmd } from '../../application/use-cases/battle-manager/dtos/submit.cmd';
@@ -37,6 +37,7 @@ import { type SubmitArenaSolutionPort } from '../../application/ports/inbound/su
 import { type CodeGolfActivityPayload } from '@funcode/shared/dist/competitive-gameplay/payloads/codeGolf.activity.payload';
 import { type CodeGolfActivityPort } from '../../application/ports/inbound/codeGolf.activity.port';
 import { type SendMatchMessagePort } from '../../application/ports/inbound/sendMatch.message.port';
+import { type SurrenderMatchPort } from '../../application/ports/inbound/surrender.match.port';
 
 @UseFilters(WsExceptionFilter)
 @WebSocketGateway({
@@ -62,6 +63,8 @@ export class GameGateway
         private readonly codeGolfActivityUC: CodeGolfActivityPort,
         @Inject(SEND_MATCH_MESSAGE_PORT)
         private readonly sendMatchMessageUC: SendMatchMessagePort,
+        @Inject(SURRENDER_MATCH_PORT)
+        private readonly surrenderMatchUC: SurrenderMatchPort,
         private readonly gameGatewayRegistry: GameGatewayRegistry,
     ) {}
 
@@ -154,6 +157,15 @@ export class GameGateway
             client.data.user.userId,
             client.data.room,
             payload,
+        )
+    }
+
+    @UseGuards(RoomGuard)
+    @SubscribeMessage(SOCKET_EVENTS.SURRENDER_MATCH)
+    async handleSurrender(client: RoomSocket){
+        await this.surrenderMatchUC.surrender(
+            client.data.user.userId,
+            client.data.room,
         )
     }
 

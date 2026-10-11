@@ -29,12 +29,22 @@ export function ClassicMatch() {
             console.log(res);
         })
 
-        const offWin = onWin(() => {
-            navigate(ROUTES.MATCH_WIN);
+        const offWin = onWin((payload) => {
+            if (payload.reason == 'normal') {
+                navigate(ROUTES.MATCH_WIN);
+
+            } else if (payload.reason == 'surrender') {
+                navigate(ROUTES.SURRENDER_WIN)
+            }
         })
 
-        const offLose = onLose(() => {
-            navigate(ROUTES.MATCH_LOSE);
+        const offLose = onLose((payload) => {
+            if (payload.reason == 'normal') {
+                navigate(ROUTES.MATCH_LOSE);
+
+            } else if (payload.reason == 'surrender') {
+                navigate(ROUTES.SURRENDER_LOSE)
+            }
         })
 
         return () => {

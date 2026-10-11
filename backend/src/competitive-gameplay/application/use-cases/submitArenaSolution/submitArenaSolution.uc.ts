@@ -2,14 +2,13 @@ import { SubmitArenaSolutionPort } from '../../ports/inbound/submitArenaSolution
 import { SubmitCmd } from '../battle-manager/dtos/submit.cmd';
 import {
     BattleAbortedPayload,
-    CodeGolfLosePayload,
     CodeGolfScoreUpdatedPayload,
-    CodeGolfWinPayload, CodeGolfWrongSubmitPayload,
-    ERROR_CODES,
+    CodeGolfWrongSubmitPayload,
+    ERROR_CODES, MatchResultPayload,
     SOCKET_EVENTS,
     SubmitResponse
 } from '@funcode/shared';
-import { BattleNotFoundError } from './errors/battleNotFound.error';
+import { BattleNotFoundError } from '../errors/battleNotFound.error';
 import type { PlayerGatewayPort } from '../../ports/outbound/player.gateway.port';
 import type { ClassicValidatorPort } from '../../ports/inbound/validators/classicValidator.port';
 import type { BattleRepositoryPort } from '../../ports/outbound/battleRepository.port';
@@ -127,16 +126,16 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
         const winnerId = submit.userId;
         const loserId = submit.userId === battle.player1.userId ? battle.player2.userId : battle.player1.userId;
 
-        this.playerGateway.notifyPlayer<CodeGolfWinPayload>(
+        this.playerGateway.notifyPlayer<MatchResultPayload>(
             winnerId,
-            SOCKET_EVENTS.CODE_GOLF_WIN,
-            { reason: 'instant-win' }
+            SOCKET_EVENTS.WIN,
+            { reason: 'instant' }
         );
 
-        this.playerGateway.notifyPlayer<CodeGolfLosePayload>(
+        this.playerGateway.notifyPlayer<MatchResultPayload>(
             loserId,
-            SOCKET_EVENTS.CODE_GOLF_LOSE,
-            { reason: 'instant-lose' }
+            SOCKET_EVENTS.LOSE,
+            { reason: 'instant' }
         );
 
         await this.battleRepo.setWinner(battle.roomId, winnerId);
@@ -169,9 +168,10 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
         const finished = await this.battleRepo.finishIfActive(submit.roomId);
         if (!finished) return;
 
-        this.playerGateway.notifyPlayer(
+        this.playerGateway.notifyPlayer<MatchResultPayload>(
             submit.userId,
-            SOCKET_EVENTS.WIN
+            SOCKET_EVENTS.WIN,
+            { reason: 'normal' },
         );
 
         const loserId =
@@ -179,9 +179,10 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
                 ? battle.player2.userId
                 : battle.player1.userId;
 
-        this.playerGateway.notifyPlayer(
+        this.playerGateway.notifyPlayer<MatchResultPayload>(
             loserId,
             SOCKET_EVENTS.LOSE,
+            { reason: 'normal' }
         );
 
         await this.playerGateway.closeRoom(submit.roomId);
@@ -215,9 +216,10 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
         const finished = await this.battleRepo.finishIfActive(submit.roomId);
         if (!finished) return;
 
-        this.playerGateway.notifyPlayer(
+        this.playerGateway.notifyPlayer<MatchResultPayload>(
             submit.userId,
-            SOCKET_EVENTS.WIN
+            SOCKET_EVENTS.WIN,
+            { reason: 'normal' }
         );
 
         const loserId =
@@ -225,9 +227,10 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
                 ? battle.player2.userId
                 : battle.player1.userId;
 
-        this.playerGateway.notifyPlayer(
+        this.playerGateway.notifyPlayer<MatchResultPayload>(
             loserId,
             SOCKET_EVENTS.LOSE,
+            { reason: 'normal' }
         );
 
         await this.playerGateway.closeRoom(submit.roomId);

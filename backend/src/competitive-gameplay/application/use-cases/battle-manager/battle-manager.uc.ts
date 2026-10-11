@@ -6,8 +6,8 @@ import {
     BattleAbortedPayload,
     BugHunterBattleStartedPayload,
     ClassicBattleStartedPayload,
-    CodeGolfBattleStartedPayload, CodeGolfLosePayload, CodeGolfWinPayload,
-    ERROR_CODES, ErrorCode,
+    CodeGolfBattleStartedPayload,
+    ERROR_CODES, ErrorCode, MatchResultPayload,
     SOCKET_EVENTS,
 } from '@funcode/shared';
 import type { BattleRepositoryPort } from '../../ports/outbound/battleRepository.port';
@@ -198,15 +198,15 @@ export class BattleManagerUC implements BattleManagerPort {
             const loserId =
                 player1Score < player2Score ? userId2 : userId1;
 
-            this.playerGateway.notifyPlayer<CodeGolfWinPayload>(
+            this.playerGateway.notifyPlayer<MatchResultPayload>(
                 winnerId,
-                SOCKET_EVENTS.CODE_GOLF_WIN,
+                SOCKET_EVENTS.WIN,
                 { reason: 'normal' }
             );
 
-            this.playerGateway.notifyPlayer<CodeGolfLosePayload>(
+            this.playerGateway.notifyPlayer<MatchResultPayload>(
                 loserId,
-                SOCKET_EVENTS.CODE_GOLF_LOSE,
+                SOCKET_EVENTS.LOSE,
                 { reason: 'normal' }
             );
         }

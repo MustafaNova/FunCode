@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import s from './surrenderButton.module.scss';
+import { createPortal } from 'react-dom';
+import { surrenderMatch } from '../../services/socket/gameSocket.ts';
 
 
 export function SurrenderButton() {
     const [isOpen, setIsOpen] = useState(false);
 
     function onSurrender() {
-
+        surrenderMatch();
     }
 
     return (
@@ -15,7 +17,7 @@ export function SurrenderButton() {
                 Surrender
             </button>
 
-            {isOpen && (
+            {isOpen && createPortal(
                 <div className={s.overlay}>
                     <div
                         className={s.modal}
@@ -47,7 +49,8 @@ export function SurrenderButton() {
                             </button>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </>
     );
