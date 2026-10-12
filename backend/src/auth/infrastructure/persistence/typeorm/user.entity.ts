@@ -18,4 +18,7 @@ export class UserEntity {
 
     @Column({ type: 'boolean', default: false })
     hasCompletedOnboarding: boolean;
+
+    @Column({ unique: true })
+    inviteCode: string;
 }

@@ -1,0 +1,1 @@
+export const MAX_BUG_HUNTER_LEVEL = 3;

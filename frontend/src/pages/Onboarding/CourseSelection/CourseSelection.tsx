@@ -1,5 +1,5 @@
 import s from './courseSelection.module.scss';
-import { getActiveScreen, initActiveScreen } from '../../../services/learning.progression.ts';
+import { getActiveScreen, initActiveScreen } from '../../../services/http/learning.progression.ts';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { courses } from './courses.ts';

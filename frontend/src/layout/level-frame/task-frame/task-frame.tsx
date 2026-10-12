@@ -2,7 +2,7 @@ import s from "./task-frame.module.scss";
 import type { props } from "./types.ts";
 import { useState } from "react";
 import { Preview } from "../../../features/codeEditor/preview.tsx";
-import { submitLevelTask } from "../../../services/learning.progression.ts";
+import { submitLevelTask } from "../../../services/http/learning.progression.ts";
 import { useNavigate } from "react-router-dom";
 import { useActiveScreen } from "../../../store/activeScreenStore.ts";
 

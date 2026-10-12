@@ -1,5 +1,11 @@
-export class InvalidCredentialsError extends Error {
+import { AppError } from '../../../../../common/app.error';
+import { ERROR_CODES } from '@funcode/shared';
+
+export class InvalidCredentialsError extends AppError {
     constructor() {
-        super('Invalid credentials');
+        super(
+            ERROR_CODES.INVALID_CREDENTIALS,
+            'Invalid credentials'
+        );
     }
 }

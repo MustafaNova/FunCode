@@ -1,0 +1,1 @@
+export const CLAN_CHAT_REPO_PORT = 'CLAN_CHAT_REPO_PORT' as const;

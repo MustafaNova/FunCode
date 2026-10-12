@@ -1,0 +1,128 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  background:
+          radial-gradient(
+                          circle at center,
+                          rgba(239, 68, 68, 0.1),
+                          transparent 45%
+          ),
+          #0f1117;
+}
+
+.card {
+  width: 100%;
+  max-width: 520px;
+  padding: 48px 40px;
+  text-align: center;
+
+  background: #171a21;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: 20px;
+
+  box-shadow:
+          0 0 30px rgba(239, 68, 68, 0.08);
+
+  h1 {
+    margin: 10px 0 14px;
+    font-size: 2.4rem;
+    color: #f9fafb;
+  }
+}
+
+.iconWrapper {
+  width: 82px;
+  height: 82px;
+  margin: 0 auto 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+
+  box-shadow:
+          0 0 25px rgba(239, 68, 68, 0.18);
+}
+
+.icon {
+  font-size: 2.2rem;
+  color: #ef4444;
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #ef4444;
+}
+
+.description {
+  max-width: 400px;
+  margin: 0 auto 32px;
+
+  color: #9ca3af;
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.primaryButton,
+.secondaryButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 11px 18px;
+  border-radius: 9px;
+
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition:
+          transform 150ms ease,
+          background 150ms ease;
+}
+
+.primaryButton {
+  border: none;
+  background: #ef4444;
+  color: white;
+
+  &:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
+  }
+}
+
+.secondaryButton {
+  border: 1px solid #343a46;
+  background: transparent;
+  color: #d1d5db;
+
+  &:hover {
+    background: #222630;
+    transform: translateY(-1px);
+  }
+}
+
+@media (max-width: 560px) {
+  .card {
+    padding: 36px 24px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+}

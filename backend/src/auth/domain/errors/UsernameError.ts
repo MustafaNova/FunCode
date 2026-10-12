@@ -1,5 +1,11 @@
-export class UsernameError extends Error {
+import { ERROR_CODES } from '@funcode/shared';
+import { AppError } from '../../../common/app.error';
+
+export class UsernameError extends AppError {
     constructor(message: string) {
-        super(message);
+        super(
+            ERROR_CODES.INVALID_USERNAME,
+            message
+        );
     }
 }

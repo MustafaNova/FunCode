@@ -1,13 +1,21 @@
 import s from './arena.module.scss'
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBolt, faCode, faLock, faTerminal, faUserGroup } from '@fortawesome/free-solid-svg-icons';
+import { faBolt, faCode, faLock, faUserGroup } from '@fortawesome/free-solid-svg-icons';
+import { getErrorMessage } from '../../utils/error.messages.ts';
 
 export function Arena() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const errorCode = location.state?.errorCode;
 
     return (
         <main className={s.screen}>
+            {errorCode && (
+                <div className={s.errorBanner}>
+                    {getErrorMessage(errorCode)}
+                </div>
+            )}
             <section className={s.panel}>
                 <div className={s.terminal}>
                     <div className={s.terminalHeader}>
@@ -50,11 +58,6 @@ export function Arena() {
                         </span>
                         <FontAwesomeIcon className={s.modeAction} icon={faLock} />
                     </button>
-                </div>
-
-                <div className={s.statusBar}>
-                    <FontAwesomeIcon icon={faTerminal} />
-                    <span>matchmaking service online</span>
                 </div>
             </section>
         </main>

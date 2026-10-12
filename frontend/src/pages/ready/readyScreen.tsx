@@ -1,8 +1,7 @@
 import s from './ready.module.scss'
-import { onBattleStarted, sendPlayerReady } from '../../services/socket.ts';
+import { onBattleAborted, onBattleStarted, sendPlayerReady } from '../../services/socket/gameSocket.ts';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useMatchStore } from '../../store/matchStore.ts';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBolt, faPlay, faTerminal } from '@fortawesome/free-solid-svg-icons';
 import { TerminalHeader } from './terminalHeader.tsx';
@@ -10,16 +9,31 @@ import { TerminalHeader } from './terminalHeader.tsx';
 
 export function ReadyScreen() {
     const navigate = useNavigate();
-    const setMatchTask = useMatchStore((s) => s.setMatchTask);
+    const location = useLocation();
+    const readyPath = location.state.readyPath;
     const starterCode= '// Warm-up zone'
     const [code, setCode] = useState(starterCode);
 
-    useEffect(() =>{
-        return onBattleStarted((data) => {
-            setMatchTask(data.task);
-            navigate('/match')
+    useEffect(() => {
+        const offBattleStarted = onBattleStarted((data) => {
+            navigate(readyPath, {
+                state: data
+            })
         });
-    }, [navigate, setMatchTask])
+        const offBattleAborted = onBattleAborted((payload) => {
+            console.log('ABORTED MATCH');
+            navigate('/home/arena', {
+                replace: true,
+                state: { errorCode: payload.code }
+            })
+        })
+
+        return () => {
+            offBattleStarted();
+            offBattleAborted();
+        }
+
+    }, [navigate, readyPath])
 
 
     return (

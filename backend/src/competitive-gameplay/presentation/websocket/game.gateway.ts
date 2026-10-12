@@ -5,24 +5,43 @@ import {
     SubscribeMessage,
     WebSocketGateway,
 } from '@nestjs/websockets';
-import type { SubmitReq } from '@funcode/shared';
+import {
+    type JoinMatchmakingPayload,
+    type LeaveMatchmakingPayload,
+    type MatchMessagePayload,
+    SOCKET_EVENTS,
+    type SubmitPayload
+} from '@funcode/shared';
 import { Server, Socket } from 'socket.io';
 import type {
-    CreateNewRoom1v1Event,
-    LoseEvent,
-    NotifyRoomEvent,
+    GameSocket,
+    Payload,
     RoomSocket,
-    WinEvent,
 } from './interfaces';
-import { UseFilters, UseGuards } from '@nestjs/common';
-import { OnEvent } from '@nestjs/event-emitter';
-import { BattleEvent } from '../../domain/enums/battle.events';
+import { Inject, UseFilters, UseGuards } from '@nestjs/common';
 import { RoomGuard } from './guards/room.guard';
-import { GameService } from './game.service';
 import { WsExceptionFilter } from '../../../common/ws.exception.filter';
+import { type JoinMatchMakingPort } from '../../application/ports/inbound/join-matchmaking.port';
+import {
+    BATTLE_MANAGER_PORT, CODE_GOLF_ACTIVITY_PORT,
+    JOIN_MATCHMAKING_PORT,
+    LEAVE_MATCHMAKING_PORT, SEND_MATCH_MESSAGE_PORT, SUBMIT_ARENA_SOLUTION_PORT, SURRENDER_MATCH_PORT
+} from '../../infrastructure/uc-wiring/tokens';
+import { type LeaveMatchmakingPort } from '../../application/ports/inbound/leave-matchmaking.port';
+import { SubmitCmd } from '../../application/use-cases/battle-manager/dtos/submit.cmd';
+import type { BattleManagerPort } from '../../application/ports/inbound/battle.manager.port';
+import { ReadyPlayerCmd } from '../../application/use-cases/battle-manager/dtos/ready.player.cmd';
+import { GameGatewayRegistry } from '../../infrastructure/GameGatewayRegistry/gameGatewayRegistry';
+import { verify } from 'jsonwebtoken';
+import { type SubmitArenaSolutionPort } from '../../application/ports/inbound/submitArenaSolution.port';
+import { type CodeGolfActivityPayload } from '@funcode/shared/dist/competitive-gameplay/payloads/codeGolf.activity.payload';
+import { type CodeGolfActivityPort } from '../../application/ports/inbound/codeGolf.activity.port';
+import { type SendMatchMessagePort } from '../../application/ports/inbound/sendMatch.message.port';
+import { type SurrenderMatchPort } from '../../application/ports/inbound/surrender.match.port';
 
-@UseFilters(new WsExceptionFilter())
+@UseFilters(WsExceptionFilter)
 @WebSocketGateway({
+    namespace: '/game',
     cors: {
         origin: process.env['FRONTEND_URL'],
         credentials: true,
@@ -31,69 +50,127 @@ import { WsExceptionFilter } from '../../../common/ws.exception.filter';
 export class GameGateway
     implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit
 {
-    constructor(private readonly gs: GameService) {}
+    constructor(
+        @Inject(JOIN_MATCHMAKING_PORT)
+        private readonly joinMatchmakingUC: JoinMatchMakingPort,
+        @Inject(LEAVE_MATCHMAKING_PORT)
+        private readonly leaveMatchmakingUC: LeaveMatchmakingPort,
+        @Inject(BATTLE_MANAGER_PORT)
+        private readonly battleManager: BattleManagerPort,
+        @Inject(SUBMIT_ARENA_SOLUTION_PORT)
+        private readonly submitArenaSolutionUC: SubmitArenaSolutionPort,
+        @Inject(CODE_GOLF_ACTIVITY_PORT)
+        private readonly codeGolfActivityUC: CodeGolfActivityPort,
+        @Inject(SEND_MATCH_MESSAGE_PORT)
+        private readonly sendMatchMessageUC: SendMatchMessagePort,
+        @Inject(SURRENDER_MATCH_PORT)
+        private readonly surrenderMatchUC: SurrenderMatchPort,
+        private readonly gameGatewayRegistry: GameGatewayRegistry,
+    ) {}
 
     afterInit(server: Server): any {
-        this.gs.setServer(server);
+        this.gameGatewayRegistry.setServer(server);
     }
 
     handleConnection(client: Socket): any {
-        console.log('handleConnection. cookie: ', client.handshake.auth.token);
-        const token = client.handshake.auth.token
-        this.gs.registerNewPlayer(client, token);
+        const token = client.handshake.auth.token;
+        if (!token) {
+            this.disconnectUnauthorized(client);
+            return;
+        }
+        try {
+            const payload = verify(token, process.env['JWT_SECRET']!) as Payload;
+            client.data.user = payload; // eslint-disable-line
+            this.gameGatewayRegistry.addPlayer(payload.userId, client as GameSocket);
+        } catch {
+            this.disconnectUnauthorized(client);
+        }
     }
 
     handleDisconnect(client: Socket): any {
-        console.log('handleDisconnect');
-        this.gs.unRegisterPlayer(client.id);
-    }
-
-    @OnEvent(BattleEvent.CREATE_1V1)
-    async createNewRoom1v1({
-        roomId,
-        userId1,
-        userId2,
-    }: CreateNewRoom1v1Event) {
-        await this.gs.createNewRoom1v1(roomId, userId1, userId2);
-    }
-
-    @OnEvent(BattleEvent.ROOM_NOTIFICATION)
-    notifyRoom({ roomId, event, msg }: NotifyRoomEvent) {
-        this.gs.sendRoom(roomId, event, msg);
-    }
-
-    @OnEvent(BattleEvent.CLOSE_ROOM)
-    async closeRoom(roomId: string) {
-        await this.gs.closeRoom(roomId);
-    }
-
-    @OnEvent(BattleEvent.WIN_NOTIFICATION)
-    notifyWin({ userId, payload }: WinEvent) {
-        this.gs.notifyWin(userId, payload);
-    }
-
-    @OnEvent(BattleEvent.LOSE_NOTIFICATION)
-    notifyLose({ userId, payload }: LoseEvent) {
-        this.gs.notifyLose(userId, payload);
+        this.gameGatewayRegistry.removePlayer(client.id);
     }
 
     @UseGuards(RoomGuard)
-    @SubscribeMessage('PLAYER_READY')
-    handlePlayerReady(client: RoomSocket) {
-        const userId = client.data.user.userId;
-        const roomId = client.data.room;
-        this.gs.playerReady(userId, roomId, client.data.roomSize);
+    @SubscribeMessage(SOCKET_EVENTS.PLAYER_READY)
+    async handlePlayerReady(client: RoomSocket) {
+        await this.battleManager.handleReadyPlayer(
+            ReadyPlayerCmd.create(
+                client.data.user.userId,
+                client.data.room,
+                client.data.roomSize
+            ),
+        );
     }
 
     @UseGuards(RoomGuard)
-    @SubscribeMessage('SUBMIT_SOLUTION')
-    async handleSolutionSubmit(client: RoomSocket, payload: SubmitReq) {
-        await this.gs.solutionSubmit(
+    @SubscribeMessage(SOCKET_EVENTS.SUBMIT_SOLUTION)
+    async handleSolutionSubmit(client: RoomSocket, payload: SubmitPayload) {
+        await this.submitArenaSolutionUC.submit(
+            SubmitCmd.create(
+                client.data.user.userId,
+                client.data.room,
+                client.data.user.username,
+                payload.code,
+            ),
+        );
+    }
+
+    @SubscribeMessage(SOCKET_EVENTS.JOIN_MATCHMAKING)
+    async joinMatchmaking(client: GameSocket, payload: JoinMatchmakingPayload) {
+        await this.joinMatchmakingUC.join({
+            userId: client.data.user.userId,
+            username: client.data.user.username,
+            gameModeId: payload.gameModeId
+        })
+    }
+
+    @SubscribeMessage(SOCKET_EVENTS.LEAVE_MATCHMAKING)
+    async leaveMatchmaking(client: GameSocket, payload: LeaveMatchmakingPayload) {
+        await this.leaveMatchmakingUC.leave({
+            userId: client.data.user.userId,
+            username: client.data.user.username,
+            gameModeId: payload.gameModeId
+        })
+    }
+
+    @UseGuards(RoomGuard)
+    @SubscribeMessage(SOCKET_EVENTS.CODE_GOLF_ACTIVITY)
+    handleCodeGolfActivity(
+        client: RoomSocket,
+        payload: CodeGolfActivityPayload,
+    ) {
+        this.codeGolfActivityUC.handle(
             client.data.user.userId,
             client.data.room,
-            client.data.user.username,
-            payload.taskId,
-            payload.solution,
-        );
+            payload
+        )
+    }
+
+    @UseGuards(RoomGuard)
+    @SubscribeMessage(SOCKET_EVENTS.MATCH_MESSAGE)
+    handleMatchMessage(
+        client: RoomSocket,
+        payload: MatchMessagePayload,
+    ) {
+        this.sendMatchMessageUC.execute(
+            client.data.user.userId,
+            client.data.room,
+            payload,
+        )
+    }
+
+    @UseGuards(RoomGuard)
+    @SubscribeMessage(SOCKET_EVENTS.SURRENDER_MATCH)
+    async handleSurrender(client: RoomSocket){
+        await this.surrenderMatchUC.surrender(
+            client.data.user.userId,
+            client.data.room,
+        )
+    }
+
+    private disconnectUnauthorized(client: Socket) {
+        client.emit('unauthorized', { msg: 'no valid token' });
+        client.disconnect();
     }
 }

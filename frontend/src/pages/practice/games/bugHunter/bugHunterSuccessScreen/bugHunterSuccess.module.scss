@@ -1,0 +1,130 @@
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+
+  background:
+  radial-gradient(
+                  circle at 50% 20%,
+                  rgba(34, 197, 94, 0.20) 0%,
+                  rgba(34, 197, 94, 0.07) 25%,
+                  transparent 50%
+  ),
+  radial-gradient(
+                  circle at 80% 80%,
+                  rgba(16, 185, 129, 0.08),
+                  transparent 40%
+  ),
+  linear-gradient(
+                  180deg,
+                  #111713 0%,
+                  #0c0f0d 45%,
+                  #080a09 100%
+  );
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 40px 32px;
+
+  background: #181818;
+  border: 1px solid #2f2f2f;
+  border-radius: 16px;
+
+  text-align: center;
+}
+
+.icon {
+  width: 72px;
+  height: 72px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 20px;
+
+  border-radius: 50%;
+  background: rgba(70, 220, 120, 0.12);
+  border: 2px solid #46dc78;
+
+  color: #46dc78;
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.title {
+  margin: 0 0 10px;
+
+  color: #ffffff;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.description {
+  margin: 0 0 28px;
+
+  color: #a8a8a8;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.reward {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 14px 16px;
+  margin-bottom: 28px;
+
+  background: #202020;
+  border: 1px solid #303030;
+  border-radius: 10px;
+
+  color: #c7c7c7;
+  font-size: 14px;
+}
+
+.xp {
+  color: #46dc78;
+  font-weight: 700;
+}
+
+.continueButton {
+  width: 100%;
+  padding: 13px 18px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #ffffff;
+  color: #111111;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+          transform 0.15s ease,
+          opacity 0.15s ease;
+}
+
+.continueButton:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.continueButton:active {
+  transform: translateY(0);
+}

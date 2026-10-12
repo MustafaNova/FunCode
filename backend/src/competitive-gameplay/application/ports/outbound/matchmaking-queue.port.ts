@@ -1,18 +1,16 @@
 import { QueueEntry } from '../../../domain/entities/queueEntry';
-import { MatchType } from '../../../domain/enums/matchtype';
-import { PlayerCount } from '../../../domain/enums/playercount';
+import { ArenaGameModeId } from '@funcode/shared';
 
 export interface MatchmakingQueuePort {
     enqueue(
         queueEntry: QueueEntry,
-        type: MatchType,
-        players: PlayerCount,
+        gameModeId: ArenaGameModeId
     ): Promise<void>;
     remove(
         queueEntry: QueueEntry,
-        type: MatchType,
-        players: PlayerCount,
+        gameModeId: ArenaGameModeId
     ): Promise<void>;
-    getEntryCount(type: MatchType, players: PlayerCount): Promise<number>;
-    popTwoPlayers(type: MatchType, players: PlayerCount): Promise<QueueEntry[]>;
+    getEntryCount(gameModeId: ArenaGameModeId): Promise<number>;
+    popTwoPlayers(gameModeId: ArenaGameModeId): Promise<QueueEntry[]>;
+    tryPopPlayers(gameModeId: ArenaGameModeId, count: number): Promise<QueueEntry[] | null>
 }

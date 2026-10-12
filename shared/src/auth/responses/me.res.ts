@@ -3,5 +3,6 @@ export type MeRes = {
     username: string,
     email: string,
     hasCompletedOnboarding: boolean,
-    token: string
+    token: string;
+    inviteCode: string;
 }

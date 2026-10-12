@@ -1,5 +1,5 @@
 import s from './onboarding.module.scss'
-import { me } from '../../services/auth.ts';
+import { me } from '../../services/http/auth.ts';
 import { useEffect, useState } from 'react';
 import type { MeRes } from '@funcode/shared';
 import { useNavigate } from 'react-router-dom';

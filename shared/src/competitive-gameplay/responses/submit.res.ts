@@ -1,9 +1,9 @@
-export type SubmitResponse =
-    { type: 'wrong'; playerName: string} | { type: 'error'; message: string};
+export type SubmitResponse = {
+    playerName: string
+}
 
 export interface WinRes {
     playerName: string;
-    solution: string;
 }
 
 export interface LoseRes {

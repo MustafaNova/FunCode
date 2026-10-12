@@ -2,13 +2,6 @@ import { Controller, Post, Inject, UseGuards, Body } from '@nestjs/common';
 import type { JoinMatchMakingPort } from '../../../../application/ports/inbound/join-matchmaking.port';
 import { JOIN_MATCHMAKING_PORT, LEAVE_MATCHMAKING_PORT } from '../../../../infrastructure/uc-wiring/tokens';
 import { AuthGuard } from '@nestjs/passport';
-import {
-    AuthUser,
-    UserPayload,
-} from '../../../../../common/utils/user-payload.decorator';
-import { MatchMakingPayload } from './dtos/join.request';
-import { JoinCmd } from '../../../../application/use-cases/matchmaking-join/dtos/join.cmd';
-import { LeaveCmd } from '../../../../application/use-cases/matchmaking-leave/leave.cmd';
 import { type LeaveMatchmakingPort } from '../../../../application/ports/inbound/leave-matchmaking.port';
 
 @UseGuards(AuthGuard('jwt'))
@@ -21,7 +14,7 @@ export class MatchmakingController {
         private readonly leaveMatchMaking: LeaveMatchmakingPort,
     ) {}
 
-    @Post('join')
+    /*@Post('join')
     async join(@UserPayload() user: AuthUser, @Body() payload: MatchMakingPayload) {
         const cmd = JoinCmd.create(
             user.userId,
@@ -31,9 +24,9 @@ export class MatchmakingController {
         );
         await this.joinMatchMaking.join(cmd);
         return { success: true };
-    }
+    }*/
 
-    @Post('leave')
+    /*@Post('leave')
     async leave(@UserPayload() user: AuthUser, @Body() payload: MatchMakingPayload) {
         const cmd = LeaveCmd.create(
             user.userId,
@@ -43,5 +36,5 @@ export class MatchmakingController {
         )
         await this.leaveMatchMaking.leave(cmd);
         return { success: true };
-    }
+    }*/
 }
