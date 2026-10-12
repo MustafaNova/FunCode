@@ -30,7 +30,7 @@ export function Arena1v1() {
                 <div className={s.hero}>
                     <p className={s.kicker}>1v1 Arena</p>
                     <h1>Choose your duel</h1>
-                    <p>Pick a battle queue and solve faster than your opponent.</p>
+                    <p>Pick a battle queue and solve faster than your opponent</p>
                 </div>
 
                 <div className={s.modeGrid}>
