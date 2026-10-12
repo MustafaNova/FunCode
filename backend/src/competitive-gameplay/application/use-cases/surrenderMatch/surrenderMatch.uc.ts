@@ -1,7 +1,7 @@
 import { SurrenderMatchPort } from '../../ports/inbound/surrender.match.port';
 import { BattleRepositoryPort } from '../../ports/outbound/battleRepository.port';
 import { BattleNotFoundError } from '../errors/battleNotFound.error';
-import { PlayerNotInBattleError } from './errors/playerNotInBattle.error';
+import { PlayerNotInBattleError } from '../errors/playerNotInBattle.error';
 import { PlayerGatewayPort } from '../../ports/outbound/player.gateway.port';
 import { MatchResultPayload, SOCKET_EVENTS } from '@funcode/shared';
 import { MatchCleanupPort } from '../../ports/outbound/match.cleanup.port';

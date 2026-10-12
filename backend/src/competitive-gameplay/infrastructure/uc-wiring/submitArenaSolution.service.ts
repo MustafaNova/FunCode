@@ -14,6 +14,8 @@ import { type BugHunterMatchStatePort } from '../../application/ports/outbound/m
 import { type ClassicMatchStatePort } from '../../application/ports/outbound/matchStates/classic.match.state.port';
 import { BUG_HUNTER_MATCH_STATE_PORT } from '../matchStates/BugHunterMatchState/token';
 import { CLASSIC_MATCH_STATE_PORT } from '../matchStates/ClassicMatchState/token';
+import { type MatchCleanupPort } from '../../application/ports/outbound/match.cleanup.port';
+import { MATCH_CLEANUP_PORT } from '../matchCleanup/token';
 
 @Injectable()
 export class SubmitArenaSolutionService extends SubmitArenaSolutionUC {
@@ -34,6 +36,8 @@ export class SubmitArenaSolutionService extends SubmitArenaSolutionUC {
         bugHunterMatchState: BugHunterMatchStatePort,
         @Inject(CLASSIC_MATCH_STATE_PORT)
         classicMatchState: ClassicMatchStatePort,
+        @Inject(MATCH_CLEANUP_PORT)
+        matchCleanup: MatchCleanupPort
     ) {
         super(
             playerGateway,
@@ -43,7 +47,8 @@ export class SubmitArenaSolutionService extends SubmitArenaSolutionUC {
             battleRepo,
             codeGolfMatchState,
             bugHunterMatchState,
-            classicMatchState
+            classicMatchState,
+            matchCleanup
         );
     }
 }

@@ -18,6 +18,8 @@ import { CodeGolfValidatorPort } from '../../ports/inbound/validators/codeGolfVa
 import { CodeGolfMatchStatePort } from '../../ports/outbound/matchStates/codeGolf.match.state.port';
 import { BugHunterMatchStatePort } from '../../ports/outbound/matchStates/bugHunter.match.state.port';
 import { ClassicMatchStatePort } from '../../ports/outbound/matchStates/classic.match.state.port';
+import { MatchCleanupPort } from '../../ports/outbound/match.cleanup.port';
+import { PlayerNotInBattleError } from '../errors/playerNotInBattle.error';
 
 
 export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
@@ -30,12 +32,22 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
         private readonly codeGolfMatchState: CodeGolfMatchStatePort,
         private readonly bugHunterMatchState: BugHunterMatchStatePort,
         private readonly classicMatchState: ClassicMatchStatePort,
+        private readonly matchCleanup: MatchCleanupPort
     ) {}
 
     async submit(submit: SubmitCmd): Promise<void> {
         const battle = await this.battleRepo.getByRoomId(submit.roomId);
-        if (!battle) {
+
+        if (battle === null) {
             throw new BattleNotFoundError();
+        }
+
+        const isParticipant =
+            battle.player1.userId === submit.userId ||
+            battle.player2.userId === submit.userId;
+
+        if (!isParticipant) {
+            throw new PlayerNotInBattleError();
         }
 
         switch (battle.gameModeId) {
@@ -57,16 +69,14 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
         const state = this.codeGolfMatchState.get(submit.roomId);
 
         if (state === null) {
-            await this.abortMatch(submit.roomId);
-            this.codeGolfMatchState.delete(submit.roomId);
+            await this.abortMatch(battle);
             return;
         }
 
         const bestScore = state.playerScores.get(submit.userId);
 
         if (bestScore === undefined) {
-            await this.abortMatch(submit.roomId);
-            this.codeGolfMatchState.delete(submit.roomId);
+            await this.abortMatch(battle);
             return;
         }
 
@@ -139,15 +149,13 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
         );
 
         await this.battleRepo.setWinner(battle.roomId, winnerId);
-        await this.playerGateway.closeRoom(battle.roomId);
-        this.codeGolfMatchState.delete(submit.roomId);
+        await this.matchCleanup.cleanup(submit.roomId, battle.gameModeId);
     }
 
     private async handleBugHunterSubmit(submit: SubmitCmd, battle: Battle1v1) {
         const state = this.bugHunterMatchState.get(submit.roomId);
         if (state === null) {
-            await this.abortMatch(submit.roomId);
-            this.bugHunterMatchState.delete(submit.roomId);
+            await this.abortMatch(battle);
             return;
         }
 
@@ -185,17 +193,15 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
             { reason: 'normal' }
         );
 
-        await this.playerGateway.closeRoom(submit.roomId);
         await this.battleRepo.setWinner(submit.roomId, submit.userId);
-        this.bugHunterMatchState.delete(submit.roomId);
+        await this.matchCleanup.cleanup(submit.roomId, battle.gameModeId);
     }
 
     private async handleClassicSubmit(submit: SubmitCmd, battle: Battle1v1) {
         const state = this.classicMatchState.get(submit.roomId);
 
         if (state === null) {
-            await this.abortMatch(submit.roomId);
-            this.classicMatchState.delete(submit.roomId);
+            await this.abortMatch(battle);
             return;
         }
 
@@ -233,17 +239,23 @@ export class SubmitArenaSolutionUC implements SubmitArenaSolutionPort {
             { reason: 'normal' }
         );
 
-        await this.playerGateway.closeRoom(submit.roomId);
         await this.battleRepo.setWinner(submit.roomId, submit.userId);
-        this.classicMatchState.delete(submit.roomId);
+        await this.matchCleanup.cleanup(submit.roomId, battle.gameModeId);
     }
 
-    private async abortMatch(roomId: string) {
+    private async abortMatch(battle: Battle1v1) {
+        const aborted = await this.battleRepo.abortIfActive(battle.roomId);
+        if (!aborted) return;
+
         this.playerGateway.notifyRoom<BattleAbortedPayload>(
-            roomId,
+            battle.roomId,
             SOCKET_EVENTS.BATTLE_ABORTED,
             { code: ERROR_CODES.MATCH_STATE_INVALID }
         );
-        await this.playerGateway.closeRoom(roomId);
+
+        await this.matchCleanup.cleanup(
+            battle.roomId,
+            battle.gameModeId
+        )
     }
 }

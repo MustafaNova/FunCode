@@ -5,4 +5,5 @@ export interface BattleRepositoryPort {
     getByRoomId(roomId: string): Promise<Battle1v1 | null>;
     setWinner(roomId: string, winnerId: string): Promise<void>;
     finishIfActive(roomId: string): Promise<boolean>;
+    abortIfActive(roomId: string): Promise<boolean>;
 }

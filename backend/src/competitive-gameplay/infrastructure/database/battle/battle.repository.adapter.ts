@@ -61,4 +61,20 @@ export class BattleRepositoryAdapter implements BattleRepositoryPort {
 
         return result.affected === 1;
     }
+
+    async abortIfActive(roomId: string): Promise<boolean> {
+        const result = await this.battleRepo
+            .createQueryBuilder()
+            .update()
+            .set({
+                status: BattleStatus.ABORT,
+            })
+            .where('roomId = :roomId', { roomId })
+            .andWhere('status = :status', {
+                status: BattleStatus.ACTIVE,
+            })
+            .execute();
+
+        return result.affected === 1;
+    }
 }
