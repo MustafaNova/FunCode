@@ -1,7 +1,7 @@
 import s from './arena.module.scss'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBolt, faCode, faLock, faTerminal, faUserGroup } from '@fortawesome/free-solid-svg-icons';
+import { faBolt, faCode, faLock, faUserGroup } from '@fortawesome/free-solid-svg-icons';
 import { getErrorMessage } from '../../utils/error.messages.ts';
 
 export function Arena() {
