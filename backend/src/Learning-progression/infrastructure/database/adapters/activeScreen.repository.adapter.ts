@@ -6,7 +6,7 @@ import { PlayerActiveScreenEntity } from '../entities/player.active.screen.entit
 import { PlayerProgressEntity } from '../entities/player.progress.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ActiveScreen } from '../../../domain/entities/activeScreen';
-import { NotFoundException } from '../errors/notFoundException.err';
+import { NotFoundProgressIdException } from '../errors/notFoundException.err';
 import { CourseMapService } from '../levels-content/course.map';
 
 @Injectable()
@@ -68,7 +68,7 @@ export class ActiveScreenRepositoryAdapter implements ActiveScreenRepositoryPort
         });
 
         if (!activeProgress) {
-            throw new NotFoundException();
+            throw new NotFoundProgressIdException();
         }
 
         return {

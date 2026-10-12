@@ -1,0 +1,1 @@
+export const CODE_GOLF_MATCH_STATE_PORT = 'CODE_GOLF_MATCH_STATE_PORT' as const;

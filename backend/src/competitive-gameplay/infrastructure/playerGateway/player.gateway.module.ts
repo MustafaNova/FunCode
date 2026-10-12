@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { PlayerGatewayAdapter } from './player.gateway.adapter';
 import { PLAYER_GATEWAY_PORT } from './token';
+import { GameGatewayRegistryModule } from '../GameGatewayRegistry/gameGatewayRegistry.module';
 
 @Module({
-    imports: [],
+    imports: [GameGatewayRegistryModule],
     providers: [
         {
             provide: PLAYER_GATEWAY_PORT,

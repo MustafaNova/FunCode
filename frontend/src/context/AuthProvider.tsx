@@ -1,0 +1,31 @@
+import { useEffect, useState } from 'react';
+import { me } from '../services/http/auth.ts';
+import { AuthContext } from './authContext.ts';
+import type { AuthUser } from './types.ts';
+import { Outlet } from 'react-router-dom';
+
+
+export function AuthProvider() {
+    const [user, setUser] = useState<AuthUser | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    async function refreshUser() {
+        const res = await me();
+        setUser({
+            userId: res.id,
+            username: res.username,
+            inviteCode: res.inviteCode
+        });
+    }
+
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        void refreshUser().finally(() => { setLoading(false) });
+    }, []);
+
+    return (
+        <AuthContext.Provider value={{ user, loading }}>
+            <Outlet />
+        </AuthContext.Provider>
+    );
+}

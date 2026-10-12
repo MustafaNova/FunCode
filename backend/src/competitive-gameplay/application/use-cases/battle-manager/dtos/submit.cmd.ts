@@ -3,7 +3,6 @@ export class SubmitCmd {
         public readonly userId: string,
         public readonly roomId: string,
         public readonly playerName: string,
-        public readonly taskId: string,
         public readonly solution: string,
     ) {}
 
@@ -11,9 +10,8 @@ export class SubmitCmd {
         userId: string,
         roomId: string,
         playerName: string,
-        taskId: string,
         solution: string,
     ) {
-        return new SubmitCmd(userId, roomId, playerName, taskId, solution);
+        return new SubmitCmd(userId, roomId, playerName, solution);
     }
 }

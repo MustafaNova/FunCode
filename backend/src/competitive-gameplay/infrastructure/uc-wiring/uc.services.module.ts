@@ -6,34 +6,62 @@ import { RedisModule } from '../redis/redis.module';
 import { JoinService } from './join.service';
 import {
     BATTLE_MANAGER_PORT,
-    JOIN_MATCHMAKING_PORT, LEAVE_MATCHMAKING_PORT,
-    VALIDATOR_PORT,
+    JOIN_MATCHMAKING_PORT, LEAVE_MATCHMAKING_PORT, MATCH_MAKER_PORT, SUBMIT_ARENA_SOLUTION_PORT,
+    CLASSIC_VALIDATOR_PORT, BUG_HUNTER_VALIDATOR_PORT, CODE_GOLF_VALIDATOR_PORT, CODE_GOLF_ACTIVITY_PORT,
+    SEND_MATCH_MESSAGE_PORT, SURRENDER_MATCH_PORT,
 } from './tokens';
-import { ValidatorService } from './validator.service';
-import { BattleManagerService } from './battle-manager/battle.manager.service';
-import { MatchModule } from '../match/match.module';
-import { MatchFound1v1Listener } from './battle-manager/match.found1v1.listener';
-import { UserCodeExecutionModule } from '../userCodeExecution/usercode.execution.module';
+import { ClassicValidatorService } from './classicValidator.service';
+import { BattleManagerService } from './battle.manager.service';
 import { PlayerGatewayModule } from '../playerGateway/player.gateway.module';
 import { LeaveService } from './leave.service';
+import { SubmitArenaSolutionService } from './submitArenaSolution.service';
+import { CodeExecutionModule } from '../codeExecution/code.execution.module';
+import { BugHunterValidatorService } from './bugHunterValidator.service';
+import { CodeGolfValidatorService } from './codeGolfValidator.service';
+import { CodeGolfMatchStateModule } from '../matchStates/CodeGolfMatchState/codeGolfMatchState.module';
+import { BugHunterMatchStateModule } from '../matchStates/BugHunterMatchState/bugHunterMatchState.module';
+import { ClassicMatchStateModule } from '../matchStates/ClassicMatchState/classicMatchState.module';
+import { CodeGolfActivityService } from './codeGolf.activity.service';
+import { SendMatchMessageService } from './sendMatch.message.service';
+import { MatchCleanupModule } from '../matchCleanup/match.cleanup.module';
+import { SurrenderMatchService } from './surrenderMatch.service';
 
 @Module({
     imports: [
         DatabaseModule,
         IdGeneratorModule,
         RedisModule,
-        MatchModule,
-        UserCodeExecutionModule,
         PlayerGatewayModule,
+        CodeExecutionModule,
+        CodeGolfMatchStateModule,
+        BugHunterMatchStateModule,
+        ClassicMatchStateModule,
+        MatchCleanupModule
     ],
     providers: [
-        MatchMakerService,
-        MatchFound1v1Listener,
+        { provide: MATCH_MAKER_PORT, useClass: MatchMakerService },
         { provide: JOIN_MATCHMAKING_PORT, useClass: JoinService },
         { provide: LEAVE_MATCHMAKING_PORT, useClass: LeaveService },
-        { provide: VALIDATOR_PORT, useClass: ValidatorService },
+        { provide: CLASSIC_VALIDATOR_PORT, useClass: ClassicValidatorService },
         { provide: BATTLE_MANAGER_PORT, useClass: BattleManagerService },
+        { provide: SUBMIT_ARENA_SOLUTION_PORT, useClass: SubmitArenaSolutionService },
+        { provide: BUG_HUNTER_VALIDATOR_PORT, useClass: BugHunterValidatorService },
+        { provide: CODE_GOLF_VALIDATOR_PORT, useClass: CodeGolfValidatorService },
+        { provide: CODE_GOLF_ACTIVITY_PORT, useClass: CodeGolfActivityService },
+        { provide: SEND_MATCH_MESSAGE_PORT, useClass: SendMatchMessageService },
+        { provide: SURRENDER_MATCH_PORT, useClass: SurrenderMatchService },
     ],
-    exports: [JOIN_MATCHMAKING_PORT, VALIDATOR_PORT, BATTLE_MANAGER_PORT, LEAVE_MATCHMAKING_PORT],
+    exports: [
+        JOIN_MATCHMAKING_PORT,
+        CLASSIC_VALIDATOR_PORT,
+        BATTLE_MANAGER_PORT,
+        LEAVE_MATCHMAKING_PORT,
+        SUBMIT_ARENA_SOLUTION_PORT,
+        BUG_HUNTER_VALIDATOR_PORT,
+        CODE_GOLF_VALIDATOR_PORT,
+        CODE_GOLF_ACTIVITY_PORT,
+        SEND_MATCH_MESSAGE_PORT,
+        SURRENDER_MATCH_PORT
+    ],
 })
 export class UCServicesModule {}

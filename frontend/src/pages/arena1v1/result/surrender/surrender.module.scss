@@ -1,0 +1,479 @@
+/* ========================================
+   THEMES
+======================================== */
+
+.win {
+  --result-color: #22c55e;
+  --result-light: #4ade80;
+  --result-rgb: 34, 197, 94;
+  --button-text: #052e16;
+}
+
+.lose {
+  --result-color: #ef4444;
+  --result-light: #f87171;
+  --result-rgb: 239, 68, 68;
+  --button-text: #ffffff;
+}
+
+/* ========================================
+   BACKGROUND
+======================================== */
+
+.container {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 100dvh;
+
+  padding: 24px;
+  box-sizing: border-box;
+
+  color: #f8fafc;
+
+  background:
+          radial-gradient(
+                          ellipse at 50% 100%,
+                          rgba(var(--result-rgb), 0.12),
+                          transparent 55%
+          ),
+          #080d12;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.container::before {
+  content: "";
+
+  position: fixed;
+  inset: 0;
+
+  background-image:
+          linear-gradient(
+                          rgba(255, 255, 255, 0.025) 1px,
+                          transparent 1px
+          ),
+          linear-gradient(
+                          90deg,
+                          rgba(255, 255, 255, 0.025) 1px,
+                          transparent 1px
+          );
+
+  background-size: 50px 50px;
+
+  pointer-events: none;
+}
+
+.backgroundGlow {
+  position: absolute;
+
+  width: 600px;
+  height: 600px;
+
+  border-radius: 50%;
+
+  background: rgba(var(--result-rgb), 0.07);
+
+  filter: blur(110px);
+
+  pointer-events: none;
+
+  animation: glowPulse 4s ease-in-out infinite;
+}
+
+/* ========================================
+   RESULT CARD
+======================================== */
+
+.resultCard {
+  position: relative;
+
+  width: min(480px, 100%);
+  flex-shrink: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 42px 36px 28px;
+  box-sizing: border-box;
+
+  border: 1px solid rgba(var(--result-rgb), 0.2);
+  border-radius: 12px;
+
+  background: rgba(15, 23, 30, 0.96);
+
+  box-shadow:
+          0 25px 80px rgba(0, 0, 0, 0.5),
+          0 0 60px rgba(var(--result-rgb), 0.04);
+
+  overflow: hidden;
+
+  animation: cardEnter 600ms ease-out both;
+}
+
+.topLine {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 3px;
+
+  background: linear-gradient(
+                  90deg,
+                  transparent,
+                  var(--result-color),
+                  transparent
+  );
+}
+
+/* ========================================
+   STATUS
+======================================== */
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  color: #94a3b8;
+
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+.statusDot {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: var(--result-color);
+
+  box-shadow:
+          0 0 12px var(--result-color);
+}
+
+/* ========================================
+   ICON
+======================================== */
+
+.iconContainer {
+  margin-top: 36px;
+  margin-bottom: 28px;
+}
+
+.iconRing {
+  width: 100px;
+  height: 100px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(var(--result-rgb), 0.35);
+
+  background:
+          radial-gradient(
+                          circle,
+                          rgba(var(--result-rgb), 0.15),
+                          rgba(var(--result-rgb), 0.02)
+          );
+
+  color: var(--result-light);
+
+  font-size: 2.5rem;
+
+  box-shadow:
+          0 0 0 12px rgba(var(--result-rgb), 0.035),
+          0 0 45px rgba(var(--result-rgb), 0.12);
+
+  animation: flagEnter 800ms ease-out both;
+}
+
+/* ========================================
+   CONTENT
+======================================== */
+
+.content {
+  text-align: center;
+}
+
+.eyebrow {
+  display: block;
+
+  margin-bottom: 12px;
+
+  color: var(--result-light);
+
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+}
+
+.content h1 {
+  margin: 0;
+
+  color: #f8fafc;
+
+  font-size: clamp(3rem, 9vw, 4.5rem);
+  font-weight: 950;
+
+  letter-spacing: -0.05em;
+  line-height: 1.1;
+}
+
+.content h1 span {
+  color: var(--result-light);
+
+  text-shadow:
+          0 0 35px rgba(var(--result-rgb), 0.3);
+}
+
+.description {
+  max-width: 330px;
+
+  margin: 18px auto 0;
+
+  color: #94a3b8;
+
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+/* ========================================
+   RESULT BOX
+======================================== */
+
+.resultBox {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  margin-top: 36px;
+  padding: 18px;
+
+  box-sizing: border-box;
+
+  border: 1px solid rgba(var(--result-rgb), 0.16);
+  border-radius: 8px;
+
+  background: rgba(var(--result-rgb), 0.055);
+}
+
+.resultBoxIcon {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 8px;
+
+  background: rgba(var(--result-rgb), 0.12);
+
+  color: var(--result-light);
+
+  font-size: 1.1rem;
+}
+
+.resultBoxText {
+  flex: 1;
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  text-align: left;
+}
+
+.resultBoxText span {
+  color: #64748b;
+
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.resultBoxText strong {
+  color: #e2e8f0;
+
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.resultStatusIcon {
+  flex-shrink: 0;
+
+  color: var(--result-light);
+
+  font-size: 1.1rem;
+}
+
+/* ========================================
+   BUTTON
+======================================== */
+
+.leaveButton {
+  width: 100%;
+  min-height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  margin-top: 24px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: var(--result-color);
+  color: var(--button-text);
+
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 900;
+
+  cursor: pointer;
+
+  transition:
+          background 180ms ease,
+          transform 180ms ease,
+          box-shadow 180ms ease;
+}
+
+.leaveButton:hover {
+  background: var(--result-light);
+
+  transform: translateY(-2px);
+
+  box-shadow:
+          0 8px 25px rgba(var(--result-rgb), 0.2);
+}
+
+.leaveButton:focus-visible {
+  outline: 2px solid var(--result-light);
+  outline-offset: 4px;
+}
+
+/* ========================================
+   FOOTER
+======================================== */
+
+.footer {
+  margin-top: 26px;
+
+  color: #475569;
+
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+}
+
+/* ========================================
+   ANIMATIONS
+======================================== */
+
+@keyframes cardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(25px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes flagEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.5) rotate(-20deg);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+@keyframes glowPulse {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 520px) {
+  .container {
+    padding: 16px;
+  }
+
+  .resultCard {
+    padding: 32px 22px 24px;
+  }
+
+  .iconContainer {
+    margin-top: 28px;
+  }
+
+  .iconRing {
+    width: 85px;
+    height: 85px;
+
+    font-size: 2rem;
+  }
+
+  .content h1 {
+    font-size: clamp(2.5rem, 11vw, 3.5rem);
+  }
+
+  .resultBox {
+    padding: 14px;
+  }
+
+  .resultBoxText strong {
+    font-size: 0.85rem;
+  }
+}
+
+/* ========================================
+   REDUCED MOTION
+======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .resultCard,
+  .iconRing,
+  .backgroundGlow,
+  .leaveButton {
+    animation: none;
+    transition: none;
+  }
+}

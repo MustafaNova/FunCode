@@ -10,12 +10,12 @@ export class GetCurrentUserUC implements GetCurrentUserPort {
     ) {
     }
     async me(username: string): Promise<User> {
-        console.log("started me use case")
         const user = await this.userRepo.findByUsername(Username.create(username));
+
         if (!user) {
             throw new Error()
         }
-        console.log("me use case successfully done")
+
         return user;
     }
 }

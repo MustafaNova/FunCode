@@ -8,9 +8,13 @@ import type { UserRepositoryPort } from '../../ports/outbound/user-repository.po
 import { User } from '../../../domain/entitys/user';
 import { UsernameAlreadyExistsError } from './errors/UsernameAlreadyExistsError';
 import { EmailAlreadyExistsError } from './errors/EmailAlreadyExistsError';
+import { InviteCodeGeneratorPort } from '../../ports/outbound/inviteCodeGenerator.port';
 
 export class UserRegistrationUC implements RegisterUserPort {
-    constructor(private readonly userRepo: UserRepositoryPort) {}
+    constructor(
+        private readonly userRepo: UserRepositoryPort,
+        private readonly inviteCodeGenerator: InviteCodeGeneratorPort
+    ) {}
 
     async registerUser(
         userRegistration: UserRegistrationCmd,
@@ -27,9 +31,29 @@ export class UserRegistrationUC implements RegisterUserPort {
             throw new EmailAlreadyExistsError();
         }
 
-        const user = new User(null, username, email, password, false);
+        const inviteCode = await this.generateUniqueInviteCode();
+
+        const user = new User(
+            null,
+            username,
+            email,
+            password,
+            false,
+            inviteCode
+        );
+
         await this.userRepo.save(user);
 
         return RegisterUserResult.from(user);
+    }
+
+    private async generateUniqueInviteCode(): Promise<string> {
+        let inviteCode: string;
+
+        do {
+            inviteCode = this.inviteCodeGenerator.generate();
+        } while (await this.userRepo.checkInviteCodeExists(inviteCode))
+
+        return inviteCode
     }
 }

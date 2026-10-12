@@ -73,9 +73,8 @@ export class AuthController {
     @Get('me')
     @UseGuards(AuthGuard('jwt'))
     async me(@UserPayload() user: AuthUser): Promise<MeRes> {
-        console.log('started me');
         const res = await this.currentUserService.me(user.username);
-        if (!res.id) {
+        if (!res || !res.id) {
             throw new Error();
         }
 
@@ -84,7 +83,8 @@ export class AuthController {
             username: res.username.get(),
             email: res.email.get(),
             hasCompletedOnboarding: res.hasCompletedOnboarding,
-            token: user.token
+            token: user.token,
+            inviteCode: res.inviteCode,
         }
     }
 
